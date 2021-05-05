@@ -22,4 +22,19 @@ If you use an IDE (like Netbeans, Eclipse), You can just open the project in the
     <img src="https://gitlab.rrz.uni-hamburg.de/corpus-services/corpus-services/-/raw/develop/images/manually-install-artifact.png" alt="Logo" width="350" height="300">
   </a>
 
-To get the automatic Doxygen creation to work to without receiving errors, for Windows download the doxygen.exe from [here](https://www.doxygen.nl/download.html) and put it directly into the corpus-services folder or install Doxygen for linux. 
+To get the automatic Doxygen creation to work to without receiving errors, for Windows download the doxygen.exe from [here](https://www.doxygen.nl/download.html) and put it directly into the corpus-services folder or install Doxygen for linux.
+
+## Step-by-step installation and setup:
+1. Make sure Java is installed on your machine (run `javac` in the terminal, which should type out a help message if you have Java installed)
+2. Install NetBeans and open Corpus Services as a project
+3. Manually install EXMARaLDA as described above
+4. Build Project (F11)
+5. Go to project properties (RMB on the project name -> Properties) and select the catrgory "Run"
+6. Choose CorpusMagician as the main class
+7. Type the command for Courpus Services in the "Arguments" field, the syntax is described [here](https://gitlab.rrz.uni-hamburg.de/corpus-services/corpus-services/-/blob/develop/doc/How_to_use.md)
+8. Run Project (F6)
+
+To build an updated .jar:
+  - RMB on your project -> Run Maven -> Goals
+  - `clean compile assembly:single` in the field "Goals" 
+  - NetBeans output will tell you where the .jar is on your computer (e.g. /home/user/Desktop/corpus-services/target/corpus-services-1.0.jar)
