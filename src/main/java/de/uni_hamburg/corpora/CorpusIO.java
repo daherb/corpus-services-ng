@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import static java.lang.System.out;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -122,9 +123,9 @@ public class CorpusIO {
      */
     //read a single file as a corpus data object from an url
     //only read it if it is needed
-    public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, ClassNotFoundException {
+    public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, ClassNotFoundException, UnsupportedEncodingException {
         CorpusData cd = null;
-        if (new File(url.getFile()).isFile()) {
+        if (new File(URLDecoder.decode(url.getFile(),"UTF-8")).isFile()) {
             if (url.getPath().endsWith("exb") && clcds.contains(bt.getClass())) {
                 BasicTranscriptionData btd = new BasicTranscriptionData(url);
                 System.out.println(btd.getFilename() + " read");
@@ -160,7 +161,7 @@ public class CorpusIO {
     }
 
     //read a single file as a corpus data object from an url
-    public CorpusData readFileURL(URL url) throws SAXException, JexmaraldaException, ClassNotFoundException {
+    public CorpusData readFileURL(URL url) throws SAXException, JexmaraldaException, ClassNotFoundException, UnsupportedEncodingException {
         return readFileURL(url, allCorpusDataTypes);
     }
 

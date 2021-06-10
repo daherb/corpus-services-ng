@@ -1103,7 +1103,7 @@ public class CorpusMagician {
         if (urlstring.startsWith("file://")) {
             inputurl = new URL(urlstring);
         } else {
-            inputurl = Paths.get(urlstring).toUri().toURL();
+            inputurl = Paths.get(urlstring).toAbsolutePath().normalize().toUri().toURL();
         }
         //now the place where Report should end up
         //also allow normal filepaths and convert them
