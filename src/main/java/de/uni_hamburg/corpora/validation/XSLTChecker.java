@@ -1,11 +1,9 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
+import de.uni_hamburg.corpora.*;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import de.uni_hamburg.corpora.Report;
+
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import java.io.IOException;
@@ -188,8 +186,11 @@ public class XSLTChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(Corpus c, Boolean fix) throws SAXException, JDOMException, IOException, JexmaraldaException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, XPathExpressionException, NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException {
         Report stats = new Report();
-        CorpusData cdata = c.getComaData();
-        stats = function(cdata, fix);
+        ComaData cdata = c.getComaData();
+        // Only if coma data exists, run the function
+        if (cdata != null){
+            stats.merge(function(cdata, fix));
+        }
         for (CorpusData bdata : c.getBasicTranscriptionData()) {
             stats.merge(function(bdata, fix));
         }

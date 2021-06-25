@@ -1,10 +1,6 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,7 +18,7 @@ import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import de.uni_hamburg.corpora.XMLData;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -252,7 +248,11 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
         for (CorpusData sdata : c.getSegmentedTranscriptionData()) {
             stats.merge(function(sdata, fix));
         }
-        stats.merge(function(c.getComaData(), fix));
+        // Check if some coma data exists and check it if it does
+        ComaData cdata = c.getComaData();
+        if (cdata != null) {
+            stats.merge(function(c.getComaData(), fix));
+        }
         return stats;
     }
 }
