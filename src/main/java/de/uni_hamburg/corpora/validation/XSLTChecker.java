@@ -189,7 +189,10 @@ public class XSLTChecker extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) throws SAXException, JDOMException, IOException, JexmaraldaException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, XPathExpressionException, NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException {
         Report stats = new Report();
         CorpusData cdata = c.getComaData();
-        stats = function(cdata, fix);
+        // Only if coma data exists, run the function
+        if (cdata != null){
+            stats.merge(function(cdata, fix));
+        }
         for (CorpusData bdata : c.getBasicTranscriptionData()) {
             stats.merge(function(bdata, fix));
         }

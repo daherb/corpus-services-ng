@@ -252,7 +252,11 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
         for (CorpusData sdata : c.getSegmentedTranscriptionData()) {
             stats.merge(function(sdata, fix));
         }
-        stats.merge(function(c.getComaData(), fix));
+        // Check if some coma data exists and check it if it does
+        ComaData cdata = c.getComaData();
+        if (cdata != null) {
+            stats.merge(function(c.getComaData(), fix));
+        }
         return stats;
     }
 }
