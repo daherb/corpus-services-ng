@@ -168,15 +168,11 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-            Class clSecond = Class.forName("de.uni_hamburg.corpora.AnnotationSpecification");
-            IsUsableFor.add(cl);
-            IsUsableFor.add(clSecond);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, " usable class not found");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.AnnotationSpecification");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

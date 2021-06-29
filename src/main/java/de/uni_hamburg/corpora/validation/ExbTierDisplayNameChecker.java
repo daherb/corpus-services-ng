@@ -126,15 +126,11 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            //Class clSecond = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-            IsUsableFor.add(cl);
-            //IsUsableFor.add(clSecond);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "unknown class not found error");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
+        //cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
+        //IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

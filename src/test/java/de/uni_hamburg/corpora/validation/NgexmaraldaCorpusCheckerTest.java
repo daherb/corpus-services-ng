@@ -53,7 +53,6 @@ public class NgexmaraldaCorpusCheckerTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         NgexmaraldaCorpusChecker instance = new NgexmaraldaCorpusChecker();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {

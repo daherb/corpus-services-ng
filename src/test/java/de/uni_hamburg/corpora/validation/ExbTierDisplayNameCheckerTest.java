@@ -54,7 +54,6 @@ public void testCheck() throws Exception {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         ExbTierDisplayNameChecker instance = new ExbTierDisplayNameChecker();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {

@@ -49,7 +49,6 @@ public class ExbSegmentationCheckerTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         ExbSegmentationChecker instance = new ExbSegmentationChecker();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
