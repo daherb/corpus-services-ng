@@ -371,7 +371,8 @@ public class ReportItem {
     }
 
     /**
-     * Generate a very short summary of validawtion errors.
+     * Generate a very short summary of validation errors.
+     * TODO: Make more fine-grained to make e.g. correct items explicit
      */
     public static String generateSummary(Collection<ReportItem>
             errors) {
@@ -383,6 +384,7 @@ public class ReportItem {
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
+                case MISSING: // made missing critical as well to match isSevere
                     criticals++;
                     break;
                 case WARNING:
@@ -391,15 +393,15 @@ public class ReportItem {
                 case NOTE:
                     notes++;
                     break;
-                case UNKNOWN:
+                default: //case UNKNOWN: // Changed the unknown case to default to cover e.g. even the okay or fixed
                     unknowns++;
                     break;
-                default:
-                    break;
+                //default:
+                //    break;
             }
         }
         report = "Total of " +  (criticals + warnings + notes + unknowns) +
-            " menssages: " + criticals + " critical errors, " +
+            " messages: " + criticals + " critical errors, " +
             warnings + " warnings, " + notes + " notes and " + unknowns +
             " others.";
         return report;
