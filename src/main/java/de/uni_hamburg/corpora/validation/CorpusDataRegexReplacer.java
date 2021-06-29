@@ -108,17 +108,13 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            if (coma) {
-                Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");
-                IsUsableFor.add(cl3);
-            } else {
-                Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        if (coma) {
+            Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+            IsUsableFor.add(cl);
+        } else {
+            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
                 IsUsableFor.add(cl);
-            }
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "Usable class not found.");
         }
         return IsUsableFor;
     }
@@ -135,13 +131,13 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
         xpathContext = s;
     }
 
-    public void setComa(String s) {
+    public void setComa(String s) throws IllegalArgumentException {
         if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("wahr") || s.equalsIgnoreCase("ja")) {
             coma = true;
         } else if (s.equalsIgnoreCase("false") || s.equalsIgnoreCase("falsch") || s.equalsIgnoreCase("nein")) {
             coma = false;
         } else {
-            report.addCritical(function, cd, "Parameter coma not recognized: " + escapeHtml4(s));
+            throw new IllegalArgumentException("Parameter coma not recognized: " + escapeHtml4(s));
         }
     }
 

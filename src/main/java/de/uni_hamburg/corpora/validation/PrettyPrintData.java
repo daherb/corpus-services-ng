@@ -56,6 +56,7 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
     }
 
     public Report function(CorpusData cd, Boolean fix) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
+        Report report = new Report();
         // if no diff - all fine, nothing needs to be done
         if (CorpusDataIsAlreadyPretty(cd)) {
             report.addCorrect(function, cd, "Already pretty printed.");
@@ -79,19 +80,15 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-            Class cl2 = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-            IsUsableFor.add(cl2);
-            Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl3);
-            Class cl4 = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
-            IsUsableFor.add(cl4);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "Usable class not found.");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

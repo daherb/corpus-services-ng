@@ -95,7 +95,7 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
                                 newKey.setText(value.toString());
                                 e.getChild("Description").addContent(
                                         newKey);
-                                report.addFix(function, cd, "Updated segment count " + key.toString() + ":" + value.toString() + "for transcription " + e.getAttributeValue("Name"));
+                                stats.addFix(function, cd, "Updated segment count " + key.toString() + ":" + value.toString() + "for transcription " + e.getAttributeValue("Name"));
                             }
                         }
 
@@ -105,9 +105,9 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
             if (comaDoc != null) {
                 cd.updateUnformattedString(TypeConverter.JdomDocument2String(comaDoc));
                 cio.write(cd, cd.getURL());
-                report.addCorrect(function, cd, "Updated the segment counts!");
+                stats.addCorrect(function, cd, "Updated the segment counts!");
             } else {
-                report.addCritical(function, cd, "Updating the segment counts was not possible!");
+                stats.addCritical(function, cd, "Updating the segment counts was not possible!");
             }
         } //still check it now after they were added
         for (int i = 0; i < communications.getLength(); i++) { //iterate through communications
@@ -168,13 +168,9 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "Usable class not found.");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

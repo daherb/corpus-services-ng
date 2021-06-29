@@ -90,14 +90,9 @@ public class ComaChartsGeneration extends Checker implements CorpusFunction {
 
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        Class cl1;
-        try {
-            cl1 = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl1);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "Usable class not found.");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException{
+        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

@@ -54,7 +54,6 @@ public class ComaTierOverviewCreatorTest {
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
             ComaTierOverviewCreator instance = new ComaTierOverviewCreator();
-            instance.report = new Report();
             Collection<CorpusData> cdc;
             //what happens when we check coma files
             for (CorpusData cd : corp.getMetadata()){

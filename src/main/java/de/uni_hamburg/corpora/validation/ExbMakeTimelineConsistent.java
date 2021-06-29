@@ -45,6 +45,7 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws JDOMException, IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
+        Report report = new Report();
         if (fix) {
 
             btd = (BasicTranscriptionData) cd;
@@ -73,14 +74,9 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "unknown class not found error");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

@@ -47,6 +47,7 @@ public class RemoveEmptyEvents extends Checker implements CorpusFunction {
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        Report report = new Report();
         try {
             XMLData xml = (XMLData) cd;
             List al = findAllEmptyEvents(xml);
@@ -80,16 +81,11 @@ public class RemoveEmptyEvents extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-            Class cl2 = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
-            IsUsableFor.add(cl2);
-
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "unknown class not found error");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

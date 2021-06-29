@@ -44,7 +44,7 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws SAXException, JexmaraldaException, ClassNotFoundException, JDOMException, URISyntaxException, TransformerException, ParserConfigurationException, IOException, MalformedURLException, XPathExpressionException {
-
+        Report report = new Report();
         Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
         Class cl3 = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
         Class cl2 = Class.forName("de.uni_hamburg.corpora.ComaData");
@@ -91,6 +91,9 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
                     }
                 }
             }
+            else {
+                report.addWarning(function, cd, "no paths found!");
+            }
             List ale = findAllAbsolutePathsExbElement(cd);
             if (!ale.isEmpty()) {
                 for (int i = 0; i < ale.size(); i++) {
@@ -132,6 +135,9 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
                     }
                 }
             }
+            else {
+                report.addWarning(function, cd, "no paths found!");
+            }
         } else if (cl2.isInstance(cd)) {
             List al = findAllAbsolutePathsComa(cd);
             //if there is no autosave, nothing needs to be done
@@ -157,6 +163,9 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
 
                 }
             }
+            else {
+                report.addWarning(function, cd, "no paths found!");
+            }
         } else {
             report.addCritical(function, cd, "File is neither coma nor exb nor exs file");
         }
@@ -164,17 +173,13 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-            Class cl2 = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
-            IsUsableFor.add(cl2);
-            Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl3);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "usable class not found error");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 
@@ -185,9 +190,6 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
         //working for exs too
         xp1 = XPath.newInstance("//head/meta-information/referenced-file/@url");
         List allAbsolutePaths = xp1.selectNodes(doc);
-        if (allAbsolutePaths.isEmpty()) {
-            report.addWarning(function, cd, "no paths found");
-        }
         return allAbsolutePaths;
     }
 
@@ -198,9 +200,6 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
         //working for exs too
         xp1 = XPath.newInstance("//ud-meta-information/ud-information[@attribute-name='# EXB-SOURCE']");
         List allAbsolutePaths = xp1.selectNodes(doc);
-        if (allAbsolutePaths.isEmpty()) {
-            report.addWarning(function, cd, "no paths found");
-        }
         return allAbsolutePaths;
     }
 
@@ -211,9 +210,6 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
         //  <relPath>narrative/KBD_71_Fish_nar/NG_6_1971_506-507_KBD_71_Fish_nar.pdf</relPath>
         xp1 = XPath.newInstance("/Corpus/CorpusData/Communication/File/relPath | /Corpus/CorpusData/Communication/File/absPath | /Corpus/CorpusData/Communication/Transcription/NSLink | /Corpus/CorpusData/Communication/Transcription/Description/Key[@Name='# EXB-SOURCE'] | /Corpus/CorpusData/Communication/Recording/Media/NSLink");
         List allAbsolutePaths = xp1.selectNodes(doc);
-        if (allAbsolutePaths.isEmpty()) {
-            report.addWarning(function, cd, "no paths found");
-        }
         return allAbsolutePaths;
     }
 

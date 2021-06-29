@@ -54,7 +54,6 @@ public class FilenameCheckerTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         ComaFilenameChecker instance = new ComaFilenameChecker();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         
         //what happens when we check exb files

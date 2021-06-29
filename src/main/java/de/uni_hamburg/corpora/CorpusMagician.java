@@ -937,22 +937,7 @@ public class CorpusMagician {
     //run one function on a corpus, that means all the files in the corpus
     //the funciton can run on
     public Report runCorpusFunction(Corpus c, CorpusFunction cf, boolean fix) {
-        Report report = new Report();
-        //find out on which objects this corpus function can run
-        //choose those from the corpus
-        //and run the checks on those files recursively
-        Collection<Class<? extends CorpusData>> usableTypes = cf.getIsUsableFor();
-
-        //if the corpus files are an instance
-        //of the class cl, run the function
-        for (CorpusData cd : c.getCorpusData()) {
-            if (usableTypes.contains(cd.getClass())) {
-                Report newReport = runCorpusFunction(cd, cf, fix);
-                report.merge(newReport);
-            }
-
-        }
-        return report;
+        return runCorpusFunction(c.getCorpusData(),cf,fix);
     }
 
     //run one function on a corpus, that means all the files in the corpus
@@ -968,15 +953,21 @@ public class CorpusMagician {
         //find out on which objects this corpus function can run
         //choose those from the corpus
         //and run the checks on those files recursively
-        Collection<Class<? extends CorpusData>> usableTypes = cf.getIsUsableFor();
-        //if the corpus files are an instance
-        //of the class cl, run the function
-        for (CorpusData cd : cdc) {
-            if (usableTypes.contains(cd.getClass())) {
-                Report newReport = runCorpusFunction(cd, cf, fix);
-                report.merge(newReport);
+        Collection<Class<? extends CorpusData>> usableTypes = null;
+        try {
+            usableTypes = cf.getIsUsableFor();
+            //if the corpus files are an instance
+            //of the class cl, run the function
+            for (CorpusData cd : cdc) {
+                if (usableTypes.contains(cd.getClass())) {
+                    Report newReport = runCorpusFunction(cd, cf, fix);
+                    report.merge(newReport);
+                }
             }
+        } catch (ClassNotFoundException e) {
+            report.addException(e,"usable classes not found");
         }
+
         return report;
     }
 
@@ -1192,8 +1183,13 @@ public class CorpusMagician {
         for (CorpusFunction cf : getAllExistingCFsAsCFs()) {
             desc = cf.getFunction() + ":   " + cf.getDescription();
             usable = "\nThe function can be used on:\n";
-            for (Class cl : cf.getIsUsableFor()) {
-                usable += cl.getSimpleName() + " ";
+            try {
+                for (Class cl : cf.getIsUsableFor()) {
+                    usable += cl.getSimpleName() + " ";
+                }
+            }
+            catch (ClassNotFoundException e) {
+                report.addException(e, "usable classes not found");
             }
             hasfix = "\nThe function has a fixing option: " + cf.getCanFix().toString();
             footerverbose += desc + hasfix + usable + "\n\n";

@@ -54,7 +54,6 @@ public class ComaPIDLengthCheckerTest {
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
             ComaFedoraIdentifierLengthChecker instance = new ComaFedoraIdentifierLengthChecker();
-            instance.report = new Report();
             Collection<CorpusData> cdc;
             //what happens when we check coma files
             for (CorpusData cd : corp.getMetadata()){
