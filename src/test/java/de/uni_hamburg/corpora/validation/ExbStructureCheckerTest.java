@@ -63,9 +63,14 @@ public class ExbStructureCheckerTest {
         System.out.println("getIsUsableFor");
         ExbStructureChecker instance = new ExbStructureChecker();
         //Collection<Class> expResult = null;
-        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-        //no null object here
-        assertNotNull(result);
+        try {
+            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+            //no null object here
+            assertNotNull(result);
+        }
+        catch (ClassNotFoundException e) {
+            fail("Class not found");
+        }
     }
 
 }

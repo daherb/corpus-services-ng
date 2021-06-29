@@ -169,9 +169,14 @@ public class PrettyPrintDataTest {
         System.out.println("getIsUsableFor");
         PrettyPrintData instance = new PrettyPrintData();
         //Collection<Class> expResult = null;
-        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-        //no null object here
-        assertNotNull(result);
+        try {
+            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+            //no null object here
+            assertNotNull(result);
+        }
+        catch (ClassNotFoundException e) {
+            fail("Class not found");
+        }
     }
     
 }

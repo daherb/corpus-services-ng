@@ -69,9 +69,14 @@ public class ComaPIDLengthCheckerTest {
         System.out.println("getIsUsableFor");
         ComaFedoraIdentifierLengthChecker instance = new ComaFedoraIdentifierLengthChecker();
         //Collection<Class> expResult = null;
-        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-        //no null object here
-        assertNotNull(result);
+        try {
+            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+            //no null object here
+            assertNotNull(result);
+        }
+        catch (ClassNotFoundException e) {
+            fail("Class not found");
+        }
     }
     
 }
