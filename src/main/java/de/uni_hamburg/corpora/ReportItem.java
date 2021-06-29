@@ -297,8 +297,12 @@ public class ReportItem {
      * super long.
      */
     public String toString() {
-        return getLocation() + ": " + getWhat() + ". " + getHowto() + ". " +
-            getLocalisedMessage() + "\n" + getStackTrace();
+        String str = getLocation() + ": " + getWhat() + ". " + getHowto() + ". " +
+            getLocalisedMessage() ;
+        if (getStackTrace() != "") {
+            str += "\n" + getStackTrace();
+        }
+        return str ;
     }
 
     /**
