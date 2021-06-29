@@ -76,6 +76,7 @@ public class ReportItem {
      * of the error.
      */
     public ReportItem() {
+        // Default severity is critical (see above)
         what = "Totally unknown error";
         howto = "No known fixes";
         e = null;
@@ -83,29 +84,27 @@ public class ReportItem {
     }
 
     public ReportItem(Severity s, String what) {
+        // Call constructor above
+        this();
         this.severity = s;
         this.what = what;
-        this.function = "Unknown function";
     }
 
     public ReportItem(Severity s, Throwable e, String what) {
-        this.severity = s;
+        // Call constructor above
+        this(s,what);
         this.e = e;
-        this.what = what;
-        this.function = "Unknown function";
     }
 
     public ReportItem(Severity s, Throwable e, String filename, String what) {
-        this.severity = s;
-        this.e = e;
-        this.what = what;
+        // Call constructor above
+        this(s,e,what);
         this.filename = filename;
-        this.function = "Unknown function";
     }
     
     public ReportItem(Severity s, String filename, String what, String function) {
-        this.severity = s;
-        this.what = what;
+        // Call constructor above
+        this(s,what);
         this.filename = filename;
         this.function = function;
     }
@@ -116,13 +115,14 @@ public class ReportItem {
      * in most situations.
      */
     public ReportItem(Severity s, SAXParseException saxpe, String what) {
-        this.severity = s;
-        this.e = saxpe;
-        this.what = what;
-        this.howto = howto;
-        this.filename = saxpe.getSystemId();
-        this.lines = "" + saxpe.getLineNumber();
-        this.columns = "" + saxpe.getColumnNumber();
+        this(s,what);
+        if (saxpe != null) {
+            this.e = (Throwable) saxpe ;
+            this.filename = saxpe.getSystemId();
+            this.lines = "" + saxpe.getLineNumber();
+            this.columns = "" + saxpe.getColumnNumber();
+        }
+//        this.howto = howto; // This does not make sense but is null anyway
         this.function = "Unknown function";
     }
 
@@ -133,11 +133,9 @@ public class ReportItem {
      */
     public ReportItem(Severity s, String filename,
             String what, String function, String howto) {
-        this.severity = s;
-        this.filename = filename;
-        this.what = what;
+        // Call constructor above
+        this(s,filename,what,function);
         this.howto = howto;
-        this.function = function;
     }
 
     /**
