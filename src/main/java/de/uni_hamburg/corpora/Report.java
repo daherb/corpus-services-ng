@@ -516,8 +516,10 @@ public class Report {
             errorStats.addAll(kv.getValue());
         }
         for (ReportItem ri : errorStats) {
+            // HL 20210628: Should use isBad?
             if (ri.getSeverity().equals(Severity.CRITICAL) || ri.getSeverity().equals(Severity.WARNING) || ri.getSeverity().equals(Severity.MISSING)) {
                 //now make the Location relative to the base dir
+                // HL 20210628: This line does not do anything?
                 ri.getLocation();
                 onlyerrorStats.add(ri);
             }
