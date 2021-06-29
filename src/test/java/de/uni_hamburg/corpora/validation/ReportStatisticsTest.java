@@ -74,9 +74,14 @@ public class ReportStatisticsTest {
         ReportStatistics instance = new ReportStatistics();
         //Collection<Class> expResult = null;
         //Collection<Class> result = instance.getIsUsableFor();
-        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-        //no null object here
-        assertNotNull(result);
+        try {
+            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+            //no null object here
+            assertNotNull(result);
+        }
+        catch (ClassNotFoundException e) {
+            fail("Class not found");
+        }
     }
     
 }
