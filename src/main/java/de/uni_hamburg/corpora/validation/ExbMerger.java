@@ -458,13 +458,9 @@ public class ExbMerger extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ExbMerger.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
         return IsUsableFor;
     }
 
