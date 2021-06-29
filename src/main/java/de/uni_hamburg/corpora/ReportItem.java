@@ -149,16 +149,18 @@ public class ReportItem {
      * whether the stuff should be counted towards good statistic.
      */
     public boolean isGood() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.IFIXEDITFORYOU))  {
-            return true;
-        } else if ((this.severity == Severity.WARNING) ||
-               (this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)) {
-            return false;
-        } else {
-            System.out.println("Missed a severity case in isGood :-(");
-            return false;
+        switch (this.severity) {
+            case CORRECT:
+            case NOTE:
+            case IFIXEDITFORYOU:
+                return true ;
+            case WARNING:
+            case CRITICAL:
+            case MISSING:
+            case UNKNOWN: // ???
+                return false ;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isGood :-( "+ this.severity.toString());
         }
     }
 
@@ -166,33 +168,36 @@ public class ReportItem {
      * whether the stuff should be counted towards bad statistic.
      */
     public boolean isBad() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.IFIXEDITFORYOU)) {
-            return false;
-        } else if ((this.severity == Severity.WARNING) ||
-               (this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)) {
-            return true;
-        } else {
-            System.out.println("Missed a severity case in isBad :-(");
-            return true;
+        switch (this.severity) {
+            case CORRECT:
+            case NOTE:
+            case IFIXEDITFORYOU:
+                return false;
+            case WARNING:
+            case CRITICAL:
+            case MISSING:
+            case UNKNOWN: // ???
+                return true;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isBad :-( "+ this.severity.toString());
         }
     }
-
     /**
      * whether the stuff should be presented as severe problem.
      */
     public boolean isSevere() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.WARNING) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.IFIXEDITFORYOU)){
-            return false;
-        } else if ((this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)) {
-            return true;
-        } else {
-            System.out.println("Missed a severity case in isSevere :-(");
-            return true;
+        switch (this.severity) {
+            case CORRECT:
+            case WARNING:
+            case NOTE:
+            case IFIXEDITFORYOU:
+                return false ;
+            case CRITICAL:
+            case MISSING:
+            case UNKNOWN: // ???
+                return true ;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isSevere :-( " + this.severity.toString());
         }
     }
     
@@ -200,16 +205,18 @@ public class ReportItem {
      * whether the stuff should be counted towards bad statistic.
      */
     public boolean isFix() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)  || (this.severity == Severity.WARNING)) {
-            return false;
-        } else if (this.severity == Severity.IFIXEDITFORYOU)
-                {
-            return true;
-        } else {
-            System.out.println("Missed a severity case in isFix :-(");
-            return true;
+        switch (this.severity) {
+            case IFIXEDITFORYOU:
+                return true;
+            case CORRECT:
+            case NOTE:
+            case CRITICAL:
+            case MISSING:
+            case WARNING:
+            case UNKNOWN:
+                return false;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isFix :-( " + this.severity.toString());
         }
     }
 
