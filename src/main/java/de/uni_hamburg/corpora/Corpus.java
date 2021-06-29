@@ -97,20 +97,29 @@ public class Corpus {
 
     public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
         for (CorpusData cd : cdc) {
+            this.cdc = cdc ;
             if (cd instanceof ContentData) {
                 contentdata.add((ContentData) cd);
-            } else if (cd instanceof Recording) {
+            }
+            if (cd instanceof Recording) {
                 recording.add((Recording) cd);
-            } else if (cd instanceof AdditionalData) {
+            }
+            if (cd instanceof AdditionalData) {
                 additionaldata.add((AdditionalData) cd);
-            } else if (cd instanceof Metadata) {
+            } if (cd instanceof Metadata) {
                 metadata.add((Metadata) cd);
-            } else if (cd instanceof AnnotationSpecification) {
+            }
+            if (cd instanceof AnnotationSpecification) {
                 annotationspecification.add((AnnotationSpecification) cd);
-            } else if (cd instanceof ConfigParameters) {
+            }
+            if (cd instanceof ConfigParameters) {
                 configparameters.add((ConfigParameters) cd);
-            } else if (cd instanceof CmdiData) {
+            }
+            if (cd instanceof CmdiData) {
                 cmdidata.add((CmdiData) cd);
+            }
+            if (cd instanceof BasicTranscriptionData) {
+                basictranscriptiondata.add((BasicTranscriptionData) cd);
             }
         }
         //and also the other collections maybe
