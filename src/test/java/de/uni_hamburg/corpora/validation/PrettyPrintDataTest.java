@@ -68,7 +68,6 @@ public class PrettyPrintDataTest {
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
             PrettyPrintData instance = new PrettyPrintData();
-            instance.report = new Report();
             //what happens when we check coma files
             Collection<CorpusData> cdc;
             //what happens when we check coma files
@@ -103,7 +102,6 @@ public class PrettyPrintDataTest {
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
             PrettyPrintData instance = new PrettyPrintData();
-            instance.report = new Report();
             //what happens when we check coma files
             Collection<CorpusData> cdc;
             //what happens when we check coma files

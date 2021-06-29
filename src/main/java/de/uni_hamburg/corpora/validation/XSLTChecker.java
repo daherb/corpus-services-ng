@@ -130,17 +130,13 @@ public class XSLTChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-            Class cl1 = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl1);
-            //Class cl2 = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-            //IsUsableFor.add(cl2);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "unknown class not found error");
-        }
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        IsUsableFor.add(cl);
+        cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+        IsUsableFor.add(cl);
+        //cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
+        //IsUsableFor.add(cl);
         return IsUsableFor;
     }
 

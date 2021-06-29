@@ -54,7 +54,6 @@ public class IAAFunctionalityTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         IAAFunctionality instance = new IAAFunctionality();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {

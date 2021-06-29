@@ -36,7 +36,8 @@ import org.xml.sax.SAXException;
 public abstract class Checker implements CorpusFunction {
 
     CorpusData cd;
-    Report report = new Report();
+    // This is dangerous and should be solved differently
+    // Report report = new Report();
     Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<Class<? extends CorpusData>>();
     final String function;
     Boolean canfix;
@@ -56,7 +57,7 @@ public abstract class Checker implements CorpusFunction {
     }
 
     public Report execute(CorpusData cd, boolean fix) {
-        report = new Report();
+        Report report = new Report();
         try {
             if (fix) {
 
@@ -99,7 +100,7 @@ public abstract class Checker implements CorpusFunction {
     }
 
     public Report execute(Corpus c, boolean fix) {
-        report = new Report();
+        Report report = new Report();
         try {
             if (fix) {
 
@@ -145,7 +146,7 @@ public abstract class Checker implements CorpusFunction {
     //To implement in the class
     public abstract Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException;
 
-    public abstract Collection<Class<? extends CorpusData>> getIsUsableFor();
+    public abstract Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException;
 
     public void setIsUsableFor(Collection<Class<? extends CorpusData>> cdc) {
         for (Class<? extends CorpusData> cl : cdc) {

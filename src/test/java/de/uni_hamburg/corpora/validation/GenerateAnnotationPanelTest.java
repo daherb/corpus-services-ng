@@ -55,7 +55,6 @@ public class GenerateAnnotationPanelTest {
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
             GenerateAnnotationPanel instance = new GenerateAnnotationPanel();
-            instance.report = new Report();
             Collection<CorpusData> cdc;
             //what happens when we check exb files
             for (CorpusData cd : corp.getContentdata()){

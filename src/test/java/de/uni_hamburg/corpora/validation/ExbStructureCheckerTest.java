@@ -48,7 +48,6 @@ public class ExbStructureCheckerTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         ExbStructureChecker instance = new ExbStructureChecker();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {

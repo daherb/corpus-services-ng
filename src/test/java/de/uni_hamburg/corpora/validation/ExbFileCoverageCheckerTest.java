@@ -57,7 +57,6 @@ public class ExbFileCoverageCheckerTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         ExbFileCoverageChecker instance = new ExbFileCoverageChecker();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getContentdata()) {

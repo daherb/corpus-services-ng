@@ -55,7 +55,6 @@ public class ComaKmlForLocationsTest {
         Corpus corp = new Corpus(corpusURL);
         ComaKmlForLocations instance = new ComaKmlForLocations();
         instance.setKMLFilePath("src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\INEL_LangsRecolored.kml");
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {
@@ -76,7 +75,6 @@ public class ComaKmlForLocationsTest {
         Corpus corp = new Corpus(corpusURL);
         ComaKmlForLocations instance = new ComaKmlForLocations();
         instance.setKMLFilePath("src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\INEL_LangsRecolored.kml");
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we fix coma files
         for (CorpusData cd : corp.getMetadata()) {

@@ -44,6 +44,7 @@ public class GeneralTransformer extends Checker {
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws JDOMException, IOException, URISyntaxException, TransformerConfigurationException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, XPathExpressionException {
+        Report report = new Report();
         if (fix) {
             CorpusIO cio = new CorpusIO();
             String corpusdata = cd.toUnformattedString();
@@ -72,22 +73,19 @@ public class GeneralTransformer extends Checker {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            if (exb) {
-                Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-                IsUsableFor.add(cl);
-            }
-            if (exs) {
-                Class cl2 = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-                IsUsableFor.add(cl2);
-            }
-            if (coma) {
-                Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");
-                IsUsableFor.add(cl3);
-            }
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, " usable class not found");
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+        Class cl ;
+        if (exb) {
+            cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+            IsUsableFor.add(cl);
+        }
+        if (exs) {
+            cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
+            IsUsableFor.add(cl);
+        }
+        if (coma) {
+            cl = Class.forName("de.uni_hamburg.corpora.ComaData");
+            IsUsableFor.add(cl);
         }
         return IsUsableFor;
     }
@@ -100,43 +98,43 @@ public class GeneralTransformer extends Checker {
         urlToOutput = new URL(cd.getParentURL() + s);
     }
 
-    public void setOverwriteFiles(String s) {
+    public void setOverwriteFiles(String s) throws IllegalArgumentException {
         if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("wahr") || s.equalsIgnoreCase("ja")) {
             overwritefiles = true;
         } else if (s.equalsIgnoreCase("false") || s.equalsIgnoreCase("falsch") || s.equalsIgnoreCase("nein")) {
             overwritefiles = false;
         } else {
-            report.addCritical(function, cd, "Parameter coma not recognized: " + escapeHtml4(s));
+            throw new IllegalArgumentException("Parameter coma not recognized: " + escapeHtml4(s));
         }
     }
 
-    public void setComa(String s) {
+    public void setComa(String s) throws IllegalArgumentException {
         if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("wahr") || s.equalsIgnoreCase("ja")) {
             coma = true;
         } else if (s.equalsIgnoreCase("false") || s.equalsIgnoreCase("falsch") || s.equalsIgnoreCase("nein")) {
             coma = false;
         } else {
-            report.addCritical(function, cd, "Parameter coma not recognized: " + escapeHtml4(s));
+            throw new IllegalArgumentException("Parameter coma not recognized: " + escapeHtml4(s));
         }
     }
 
-    public void setExb(String s) {
+    public void setExb(String s) throws IllegalArgumentException {
         if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("wahr") || s.equalsIgnoreCase("ja")) {
             exb = true;
         } else if (s.equalsIgnoreCase("false") || s.equalsIgnoreCase("falsch") || s.equalsIgnoreCase("nein")) {
             exb = false;
         } else {
-            report.addCritical(function, cd, "Parameter coma not recognized: " + escapeHtml4(s));
+            throw new IllegalArgumentException("Parameter coma not recognized: " + escapeHtml4(s));
         }
     }
 
-    public void setExs(String s) {
+    public void setExs(String s) throws IllegalArgumentException {
         if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("wahr") || s.equalsIgnoreCase("ja")) {
             exs = true;
         } else if (s.equalsIgnoreCase("false") || s.equalsIgnoreCase("falsch") || s.equalsIgnoreCase("nein")) {
             exs = false;
         } else {
-            report.addCritical(function, cd, "Parameter coma not recognized: " + escapeHtml4(s));
+            throw new IllegalArgumentException("Parameter coma not recognized: " + escapeHtml4(s));
         }
     }
 

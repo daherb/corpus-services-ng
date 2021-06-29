@@ -50,7 +50,6 @@ public class NgTierCheckerWithAnnotationTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation();
-        instance.report = new Report();
         Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {
