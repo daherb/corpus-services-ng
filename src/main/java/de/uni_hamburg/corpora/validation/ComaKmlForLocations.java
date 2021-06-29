@@ -272,15 +272,15 @@ public class ComaKmlForLocations extends Checker implements CorpusFunction {
         } catch (JDOMException ex) {
             Logger.getLogger(ComaKmlForLocations.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParserConfigurationException ex) {
-            stats.addException(ex, function, cd, "The KML file could not be parsed.");
+            stats.addException(function, ex, cd, "The KML file could not be parsed.");
         } catch (TransformerException ex) {
-            stats.addException(ex, function, cd, "Unknown Transformer error.");
+            stats.addException(function, ex, cd, "Unknown Transformer error.");
         } catch (XPathExpressionException ex) {
-            stats.addException(ex, function, cd, "Unknown XPath error.");
+            stats.addException(function, ex, cd, "Unknown XPath error.");
         } catch (IOException ex) {
-            stats.addException(ex, function, cd, "The KML file could not be parsed.");
+            stats.addException(function, ex, cd, "The KML file could not be parsed.");
         } catch (URISyntaxException ex) {
-            stats.addException(ex, function, cd, "URI syntax Exception.");
+            stats.addException(function, ex, cd, "URI syntax Exception.");
         }
         return stats; // return the report with warnings
     }

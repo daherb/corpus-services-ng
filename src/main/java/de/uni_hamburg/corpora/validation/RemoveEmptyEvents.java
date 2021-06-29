@@ -74,7 +74,7 @@ public class RemoveEmptyEvents extends Checker implements CorpusFunction {
                 exmaError.addError(function, cd.getURL().getFile(), "", "", false, "empty events need to be removed");
             }}
         } catch (JDOMException ex) {
-            report.addException(ex, function, cd, "Jdom Exception");
+            report.addException(function, ex, cd, "Jdom Exception");
         }
         return report;
     }

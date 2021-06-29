@@ -311,7 +311,7 @@ public class Report {
     /**
      * Add a exception in named statistics bucket. with CorpusData object
      */
-    public void addException(Throwable e, String statId, CorpusData cd, String description) {
+    public void addException(String statId, Throwable e, CorpusData cd, String description) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
         stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
                 e, cd.getURL().toString(), description));

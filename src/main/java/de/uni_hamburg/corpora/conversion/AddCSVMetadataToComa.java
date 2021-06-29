@@ -80,11 +80,11 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
         try {
             stats = function(cd);
         } catch (ParserConfigurationException pce) {
-            stats.addException(pce, function, cd, "Unknown parsing error");
+            stats.addException(function, pce, cd, "Unknown parsing error");
         } catch (IOException ioe) {
-            stats.addException(ioe, function, cd, "Unknown file reading error");
+            stats.addException(function, ioe, cd, "Unknown file reading error");
         } catch (JDOMException ex) {
-             stats.addException(ex, function, cd, "Unknown JDOM error");
+             stats.addException(function, ex, cd, "Unknown JDOM error");
         }
         return stats;
     }

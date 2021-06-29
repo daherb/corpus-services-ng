@@ -69,19 +69,19 @@ public class ComaChartsGeneration extends Checker implements CorpusFunction {
            
 
         } catch (TransformerConfigurationException ex) {
-            r.addException(ex, function, cd, "Transformer configuration error");
+            r.addException(function, ex, cd, "Transformer configuration error");
         } catch (TransformerException ex) {
-            r.addException(ex, function, cd, "Transformer error");
+            r.addException(function, ex, cd, "Transformer error");
         } catch (MalformedURLException ex) {
-            r.addException(ex, function, cd, "Malformed URL error");
+            r.addException(function, ex, cd, "Malformed URL error");
         } catch (IOException ex) {
-            r.addException(ex, function, cd, "Unknown input/output error");
+            r.addException(function, ex, cd, "Unknown input/output error");
         } catch (ParserConfigurationException ex) {
-            r.addException(ex, function, cd, "Unknown Parser error");
+            r.addException(function, ex, cd, "Unknown Parser error");
         } catch (SAXException ex) {
-            r.addException(ex, function, cd, "Unknown XML error");
+            r.addException(function, ex, cd, "Unknown XML error");
         } catch (XPathExpressionException ex) {
-            r.addException(ex, function, cd, "Unknown XPath error");
+            r.addException(function, ex, cd, "Unknown XPath error");
         }
 
         return r;

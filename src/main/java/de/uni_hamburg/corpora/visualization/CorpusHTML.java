@@ -54,9 +54,9 @@ public class CorpusHTML extends Visualizer {
             xt.setParameter("identifier", "spoken-corpus:" + corpusPrefix + "-" + corpusVersion);
             result = xt.transform(coma, xsl);
         } catch (TransformerConfigurationException ex) {
-            stats.addException(ex, SERVICE_NAME, cd, "Unknown TransformerConfigurationException");
+            stats.addException(SERVICE_NAME, ex, cd, "Unknown TransformerConfigurationException");
         } catch (TransformerException ex) {
-            stats.addException(ex, SERVICE_NAME, cd, "Unknown TransformerException");
+            stats.addException(SERVICE_NAME, ex, cd, "Unknown TransformerException");
         }
 
         return result;
@@ -72,9 +72,9 @@ public class CorpusHTML extends Visualizer {
             targeturl = new URL(cd.getParentURL() + "/resources/" + cd.getFilenameWithoutFileEnding() + ".html");
             cio.write(result, targeturl);
         } catch (MalformedURLException ex) {
-            stats.addException(ex, SERVICE_NAME, cd, "Malformed URL used");
+            stats.addException(SERVICE_NAME, ex, cd, "Malformed URL used");
         } catch (IOException ex) {
-            stats.addException(ex, SERVICE_NAME, cd, "Unknown Input Output error");
+            stats.addException(SERVICE_NAME, ex, cd, "Unknown Input Output error");
         } catch (TransformerException ex) {
             stats.addException(SERVICE_NAME, ex, "Transformer Exception");
         } catch (ParserConfigurationException ex) {
