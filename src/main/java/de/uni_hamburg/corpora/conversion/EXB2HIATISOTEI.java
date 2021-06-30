@@ -206,25 +206,25 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
             }
 
         } catch (SAXException ex) {
-            stats.addException(ex, function, cd, "Unknown exception error");
+            stats.addException(function, ex, cd, "Unknown exception error");
         } catch (FSMException ex) {
-            stats.addException(ex, function, cd, "Unknown finite state machine error");
+            stats.addException(function, ex, cd, "Unknown finite state machine error");
         } catch (MalformedURLException ex) {
-            stats.addException(ex, function, cd, "Unknown file URL reading error");
+            stats.addException(function, ex, cd, "Unknown file URL reading error");
         } catch (JDOMException ex) {
-            stats.addException(ex, function, cd, "Unknown file reading error");
+            stats.addException(function, ex, cd, "Unknown file reading error");
         } catch (IOException ex) {
-            stats.addException(ex, function, cd, "Unknown file reading error");
+            stats.addException(function, ex, cd, "Unknown file reading error");
         } catch (TransformerException ex) {
-            stats.addException(ex, function, cd, "XSL transformer error");
+            stats.addException(function, ex, cd, "XSL transformer error");
         } catch (ParserConfigurationException ex) {
-            stats.addException(ex, function, cd, "Parser error");
+            stats.addException(function, ex, cd, "Parser error");
         } catch (XPathExpressionException ex) {
-            stats.addException(ex, function, cd, "XPath error");
+            stats.addException(function, ex, cd, "XPath error");
         } catch (URISyntaxException ex) {
-            stats.addException(ex, function, cd, "ComaPath URI error");
+            stats.addException(function, ex, cd, "ComaPath URI error");
         } catch (JexmaraldaException ex) {
-            stats.addException(ex, function, cd, "Jexmeaalda error");
+            stats.addException(function, ex, cd, "Jexmeaalda error");
         }
         return stats;
     }

@@ -100,7 +100,7 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
             System.out.println("Done");
             stats.addCorrect(function, comadata, "Successfully created zip file at " + zipFile);
         } catch (IOException ex) {
-            stats.addException(ex, function, comadata, "Unknown IO exception");
+            stats.addException(function, ex, comadata, "Unknown IO exception");
         }
         return stats;
     }

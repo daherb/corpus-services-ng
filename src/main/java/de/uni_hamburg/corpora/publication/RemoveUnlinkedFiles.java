@@ -101,15 +101,15 @@ public class RemoveUnlinkedFiles extends Publisher implements CorpusFunction {
             }
 
         } catch (ParserConfigurationException ex) {
-            stats.addException(ex, function, cd, "Unknown ParserConfigurationException.");
+            stats.addException(function, ex, cd, "Unknown ParserConfigurationException.");
         } catch (TransformerException ex) {
-            stats.addException(ex, function, cd, "Unknown TransformerException.");
+            stats.addException(function, ex, cd, "Unknown TransformerException.");
         } catch (SAXException ex) {
-            stats.addException(ex, function, cd, "Unknown SAXException.");
+            stats.addException(function, ex, cd, "Unknown SAXException.");
         } catch (IOException ex) {
-            stats.addException(ex, function, cd, "Unknown IOException.");
+            stats.addException(function, ex, cd, "Unknown IOException.");
         } catch (XPathExpressionException ex) {
-            stats.addException(ex, function, cd, "Unknown XPathExpressionException.");
+            stats.addException(function, ex, cd, "Unknown XPathExpressionException.");
         }
 
         return stats;

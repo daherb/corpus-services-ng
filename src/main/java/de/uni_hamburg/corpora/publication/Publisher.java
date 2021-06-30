@@ -44,27 +44,27 @@ public abstract class Publisher implements CorpusFunction {
 
             report = function(c);
         } catch (JexmaraldaException je) {
-            report.addException(je, function, cd, "Unknown parsing error");
+            report.addException(function, je, cd, "Unknown parsing error");
         } catch (JDOMException jdome) {
-            report.addException(jdome, function, cd, "Unknown parsing error");
+            report.addException(function, jdome, cd, "Unknown parsing error");
         } catch (SAXException saxe) {
-            report.addException(saxe, function, cd, "Unknown parsing error");
+            report.addException(function, saxe, cd, "Unknown parsing error");
         } catch (IOException ioe) {
-            report.addException(ioe, function, cd, "File reading error");
+            report.addException(function, ioe, cd, "File reading error");
         } catch (FSMException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (URISyntaxException ex) {
-            report.addException(ex, function, cd, "File reading erro");
+            report.addException(function, ex, cd, "File reading erro");
         } catch (ParserConfigurationException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (TransformerException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (XPathExpressionException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (ClassNotFoundException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (NoSuchAlgorithmException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         }
         return report;
     }
@@ -74,27 +74,27 @@ public abstract class Publisher implements CorpusFunction {
         try {
             report = function(cd);
         } catch (JexmaraldaException je) {
-            report.addException(je, function, cd, "Unknown parsing error");
+            report.addException(function, je, cd, "Unknown parsing error");
         } catch (JDOMException jdome) {
-            report.addException(jdome, function, cd, "Unknown parsing error");
+            report.addException(function, jdome, cd, "Unknown parsing error");
         } catch (SAXException saxe) {
-            report.addException(saxe, function, cd, "Unknown parsing error");
+            report.addException(function, saxe, cd, "Unknown parsing error");
         } catch (IOException ioe) {
-            report.addException(ioe, function, cd, "File reading error");
+            report.addException(function, ioe, cd, "File reading error");
         } catch (FSMException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (URISyntaxException ex) {
-            report.addException(ex, function, cd, "File reading erro");
+            report.addException(function, ex, cd, "File reading erro");
         } catch (ParserConfigurationException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (TransformerException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (XPathExpressionException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (ClassNotFoundException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         } catch (NoSuchAlgorithmException ex) {
-            report.addException(ex, function, cd, "File reading error");
+            report.addException(function, ex, cd, "File reading error");
         }
         return report;
     }

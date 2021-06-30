@@ -40,14 +40,22 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 public class BasicTranscriptionData implements CorpusData, ContentData, XMLData {
 
     private BasicTranscription bt;
-    URL url;
+    URL url ;
     Document jdom = new Document();
     String originalstring;
     URL parenturl;
     String filename;
     String filenamewithoutending;
 
+    // This constructor does not really make sense
+    // At the moment at least creates placeholder URL objects
     public BasicTranscriptionData() {
+        try {
+            this.url = new URL("file:///tmp");
+            this.parenturl = new URL("file:///");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     public BasicTranscriptionData(URL url) {

@@ -89,23 +89,23 @@ public class EXB2Chat extends Converter implements CorpusFunction {
             cio.write(data, targeturl);
             stats.addCorrect(EXB2CHAT, cod, "Conversion of file was successfully saved at " + targeturl);
         } catch (JexmaraldaException je) {
-            stats.addException(je, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, je, cod, "Input Output Exception");
         } catch (FSMException fe) {
-            stats.addException(fe, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, fe, cod, "Input Output Exception");
         } catch (SAXException se) {
-            stats.addException(se, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, se, cod, "Input Output Exception");
         } catch (FileNotFoundException fnfe) {
-            stats.addException(fnfe, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, fnfe, cod, "Input Output Exception");
         } catch (IOException ioe) {
-            stats.addException(ioe, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, ioe, cod, "Input Output Exception");
         } catch (XPathException xe) {
-            stats.addException(xe, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, xe, cod, "Input Output Exception");
         } catch (XPathExpressionException xee) {
-            stats.addException(xee, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, xee, cod, "Input Output Exception");
         } catch (ParserConfigurationException pe) {
-            stats.addException(pe, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, pe, cod, "Input Output Exception");
         } catch (TransformerException te) {
-            stats.addException(te, EXB2CHAT, cod, "Input Output Exception");
+            stats.addException(EXB2CHAT, te, cod, "Input Output Exception");
         }
         return stats;
     }

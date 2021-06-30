@@ -311,7 +311,7 @@ public class Report {
     /**
      * Add a exception in named statistics bucket. with CorpusData object
      */
-    public void addException(Throwable e, String statId, CorpusData cd, String description) {
+    public void addException(String statId, Throwable e, CorpusData cd, String description) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
         stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
                 e, cd.getURL().toString(), description));
@@ -516,8 +516,10 @@ public class Report {
             errorStats.addAll(kv.getValue());
         }
         for (ReportItem ri : errorStats) {
+            // HL 20210628: Should use isBad?
             if (ri.getSeverity().equals(Severity.CRITICAL) || ri.getSeverity().equals(Severity.WARNING) || ri.getSeverity().equals(Severity.MISSING)) {
                 //now make the Location relative to the base dir
+                // HL 20210628: This line does not do anything?
                 ri.getLocation();
                 onlyerrorStats.add(ri);
             }

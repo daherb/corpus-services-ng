@@ -71,7 +71,7 @@ public class RemoveAutoSaveExb extends Checker implements CorpusFunction {
                 exmaError.addError("RemoveAutoSaveExb", cd.getURL().getFile(), "", "", false, "autosave info needs to be removed");
             }
         } catch (JDOMException ex) {
-            report.addException(ex, function, cd, "Jdom Exception");
+            report.addException(function, ex, cd, "Jdom Exception");
         }
         return report;
     }

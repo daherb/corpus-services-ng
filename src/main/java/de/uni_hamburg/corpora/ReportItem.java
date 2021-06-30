@@ -76,6 +76,7 @@ public class ReportItem {
      * of the error.
      */
     public ReportItem() {
+        // Default severity is critical (see above)
         what = "Totally unknown error";
         howto = "No known fixes";
         e = null;
@@ -83,29 +84,27 @@ public class ReportItem {
     }
 
     public ReportItem(Severity s, String what) {
+        // Call constructor above
+        this();
         this.severity = s;
         this.what = what;
-        this.function = "Unknown function";
     }
 
     public ReportItem(Severity s, Throwable e, String what) {
-        this.severity = s;
+        // Call constructor above
+        this(s,what);
         this.e = e;
-        this.what = what;
-        this.function = "Unknown function";
     }
 
     public ReportItem(Severity s, Throwable e, String filename, String what) {
-        this.severity = s;
-        this.e = e;
-        this.what = what;
+        // Call constructor above
+        this(s,e,what);
         this.filename = filename;
-        this.function = "Unknown function";
     }
     
     public ReportItem(Severity s, String filename, String what, String function) {
-        this.severity = s;
-        this.what = what;
+        // Call constructor above
+        this(s,what);
         this.filename = filename;
         this.function = function;
     }
@@ -116,13 +115,14 @@ public class ReportItem {
      * in most situations.
      */
     public ReportItem(Severity s, SAXParseException saxpe, String what) {
-        this.severity = s;
-        this.e = saxpe;
-        this.what = what;
-        this.howto = howto;
-        this.filename = saxpe.getSystemId();
-        this.lines = "" + saxpe.getLineNumber();
-        this.columns = "" + saxpe.getColumnNumber();
+        this(s,what);
+        if (saxpe != null) {
+            this.e = (Throwable) saxpe ;
+            this.filename = saxpe.getSystemId();
+            this.lines = "" + saxpe.getLineNumber();
+            this.columns = "" + saxpe.getColumnNumber();
+        }
+//        this.howto = howto; // This does not make sense but is null anyway
         this.function = "Unknown function";
     }
 
@@ -133,11 +133,9 @@ public class ReportItem {
      */
     public ReportItem(Severity s, String filename,
             String what, String function, String howto) {
-        this.severity = s;
-        this.filename = filename;
-        this.what = what;
+        // Call constructor above
+        this(s,filename,what,function);
         this.howto = howto;
-        this.function = function;
     }
 
     /**
@@ -151,16 +149,18 @@ public class ReportItem {
      * whether the stuff should be counted towards good statistic.
      */
     public boolean isGood() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.IFIXEDITFORYOU))  {
-            return true;
-        } else if ((this.severity == Severity.WARNING) ||
-               (this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)) {
-            return false;
-        } else {
-            System.out.println("Missed a severity case in isGood :-(");
-            return false;
+        switch (this.severity) {
+            case CORRECT:
+            case NOTE:
+            case IFIXEDITFORYOU:
+                return true ;
+            case WARNING:
+            case CRITICAL:
+            case MISSING:
+            case UNKNOWN: // ???
+                return false ;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isGood :-( "+ this.severity.toString());
         }
     }
 
@@ -168,33 +168,36 @@ public class ReportItem {
      * whether the stuff should be counted towards bad statistic.
      */
     public boolean isBad() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.IFIXEDITFORYOU)) {
-            return false;
-        } else if ((this.severity == Severity.WARNING) ||
-               (this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)) {
-            return true;
-        } else {
-            System.out.println("Missed a severity case in isBad :-(");
-            return true;
+        switch (this.severity) {
+            case CORRECT:
+            case NOTE:
+            case IFIXEDITFORYOU:
+                return false;
+            case WARNING:
+            case CRITICAL:
+            case MISSING:
+            case UNKNOWN: // ???
+                return true;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isBad :-( "+ this.severity.toString());
         }
     }
-
     /**
      * whether the stuff should be presented as severe problem.
      */
     public boolean isSevere() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.WARNING) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.IFIXEDITFORYOU)){
-            return false;
-        } else if ((this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)) {
-            return true;
-        } else {
-            System.out.println("Missed a severity case in isSevere :-(");
-            return true;
+        switch (this.severity) {
+            case CORRECT:
+            case WARNING:
+            case NOTE:
+            case IFIXEDITFORYOU:
+                return false ;
+            case CRITICAL:
+            case MISSING:
+            case UNKNOWN: // ???
+                return true ;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isSevere :-( " + this.severity.toString());
         }
     }
     
@@ -202,16 +205,18 @@ public class ReportItem {
      * whether the stuff should be counted towards bad statistic.
      */
     public boolean isFix() {
-        if ((this.severity == Severity.CORRECT) ||
-               (this.severity == Severity.NOTE) || (this.severity == Severity.CRITICAL) ||
-              (this.severity == Severity.MISSING)  || (this.severity == Severity.WARNING)) {
-            return false;
-        } else if (this.severity == Severity.IFIXEDITFORYOU)
-                {
-            return true;
-        } else {
-            System.out.println("Missed a severity case in isFix :-(");
-            return true;
+        switch (this.severity) {
+            case IFIXEDITFORYOU:
+                return true;
+            case CORRECT:
+            case NOTE:
+            case CRITICAL:
+            case MISSING:
+            case WARNING:
+            case UNKNOWN:
+                return false;
+            default:
+                throw new IllegalArgumentException("Missed a severity case in isFix :-( " + this.severity.toString());
         }
     }
 
@@ -292,8 +297,12 @@ public class ReportItem {
      * super long.
      */
     public String toString() {
-        return getLocation() + ": " + getWhat() + ". " + getHowto() + ". " +
-            getLocalisedMessage() + "\n" + getStackTrace();
+        String str = getLocation() + ": " + getWhat() + ". " + getHowto() + ". " +
+            getLocalisedMessage() ;
+        if (getStackTrace() != "") {
+            str += "\n" + getStackTrace();
+        }
+        return str ;
     }
 
     /**
@@ -366,7 +375,8 @@ public class ReportItem {
     }
 
     /**
-     * Generate a very short summary of validawtion errors.
+     * Generate a very short summary of validation errors.
+     * TODO: Make more fine-grained to make e.g. correct items explicit
      */
     public static String generateSummary(Collection<ReportItem>
             errors) {
@@ -378,6 +388,7 @@ public class ReportItem {
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
+                case MISSING: // made missing critical as well to match isSevere
                     criticals++;
                     break;
                 case WARNING:
@@ -386,15 +397,15 @@ public class ReportItem {
                 case NOTE:
                     notes++;
                     break;
-                case UNKNOWN:
+                default: //case UNKNOWN: // Changed the unknown case to default to cover e.g. even the okay or fixed
                     unknowns++;
                     break;
-                default:
-                    break;
+                //default:
+                //    break;
             }
         }
         report = "Total of " +  (criticals + warnings + notes + unknowns) +
-            " menssages: " + criticals + " critical errors, " +
+            " messages: " + criticals + " critical errors, " +
             warnings + " warnings, " + notes + " notes and " + unknowns +
             " others.";
         return report;
