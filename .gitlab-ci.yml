@@ -2,7 +2,7 @@ compile_withmaven:
   image: maven:latest
   script:
     - mvn install:install-file -Dfile=lib/EXMARaLDA-Preview-20201130.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=Preview-20201130 -Dpackaging=jar  -DgeneratePom=true
-    - mvn clean compile assembly:single
+    - mvn clean test compile assembly:single
     
   artifacts:
     expire_in: 10 week
