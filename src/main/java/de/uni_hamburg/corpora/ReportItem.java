@@ -602,5 +602,36 @@ public class ReportItem {
         
         return report;
     }
-
+    
+    /* Generate a CSV file with validation errors list with double quotes as delimeters*/
+    public static String GenerateCSV (Collection<ReportItem> errors, String summarylines) {
+        String report = new String();
+        report += "Type\"Function\"FIlename:line.column\"Error\"Fix\"Original\n"; 
+        for (ReportItem error : errors) {
+            switch (error.getSeverity()) {
+                case CRITICAL:
+                    report += "Critical\"";
+                    break;
+                case WARNING:
+                    report += "Warning\"";
+                    break;
+                case NOTE:
+                    report += "Note\"";
+                    break;
+                case UNKNOWN:
+                    report += "Unknown\"";
+                    break;
+                default:
+                    report += "Other\"";
+                    break;
+            }
+            report += error.getFunction() + "\"";
+            report += error.getLocation() + "\"";
+            report += error.getWhat() + "\"";
+            report += error.getHowto() + "\"";
+            report += error.getLocalisedMessage() + "\"";
+            report += error.getStackTrace() +"\n";
+        }
+        return report; 
+       }
 }
