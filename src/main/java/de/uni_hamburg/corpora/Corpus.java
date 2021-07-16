@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
@@ -72,11 +74,25 @@ public class Corpus {
         cdc.add(coma);
     }
 
+    public Corpus(String corpusName, URL baseDir, Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
+        this(cdc);
+        basedirectory = baseDir ;
+        corpusname = corpusName ;
+    }
 
     public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
         this.cdc = cdc ;
         // Now sort the corpus data files into categories
         addCorpusDataCollection(cdc);
+        // We don't have a name
+        corpusname = "" ;
+        // Get the common prefix of all parent urls
+        String commonPrefix =
+                StringUtils.getCommonPrefix(cdc.stream().map((cd) -> cd.getParentURL().toString()).toArray(String[]::new));
+        // Convert to basedirectory
+        basedirectory = new URL(commonPrefix) ;
+    }
+
     private void addCorpusDataCollection(Collection<CorpusData> cdc) {
         for (CorpusData cd : cdc) {
             if (cd instanceof ContentData) {
