@@ -2,7 +2,10 @@ package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
 import org.reflections.Reflections;
+
+import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class NullChecker extends Checker implements CorpusFunction {
 
@@ -41,7 +44,7 @@ public class NullChecker extends Checker implements CorpusFunction {
         // Use reflections to get all corpus data classes
         Reflections reflections = new Reflections("de.uni_hamburg.corpora");
         // Get all classes derived from CorpusData
-        return reflections.getSubTypesOf(CorpusData.class);
+        return reflections.getSubTypesOf(CorpusData.class).stream().filter((c) -> !Modifier.isAbstract(c.getModifiers())).collect(Collectors.toSet());
     }
 
 
