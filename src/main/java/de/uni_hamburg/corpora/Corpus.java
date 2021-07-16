@@ -64,9 +64,20 @@ public class Corpus {
                 cdc.add(cddd);
             }
         }
-        //Coma is coma is 
+        //Coma is coma is
         comadata = coma;
-        //Now create the needed 
+        // Now sort the corpus data files into categories
+        addCorpusDataCollection(cdc);
+        //we don't need to check it because we know it
+        cdc.add(coma);
+    }
+
+
+    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
+        this.cdc = cdc ;
+        // Now sort the corpus data files into categories
+        addCorpusDataCollection(cdc);
+    private void addCorpusDataCollection(Collection<CorpusData> cdc) {
         for (CorpusData cd : cdc) {
             if (cd instanceof ContentData) {
                 contentdata.add((ContentData) cd);
@@ -91,38 +102,6 @@ public class Corpus {
                 }
             }
         }
-        //we don't need to check it because we know it
-        cdc.add(coma);
-    }
-
-    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
-        for (CorpusData cd : cdc) {
-            this.cdc = cdc ;
-            if (cd instanceof ContentData) {
-                contentdata.add((ContentData) cd);
-            }
-            if (cd instanceof Recording) {
-                recording.add((Recording) cd);
-            }
-            if (cd instanceof AdditionalData) {
-                additionaldata.add((AdditionalData) cd);
-            } if (cd instanceof Metadata) {
-                metadata.add((Metadata) cd);
-            }
-            if (cd instanceof AnnotationSpecification) {
-                annotationspecification.add((AnnotationSpecification) cd);
-            }
-            if (cd instanceof ConfigParameters) {
-                configparameters.add((ConfigParameters) cd);
-            }
-            if (cd instanceof CmdiData) {
-                cmdidata.add((CmdiData) cd);
-            }
-            if (cd instanceof BasicTranscriptionData) {
-                basictranscriptiondata.add((BasicTranscriptionData) cd);
-            }
-        }
-        //and also the other collections maybe
     }
 
     public Collection<CorpusData> getCorpusData() {
