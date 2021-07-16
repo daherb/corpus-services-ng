@@ -62,11 +62,11 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
         } catch (JDOMException ex) {
-            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         } 
     }
 
