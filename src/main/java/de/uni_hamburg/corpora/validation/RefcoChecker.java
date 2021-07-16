@@ -162,7 +162,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (isoStream == null)
                 isoStream = new FileInputStream("iso-639-3.tab");
             BufferedReader bReader = new BufferedReader(new
-                    InputStreamReader(getClass().getResourceAsStream("/iso-639-3.tab")));
+                    InputStreamReader(isoStream));
             String line;
             while ((line = bReader.readLine()) != null) {
                     // Skip the header
