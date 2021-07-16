@@ -152,6 +152,10 @@ public class CorpusIO {
                 SegmentedTranscriptionData seg = new SegmentedTranscriptionData(url);
                 System.out.println(seg.getFilename() + " read");
                 return seg;
+            } else if (url.getPath().toLowerCase().endsWith("imdi") && clcds.contains(usdata.getClass())) {
+                UnspecifiedXMLData usd = new UnspecifiedXMLData(url);
+                System.out.println(usd.getFilename() + " read");
+                return usd;
             } else if (url.getPath().toLowerCase().endsWith("eaf") && clcds.contains(eldata.getClass())) {
                 ELANData eld = new ELANData(url);
                 System.out.println(eld.getFilename() + " read");
