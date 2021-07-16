@@ -156,11 +156,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
     public RefcoChecker(boolean hasfixingoption) {
         super(hasfixingoption);
-        BufferedReader bReader = new BufferedReader(new
-                InputStreamReader(getClass().getResourceAsStream("/iso-639-3.tab")));
+        try {
+            InputStream isoStream = getClass().getResourceAsStream("/iso-639-3.tab") ;
+            // If the resource is missing try to load it as a file instead
+            if (isoStream == null)
+                isoStream = new FileInputStream("iso-639-3.tab");
+            BufferedReader bReader = new BufferedReader(new
+                    InputStreamReader(getClass().getResourceAsStream("/iso-639-3.tab")));
             String line;
-            try {
-                while ((line = bReader.readLine()) != null) {
+            while ((line = bReader.readLine()) != null) {
                     // Skip the header
                     if (!line.startsWith("Id"))
                         isoList.add(line.split("\t")[0]) ;
