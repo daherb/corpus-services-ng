@@ -35,6 +35,8 @@ public class Corpus {
     private Collection<CmdiData> cmdidata = new ArrayList();
     Collection<BasicTranscriptionData> basictranscriptiondata = new ArrayList();
     Collection<SegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList();
+    Collection<ELANData> elandata = new ArrayList();
+    Collection<FlextextData> flextextdata = new ArrayList();
     ComaData comadata;
     //all the data together
     Collection<CorpusData> cdc = new ArrayList<CorpusData>();
@@ -74,6 +76,10 @@ public class Corpus {
                     basictranscriptiondata.add((BasicTranscriptionData) cd);
                 } else if (cd instanceof SegmentedTranscriptionData) {
                     segmentedtranscriptiondata.add((SegmentedTranscriptionData) cd);
+                } else if (cd instanceof ELANData) {
+                    elandata.add((ELANData) cd);
+                } else if (cd instanceof FlextextData) {
+                    flextextdata.add((FlextextData) cd);
                 }
             } else if (cd instanceof Recording) {
                 recording.add((Recording) cd);
@@ -164,7 +170,15 @@ public class Corpus {
     public Collection<SegmentedTranscriptionData> getSegmentedTranscriptionData() {
         return segmentedtranscriptiondata;
     }
+    
+    public Collection<ELANData> getELANData() {
+        return elandata;
+    }
 
+    public Collection<FlextextData> getFlextextData() {
+        return flextextdata;
+    }
+ 
     public ComaData getComaData() {
         return comadata;
     }

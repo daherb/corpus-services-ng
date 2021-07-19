@@ -51,6 +51,8 @@ import de.uni_hamburg.corpora.validation.DuplicateTierContentChecker;
 import de.uni_hamburg.corpora.validation.ExbMP3Next2WavAdder;
 import de.uni_hamburg.corpora.validation.ExbSegmentationChecker;
 import de.uni_hamburg.corpora.validation.LanguageToolChecker;
+import de.uni_hamburg.corpora.validation.ElanPunctuationChecker;
+import de.uni_hamburg.corpora.validation.FlextextPunctuationChecker;
 import de.uni_hamburg.corpora.visualization.HScoreHTML;
 import de.uni_hamburg.corpora.validation.ReportStatistics;
 import de.uni_hamburg.corpora.visualization.VikusViewer;
@@ -316,6 +318,8 @@ public class CorpusMagician {
         allExistingCFs.add("ExbEventTokenizationChecker");
         allExistingCFs.add("ExbTimestampsChecker");
         allExistingCFs.add("ExbForbiddenSymbolsChecker");
+        allExistingCFs.add("ElanPunctuationChecker");
+        allExistingCFs.add("FlextextPunctuationChecker");
         Collections.sort((List<String>) allExistingCFs);
         return allExistingCFs;
     }
@@ -837,7 +841,7 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(ltc);
                     break;
-                    case "vikusviewer":
+                case "vikusviewer":
                     VikusViewer vv = new VikusViewer();
                     cf2strcorpusfunctions.add(vv);
                     break;
@@ -869,6 +873,14 @@ public class CorpusMagician {
                             System.out.println("The tiers to check are set to " + cfProperties.getProperty("tiers"));
                         }
                     }
+                    break;
+                case "elanpunctuationchecker":
+                    ElanPunctuationChecker epc = new ElanPunctuationChecker();
+                    cf2strcorpusfunctions.add(epc);
+                    break;
+                case "flextextpunctuationchecker":
+                    FlextextPunctuationChecker fpc = new FlextextPunctuationChecker();
+                    cf2strcorpusfunctions.add(fpc);
                     break;
                 default:
                     report.addCritical("CommandlineFunctionality", "Function String \"" + function + "\" is not recognized");

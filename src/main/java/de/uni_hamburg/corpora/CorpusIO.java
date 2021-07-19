@@ -50,6 +50,8 @@ public class CorpusIO {
     CmdiData cmdidata = new CmdiData();
     UnspecifiedXMLData usdata = new UnspecifiedXMLData();
     SegmentedTranscriptionData segdata = new SegmentedTranscriptionData();
+    ELANData elandata = new ELANData();
+    FlextextData flextextdata = new FlextextData();
 
     public CorpusIO() {
         allCorpusDataTypes.add(bt.getClass());
@@ -58,6 +60,8 @@ public class CorpusIO {
         allCorpusDataTypes.add(cmdidata.getClass());
         allCorpusDataTypes.add(usdata.getClass());
         allCorpusDataTypes.add(segdata.getClass());
+        allCorpusDataTypes.add(elandata.getClass());
+        allCorpusDataTypes.add(flextextdata.getClass());
     }
 
     public String CorpusData2String(CorpusData cd) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
@@ -150,6 +154,14 @@ public class CorpusIO {
                 SegmentedTranscriptionData seg = new SegmentedTranscriptionData(url);
                 System.out.println(seg.getFilename() + " read");
                 return seg;
+            } else if (url.getPath().toLowerCase().endsWith("eaf") && clcds.contains(elandata.getClass())) {
+                ELANData eld = new ELANData(url);
+                System.out.println(eld.getFilename() + " read");
+                return eld;
+            } else if (url.getPath().toLowerCase().endsWith("flextext") && clcds.contains(flextextdata.getClass())) {
+                FlextextData flx = new FlextextData(url);
+                System.out.println(flx.getFilename() + " read");
+                return flx;
             } else {
                 System.out.println(url + " will not be read");
                 return null;
