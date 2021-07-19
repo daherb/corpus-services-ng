@@ -1053,6 +1053,12 @@ public class CorpusMagician {
             } else {
                 reportOutput = ReportItem.generateDataTableHTML(report.getRawStatistics(), report.getSummaryLines());
             }
+        } else if (reportlocation.getFile().endsWith("csv")) {
+            if (iserrorsonly) {
+                reportOutput = ReportItem.GenerateCSV(report.getErrorStatistics(), report.getSummaryLines());
+            } else {
+            reportOutput = ReportItem.GenerateCSV(report.getRawStatistics(), report.getSummaryLines());
+            }
         } else {
             //reportOutput = report.getSummaryLines() + "\n" + report.getErrorReports();
             reportOutput = report.getSummaryLines() + "\n" + report.getFullReports();
