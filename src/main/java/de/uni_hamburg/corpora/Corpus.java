@@ -222,6 +222,14 @@ public class Corpus {
     public void setSegmentedTranscriptionData(Collection<SegmentedTranscriptionData> segmentedtranscriptions) {
         this.segmentedtranscriptiondata = segmentedtranscriptions;
     }
+    
+    public void setELANData(Collection<ELANData> elandata) {
+        this.elandata = elandata;
+    }
+    
+    public void setFlextextData(Collection<FlextextData> flextextdata) {
+        this.flextextdata = flextextdata;
+    }
 
     public void setComaData(ComaData coma) {
         this.comadata = coma;
