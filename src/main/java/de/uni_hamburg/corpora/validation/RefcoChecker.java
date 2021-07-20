@@ -36,11 +36,12 @@ import java.util.zip.ZipFile;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20210713
+ * @version 20210720
  * The checker for Refco set of criteria.
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 
+    // The local logger that can be used for debugging
     private final Logger logger = Logger.getLogger(this.getClass().toString());
 
     // Separator used to separate multiple values in a cell
@@ -48,15 +49,31 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Separator used to separate words/token
     private final String tokenSeparator = "\\s+" ;
 
+    // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
             Namespace.getNamespace("table","urn:oasis:names:tc:opendocument:xmlns:table:1.0") ;
+    // The XML namespace for text elements in ODS files
     private final Namespace textNamespace =
             Namespace.getNamespace("text","urn:oasis:names:tc:opendocument:xmlns:text:1.0") ;
 
+
+    /**
+     * A pair of information with potentially associated notes, used e.g. in the Overview table
+     */
     class InformationNotes {
+        public InformationNotes(String information, String notes) {
+            this.information = information;
+            this.notes = notes;
+        }
+
         String information ;
         String notes;
     }
+
+    /**
+     * Representation of information in the CorpusComposition table consisting of e.g.
+     * speaker information, location and date
+     */
     class Session {
         String sessionName ;
         String fileName ;
@@ -68,6 +85,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String genre ; // is this a controlled vocabulary?
         String ageGroup ; // is this a controlled vocabulary?
     }
+
+
+    /**
+     * Representation of information in the AnnotationTiers table consisting of e.g.
+     * tier functions and languages
+     */
     class Tier {
         String tierName ;
         String tierFunction ;
@@ -76,12 +99,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String morphemeDistinction;
     }
 
+    /**
+     * Representation of information in the Transcriptions table consisting of e.g.
+     * the list of valid graphemes used in transcription tiers
+     */
     class Transcription {
         String grapheme ;
         String linguisticValue ;
         String linguisticConvention ;
     }
 
+    /**
+     * Representation of information in the Glosses table consisting of e.g.
+     * list of expected glosses and the tiers they are valid in
+     */
     class Gloss {
         String gloss ;
         String meaning ;
@@ -89,6 +120,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String tiers ;
     }
 
+    /**
+     * Representation of information in the Punctuation table consisting of e.g.
+     * valid punctuation characters and the tiers they are valid in
+     */
     class Punctuation {
         String character ;
         String meaning ;
@@ -96,6 +131,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String tiers ;
     }
 
+    /**
+     * Representation of the complete information defined in the RefCo spreadsheet
+     */
     class RefcoCriteria {
         // Tab: Overview
         // Corpus information
@@ -115,7 +153,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         InformationNotes numberTranscribedWords ;
         InformationNotes numberAnnotatedWords ;
         // Annotation Strategies
-        InformationNotes translationLanguages ; // TODO: Is this the proper interpretation?
+        /* TODO: Is this the proper interpretation of translationLanguages?
+           This currently assumes that all languages are in a single cell but it could
+           be that they are actually listed in separate rows
+         */
+        InformationNotes translationLanguages ;
         // Tab: Corpus Compositions
         ArrayList<Session> sessions = new ArrayList<>() ;
         // Tab: Annotation Tiers
@@ -129,34 +171,59 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
     }
 
-    // The filename of the RefCo spreadsheet
+    /**
+     * The filename of the RefCo spreadsheet
+     */
     String refcoFileName;
 
-    // The XML DOM of the RefCo spreadsheet
+    /**
+     * The XML DOM of the RefCo spreadsheet
+     */
     Document refcoDoc ;
 
-    // The criteria extracted from the Refco spreadsheet
+    /**
+     * The criteria extracted from the Refco spreadsheet
+     */
     RefcoCriteria criteria = new RefcoCriteria() ;
 
-    // The list of ISO-639-3 language codes
+    /**
+     * The list of ISO-639-3 language codes
+     */
     ArrayList<String> isoList = new ArrayList<>() ;
 
-    // The complete corpus
+    /**
+     * The corpus with all usable files
+     */
     Corpus refcoCorpus ;
 
-    // The frequency list of all transcription tokens in the corpus
+    /**
+     *  The frequency list of all transcription tokens in the corpus
+     */
     HashMap<String,Integer> tokenFreq = new HashMap<>();
 
-    // The frequency list of all annotation/morphology glosses in the corpus
+    /**
+     * The frequency list of all annotation/morphology glosses in the corpus
+     */
     HashMap<String,Integer> glossFreq = new HashMap<>();
 
+    /**
+     * Default constructor without parameter, sets the fixing option to false
+     */
     public RefcoChecker() {
+        // Call the constructor below with the default parameter
         this(false);
     }
 
+    /**
+     * Default constructor with fixing option as parameter
+     * @param hasfixingoption switch for fixing option
+     */
     public RefcoChecker(boolean hasfixingoption) {
+        // Call the inherited constructor
         super(hasfixingoption);
+        // Read the list of ISO-639-3 language codes
         try {
+            // In a jar this would be one of the resources
             InputStream isoStream = getClass().getResourceAsStream("/iso-639-3.tab") ;
             // If the resource is missing try to load it as a file instead
             if (isoStream == null)
@@ -171,38 +238,80 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
             catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE,"Unable to load ISO-639-3 language list", e);
             }
     }
 
+    /**
+     * Gives the description of what the checker does
+     * @return the description of the checker
+     */
     @Override
     public String getDescription() {
         return "checks the RefCo criteria for a corpus. Requires a filled RefCo spreadsheet.";
     }
 
+    /**
+     * The checker function for one corpus document
+     * @param cd the corpus doecument
+     * @param fix the choice of the fixing option
+     * @return the report with detailed check results
+     * @throws NoSuchAlgorithmException inherited
+     * @throws ClassNotFoundException inherited
+     * @throws FSMException inherited
+     * @throws URISyntaxException inherited
+     * @throws SAXException inherited
+     * @throws IOException inherited
+     * @throws ParserConfigurationException inherited
+     * @throws JexmaraldaException inherited
+     * @throws TransformerException inherited
+     * @throws XPathExpressionException inherited
+     * @throws JDOMException inherited
+     */
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         return refcoCorpusCheck(cd);
     }
 
+    /**
+     * The checker function for a complete corpus, i.e. a set of corpus documents
+     * @param c the corpus
+     * @param fix the choice of the fixing option
+     * @return the report with detailed check results
+     * @throws NoSuchAlgorithmException inherited
+     * @throws ClassNotFoundException inherited
+     * @throws FSMException inherited
+     * @throws URISyntaxException inherited
+     * @throws SAXException inherited
+     * @throws IOException inherited
+     * @throws ParserConfigurationException inherited
+     * @throws JexmaraldaException inherited
+     * @throws TransformerException inherited
+     * @throws XPathExpressionException inherited
+     * @throws JDOMException inherited
+     */
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        // Create the current report
         Report report = new Report();
         // Get all usable formats for the checker
         Collection<Class<? extends CorpusData>> usableFormats = this.getIsUsableFor();
-        // Get all usable files from the corpus
+        // Get all usable files from the corpus, i.e. the ones whose format is included in usableFormats
         Collection<CorpusData> usableFiles = c.getCorpusData().stream().filter((cd) -> usableFormats.contains(cd.getClass())).collect(Collectors.toList());
+        // Create a new corpus from only these files, keeping the original corpus name and base directory
+        // This corpus is among others used to check the existence of referenced files
         refcoCorpus = new Corpus(c.getCorpusName(), c.getBaseDirectory(), usableFiles) ;
-        report.merge(refCoGenericCheck());
+        // Run the generic tests and merge their reports into the current report
+        report.merge(refcoGenericCheck());
         // Initialize frequency list for glosses
         for (Gloss gloss : criteria.glosses) {
             glossFreq.put(gloss.gloss,0);
         }
-        // Apply function for each of the supported file
+        // Apply function for each of the supported file. Again merge the reports
         for (CorpusData cdata : usableFiles) {
             report.merge(function(cdata, fix));
         }
-        // Check for glosses that never occurred
+        // Check for glosses that never occurred in the complete corpus
         for (Map.Entry<String,Integer> e : glossFreq.entrySet()) {
             if (e.getValue() == 0)
                 report.addWarning(function,  "Gloss never encountered in corpus: " + e.getKey()) ;
@@ -210,23 +319,40 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report;
     }
 
+    /**
+     * Function to retrieve the collection of all classes the checker is suitable for
+     *
+     * @return a collection of classes the checker is suitable for
+     * @throws ClassNotFoundException inherited
+     */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        HashSet<Class<? extends CorpusData>> classes = new HashSet<>();
-        classes.add(ELANData.class);
-        return classes ;
+        // Only ELAN is supported
+        return Collections.singleton(ELANData.class) ;
     }
 
+    /**
+     * The main function to run the RefCo checker as an independent application
+     *
+     * @param args the first argument being the refco spreadsheet and the second one being the corpus directory
+     */
     public static void main(String[] args) {
+        // Create the checker
         RefcoChecker rc = new RefcoChecker();
-        if (args.length < 2) {
-            System.out.println("Usage: RefcoChecker RefcoFile CorpusDirectory");
+        // Check the number of arguments and report the usage if parameters are missing
+        if (args.length < 3) {
+            System.out.println("Usage: RefcoChecker RefcoFile CorpusDirectory ReportFile");
+            System.out.println("\tRefcoFile       : the RefCo spreadsheet");
+            System.out.println("\tCorpusDirectory : the path to the corpus");
+            System.out.println("\tReportFile      : the output file containing the report as a HTML page");
         }
         else {
             Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Loading RefCo file");
-            rc.setRefcoFileName(args[0]);
+            // Set the filename of the RefCo spreadsheet. This also triggers the parser for the spreadsheet
+            // and initializes the criteria field
+            rc.setRefcoFile(args[0]);
             // Safe the Refco criteria to file
-            // Generate pretty-printed json
+            // Generate pretty-printed json using an object mapper
             ObjectMapper mapper = new ObjectMapper();
             // Allows serialization even when getters are missing
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
@@ -239,16 +365,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            CorpusIO cio = new CorpusIO();
             try {
+                // Read the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Reading corpus");
+                CorpusIO cio = new CorpusIO();
+                // Handle relative paths
                 URL url = Paths.get(args[1]).toAbsolutePath().normalize().toUri().toURL();
-                Corpus corpus = new Corpus("RefCo", url, cio.read(url));
+                // Create the corpus
+                Corpus corpus = new Corpus(rc.criteria.corpusTitle, url, cio.read(url));
+                // Run the tests on the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Running tests");
                 Report report = rc.function(corpus,false);
+                // When the tests are done write the report to file
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Writing report");
                 String html = ReportItem.generateDataTableHTML(report.getRawStatistics(),report.getSummaryLines());
-                FileWriter fw = new FileWriter("/tmp/refco.html") ;
+                FileWriter fw = new FileWriter(args[2]) ;
                 fw.write(html) ;
                 fw.close() ;
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Done") ;
@@ -259,12 +390,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Sets the spreadsheet as XML data
+     * Function to store the spreadsheet as XML data
      *
      * @param fileName the spreadsheet file name
      */
-    public void setRefcoFileName(String fileName) {
+    public void setRefcoFile(String fileName) {
+        // Save the file name
         refcoFileName = fileName ;
+        // Extract XML from spreadsheet file
         try {
             // Plain XML file
             if (refcoFileName.toLowerCase().endsWith("fods")) {
@@ -293,30 +426,45 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // Extract the criteria from the XML
         readRefcoCriteria(refcoDoc);
     }
 
     /**
-     * ods file use some kind of run-length compression for multiple blank cells in a row which is problematic for our parser.
-     * this functions expands compressed cells
+     * Functions that expands compressed cells by replacing them by several blank cells. ODS files use some kind of
+     * run-length compression for multiple blank cells in a row which is problematic for the parser.
+     *
      * @param document the document in which the cells should be expanded
-     * @throws JDOMException if the xpath expression is invalid
+     * @throws JDOMException if the XPath expression is invalid
      */
     private void expandTableCells(Document document) throws JDOMException {
+        // Find all cells that have the attribute number-columns-repeated
         for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-cell[@table:number-columns-repeated]")
                 .selectNodes(document))) {
+            // Generate as many blank cells as neede
             ArrayList<Element> replacement = new ArrayList<>();
-            for (int i = 0; i < Integer.parseInt(node.getAttribute("number-columns-repeated", tableNamespace).getValue());
-                 i++){
+            int colCount = 0;
+            try {
+                colCount = Integer.parseInt(node.getAttribute("number-columns-repeated", tableNamespace).getValue());
+                // Do not expand too many cells
+                if (colCount > 1000)
+                    colCount = 1 ;
+            }
+            catch (NumberFormatException e) {
+                logger.log(Level.SEVERE,"Error parsing number",e);
+            }
+            for (int i = 0; i < colCount; i++){
                 Element e = (Element) node.clone();
                 e.removeAttribute("number-columns-repeated", tableNamespace);
                 replacement.add(e);
             }
+            // Replace the original cell by the sequence of new ones
             node.getParentElement().setContent(node.getParentElement().indexOf(node),replacement);
         }
     }
+
     /**
-     * Gets the value for a cell given by its title, i.e. returns the text of the second cell of a row where
+     * Function that gets the value for a cell given by its title, i.e. returns the text of the second cell of a row where
      * the text of the first cell matches the title. If the cell does not exist, an empty string is returned
      *
      * @param path the xpath expression to find the cell
@@ -330,7 +478,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Safely returns the text from an Element returning an empty string if the element does not exist
+     * Function that safely returns the text from an Element returning an empty string if the element does not exist
      *
      * @param element the element to get the text from
      * @return either the text contained or an empty string
@@ -343,7 +491,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Gets the text from a certain cell in a row given its index
+     * Function that gets the text from a certain cell in a row given its index
      *
      * @param path the xpath expression to find the cell
      * @param e the root element
@@ -353,13 +501,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @throws JDOMException if the xpath expression is invalid
      */
     private String getTextInRow(String path, Element e, String title, int pos) throws JDOMException {
-        Element cell = (Element) XPath.newInstance(String.format(path, title, pos))
+        if (path == null || e == null)
+            return "" ;
+        else {
+            Element cell = (Element) XPath.newInstance(String.format(path, title, pos))
                     .selectSingleNode(e);
-        return safeGetText(cell);
+            return safeGetText(cell);
+        }
     }
 
     /**
-     * Gets a pair, the information and the associated notes, from a row
+     * Function that gets a pair, the information and the associated notes, from a row
      *
      * @param path the xpath expression to find the cells
      * @param root the root
@@ -368,14 +520,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @throws JDOMException if the xpath expression is invalid
      */
     private InformationNotes getInformationNotes(String path, Element root, String title) throws JDOMException {
-        InformationNotes version = new InformationNotes();
-        version.information = getTextInRow(path, root, title, 2);
-        version.notes = getTextInRow(path, root, title, 3);
-        return version;
+        return new InformationNotes(getTextInRow(path, root, title, 2),getTextInRow(path, root, title, 3));
     }
 
     /**
-     * Reads the XML data from the spreadsheet into a java data structure
+     * Method that reads the XML data from the spreadsheet into a java data structure
      * @param refcoDoc the spreadsheet document
      */
     private void readRefcoCriteria(Document refcoDoc) {
@@ -479,7 +628,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
     }
 
-    private Report refCoGenericCheck() {
+    /**
+     * Function that performs generic checks on the RefCo documentation stored in the Checker object (using setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    private Report refcoGenericCheck() {
         Report report = new Report() ;
         if (!refcoFileName.matches("\\d{8}_\\w+_RefCo-Report.f?ods"))
             report.addWarning(function,"Filename does not match schema yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoFileName);
@@ -735,6 +889,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report ;
     }
 
+    /**
+     * Function that checks a corpus document based on the RefCo documentation stored in the checker object (using setRefcoFile)
+     *
+     * @param cd the corpus document
+     * @return the detailed report of the checks
+     */
     private Report refcoCorpusCheck(CorpusData cd) {
         Report report = new Report() ;
         // Check for ELAN data
@@ -760,6 +920,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report ;
     }
 
+    /**
+     * Function that checks all transcription tiers in a corpus document
+     *
+     * @param cd the corpus document
+     * @return the detailed report of the checks
+     * @throws JDOMException on XPath problems
+     */
     private Report checkTranscription(CorpusData cd) throws JDOMException {
         Report report = new Report();
         // Get the dom
@@ -777,7 +944,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
         for (Transcription t : criteria.transcriptions) {
             // Add all of the grapheme's characters
-            Chars.asList(t.grapheme.toCharArray());
+            // validTranscriptionCharacters.addAll(Chars.asList(t.grapheme.toCharArray()));
             validTranscriptionCharacters.addAll(getChars(t.grapheme));
         }
         // and punctuation characters
@@ -831,6 +998,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report;
     }
 
+    /**
+     * Function that checks all morphology tiers in a corpus document
+     * @param cd the corpus document
+     * @return the detailed report of the checks
+     * @throws JDOMException on XPath problems
+     */
     private Report checkMorphology(CorpusData cd) throws JDOMException {
         Report report = new Report();
         // Get the dom
@@ -869,13 +1042,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return report;
         }
         if (glossText.isEmpty()) {
-            report.addCritical(function, cd,  "No annotated text found in one of the expected tiers: " + morphologyTiers.stream().reduce((s1,s2) -> s1 + "," + s2).get());
+            report.addCritical(function, cd,  "No annotated text found in one of the expected tiers: " +
+                    morphologyTiers.stream().reduce((s1,s2) -> s1 + "," + s2).get());
             return report;
         }
         report.merge(checkMorphologyGloss(cd,glossText,validGlosses));
         return report ;
     }
 
+    /**
+     * Function that checks the morphology tier for documented glosses
+     * @param cd the corpus document used to correctly assign the log messages
+     * @param text the extracted text from all morphology tiers
+     * @param glosses all documented glosses
+     * @return the detailed report of the checks
+     */
     private Report checkMorphologyGloss(CorpusData cd, List<Text> text, HashSet<String> glosses) {
         Report report = new Report() ;
 
@@ -884,13 +1065,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // All invalid tokens in the text
         int missing = 0 ;
         // Indicator if a word contains missing characters
-        boolean mismatch ;
         for (Text t : text) {
             // Tokenize text
             for (String token : t.getText().split(tokenSeparator)) {
                 // Check if token is a gloss
                 if (!glosses.contains(token)) {
                     missing += 1 ;
+                    // This would lead to large amount of warnings
                     // report.addWarning(function,cd,"Invalid token: " + token);
                 }
                 else {
@@ -911,6 +1092,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report ;
     }
 
+    /**
+     * function to check the transcription text based on valid chars and glosses
+     *
+     * @param cd the corpus document used to correctly assign the log messages
+     * @param text the extracted text from the transcription tiers
+     * @param chars the valid character
+     * @param glosses the documented glosses
+     * @return the check report
+     */
     private Report checkTranscriptionText(CorpusData cd, List<Text> text, Set<Character> chars,
                                           Set<String> glosses) {
         Report report = new Report();
@@ -957,9 +1147,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report ;
     }
 
-    private boolean checkLanguage(String lang) {
+    /**
+     * Function to check if a language identifier is either a valid Glottolog Languoid or an ISO-639-3 code
+     *
+     * @param lang the language identifier
+     * @return if the identifier is valid
+     */
+    public boolean checkLanguage(String lang) {
         // ISO code
         if (lang.length() == 3) {
+            // Just check the list
             return isoList.contains(lang);
         }
         // Glottolog
@@ -979,7 +1176,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return false ;
     }
 
-    private boolean checkUrl(String url) {
+    /**
+     * Function to call a URL and check the return code
+     * @param url the web resource to be accessed
+     * @return if the request was successful
+     */
+    public static boolean checkUrl(String url) {
         try {
             URL u = new URL(url);
             // Sleep 500 milliseconds before making a request to avoid problems with too many calls
@@ -993,20 +1195,50 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
     }
 
-    private List<Text> getTextsInTierByType(Document d, String tier) throws JDOMException {
-        List texts = XPath.newInstance(
-                String.format("//TIER[@LINGUISTIC_TYPE_REF=\"%s\"]//ANNOTATION_VALUE/text()",tier))
-                .selectNodes(d);
-        return listToParamList(Text.class, texts) ;
+    /**
+     * Function that gets all text from tiers identified by type
+     * @param d the XML DOM of the corpus document
+     * @param tier the tier type
+     * @return the list of all text elements from the selected tiers
+     * @throws JDOMException on XPath problems
+     */
+    public List<Text> getTextsInTierByType(Document d, String tier) throws JDOMException {
+        if (d == null)
+            return new ArrayList<>();
+        else {
+            List texts = XPath.newInstance(
+                    String.format("//TIER[@LINGUISTIC_TYPE_REF=\"%s\"]//ANNOTATION_VALUE/text()", tier))
+                    .selectNodes(d);
+            return listToParamList(Text.class, texts);
+        }
     }
 
-    private List<Text> getTextsInTierByID(Document d, String tier) throws JDOMException {
-        List texts = XPath.newInstance(
-                String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()",tier))
-                .selectNodes(d);
-        return listToParamList(Text.class, texts) ;
+    /**
+     * Function that gets all text from tiers identified by the tier ID
+     * @param d the XML DOM of the corpus document
+     * @param tier the tier ID
+     * @return the list of all text elements from the selected tiers
+     * @throws JDOMException on XPath problems
+     */
+    public List<Text> getTextsInTierByID(Document d, String tier) throws JDOMException {
+        if (d == null)
+            return new ArrayList<>();
+        else {
+            List texts = XPath.newInstance(
+                    String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier))
+                    .selectNodes(d);
+            return listToParamList(Text.class, texts);
+        }
     }
 
+    /**
+     * Function to count all words in certain tiers of the corpus stored in the Checker object. The tier is identified
+     * by type
+     *
+     * @param tier the tier type
+     * @return the number of words encountered in the selected tiers of all documents in the corpus
+     * @throws JDOMException on XPath problems
+     */
     private int countWordsInTierByType(String tier) throws JDOMException{
         int count = 0 ;
         for (CorpusData cd : refcoCorpus.getCorpusData()) {
@@ -1022,17 +1254,39 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return count ;
     }
 
+    /**
+     * Function that counts all words from transcription tiers, i.e. tiers of type transcription, in the corpus stored
+     * in the Checker object
+     *
+     * @return the number of transcribed words
+     * @throws JDOMException on XPath problems
+     */
     private int countTranscribedWords() throws JDOMException {
         return countWordsInTierByType("Transcription") ;
     }
 
+    /**
+     * Function that counts all words from annotation tiers, i.e. tiers of type morphologie, in the corpus stored in
+     * the Checker object
+     *
+     * @return the number of transcribed words
+     * @throws JDOMException on XPath problems
+     */
     private int countAnnotatedWords() throws JDOMException {
         // TODO this seems to be problematic
         return countWordsInTierByType("Morphologie") ;
     }
 
+    /**
+     * Function to safely convert an un-parametrized list into a parametrized one
+     *
+     * @param p the parameter class extending the parameter type
+     * @param l the un-parametrized list
+     * @param <T> the parameter class
+     * @return the parametrized list
+     */
     @SuppressWarnings("unchecked")
-    private <T> List<T> listToParamList(Class<? extends T> p, List l) {
+    public   <T> List<T> listToParamList(Class<? extends T> p, List l) {
         ArrayList<T> nl = new ArrayList<>(l.size()) ;
         for (Object o : l) {
             if (o.getClass() == p)
@@ -1040,13 +1294,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     nl.add((T) o);
                 }
                 catch (ClassCastException e) {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE,"Encountered exception", e);
                 }
         }
         return nl;
     }
 
-    private List<Character> getChars(String s) {
+    /**
+     * Function to convert a string to an list of characters
+     * @param s the string
+     * @return the list of characters
+     */
+    public List<Character> getChars(String s) {
         return Chars.asList(s.toCharArray());
     }
 }
