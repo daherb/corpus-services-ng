@@ -8,7 +8,6 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
 import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
 import java.util.Collection;
@@ -32,7 +31,7 @@ import org.jdom.Element;
  */
 public class ElanPunctuationChecker extends Checker implements CorpusFunction {
 
-    boolean linebreak = false;
+    boolean badPunctuation = false;
     String xpathContext = "//ANNOTATION_VALUE";
     XPath context;
     Document doc;
@@ -47,15 +46,15 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
      * FLEX is being done.
      */
     @Override
-    public Report function(CorpusData cd, Boolean fix) // check whether there's any illegal apostrophes '
+    public Report function(CorpusData cd, Boolean fix) 
             throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, XPathExpressionException {
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
-        //TODO: Replace RegEx
-        Pattern replacePattern = Pattern.compile(":");
+        Pattern colonPattern = Pattern.compile(":$");
+        Pattern dotPattern = Pattern.compile("\\..+$");
+        Pattern qmarkPattern = Pattern.compile("\\?.+$");
         context = XPath.newInstance(xpathContext);
         List allContextInstances = context.selectNodes(doc);
-        CorpusIO cio = new CorpusIO();
         String s = "";
         if (!allContextInstances.isEmpty()) {
             for (int i = 0; i < allContextInstances.size(); i++) {
@@ -63,17 +62,23 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                 if (o instanceof Element) {
                     Element e = (Element) o;
                     s = e.getText();
-                    if (replacePattern.matcher(s).find()) {          // if file contains the RegEx then issue warning
-                        linebreak = true;
+                    if (colonPattern.matcher(s).find()) {        
+                        badPunctuation = true;
                         stats.addWarning(function, cd, "Bad punctuation in :" + s);
-                    }
+                    } else if (dotPattern.matcher(s).find()) {          
+                        badPunctuation = true;
+                        stats.addWarning(function, cd, "Bad punctuation in :" + s);
+                    } else if (qmarkPattern.matcher(s).find()) {         
+                        badPunctuation = true;
+                        stats.addWarning(function, cd, "Bad punctuation in :" + s);
+                    } 
                 }
             }
-            if (!linebreak) {
-                stats.addCorrect(function, cd, "CorpusData file does not contain line ending in an event");
+            if (!badPunctuation) {
+                stats.addCorrect(function, cd, "Punctuation OK");
             }
         } else {
-            stats.addCorrect(function, cd, "CorpusData file does not contain any event");
+            stats.addCorrect(function, cd, "The file does not contain any annotation");
         }
         return stats; // return the report with warnings
     }
