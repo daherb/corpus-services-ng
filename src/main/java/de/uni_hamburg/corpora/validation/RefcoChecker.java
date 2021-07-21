@@ -227,7 +227,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             InputStream isoStream = getClass().getResourceAsStream("/iso-639-3.tab") ;
             // If the resource is missing try to load it as a file instead
             if (isoStream == null)
-                isoStream = new FileInputStream("iso-639-3.tab");
+                isoStream = new FileInputStream("src/main/java/de/uni_hamburg/corpora/validation/resources/iso-639-3.tab");
             BufferedReader bReader = new BufferedReader(new
                     InputStreamReader(isoStream));
             String line;
