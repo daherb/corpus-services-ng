@@ -52,7 +52,7 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
         Pattern colonPattern = Pattern.compile(":$");
         Pattern dotPattern = Pattern.compile("\\..+$");
-        Pattern qmarkPattern = Pattern.compile("\\?.+$");
+        Pattern qmarkPattern = Pattern.compile("(?<=[^\\?])\\?{1,2}(?=[^\\?]).+?");
         context = XPath.newInstance(xpathContext);
         List allContextInstances = context.selectNodes(doc);
         String s = "";
@@ -62,13 +62,7 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                 if (o instanceof Element) {
                     Element e = (Element) o;
                     s = e.getText();
-                    if (colonPattern.matcher(s).find()) {        
-                        badPunctuation = true;
-                        stats.addWarning(function, cd, "Bad punctuation in :" + s);
-                    } else if (dotPattern.matcher(s).find()) {          
-                        badPunctuation = true;
-                        stats.addWarning(function, cd, "Bad punctuation in :" + s);
-                    } else if (qmarkPattern.matcher(s).find()) {         
+                    if (colonPattern.matcher(s).find() || dotPattern.matcher(s).find() || qmarkPattern.matcher(s).find()) {        
                         badPunctuation = true;
                         stats.addWarning(function, cd, "Bad punctuation in :" + s);
                     } 
@@ -80,7 +74,7 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
         } else {
             stats.addCorrect(function, cd, "The file does not contain any annotation");
         }
-        return stats; // return the report with warnings
+        return stats;
     }
 
     /**
