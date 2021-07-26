@@ -85,17 +85,27 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                             if (bt instanceof Element) {
                                 Element eb = (Element) bt;
                                 start = eb.getAttributeValue("TIME_VALUE");
-                                System.out.println(start);
+                                int startTime = Integer.parseInt(start);
+                                int startSeconds = (startTime / 1000) % 60;
+                                int startMinutes =  (startTime/ (1000*60)) % 60;
+                                int startHours  = (startTime / (1000*60*60)) % 24;
+                                String startFormatted = String.format("%d:%d:%d", startHours, startMinutes, startSeconds);
+                                System.out.println(startFormatted);
                                 XPath endTime = XPath.newInstance(xpathEndTime);
                                 Object et = endTime.selectSingleNode(doc);
                                 if (et instanceof Element) {
                                     Element ec = (Element) et;
                                     finish = ec.getAttributeValue("TIME_VALUE");
-                                    System.out.println(finish);
-                                }
+                                    int finishTime = Integer.parseInt(finish);
+                                    int finishSeconds = (finishTime / 1000) % 60;
+                                    int finishMinutes =  (finishTime/ (1000*60)) % 60;
+                                    int finishHours  = (finishTime / (1000*60*60)) % 24;
+                                    String finishFormatted = String.format("%d:%d:%d", finishHours, finishMinutes, finishSeconds);
+                                    System.out.println(finishFormatted);
+                                    badPunctuation = true;
+                                    stats.addWarning(function, cd, "Bad punctuation in : " + s + " Start: " + startFormatted +  " Finish: " + finishFormatted);
+                                }  
                             }
-                        badPunctuation = true;
-                        stats.addWarning(function, cd, "Bad punctuation in : " + s + " Start: " + start +  " Finish: " + finish);
                         }
                     } 
                 }
