@@ -50,9 +50,12 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
             throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, XPathExpressionException {
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
-        Pattern colonPattern = Pattern.compile(":$");
-        Pattern dotPattern = Pattern.compile("\\..+$");
-        Pattern qmarkPattern = Pattern.compile("(?<=[^\\?])\\?{1,2}(?=[^\\?]).+?");
+        //Pattern colonPattern = Pattern.compile(":$");
+        Pattern dotPattern = Pattern.compile("(?<=[^\\.])\\.{1,}(?=[^\\.\\\"“»”]).+?");
+        Pattern fourDotPattern = Pattern.compile("(?<=[^\\.])\\.{4,}(?=[^\\.\\\"“»”]).+?");
+        Pattern qmarkPattern = Pattern.compile("(?<=[^\\?])\\?{1,3}(?=[^\\?]).+?");
+        Pattern paragraphPattern = Pattern.compile("§.+$");
+        Pattern exclamPattern = Pattern.compile("!.+$");
         context = XPath.newInstance(xpathContext);
         List allContextInstances = context.selectNodes(doc);
         String start = "";
@@ -63,7 +66,7 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                 if (o instanceof Element) {
                     Element e = (Element) o;
                     String s = e.getChildText("ANNOTATION_VALUE");
-                    if (colonPattern.matcher(s).find() || dotPattern.matcher(s).find() || qmarkPattern.matcher(s).find()) {
+                    if (dotPattern.matcher(s).find()||fourDotPattern.matcher(s).find() || qmarkPattern.matcher(s).find() || paragraphPattern.matcher(s).find() || exclamPattern.matcher(s).find()) {
                         Object a = "";
                         System.out.println(e.getAttributeValue("ANNOTATION_REF"));
                         if (e.getAttributeValue("ANNOTATION_REF") != null) {
