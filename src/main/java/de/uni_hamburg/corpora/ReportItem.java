@@ -101,14 +101,14 @@ public class ReportItem {
         this(s,e,what);
         this.filename = filename;
     }
-    
+
     public ReportItem(Severity s, String filename, String what, String function) {
         // Call constructor above
         this(s,what);
         this.filename = filename;
         this.function = function;
     }
-    
+
     /**
      * Errors found by XML validation errors should always include a
      * SAXParseException. This can be used to extract file location informations
@@ -200,7 +200,7 @@ public class ReportItem {
                 throw new IllegalArgumentException("Missed a severity case in isSevere :-( " + this.severity.toString());
         }
     }
-    
+
         /**
      * whether the stuff should be counted towards bad statistic.
      */
@@ -257,7 +257,7 @@ public class ReportItem {
             return "";
         }
     }
-    
+
     /**
      * A suggested fix to the error.
      */
@@ -503,33 +503,33 @@ public class ReportItem {
         return report;
     }
 
-    
-    
+
+
     /**
      * Generate a simple HTML snippet version of validation errors.
      * Includes quite ugly table of all the reports with a java script to hide
      * errors based on severity.
      */
     public static String generateDataTableHTML(Collection<ReportItem> errors, String summarylines) {
-        
+
         String report = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        
+
         report += "<html>\n   <head>\n";
-        
+
         report += "<title>Corpus Check Report</title>\n";
         report += "<meta charset=\"utf-8\"></meta>\n";
-        
+
         //add JS libraries
         report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/jquery/jquery-3.1.1.min.js")) + "</script>\n";
         report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/DataTables/jquery.dataTables-1.10.12.min.js")) + "</script>\n";
         report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/DataTables/dataTables-bootstrap.min.js")) + "</script>\n";
         report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/bootstrap/bootstrap-3.3.7.min.js")) + "</script>\n";
-        
+
         //add CSS
         report += "<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css/DataTables/dataTables.bootstrap.min.css")) + "</style>\n";
         report += "<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css/DataTables/buttons.dataTables.min.css")) + "</style>\n";
         report += "<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css/bootstrap/bootstrap-3.3.7.min.css")) + "</style>\n";
-        
+
         //add custom CSS
         report += "<style>"+
                 "body{padding:15px;}"+
@@ -543,12 +543,12 @@ public class ReportItem {
                 ".char_Georgian{ background:#9c026d; } "+
                 "</style>\n";
         report += "   </head>\n   <body>\n";
-        
+
         //add timestamp
-        report += "   <div id='timestamp'>Generated: ";        
+        report += "   <div id='timestamp'>Generated: ";
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         report += timestamp + "</div>\n";
-        
+
         report += "<table>\n  <thead><tr>" +
             "<th>Type</th>"+
             "<th>Function</th>"+
@@ -591,47 +591,47 @@ public class ReportItem {
             report += "</tr>";
         }
         report += "  </tbody>\n  </table>\n";
-        
+
         //initiate DataTable on <table>
         report += "<script>$(document).ready( function () {\n" +
                   "    $('table').DataTable({ 'iDisplayLength': 50 });\n" +
                   "} );</script>";
-        
+
         report += "   <footer style='white-space: pre'>" + summarylines + "</footer>";
         report += "   </body>\n</html>";
-        
+
         return report;
     }
-    
+
     /* Generate a CSV file with validation errors list with double quotes as delimeters*/
     public static String GenerateCSV (Collection<ReportItem> errors, String summarylines) {
         String report = new String();
-        report += "Type\"Function\"FIlename:line.column\"Error\"Fix\"Original\n"; 
+        report += "\"Type\"\t\"Function\"\t\"Filename:line.column\"\t\"Error\"\t\"Fix\"\t\"Original\"\n";
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
-                    report += "Critical\"";
+                    report += "\"Critical\"\t";
                     break;
                 case WARNING:
-                    report += "Warning\"";
+                    report += "\"Warning\"\t";
                     break;
                 case NOTE:
-                    report += "Note\"";
+                    report += "\"Note\"\t";
                     break;
                 case UNKNOWN:
-                    report += "Unknown\"";
+                    report += "\"Unknown\"\t";
                     break;
                 default:
-                    report += "Other\"";
+                    report += "\"Other\"\t";
                     break;
             }
-            report += error.getFunction() + "\"";
-            report += error.getLocation() + "\"";
-            report += error.getWhat() + "\"";
-            report += error.getHowto() + "\"";
-            report += error.getLocalisedMessage() + "\"";
-            report += error.getStackTrace() +"\n";
+            report += "\"" + error.getFunction() + "\"\t";
+            report += "\"" + error.getLocation() + "\"\t";
+            report += "\"" + error.getWhat() + "\"\t";
+            report += "\"" + error.getHowto() + "\"\t";
+            report += "\"" + error.getLocalisedMessage() + "\"\t";
+            report += "\"" + error.getStackTrace() +"\"\n";
         }
-        return report; 
+        return report;
        }
 }
