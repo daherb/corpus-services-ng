@@ -135,7 +135,8 @@ public class CorpusMagician {
     static String corpusname = "corpusname";
     static String kml = "kml";
     static String mode = "mode";
-    static URL reportlocation;
+    //static URL reportlocation;
+    static ArrayList<URL> reportlocations = new ArrayList<>();
     static URL inputurl;
     static boolean isCorpus = false;
     static boolean isCollection = false;
@@ -1051,7 +1052,8 @@ public class CorpusMagician {
     public static void createReports() throws IOException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, XPathExpressionException, JDOMException {
         System.out.println(report.getFullReports());
         String reportOutput;
-        if (reportlocation.getFile().endsWith("html")) {
+        for (URL reportlocation : reportlocations) {
+            if (reportlocation.getFile().endsWith("html")) {
             if (iserrorsonly) {
                 //ToDo
                 //reportOutput = ReportItem.generateDataTableHTML(report.getErrorStatistics(basedirectory), report.getSummaryLines());
@@ -1059,22 +1061,24 @@ public class CorpusMagician {
             } else {
                 reportOutput = ReportItem.generateDataTableHTML(report.getRawStatistics(), report.getSummaryLines());
             }
-        } else if (reportlocation.getFile().endsWith("csv")) {
+           } else if (reportlocation.getFile().endsWith("csv")) {
             if (iserrorsonly) {
                 reportOutput = ReportItem.GenerateCSV(report.getErrorStatistics(), report.getSummaryLines());
             } else {
             reportOutput = ReportItem.GenerateCSV(report.getRawStatistics(), report.getSummaryLines());
             }
-        } else {
+            } else {
             //reportOutput = report.getSummaryLines() + "\n" + report.getErrorReports();
             reportOutput = report.getSummaryLines() + "\n" + report.getFullReports();
-        }
-        String absoluteReport = reportOutput;
-        if (absoluteReport != null && basedirectory != null && absoluteReport.contains(basedirectory.toString())) {
-            absoluteReport = reportOutput.replaceAll(basedirectory.toString(), "");
-        }
-        if (absoluteReport != null) {
-            cio.write(absoluteReport, reportlocation);
+            }
+            String absoluteReport = reportOutput;
+            if (absoluteReport != null && basedirectory != null && absoluteReport.contains(basedirectory.toString())) {
+                absoluteReport = reportOutput.replaceAll(basedirectory.toString(), "");
+            }
+            if (absoluteReport != null) {
+                cio.write(absoluteReport, reportlocation);
+            }
+            
         }
         //create the error list file
         System.out.println("Basedirectory is " + basedirectory);
@@ -1122,11 +1126,15 @@ public class CorpusMagician {
         }
         //now the place where Report should end up
         //also allow normal filepaths and convert them
-        String reportstring = cmd.getOptionValue("output");
-        if (reportstring.startsWith("file://")) {
-            reportlocation = new URL(reportstring);
-        } else {
-            reportlocation = Paths.get(reportstring).toUri().toURL();
+         String[] reportstring = cmd.getOptionValues("output");
+        for (String o : reportstring) {
+            if (o.startsWith("file://")) {
+                URL out = new URL(o);
+                reportlocations.add(out);
+            } else {
+                URL s = Paths.get(o).toUri().toURL();
+                reportlocations.add(s);
+            }
         }
         //now add the functionsstrings to array
         String[] corpusfunctionarray = cmd.getOptionValues("c");
@@ -1144,8 +1152,11 @@ public class CorpusMagician {
         input.setArgName("FILE PATH");
         options.addOption(input);
 
+        //Set option o to take one and more arguments
         Option output = new Option("o", "output", true, "output file");
+        output.setArgs(Option.UNLIMITED_VALUES);
         output.setRequired(true);
+        output.setValueSeparator(',');
         output.setArgName("FILE PATH");
         options.addOption(output);
 
