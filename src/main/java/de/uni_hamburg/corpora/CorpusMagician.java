@@ -59,6 +59,7 @@ import de.uni_hamburg.corpora.visualization.VikusViewer;
 import de.uni_hamburg.corpora.validation.ExbEventTokenizationChecker;
 import de.uni_hamburg.corpora.validation.ExbTimestampsChecker;
 import de.uni_hamburg.corpora.validation.ExbForbiddenSymbolsChecker;
+import de.uni_hamburg.corpora.validation.ExbSeparateTiersForDifferentSpeakers;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -320,6 +321,7 @@ public class CorpusMagician {
         allExistingCFs.add("ExbForbiddenSymbolsChecker");
         allExistingCFs.add("ElanPunctuationChecker");
         allExistingCFs.add("FlextextPunctuationChecker");
+        allExistingCFs.add("ExbSeparateTiersForDifferentSpeakers");
         Collections.sort((List<String>) allExistingCFs);
         return allExistingCFs;
     }
@@ -881,6 +883,10 @@ public class CorpusMagician {
                 case "flextextpunctuationchecker":
                     FlextextPunctuationChecker fpc = new FlextextPunctuationChecker();
                     cf2strcorpusfunctions.add(fpc);
+                    break;
+                case "exbseparatetiersfordifferentspeakers":
+                    ExbSeparateTiersForDifferentSpeakers estfds = new ExbSeparateTiersForDifferentSpeakers();
+                    cf2strcorpusfunctions.add(estfds);
                     break;
                 default:
                     report.addCritical("CommandlineFunctionality", "Function String \"" + function + "\" is not recognized");
