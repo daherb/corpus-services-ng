@@ -83,10 +83,11 @@ public class GenericMetadataCriterion {
         }
     }
 
-    public static class ToClass extends AbstractBeanField {
+    public static class ToType extends AbstractBeanField {
 
         @Override
         protected Object convert(String value) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
+            // Split type at " OR " and use optional to represent known types or an empty value otherwise
             return Arrays.stream(value.split("\\s+OR\\s+")).map(this::toOptional).collect(Collectors.toList()) ;
         }
 
@@ -116,13 +117,18 @@ public class GenericMetadataCriterion {
     }
 
     public GenericMetadataCriterion() {}
-
+    // First column is the name of the property
     @CsvBindByPosition(position = 0)
     String name ;
+    // Second column is the lower and upper bounds of cardinality
+    // Custom parser is defined in ToBound
     @CsvCustomBindByPosition(position = 1, converter = ToBounds.class)
     Bounds bounds ;
-    @CsvCustomBindByPosition(position = 2, converter = ToClass.class)
+    // Third column is the lower and upper bounds of cardinality
+    // Custom parser is defined in ToType
+    @CsvCustomBindByPosition(position = 2, converter = ToType.class)
     List<Optional<String>> type ;
+    // Final column are potential locators, just split on " OR "
     @CsvBindAndSplitByPosition(position = 3, elementType = String.class, splitOn = "\\s+OR\\s+")
     List<String> locator;
 }
