@@ -45,7 +45,9 @@ CalculateAnnotatedTime
 CmdiChecker
 ComaAddTiersFromExbsCorrector
 ComaApostropheChecker
+ComaChartsGeneration
 ComaFedoraIdentifierLengthChecker
+ComaFileCoverageChecker
 ComaKmlForLocations
 ComaNSLinksChecker
 ComaOverviewGeneration
@@ -59,22 +61,28 @@ CorpusHTML
 DuplicateTierContentChecker
 EXB2HIATISOTEI
 EXB2INELISOTEI
+ElanPunctuationChecker
 ExbAnnotationPanelCheck
 ExbEventLinebreaksChecker
+ExbEventTokenizationChecker
 ExbFileCoverageChecker
 ExbFileReferenceChecker
+ExbForbiddenSymbolsChecker
 ExbMP3Next2WavAdder
 ExbRefTierChecker
 ExbScriptMixChecker
 ExbSegmentationChecker
 ExbSegmenter
+ExbSeparateTiersForDifferentSpeakers
 ExbStructureChecker
 ExbTierDisplayNameChecker
-FileCoverageChecker
+ExbTimestampsChecker
 FilenameChecker
+FlextextPunctuationChecker
 GeneralTransformer
 GenerateAnnotationPanel
 HScoreHTML
+HandlePidRegistration
 IAAFunctionality
 LanguageToolChecker
 ListHTML
@@ -86,8 +94,10 @@ PrettyPrintData
 RemoveAbsolutePaths
 RemoveAutoSaveExb
 RemoveEmptyEvents
+RemoveUnlinkedFiles
 ReportStatistics
 ScoreHTML
+VikusViewer
 XSLTChecker
 ZipCorpus
 </pre>
@@ -129,9 +139,23 @@ The function has a fixing option: true
 The function can be used on:
 ComaData
 
+ComaChartsGeneration:   This class creates a sort- and filterable html
+overview in table form  of the content of the coma file to make error
+checking and harmonizing easier.
+The function has a fixing option: false
+The function can be used on:
+ComaData
+
 ComaFedoraIdentifierLengthChecker:   This class loads coma data and check
 for potential problems with HZSK repository depositing; it checks the
 Exmaralda .coma file for ID's that violate Fedora's PID limits.
+The function has a fixing option: false
+The function can be used on:
+ComaData
+
+ComaFileCoverageChecker:   This class is a validator for Coma file
+references; it checks Exmaralda coma file for file references if a
+referenced file does not exist, issues a warning;
 The function has a fixing option: false
 The function can be used on:
 ComaData
@@ -217,11 +241,18 @@ The function has a fixing option: false
 The function can be used on:
 BasicTranscriptionData
 
-EXB2INELISOTEI:   This class takes an exb as input and converts it into
+EXB2HIATISOTEI:   This class takes an exb as input and converts it into
 ISO standard TEI format.
 The function has a fixing option: false
 The function can be used on:
 BasicTranscriptionData
+
+ElanPunctuationChecker:   This class issues warnings if the ELAN file
+contains punctuation marks causing problems when import to FLEX is being
+done.
+The function has a fixing option: false
+The function can be used on:
+ELANData
 
 ExbAnnotationPanelCheck:   This class checks whether the annotations in
 exb files comply with the annotation specification panel.
@@ -236,6 +267,12 @@ The function has a fixing option: true
 The function can be used on:
 BasicTranscriptionData
 
+ExbEventTokenizationChecker:   This class issues warnings if the
+tokenization tier contains events with internal whitespace characters
+The function has a fixing option: false
+The function can be used on:
+BasicTranscriptionData
+
 ExbFileCoverageChecker:   This class checks whether files are both in the
 exb file and file system.
 The function has a fixing option: false
@@ -245,6 +282,12 @@ BasicTranscriptionData
 ExbFileReferenceChecker:   This class is a validator for EXB-file's
 references; it checks Exmaralda .exb file for file references if a
 referenced file does not exist, issues a warning;
+The function has a fixing option: false
+The function can be used on:
+BasicTranscriptionData
+
+ExbForbiddenSymbolsChecker:   This class checks if there are forbidden
+symbols in the transcription.
 The function has a fixing option: false
 The function can be used on:
 BasicTranscriptionData
@@ -286,6 +329,12 @@ The function has a fixing option: true
 The function can be used on:
 BasicTranscriptionData
 
+ExbSeparateTiersForDifferentSpeakers:   This class fixes tier alignment
+for basic transctiption files with multiple speakers
+The function has a fixing option: true
+The function can be used on:
+BasicTranscriptionData
+
 ExbStructureChecker:   This class checks basic transcription files for
 structural anomalies.
 The function has a fixing option: false
@@ -299,12 +348,11 @@ The function has a fixing option: false
 The function can be used on:
 BasicTranscriptionData
 
-ComaFileCoverageChecker:   This class is a validator for Coma file
-references; it checks Exmaralda coma file for file references if a
-referenced file does not exist, issues a warning;
+ExbTimestampsChecker:   This class issues warnings if it finds missing
+timestamps in the timeline at the beginning or end of a segment chein
 The function has a fixing option: false
 The function can be used on:
-ComaData
+SegmentedTranscriptionData
 
 ComaFilenameChecker:   This class checks if all file names linked in the
 coma file to be deposited in HZSK repository; checks if there is a file
@@ -312,6 +360,13 @@ which is not named according to coma file.
 The function has a fixing option: false
 The function can be used on:
 ComaData
+
+FlextextPunctuationChecker:   This class issues warnings if the flextext
+file contains punctuation marks causing problems when conversion to
+EXMARaLDA is being done
+The function has a fixing option: true
+The function can be used on:
+FlextextData
 
 GeneralTransformer:   This class runs an xsl transformation on files.
 The function has a fixing option: true
@@ -330,6 +385,13 @@ The function has a fixing option: false
 The function can be used on:
 BasicTranscriptionData
 
+HandlePidRegistration:   This class loads CMDI data and retrieves already
+existing or newly registered Handle PIDs for URLs from specific XML
+elements.
+The function has a fixing option: false
+The function can be used on:
+CmdiData
+
 IAAFunctionality:   This class calculates IAA according to Krippendorff's
 alpha for exb files; only cares for annotation labels, assuming that
 transcription structure and text remains the same. Checks and puts them in
@@ -343,7 +405,7 @@ BasicTranscriptionData
 
 LanguageToolChecker:   This class takes a CorpusDataObject that is an Exb,
 checks if there are spell or grammar errors in German, English or Russian
-using LnaguageTool and returns the errors in the Report and in the
+using LanguageTool and returns the errors in the Report and in the
 ExmaErrors.
 The function has a fixing option: false
 The function can be used on:
@@ -408,6 +470,13 @@ The function has a fixing option: true
 The function can be used on:
 BasicTranscriptionData SegmentedTranscriptionData
 
+RemoveUnlinkedFiles:   This class takes a coma file and removes all files
+from the directory/subdirectories which are not linked somewhere in the
+coma file.
+The function has a fixing option: false
+The function can be used on:
+ComaData
+
 ReportStatistics:   This class creates or updates the html statistics
 report from the report output file outputted by the corpus services.
 The function has a fixing option: false
@@ -419,6 +488,12 @@ from an exb.
 The function has a fixing option: false
 The function can be used on:
 BasicTranscriptionData
+
+VikusViewer:   This class creates an config files needed for the
+vikus-viewer software.
+The function has a fixing option: false
+The function can be used on:
+ComaData
 
 XSLTChecker:   This class runs many little checks specified in a XSLT
 stylesheet and adds them to the report.
