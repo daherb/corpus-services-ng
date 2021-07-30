@@ -13,18 +13,19 @@ usage: corpus-services -i <FILE PATH> -o <FILE PATH> -c <CORPUS
        PATH>]
 Specify a corpus folder or file and a function to be applied
 
- -i,--input <FILE PATH>                  input file path (coma file for
-                                         corpus, folder or other file for
-                                         unstructured data)
- -o,--output <FILE PATH>                 output file
- -c,--corpusfunction <CORPUS FUNCTION>   corpus function
- -p,--property <property=value>          use value for given properties
- -f,--fix                                fixes problems automatically
- -h,--help                               display help
- -e,--errorsonly                         output only errors
- -j,--fixesjson                          output json file for fixes
- -s,--settingsfile <FILE PATH>           settings file path
- -n,--nocuration						 no curation folder
+| Parameter| Short description|
+| --- | ----------- |
+| -i,--input <FILE PATH> | input file path (coma file for corpus, folder or other file for unstructured data)|
+| -o,--output <FILE PATH> | output file |
+| -c,--corpusfunction <CORPUS FUNCTION> | corpus function |
+| -p,--property <property=value>      | use value for given properties |
+| -f,--fix            | fixes problems automatically |
+| -h,--help           | display help |
+| -e,--errorsonly     | output only errors |
+| -j,--fixesjson      | output json file for fixes |
+| -s,--settingsfile <FILE PATH> | settings file path |
+| -n,--nocuration     | no curation folder |
+
 </pre>
 
 *-i* is the input, it should be the name of the folder or single corpus file you want to process. Functions can be run on a folder, a metadata file representing a list of files, or a single file (e.g. exb). If the input is a folder or a single file that is not an EXMARaLDA coma file, it will be treated as unstructured data. If the input file is an EXMARaLDA coma file, it will be treated as a structured corpus and all files linked in it will also be checked, depending on the chosen functions.
@@ -42,6 +43,8 @@ Specify a corpus folder or file and a function to be applied
 Only use one of the following:
 
 *-j* outputs an additional json file for fixes that can be used for statistical evaluation of the curation
+
+OR
 
 *-n* use this parameter if you don't want a curation folder with EXMARaLDA error list to be created
 
