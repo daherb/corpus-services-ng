@@ -6,31 +6,29 @@ Download the generated .jar and execute something similar to:
 
 `java -Xmx3g -jar ../corpus-services-1.0.jar -i E:\user\corpus -o E:\user\corpus\report-output.html -c function1 -c function2 -f `
 
-Output of the help parameter:
+The output of the help parameter will prompt how to use the corpus functions and show a list of available parameters (see the table below):
 <pre>
 usage: corpus-services -i <FILE PATH> -o <FILE PATH> -c <CORPUS
        FUNCTION> [-p <property=value>] [-f] [-h] [-e] [-j] [-s <FILE
        PATH>]
 Specify a corpus folder or file and a function to be applied
-
-| Parameter| Short description|
-| --- | ----------- |
-| -i,--input <FILE PATH> | input file path (coma file for corpus, folder or other file for unstructured data)|
+</pre>
+| Parameter|Short description |
+| ------------------------------- | -------------------------------------------- |
+| -i,--input <FILE PATH>| input file path (coma file for corpus, folder or other file for unstructured data)
 | -o,--output <FILE PATH> | output file |
-| -c,--corpusfunction <CORPUS FUNCTION> | corpus function |
-| -p,--property <property=value>      | use value for given properties |
+| -c,--corpusfunction <CORPUS FUNCTION>| corpus function |
+| -p,--property      | use value for given properties |
 | -f,--fix            | fixes problems automatically |
 | -h,--help           | display help |
 | -e,--errorsonly     | output only errors |
 | -j,--fixesjson      | output json file for fixes |
 | -s,--settingsfile <FILE PATH> | settings file path |
-| -n,--nocuration     | no curation folder |
-
-</pre>
+| -n,--nocuration     | do not create curation folder and exma-error file|
 
 *-i* is the input, it should be the name of the folder or single corpus file you want to process. Functions can be run on a folder, a metadata file representing a list of files, or a single file (e.g. exb). If the input is a folder or a single file that is not an EXMARaLDA coma file, it will be treated as unstructured data. If the input file is an EXMARaLDA coma file, it will be treated as a structured corpus and all files linked in it will also be checked, depending on the chosen functions.
 
-*-o* is the location, where the output will be found. Supported output formats are .html, .txt and .csv. It is possible to create several output files at the same time. Depending if you end the filename with ".txt", ".html" or ".csv" a simple text file, a sort- and filterable HTML table or a CSV (tabs and double quotes as delimiters) table will be generated. If you want to obtain several outputs, provide the path to each file separated by -o or commas (no space after the coma). At the same place an additional a curation folder with EXMARaLDA error list will be created. 
+*-o* is the location, where the output will be found. Supported output formats are .html, .txt and .csv. It is possible to create several output files at the same time. Depending if you end the filename with ".txt", ".html" or ".csv" a simple text file, a sort- and filterable HTML table or a CSV (tabs and double quotes as delimiters) table will be generated. If you want to obtain several outputs, provide the path to each file separated by -o or commas (no space after the comma). At the same place an additional a curation folder with EXMARaLDA error list will be created. 
 
 *-c* are the corpus functions you want to run. See the method getAllExistingCFs() in the class src/main/java/de/uni_hamburg/corpora/CorpusMagician.java for all available function strings. 
 
@@ -46,7 +44,7 @@ Only use one of the following:
 
 OR
 
-*-n* use this parameter if you don't want a curation folder with EXMARaLDA error list to be created
+*-n* use this parameter if you do not want a curation folder with an EXMARaLDA error list to be created
 
 Only use one of the following:
 
