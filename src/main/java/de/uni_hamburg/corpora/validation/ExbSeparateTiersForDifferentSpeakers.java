@@ -55,6 +55,7 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
             throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, XPathExpressionException {
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
+        CorpusIO cio = new CorpusIO();
         
         //first we collect all the timeline elements in a list
         XPath XTimeline = XPath.newInstance("//tli");
@@ -230,7 +231,6 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
                 }
                 
                 //write out the file
-                CorpusIO cio = new CorpusIO();
                 cd.updateUnformattedString(TypeConverter.JdomDocument2String(doc));
                 cio.write(cd, cd.getURL());
                 stats.addFix(function, cd, "Corrected tier structure");
@@ -239,6 +239,33 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
             }
         } else {
             stats.addCorrect(function, cd, "The file has only one speaker, no transformation needed");
+            
+            //check if tier names are equal to as category names anyway; fix if necessary
+            XPath tierNames = XPath.newInstance("//tier");
+            List tierNamesList = tierNames.selectNodes(doc);
+            for (int name = 0; name < tierNamesList.size(); name++) {
+                Object no = tierNamesList.get(name);
+                if (no instanceof Element) {
+                    Element ne = (Element) no;
+                    String category = ne.getAttributeValue("category");
+                    String id = ne.getAttributeValue("id");
+                    String displayName = ne.getAttributeValue("display-name");
+                    if (category.equals(id) && category.equals(displayName)) {
+                        stats.addCorrect(function, cd, "The tier name is correct");                            
+                    } else {
+                        if (fix) {
+                            ne.setAttribute("id", category);
+                            ne.setAttribute("display-name", category);
+                            cd.updateUnformattedString(TypeConverter.JdomDocument2String(doc));
+                            cio.write(cd, cd.getURL());
+                            stats.addFix(function, cd, "Corrected tier name");
+                        } else {
+                            String message = "The id of tier  " + id + " or its name " + displayName + " do not match its category " + category;
+                            stats.addCritical(function, cd, message);
+                        }
+                    }
+                }
+            }
         }     
                 
         return stats; 

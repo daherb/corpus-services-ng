@@ -121,6 +121,7 @@ public class CorpusMagician {
     static boolean fixing = false;
     static boolean iserrorsonly = false;
     static boolean isfixesjson = false;
+    static boolean nocurationfolder = false;
     static CommandLine cmd = null;
     //the final Exmaralda error list
     public static ExmaErrorList exmaError = new ExmaErrorList();
@@ -1081,35 +1082,37 @@ public class CorpusMagician {
             
         }
         //create the error list file
-        System.out.println("Basedirectory is " + basedirectory);
-        System.out.println("BasedirectoryPath is " + basedirectory.getPath());
-        URL errorlistlocation = new URL(basedirectory + "curation/CorpusServices_Errors.xml");
-        URL fixJsonlocation = new URL(basedirectory + "curation/fixes.json");
-        File curationFolder = new File((new URL(basedirectory + "curation").getFile()));
-        if (!curationFolder.exists()) {
-            //the curation folder it not there and needs to be created
-            curationFolder.mkdirs();
-        }
-        Document exmaErrorList = TypeConverter.W3cDocument2JdomDocument(ExmaErrorList.createFullErrorList());
-        String exmaErrorListString = TypeConverter.JdomDocument2String(exmaErrorList);
-        if (exmaErrorListString != null && basedirectory != null && exmaErrorListString.contains(basedirectory.getPath())) {
-            exmaErrorListString = exmaErrorListString.replaceAll(basedirectory.getPath(), "../");
-        }
-        if (exmaErrorListString != null) {
-            exmaErrorListString = pp.indent(exmaErrorListString, "event");
-            cio.write(exmaErrorListString, errorlistlocation);
-            System.out.println("Wrote ErrorList at " + errorlistlocation);
-        }
-        if (isfixesjson) {
-            String fixJson = "";
-            if (isCorpus) {
-                fixJson = report.getFixJson(corpus);
-            } else {
-                fixJson = report.getFixJson();
+        if (!nocurationfolder) {
+            System.out.println("Basedirectory is " + basedirectory);
+            System.out.println("BasedirectoryPath is " + basedirectory.getPath());
+            URL errorlistlocation = new URL(basedirectory + "curation/CorpusServices_Errors.xml");
+            URL fixJsonlocation = new URL(basedirectory + "curation/fixes.json");
+            File curationFolder = new File((new URL(basedirectory + "curation").getFile()));
+            if (!curationFolder.exists()) {
+                //the curation folder it not there and needs to be created
+                curationFolder.mkdirs();
             }
-            if (fixJson != null) {
-                cio.write(fixJson, fixJsonlocation);
-                System.out.println("Wrote JSON file for fixes at " + fixJsonlocation);
+            Document exmaErrorList = TypeConverter.W3cDocument2JdomDocument(ExmaErrorList.createFullErrorList());
+            String exmaErrorListString = TypeConverter.JdomDocument2String(exmaErrorList);
+            if (exmaErrorListString != null && basedirectory != null && exmaErrorListString.contains(basedirectory.getPath())) {
+                exmaErrorListString = exmaErrorListString.replaceAll(basedirectory.getPath(), "../");
+            }
+            if (exmaErrorListString != null) {
+                exmaErrorListString = pp.indent(exmaErrorListString, "event");
+                cio.write(exmaErrorListString, errorlistlocation);
+                System.out.println("Wrote ErrorList at " + errorlistlocation);
+            }
+            if (isfixesjson) {
+                String fixJson = "";
+                if (isCorpus) {
+                    fixJson = report.getFixJson(corpus);
+                } else {
+                    fixJson = report.getFixJson();
+                }
+                if (fixJson != null) {
+                    cio.write(fixJson, fixJsonlocation);
+                    System.out.println("Wrote JSON file for fixes at " + fixJsonlocation);
+                }
             }
         }
     }
@@ -1119,6 +1122,7 @@ public class CorpusMagician {
         fixing = cmd.hasOption("f");
         iserrorsonly = cmd.hasOption("e");
         isfixesjson = cmd.hasOption("j");
+        nocurationfolder = cmd.hasOption("n");
         if (urlstring.startsWith("file://")) {
             inputurl = new URL(urlstring);
         } else {
@@ -1204,6 +1208,10 @@ public class CorpusMagician {
         settingsfile.setRequired(false);
         settingsfile.setArgName("FILE PATH");
         options.addOption(settingsfile);
+        
+        Option nocuration = new Option("n", "nocuration", false, "do not create creation folder and exma-error file");
+        fix.setRequired(false);
+        options.addOption(nocuration);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -1235,6 +1243,12 @@ public class CorpusMagician {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
+            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose, true);
+            System.exit(1);
+        }
+        
+        if (cmd.hasOption("n") && cmd.hasOption("j")) {
+            System.out.println("Options n and j are not allowed at the same time");
             formatter.printHelp("hzsk-corpus-services", header, options, footerverbose, true);
             System.exit(1);
         }
