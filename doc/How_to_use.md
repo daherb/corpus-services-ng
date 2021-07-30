@@ -28,7 +28,7 @@ Specify a corpus folder or file and a function to be applied
 
 *-i* is the input, it should be the name of the folder or single corpus file you want to process. Functions can be run on a folder, a metadata file representing a list of files, or a single file (e.g. exb). If the input is a folder or a single file that is not an EXMARaLDA coma file, it will be treated as unstructured data. If the input file is an EXMARaLDA coma file, it will be treated as a structured corpus and all files linked in it will also be checked, depending on the chosen functions.
 
-*-o* is the location, where the output will be found. Depending if you end the filenem with ".txt" or ".html" a simple text file or a sort - and filterable html table will be generated. At the same place an additional EXMARaLDA error list will be created. 
+*-o* is the location, where the output will be found. Supported output formats are .html, .txt and .csv. It is possible to create several output files at the same time. Depending if you end the filename with ".txt", ".html" or ".csv" a simple text file, a sort- and filterable HTML table or a CSV (tabs and double quotes as delimiters) table will be generated. If you want to obtain several outputs, provide the path to each file separated by -o or commas (no space after the coma). At the same place an additional EXMARaLDA error list will be created. 
 
 *-c* are the corpus functions you want to run. See the method getAllExistingCFs() in the class src/main/java/de/uni_hamburg/corpora/CorpusMagician.java for all available function strings. 
 
