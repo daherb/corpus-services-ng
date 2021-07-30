@@ -629,8 +629,7 @@ public class ReportItem {
             report += "\"" + error.getLocation() + "\"\t";
             report += "\"" + error.getWhat() + "\"\t";
             report += "\"" + error.getHowto() + "\"\t";
-            report += "\"" + error.getLocalisedMessage() + "\"\t";
-            report += "\"" + error.getStackTrace() +"\"\n";
+            report += "\"" + error.getLocalisedMessage() + "\"\n";
         }
         return report;
        }
