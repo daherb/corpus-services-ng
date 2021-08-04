@@ -35,9 +35,6 @@ import org.xml.sax.SAXException;
 
 public class ExbSeparateTiersForDifferentSpeakers extends Checker implements CorpusFunction {
 
-    Map<String,ArrayList<String>> eventMap = new HashMap<>();
-    ArrayList<String> timeline = new ArrayList<>();
-    ArrayList<Object> tsTierToCopy = new ArrayList<>(); 
     Document doc;
     //XMLOutputter xmOut = new XMLOutputter(); //for testing
 
@@ -56,6 +53,10 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
         CorpusIO cio = new CorpusIO();
+        Map<String,ArrayList<String>> eventMap = new HashMap<>();
+        ArrayList<Object> tsTierToCopy = new ArrayList<>();
+        ArrayList<String> timeline = new ArrayList<>();
+        Boolean separateTiers = false;
         
         //first we collect all the timeline elements in a list
         XPath XTimeline = XPath.newInstance("//tli");
@@ -72,7 +73,21 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
         XPath tsTiers = XPath.newInstance("//tier[@category='ts']");
         List allTSTiers = tsTiers.selectNodes(doc);
         if (allTSTiers.size() > 1) {
-            if (fix) {
+            //first check if the attributes are correct
+            for (int tr = 0; tr < allTSTiers.size(); tr++) {
+                Object tro = allTSTiers.get(tr);
+                if (tro instanceof Element) {
+                    Element tre = (Element) tro;
+                    String trName = tre.getAttributeValue("display-name");
+                    String trId = tre.getAttributeValue("id");
+                    String trCat = tre.getAttributeValue("category");
+                    String trSpeaker = tre.getAttributeValue("speaker");
+                    if (!trId.equals(trCat + "-" + trSpeaker) | !trName.equals(trCat + "-" + trSpeaker)) {
+                        separateTiers = true;
+                    }
+                }
+            }
+            if (fix && separateTiers) {
                 for (int tier = 0; tier < allTSTiers.size(); tier++) {
                     Object o = allTSTiers.get(tier);
                     if (o instanceof Element) {
@@ -234,8 +249,10 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
                 cd.updateUnformattedString(TypeConverter.JdomDocument2String(doc));
                 cio.write(cd, cd.getURL());
                 stats.addFix(function, cd, "Corrected tier structure");
-            } else {
+            } else if (separateTiers) {
                 stats.addCritical(function, cd, "Tier structure needs to be fixed");
+            } else {
+                stats.addCorrect(function, cd, "Tiers are already separated");
             }
         } else {
             stats.addCorrect(function, cd, "The file has only one speaker, no transformation needed");
