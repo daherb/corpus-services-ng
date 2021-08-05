@@ -1209,7 +1209,7 @@ public class CorpusMagician {
         settingsfile.setArgName("FILE PATH");
         options.addOption(settingsfile);
         
-        Option nocuration = new Option("n", "nocuration", false, "do not create creation folder and exma-error file");
+        Option nocuration = new Option("n", "nocuration", false, "do not create curation folder and exma-error file");
         fix.setRequired(false);
         options.addOption(nocuration);
 
