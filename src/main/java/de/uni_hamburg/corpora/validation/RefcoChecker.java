@@ -846,8 +846,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (Transcription t : criteria.transcriptions) {
             if (t.grapheme == null || t.grapheme.isEmpty())
                 report.addCritical(function,"Grapheme is empty");
-            if (t.grapheme.length() != 1)
-                report.addCritical(function,"Grapheme is not a single character: " + t.grapheme);
+            //if (t.grapheme.length() != 1)
+            //    report.addCritical(function,"Grapheme is not a single character: " + t.grapheme);
             if (t.linguisticValue == null || t.linguisticValue.isEmpty())
                 report.addCritical(function,"Grapheme linguistic value is empty: " + t.grapheme);
             if (t.linguisticConvention == null || t.linguisticConvention.isEmpty())
@@ -878,8 +878,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (Punctuation p : criteria.punctuations) {
             if (p.character == null || p.character.isEmpty())
                 report.addCritical(function,"Punctuation character is empty");
-            if (p.character.length() != 1)
-                report.addCritical(function,"Punctuation is not a single character: " + p.character);
+            //if (p.character.length() != 1)
+            //    report.addCritical(function,"Punctuation is not a single character: " + p.character);
             if (p.meaning == null || p.meaning.isEmpty())
                 report.addCritical(function,"Punctuation meaning is empty: " + p.character);
             // We skip comments assuming it is optional
