@@ -353,7 +353,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             rc.setRefcoFile(args[0]);
             // Safe the Refco criteria to file
             // Generate pretty-printed json using an object mapper
-            ObjectMapper mapper = new ObjectMapper();
+            // DEBUG write criteria to json file
+            /*ObjectMapper mapper = new ObjectMapper();
             // Allows serialization even when getters are missing
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
@@ -364,7 +365,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
             try {
                 // Read the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Reading corpus");
