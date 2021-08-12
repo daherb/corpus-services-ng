@@ -998,7 +998,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check if one of the relevant variables is empty and, if yes, skip the transcription test
         if (transcriptionTiers.isEmpty()) {
-            report.addCritical(function, cd,  "No transcription tiers found");
+            report.addCritical(function, cd, "No transcription tiers found");
             return report;
         }
         if (validTranscriptionCharacters.isEmpty()) {
@@ -1042,7 +1042,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
         }
-        // Get the text from all transcription tiers
+        // Get the text from all morphology tiers
         List<Text> glossText = new ArrayList<>();
         for (String t : morphologyTiers) {
             glossText.addAll(getTextsInTierByID(content, t));
