@@ -637,9 +637,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Report report = new Report() ;
         if (!refcoFileName.matches("\\d{8}_\\w+_RefCo-Report.f?ods"))
             report.addWarning(function,"Filename does not match schema yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoFileName);
-        if (criteria.corpusTitle.isEmpty())
+        if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
             report.addCritical(function, "Corpus title is empty");
-        if (criteria.subjectLanguages.isEmpty())
+        if (criteria.subjectLanguages == null || criteria.subjectLanguages.isEmpty())
             report.addCritical(function, "Subject languages is empty");
         else {
             // Each cell can contain several languages. Split the languages and check for each one if it is a
@@ -653,24 +653,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
         }
-        if (criteria.archive.isEmpty())
+        if (criteria.archive == null || criteria.archive.isEmpty())
             report.addWarning(function,"Archive name is empty");
-        if (criteria.persistentId.isEmpty())
+        if (criteria.persistentId == null || criteria.persistentId.isEmpty())
             report.addCritical(function,"Persistent identifier is empty");
         else if (!checkUrl(criteria.persistentId)){
             report.addCritical(function,"Invalid URL");
         }
-        if (criteria.annotationLicense.isEmpty())
+        if (criteria.annotationLicense == null || criteria.annotationLicense.isEmpty())
             report.addWarning(function,"Annotation license is empty");
-        if (criteria.recordingLicense.isEmpty())
+        if (criteria.recordingLicense == null || criteria.recordingLicense.isEmpty())
             report.addWarning(function,"Recording license is empty");
-        if (criteria.creatorName.isEmpty())
+        if (criteria.creatorName == null || criteria.creatorName.isEmpty())
             report.addCritical(function,"Creator name is empty");
-        if (criteria.creatorContact.isEmpty())
+        if (criteria.creatorContact == null || criteria.creatorContact.isEmpty())
             report.addCritical(function,"Creator contact is empty");
-        if (criteria.creatorInstitution.isEmpty())
+        if (criteria.creatorInstitution == null || criteria.creatorInstitution.isEmpty())
             report.addWarning(function,"Creator institution is empty");
-        if (criteria.refcoVersion.information.isEmpty())
+        if (criteria.refcoVersion.information == null || criteria.refcoVersion.information.isEmpty())
             report.addCritical(function, "RefCo version is empty");
         else {
             try {
@@ -682,7 +682,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addCritical(function, "Refco version is not a number");
             }
         }
-        if (criteria.numberSessions.information.isEmpty())
+        if (criteria.numberSessions.information == null || criteria.numberSessions.information.isEmpty())
             report.addWarning(function, "Number of sessions is empty");
         else {
             try {
@@ -697,7 +697,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addWarning(function, "Number of sessions is not a number");
             }
         }
-        if (criteria.numberTranscribedWords.information.isEmpty())
+        if (criteria.numberTranscribedWords.information == null || criteria.numberTranscribedWords.information.isEmpty())
             report.addWarning(function, "Number of transcribed words is empty");
         else {
             try {
@@ -717,7 +717,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addWarning(function, "Number of transcribed words is not a number");
             }
         }
-        if (criteria.numberAnnotatedWords.information.isEmpty())
+        if (criteria.numberAnnotatedWords.information == null || criteria.numberAnnotatedWords.information.isEmpty())
             report.addWarning(function, "Number of annotated words is empty");
         else {
             try {
@@ -730,7 +730,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addWarning(function, "Number of annotated words is not a number");
             }
         }
-        if (criteria.translationLanguages.information.isEmpty())
+        if (criteria.translationLanguages.information == null || criteria.translationLanguages.information.isEmpty())
             report.addWarning(function,"Translation languages is empty");
         else {
             // Each cell can contain several languages. Split the languages and check for each one if it is a
@@ -746,9 +746,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check each of the sessions
         for (Session s : criteria.sessions) {
-            if (s.speakerName.isEmpty())
+            if (s.speakerName == null || s.speakerName.isEmpty())
                 report.addCritical(function, "Session name is empty");
-            if (s.fileName.isEmpty())
+            if (s.fileName == null || s.fileName.isEmpty())
                 report.addCritical(function, "Session file name is empty: " + s.sessionName);
             else {
                 // Each cell can contain several files. Split the files and check for each one if it exists
@@ -781,17 +781,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         report.addCritical(function,"File does not exist: " + f);
                 }
             }
-            if (s.speakerName.isEmpty())
+            if (s.speakerName == null || s.speakerName.isEmpty())
                 report.addCritical(function,"Speaker name is empty");
-            if (s.speakerAge.isEmpty())
+            if (s.speakerAge == null || s.speakerAge.isEmpty())
                 report.addWarning(function, "Speaker age is empty: " + s.speakerName);
             else if (!s.speakerAge.matches("~?\\d{1,3}"))
                 report.addWarning(function,"Speaker age does not match schema: " + s.speakerAge);
-            if (s.speakerGender.isEmpty())
+            if (s.speakerGender == null || s.speakerGender.isEmpty())
                 report.addWarning(function,"Speaker gender is empty: " + s.speakerName);
-            if (s.recordingLocation.isEmpty())
+            if (s.recordingLocation == null || s.recordingLocation.isEmpty())
                 report.addCritical(function,"Recording location is empty: " + s.speakerName);
-            if (s.recordingDate.isEmpty())
+            if (s.recordingLocation == null || s.recordingDate.isEmpty())
                 report.addCritical(function,"Recording date is empty: " + s.speakerName);
             else {
                 // Check date by trying to parse it
@@ -802,20 +802,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     report.addWarning(function,"Recording date in invalid format. Expected yyyy-mm-dd, got: " + s.recordingDate);
                 }
             }
-            if (s.genre.isEmpty())
+            if (s.genre == null || s.genre.isEmpty())
                 report.addWarning(function,"Genre is empty");
-            if (s.ageGroup.isEmpty())
+            if (s.ageGroup == null || s.ageGroup.isEmpty())
                 report.addWarning(function, "Age group is empty");
         }
         // Check all tiers
         for (Tier t : criteria.tiers) {
-            if (t.tierName.isEmpty())
+            if (t.tierName == null || t.tierName.isEmpty())
                 report.addCritical(function, "Tier name is empty");
-            if (t.tierFunction.isEmpty())
+            if (t.tierFunction == null || t.tierFunction.isEmpty())
                 report.addWarning(function,"Tier function is empty: " + t.tierName);
-            if (t.segmentationStrategy.isEmpty())
+            if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
                 report.addWarning(function,"Segmentation strategy is empty: " + t.tierName);
-            if (t.languages.isEmpty())
+            if (t.languages == null || t.languages.isEmpty())
                 report.addCritical(function,"Tier languages is empty: " + t.tierName);
             else {
                 // Each cell can contain several languages. Split the languages and check for each one if it is a
@@ -828,28 +828,28 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            if (t.morphemeDistinction.isEmpty())
+            if (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty())
                 report.addWarning(function,"Morpheme distinction is empty: " + t.tierName);
         }
         // Check all transcription graphemes
         for (Transcription t : criteria.transcriptions) {
-            if (t.grapheme.isEmpty())
+            if (t.grapheme == null || t.grapheme.isEmpty())
                 report.addCritical(function,"Grapheme is empty");
             if (t.grapheme.length() != 1)
                 report.addCritical(function,"Grapheme is not a single character: " + t.grapheme);
-            if (t.linguisticValue.isEmpty())
+            if (t.linguisticValue == null || t.linguisticValue.isEmpty())
                 report.addCritical(function,"Grapheme linguistic value is empty: " + t.grapheme);
-            if (t.linguisticConvention.isEmpty())
+            if (t.linguisticConvention == null || t.linguisticConvention.isEmpty())
                 report.addWarning(function,"Grapheme linguistic convention is empty: " + t.grapheme);
         }
         // Check all glosses
         for (Gloss g : criteria.glosses) {
-            if (g.gloss.isEmpty())
+            if (g.gloss == null || g.gloss.isEmpty())
                 report.addCritical(function,"Gloss is empty");
-            if (g.meaning.isEmpty())
+            if (g.meaning == null || g.meaning.isEmpty())
                 report.addCritical(function,"Gloss meaning is empty: " + g.gloss);
             // We skip comments assuming it is optional
-            if (g.tiers.isEmpty())
+            if (g.tiers == null || g.tiers.isEmpty())
                 report.addCritical(function,"Gloss tiers is empty: " + g.gloss);
             // If the tiers is not "all", check if its valid tiers
             else if (!g.tiers.equalsIgnoreCase("all")) {
@@ -865,14 +865,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check all punctuation
         for (Punctuation p : criteria.punctuations) {
-            if (p.character.isEmpty())
+            if (p.character == null || p.character.isEmpty())
                 report.addCritical(function,"Punctuation character is empty");
             if (p.character.length() != 1)
                 report.addCritical(function,"Punctuation is not a single character: " + p.character);
-            if (p.meaning.isEmpty())
+            if (p.meaning == null || p.meaning.isEmpty())
                 report.addCritical(function,"Punctuation meaning is empty: " + p.character);
             // We skip comments assuming it is optional
-            if (p.tiers.isEmpty())
+            if (p.tiers == null || p.tiers.isEmpty())
                 report.addCritical(function,"Punctuation tiers is empty: " + p.character);
             // If the tiers is not "all", check if its valid tiers
             else if (!p.tiers.equalsIgnoreCase("all")) {
