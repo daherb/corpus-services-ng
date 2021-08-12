@@ -823,7 +823,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (t.tierName == null || t.tierName.isEmpty())
                 report.addCritical(function, "Tier name is empty");
             if (t.tierFunction == null || t.tierFunction.isEmpty())
-                report.addWarning(function,"Tier function is empty: " + t.tierName);
+                report.addCritical(function,"Tier function is empty: " + t.tierName);
             if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
                 report.addWarning(function,"Segmentation strategy is empty: " + t.tierName);
             if (t.languages == null || t.languages.isEmpty())
@@ -1093,7 +1093,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         float percentValid = (float)matched/(matched+missing) ;
         if (percentValid < 0.2)
-            report.addCritical(function, cd,  "Less than 20 percent of tokens are valid glosses. " +
+            report.addWarning(function, cd,  "Less than 20 percent of tokens are valid glosses. " +
                     "Valid: " + matched + " Invalid: " + missing + " Percentage vald: " +
                     Math.round(percentValid*100)) ;
         else
