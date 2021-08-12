@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -33,6 +35,8 @@ import static org.junit.Assert.*;
  * @version 20210720
  */
 public class RefcoCheckerTest {
+
+    Logger logger = Logger.getLogger(this.getClass().getName());
 
     private Document ODSDOM ;
 
@@ -376,7 +380,7 @@ public class RefcoCheckerTest {
     public void testCheckTranscriptionText() {
         RefcoChecker rc = new RefcoChecker();
         try {
-            Method checkTranscriptionText = rc.getClass().getDeclaredMethod("checkTranscriptionText", CorpusData.class, List.class, Set.class, Set.class);
+            Method checkTranscriptionText = rc.getClass().getDeclaredMethod("checkTranscriptionText", CorpusData.class, List.class, List.class, Set.class);
             checkTranscriptionText.setAccessible(true);
             ELANData corpusData = new ELANData();
             Field urlField = corpusData.getClass().getDeclaredField("url") ;
@@ -384,27 +388,43 @@ public class RefcoCheckerTest {
             urlField.set(corpusData,new URL("file://./test.eaf"));
             //corpusData.setJdom(ELANDOM);
             List<Text> transcriptionText = rc.getTextsInTierByType(ELANDOM, "Transcription");
-            Set<Character> allCharacters = new HashSet<>(rc.getChars("GO abdeghik,lm-noqrstuvy=?"));
-            Set<Character> moreThan80percent = new HashSet<>(rc.getChars(" ,-=?GOabdeghklmnoqr"));
-            Set<Character> lessThan40percent = new HashSet<>(rc.getChars(" ,-=?a"));
+            List<String> allCharacters = Arrays.asList(new String[] {
+                    "avyn", "stor",
+                    "moq", "tog", "kal", "roh", "hre", "sob", "mao", "vis",
+                    "Ga", "vu", "na", "Ok", "ar", "gy",
+                    "=", "?", ",", "-", "i", "n", ",", "d", "a", "q", "r", "o", "h"} );
+
+            List<String> moreThan80percent = Arrays.asList(new String[] {
+                    "avyn", "stor",
+                    "moq", "tog", "kal", "roh", "hre", "sob", "mao", "vis",
+                    "Ga", "vu", "na", // "Ok", "ar", "gy",
+                    "=", "?", "-", "i", "n", ",", "d", "a", "q", "r", "o", "h"} );
+            List<String> lessThan40percent = Arrays.asList(new String[] {
+                    "avyn", "stor",
+                    "moq", "tog", "kal", // "roh", "hre", "sob", "mao", "vis",
+                    "Ga", "vu", "na", // "Ok", "ar", "gy",
+                    "=", "?", "-", "i", //"n", ",", "d", "a", "q", "r", "o", "h"
+            } );
             Report r = (Report) checkTranscriptionText.invoke(rc,corpusData,transcriptionText,allCharacters,
                     new HashSet<String>());
-            assertEquals("All characters are matched", 1, r.getRawStatistics().stream()
-                    .filter(ReportItem::isGood).count());
+            assertTrue("Sufficient characters are matched for all valid characters", ReportItem.generatePlainText(r.getRawStatistics(), true)
+                    .contains("More than 50 percent of transcription characters are valid"));
             assertEquals("No warnings or errors", 0, r.getRawStatistics().stream()
                     .filter(ReportItem::isBad).count());
             r = (Report) checkTranscriptionText.invoke(rc,corpusData,transcriptionText,moreThan80percent,
                     new HashSet<String>());
-            assertEquals("All characters are matched", 1, r.getRawStatistics().stream()
-                    .filter(ReportItem::isGood).count());
+            assertTrue("Sufficient characters matched for 80 percent valid characters", ReportItem.generatePlainText(r.getRawStatistics(), true)
+                    .contains("More than 50 percent of transcription characters are valid"));
             // "Bad" messages that are not about tokens containing invalid characters
             List<ReportItem> relevantMessages = r.getRawStatistics().stream().filter((ri) -> ri.isBad() &&
                     !ri.toString().contains("Transcription token contains invalid characters")).collect(Collectors.toList());
             assertEquals("No relevant warnings or errors", 0, relevantMessages.size());
             r = (Report) checkTranscriptionText.invoke(rc,corpusData,transcriptionText,lessThan40percent,
                     new HashSet<String>());
-            assertEquals("All characters are matched", 0, r.getRawStatistics().stream()
-                    .filter(ReportItem::isGood).count());
+            // DEBUG
+            //logger.log(Level.INFO,ReportItem.generatePlainText(r.getRawStatistics(),true));
+            assertFalse("Sufficient characters matched for 40 percent valid characters", ReportItem.generatePlainText(r.getRawStatistics(), true)
+                    .contains("More than 50 percent of transcription characters are valid"));
             // "Bad" messages that are not about tokens containing invalid characters
             relevantMessages = r.getRawStatistics().stream().filter((ri) -> ri.isBad() &&
                     !ri.toString().contains("Transcription token contains invalid characters")).collect(Collectors.toList());
