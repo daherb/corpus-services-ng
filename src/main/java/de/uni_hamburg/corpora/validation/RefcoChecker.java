@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.utilities.DictionaryAutomaton;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.ini4j.InvalidFileFormatException;
@@ -944,30 +945,33 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Document content = ((ELANData) cd).getJdom();
         // Get all transcription tiers
         ArrayList<String> transcriptionTiers = new ArrayList<>();
-        transcriptionTiers.add("Transcription") ; // Add default tier function for transcription
+        transcriptionTiers.add("transcription") ; // Add default tier function for transcription
         for (Tier t: criteria.tiers) {
-            // Also add all tiers that have transcription as a function
-            if (t.tierFunction.equalsIgnoreCase("transcription")) {
+            // Also add all tiers that contain transcription in the tier function
+            if (t.tierFunction.toLowerCase().contains("transcription")) {
                 transcriptionTiers.add(t.tierName);
             }
         }
         // Get all transcription graphemes
-        Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
+        // Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
+        List<String> validTranscriptionCharacters = new ArrayList<>(criteria.transcriptions.size()) ;
         for (Transcription t : criteria.transcriptions) {
             // Add all of the grapheme's characters
-            // validTranscriptionCharacters.addAll(Chars.asList(t.grapheme.toCharArray()));
-            validTranscriptionCharacters.addAll(getChars(t.grapheme));
+            // validTranscriptionCharacters.addAll(getChars(t.grapheme));
+            validTranscriptionCharacters.add(t.grapheme);
         }
         // and punctuation characters
         for (Punctuation p : criteria.punctuations) {
             if (p.tiers.equals("all"))
                 // Add all of the punctuation's characters
-                validTranscriptionCharacters.addAll(getChars(p.character));
+                // validTranscriptionCharacters.addAll(getChars(p.character));
+                validTranscriptionCharacters.add(p.character);
             else {
                 for (String t : new ArrayList<>(Arrays.asList(p.tiers.split(valueSeparator)))) {
-                    if (transcriptionTiers.contains(t)) {
+                    if (transcriptionTiers.contains(t.toLowerCase())) {
                         // Add all of the punctuation's characters
-                        validTranscriptionCharacters.addAll(getChars(p.character));
+                        // validTranscriptionCharacters.addAll(getChars(p.character));
+                        validTranscriptionCharacters.add(p.character);
                         break;
                     }
                 }
@@ -1104,16 +1108,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * function to check the transcription text based on valid chars and glosses
+     * function to check the transcription text based on valid chunks and glosses
      *
      * @param cd the corpus document used to correctly assign the log messages
      * @param text the extracted text from the transcription tiers
-     * @param chars the valid character
+     * @param chunks the valid character sequences (graphemes/punctuations)
      * @param glosses the documented glosses
      * @return the check report
      */
-    private Report checkTranscriptionText(CorpusData cd, List<Text> text, Set<Character> chars,
+    // private Report checkTranscriptionText(CorpusData cd, List<Text> text, Set<Character> chunks,
+    private Report checkTranscriptionText(CorpusData cd, List<Text> text, List<String> chunks,
                                           Set<String> glosses) {
+        DictionaryAutomaton dict = new DictionaryAutomaton(chunks);
         Report report = new Report();
         // All the characters that are valid
         int matched = 0;
@@ -1129,13 +1135,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Update frequency list
                 tokenFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
                 if (!glosses.contains(token)) {
-                    for (char c : token.toCharArray()) {
-                        if (chars.contains(c))
+                    /*for (char c : token.toCharArray()) {
+                        if (chunks.contains(c))
                             matched += 1;
                         else {
                             missing += 1;
                             mismatch = true ;
                         }
+                    }*/
+                    // Check if we can segment the token using the chunks
+                    if (dict.checkSegmentableWord(token))
+                        matched += 1;
+                    else {
+                        missing += 1;
+                        mismatch = true ;
                     }
                 }
                 else {
