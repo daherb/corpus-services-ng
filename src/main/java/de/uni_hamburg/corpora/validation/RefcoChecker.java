@@ -1172,16 +1172,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Glottolog
         else if (lang.matches("\\w{4}\\d{4}")) {
-            try {
-                // Look the languoid up online
-                URL url = new URL("https://glottolog.org/resource/languoid/id/" + lang);
-                HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setRequestMethod("GET");
-                return con.getResponseCode() == 200;
-            }
-            catch (IOException e) {
-                return false ;
-            }
+            return checkUrl("https://glottolog.org/resource/languoid/id/" + lang);
         }
         else
             return false ;
