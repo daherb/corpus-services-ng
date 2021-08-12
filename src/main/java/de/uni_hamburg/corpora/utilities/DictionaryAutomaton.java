@@ -219,7 +219,7 @@ public class DictionaryAutomaton {
      * Function to check if a word can be segmented into words from the dictionary
      *
      * @param word the word to be segmented
-     * @return the list of segments
+     * @return the list of segments and null if the segmentation fails
      */
     public List<String> segmentWord(String word) {
         // Stack to keep track of the process and for backtracking
@@ -264,7 +264,7 @@ public class DictionaryAutomaton {
             }
         }
         // if we fail to segment we return an empty list
-        return Collections.EMPTY_LIST ;
+        return null ; // Collections.EMPTY_LIST ;
     }
 
     /**
@@ -274,7 +274,7 @@ public class DictionaryAutomaton {
      */
     public boolean checkSegmentableWord(String word) {
         List<String> l = segmentWord(word) ;
-        return !l.isEmpty() ;
+        return l != null && !l.isEmpty() ;
     }
 
     /**
@@ -308,9 +308,14 @@ public class DictionaryAutomaton {
                 strings.addFirst(s.segment);
                 currentStart = s.startIndex ;
             }
+            // Done early when encountering the start
             if (currentStart == 0)
                 return strings ;
         }
-        return Collections.EMPTY_LIST ;
+        // If we are done matching we return the strings otherwise the empty list
+        if (currentStart == 0)
+            return strings ;
+        else
+            return Collections.EMPTY_LIST ;
     }
 }
