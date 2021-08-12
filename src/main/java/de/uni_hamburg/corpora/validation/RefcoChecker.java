@@ -638,6 +638,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Report report = new Report() ;
         if (!refcoFileName.matches("\\d{8}_\\w+_RefCo-Report.f?ods"))
             report.addWarning(function,"Filename does not match schema yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoFileName);
+        else {
+            // Check date in file name is valid
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            try {
+                df.parse(refcoFileName.substring(8));
+            }
+            catch (ParseException e) {
+                report.addWarning(function, "Date given in filename not valid: " + e);
+            }
+        }
         if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
             report.addCritical(function, "Corpus title is empty");
         if (criteria.subjectLanguages == null || criteria.subjectLanguages.isEmpty())
