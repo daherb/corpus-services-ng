@@ -1160,14 +1160,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
-        if (percentValid < 0.5)
-            report.addCritical(function, cd,  "Less than 50 percent of transcription characters are valid. " +
+        if (percentValid < 0.5) {
+            report.addCritical(function, cd, "Less than 50 percent of transcription characters are valid. " +
                     "Valid: " + matched + " Invalid: " + missing + " Percentage: " +
-                    Math.round(percentValid*100)) ;
-        else
-            report.addNote(function,cd,"More than 50 percent of transcription characters are valid. " +
+                    Math.round(percentValid * 100));
+        }
+        else {
+            report.addNote(function, cd, "More than 50 percent of transcription characters are valid. " +
                     "Valid: " + matched + " Invalid: " + missing + " Percentage: " +
-                    Math.round(percentValid*100));
+                    Math.round(percentValid * 100));
+        }
         return report ;
     }
 
@@ -1323,4 +1325,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public List<Character> getChars(String s) {
         return Chars.asList(s.toCharArray());
     }
+
+
 }
