@@ -32,11 +32,11 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
     // The local logger that can be used for debugging
     Logger logger = Logger.getLogger(this.getClass().toString());
 
-    ELANValidatorChecker(boolean hasfixingoption) {
+    public ELANValidatorChecker(boolean hasfixingoption) {
         super(hasfixingoption);
     }
 
-    ELANValidatorChecker() {
+    public ELANValidatorChecker() {
         this(false) ;
     }
 
