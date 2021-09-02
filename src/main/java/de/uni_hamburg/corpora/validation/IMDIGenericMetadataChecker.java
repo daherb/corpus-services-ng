@@ -74,6 +74,12 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
                     values.add(((Element) o).getValue());
                 else if (o instanceof Attribute)
                     values.add(((Attribute) o).getValue());
+                // Result of a XPath predicate -> only keep if the result is true
+                // This allows e.g. predicates where the counts of elements can be compared
+                else if (o instanceof Boolean) {
+                    if ((Boolean) o)
+                        values.add(((Boolean) o).toString());
+                }
                 else {
                     // Error if it is neither element nor attribute
                     report.addCritical(function, cd, "Unexpected object type: " + o.getClass().getName());
