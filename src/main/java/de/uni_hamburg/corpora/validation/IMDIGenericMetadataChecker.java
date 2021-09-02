@@ -61,16 +61,10 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
     @Override
     protected Report getValuesForLocator(CorpusData cd, String locator, Collection<String> values) {
         Report report = new Report();
-        String query;
-        if (locator.startsWith("/"))
-            query = locator;
-        else
-            // Workaround for incomplete XPath expressions
-            query = "//" + locator;
         // Workaround for default namespace "" kind of following
         // http://www.edankert.com/defaultnamespaces.html
         try {
-            XPath xpath = XPath.newInstance(query.replaceAll("/([a-zA-Z])", "/imdi:$1"));
+            XPath xpath = XPath.newInstance(locator);
             xpath.addNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
             List<Object> nodes = xpath.selectNodes(((IMDIData) cd).getJdom());
             // Convert nodes to string values
