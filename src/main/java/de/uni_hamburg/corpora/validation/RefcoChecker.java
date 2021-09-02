@@ -1145,9 +1145,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }*/
                     // Check if we can segment the token using the chunks
                     if (dict.checkSegmentableWord(token))
-                        matched += 1;
+                        matched += token.length();
                     else {
-                        missing += 1;
+                        missing += token.length();
                         mismatch = true ;
                     }
                 }
