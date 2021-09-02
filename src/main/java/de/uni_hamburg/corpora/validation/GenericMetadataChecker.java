@@ -25,6 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -194,9 +195,19 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         }
                     }
                     // Error if everything failed
-                    if (!parsable)
-                        report.addCritical(function, cd, "No valid type given for value " + value +
-                                " (Attempted " + c.type + ")");
+                    if (!parsable) {
+                        // Function to get either an optional string value or "n/a"
+                        Function<Optional<String>,String> getPresent = ((t) -> t.isPresent() ? t.get() : "n/a");
+                        // Get all the types we attempted
+                        String attemptedTypes = getPresent.apply(c.type.stream().map(getPresent).reduce((s1,s2) -> s1 + "," + s2));
+                        // Create error message for problematic value. Only warn if it is unknown but create error if unspecified
+                        if (value.equals("Unknown"))
+                            report.addWarning(function, cd, "Unexpected value " + value +
+                                    " for " + c.name + ". Expected type: " + attemptedTypes);
+                        else
+                            report.addCritical(function, cd, "Unexpected value " + value +
+                                    " for " + c.name + ". Expected type: " + attemptedTypes);
+                    }
                 }
             }
         } else
