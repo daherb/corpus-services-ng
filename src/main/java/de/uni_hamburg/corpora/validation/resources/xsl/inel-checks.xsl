@@ -245,7 +245,7 @@
                         <!--<xsl:value-of select="concat('CRITICAL;utterance end symbol in tx tier IS appearing at end of matching ref tier event ', replace(replace(../../tier[@category='tx']/event[@end=$END]/text(), ';', ':'), $NEWLINE, '') ,' in event (start: ', @start, ', end: ', @end, ', tier: ', ../@category, ');', ../@id, ';', @start, $NEWLINE)"/> -->
                     </xsl:when> 
                     <!-- Test if the utterance end symbol is in double brackets, then it is allowed -->
-                    <xsl:when test="matches(., concat('.*\(\(', $UTTERANCEENDSYMBOL, '\)\).*'))">
+                    <xsl:when test="matches(., concat('.*\(\([^\)]*', $UTTERANCEENDSYMBOL, '[^\)]*\)\).*'))">
                          <!--<xsl:value-of select="concat('XSLTChecker.segmentation;CRITICAL;utterance end symbol is in double brackets which is allowed ', replace(replace(../../tier[@category='tx' and @speaker=$SPK]/event[@end=$END]/text(), ';', ':'), $NEWLINE, '') ,' in event (start: ', @start, ', end: ', @end, ', tier: ', ../@category, ');', ../@id, ';', @start, $NEWLINE)"/> -->
                     </xsl:when> 
                     <!-- Test if it is a colon but should be a vowel length marker -->
