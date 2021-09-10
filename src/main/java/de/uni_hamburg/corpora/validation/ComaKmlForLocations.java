@@ -252,7 +252,7 @@ public class ComaKmlForLocations extends Checker implements CorpusFunction {
                             String message = "Added Key " + KEYSETTLEMENTLL + ": " + coordinatesKey + ") from KML (" + kmlFile + ") "
                                     + "for communication '" + communicationName + "'";
                             stats.addFix(function, cd, message);
-                        } else if ((!lngLat.containsKey(settlement + "-" + languageCode)) && (!languageCode.equals("_any_"))) {
+                        } else if ((!lngLat.containsKey(settlement + "-" + languageCode)) && (!lngLat.containsKey(settlement + "-_any_"))) {
                             String message = "KML (" + kmlFile + ") does not contain the settlement '" + settlement + "' "
                                     + "from communication '" + communicationName + "'";
                             System.out.println(message);
