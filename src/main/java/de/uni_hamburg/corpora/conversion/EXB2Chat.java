@@ -118,7 +118,7 @@ public class EXB2Chat extends Converter implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
             IsUsableFor.add(cl);
         } catch (ClassNotFoundException ex) {
             report.addException(ex, "Usable class not found.");

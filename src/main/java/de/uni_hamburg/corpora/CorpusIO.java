@@ -44,7 +44,7 @@ public class CorpusIO {
     Collection<URL> recursed = new ArrayList();
     Collection<URL> alldata = new ArrayList();
     Collection<Class<? extends CorpusData>> allCorpusDataTypes = new ArrayList();
-    BasicTranscriptionData bt = new BasicTranscriptionData();
+    EXMARaLDACorpusData bt = new EXMARaLDACorpusData();
     ComaData coma = new ComaData();
     AnnotationSpecification asp = new AnnotationSpecification();
     CmdiData cmdidata = new CmdiData();
@@ -131,7 +131,7 @@ public class CorpusIO {
         CorpusData cd = null;
         if (new File(URLDecoder.decode(url.getFile(),"UTF-8")).isFile()) {
             if (url.getPath().endsWith("exb") && clcds.contains(bt.getClass())) {
-                BasicTranscriptionData btd = new BasicTranscriptionData(url);
+                EXMARaLDACorpusData btd = new EXMARaLDACorpusData(url);
                 System.out.println(btd.getFilename() + " read");
                 return btd;
             } else if (url.getPath().toLowerCase().endsWith("coma") && clcds.contains(coma.getClass())) {

@@ -62,7 +62,7 @@ public class FlextextData implements CorpusData, ContentData, XMLData {
         } catch (IOException ex) {
             Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
 

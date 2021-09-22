@@ -76,7 +76,7 @@ public class ComaData implements Metadata, CorpusData, XMLData {
         } catch (IOException ex) {
             Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

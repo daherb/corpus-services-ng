@@ -104,7 +104,7 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
         Class cl = Class.forName("de.uni_hamburg.corpora.AnnotationSpecification");
         IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         IsUsableFor.add(cl);
         return IsUsableFor;
     }

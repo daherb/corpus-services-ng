@@ -76,7 +76,7 @@ public class GeneralTransformer extends Checker {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
         Class cl ;
         if (exb) {
-            cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+            cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
             IsUsableFor.add(cl);
         }
         if (exs) {

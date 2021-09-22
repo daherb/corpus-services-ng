@@ -37,7 +37,7 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  * written HZSK corpus services. Naming might change, depending on what it ends
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
  */
-public class BasicTranscriptionData implements CorpusData, ContentData, XMLData {
+public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
 
     private BasicTranscription bt;
     URL url ;
@@ -49,7 +49,7 @@ public class BasicTranscriptionData implements CorpusData, ContentData, XMLData 
 
     // This constructor does not really make sense
     // At the moment at least creates placeholder URL objects
-    public BasicTranscriptionData() {
+    public EXMARaLDACorpusData() {
         try {
             this.url = new URL("file:///tmp");
             this.parenturl = new URL("file:///");
@@ -58,7 +58,7 @@ public class BasicTranscriptionData implements CorpusData, ContentData, XMLData 
         }
     }
 
-    public BasicTranscriptionData(URL url) {
+    public EXMARaLDACorpusData(URL url) {
         try {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
@@ -76,11 +76,11 @@ public class BasicTranscriptionData implements CorpusData, ContentData, XMLData 
         } catch (IOException ex) {
             Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SAXException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JexmaraldaException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -141,12 +141,12 @@ public class BasicTranscriptionData implements CorpusData, ContentData, XMLData 
     public static void main(String[] args) {
         if ((args.length != 2) && (args.length != 1)) {
             System.out.println("Usage: "
-                    + BasicTranscriptionData.class.getName()
+                    + EXMARaLDACorpusData.class.getName()
                     + " INPUT [OUTPUT]");
             System.exit(1);
         }
         try {
-            BasicTranscriptionData btd = new BasicTranscriptionData();
+            EXMARaLDACorpusData btd = new EXMARaLDACorpusData();
             btd.loadFile(new File(args[0]));
             String prettyXML = btd.toSaveableString();
             boolean emplace = false;

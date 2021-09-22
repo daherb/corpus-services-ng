@@ -19,7 +19,6 @@ import org.jdom.xpath.XPath;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -45,7 +44,7 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
     @Override
     public Report function(CorpusData cd, Boolean fix) throws SAXException, JexmaraldaException, ClassNotFoundException, JDOMException, URISyntaxException, TransformerException, ParserConfigurationException, IOException, MalformedURLException, XPathExpressionException {
         Report report = new Report();
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         Class cl3 = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
         Class cl2 = Class.forName("de.uni_hamburg.corpora.ComaData");
         if (cl.isInstance(cd) || cl3.isInstance(cd)) {
@@ -174,7 +173,7 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         IsUsableFor.add(cl);
         cl = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
         IsUsableFor.add(cl);

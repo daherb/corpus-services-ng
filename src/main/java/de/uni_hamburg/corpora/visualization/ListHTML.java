@@ -5,7 +5,7 @@
  */
 package de.uni_hamburg.corpora.visualization;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusIO;
@@ -16,7 +16,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.exmaralda.common.corpusbuild.FileIO;
 import org.exmaralda.common.jdomutilities.IOUtilities;
-import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.ListTranscription;
 import org.exmaralda.partitureditor.jexmaralda.SegmentedTranscription;
 import org.exmaralda.partitureditor.jexmaralda.segment.CHATSegmentation;
@@ -33,8 +32,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation;
@@ -264,8 +261,8 @@ public class ListHTML extends Visualizer {
     @Override
     public Report function(Corpus co) throws TransformerException, TransformerConfigurationException, IOException, SAXException {
         Report stats = new Report();
-        Collection<BasicTranscriptionData> btc = co.getBasicTranscriptionData();
-        for (BasicTranscriptionData bt : btc) {
+        Collection<EXMARaLDACorpusData> btc = co.getBasicTranscriptionData();
+        for (EXMARaLDACorpusData bt : btc) {
             stats.merge(function(bt));
         }
         return stats;
@@ -274,7 +271,7 @@ public class ListHTML extends Visualizer {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
             IsUsableFor.add(cl);
         } catch (ClassNotFoundException ex) {
             report.addException(ex, "Usable class not found.");

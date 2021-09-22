@@ -5,7 +5,7 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
@@ -113,7 +113,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
             Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
             IsUsableFor.add(cl);
         } else {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
                 IsUsableFor.add(cl);
         }
         return IsUsableFor;
@@ -159,7 +159,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
             stats = function(cd, fix);
 
         } else {
-            for (BasicTranscriptionData btd : c.getBasicTranscriptionData()) {
+            for (EXMARaLDACorpusData btd : c.getBasicTranscriptionData()) {
                 stats.merge(function(btd, fix));
             }
         }
