@@ -5,7 +5,7 @@
  */
 package de.uni_hamburg.corpora.swing;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
 import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.validation.ExbMerger;
@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -278,8 +277,8 @@ public class ExbMergerGUI extends javax.swing.JFrame {
         } catch (MalformedURLException ex) {
             Logger.getLogger(ExbMergerGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        BasicTranscriptionData btFirst = new BasicTranscriptionData(firstURL);
-        BasicTranscriptionData btSecond = new BasicTranscriptionData(secondURL);
+        EXMARaLDACorpusData btFirst = new EXMARaLDACorpusData(firstURL);
+        EXMARaLDACorpusData btSecond = new EXMARaLDACorpusData(secondURL);
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
         try {

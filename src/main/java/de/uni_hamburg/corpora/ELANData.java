@@ -9,9 +9,8 @@
 package de.uni_hamburg.corpora;
 
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
-import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
+
 import java.io.File;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.jdom.Document;
@@ -19,8 +18,6 @@ import org.jdom.input.SAXBuilder;
 import org.xml.sax.SAXException;
 import org.jdom.JDOMException;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -30,7 +27,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.io.FilenameUtils;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 
 /**
  * Provides access to basic transcriptions as a data type that can be read and
@@ -66,7 +62,7 @@ public class ELANData implements CorpusData, ContentData, XMLData {
         } catch (IOException ex) {
             Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(BasicTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         } 
     }
 

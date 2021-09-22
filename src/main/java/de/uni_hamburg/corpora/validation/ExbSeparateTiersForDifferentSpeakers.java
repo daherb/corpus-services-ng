@@ -24,7 +24,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.xml.sax.SAXException;
 
@@ -295,7 +294,7 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         IsUsableFor.add(cl);
         return IsUsableFor;
     }

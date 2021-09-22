@@ -9,11 +9,9 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+
 import java.io.IOException;
 import java.io.File;
 import java.util.Hashtable;
@@ -52,7 +50,7 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, JDOMException, IOException, JexmaraldaException {
         Report stats = new Report();
-        BasicTranscriptionData btd = (BasicTranscriptionData) cd;
+        EXMARaLDACorpusData btd = (EXMARaLDACorpusData) cd;
         filename = cd.getFilename();
         bt = btd.getEXMARaLDAbt();
 
@@ -118,7 +116,7 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         IsUsableFor.add(cl);
         return IsUsableFor;
     }

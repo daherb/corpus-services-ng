@@ -7,8 +7,6 @@ package de.uni_hamburg.corpora;
 
 import java.net.URL;
 import java.util.Collection;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusIO;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -33,7 +31,7 @@ public class Corpus {
     Collection<AnnotationSpecification> annotationspecification = new ArrayList();
     Collection<ConfigParameters> configparameters = new ArrayList();
     private Collection<CmdiData> cmdidata = new ArrayList();
-    Collection<BasicTranscriptionData> basictranscriptiondata = new ArrayList();
+    Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList();
     Collection<SegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList();
     Collection<ELANData> elandata = new ArrayList();
     Collection<FlextextData> flextextdata = new ArrayList();
@@ -72,8 +70,8 @@ public class Corpus {
         for (CorpusData cd : cdc) {
             if (cd instanceof ContentData) {
                 contentdata.add((ContentData) cd);
-                if (cd instanceof BasicTranscriptionData) {
-                    basictranscriptiondata.add((BasicTranscriptionData) cd);
+                if (cd instanceof EXMARaLDACorpusData) {
+                    basictranscriptiondata.add((EXMARaLDACorpusData) cd);
                 } else if (cd instanceof SegmentedTranscriptionData) {
                     segmentedtranscriptiondata.add((SegmentedTranscriptionData) cd);
                 } else if (cd instanceof ELANData) {
@@ -124,8 +122,8 @@ public class Corpus {
             if (cd instanceof CmdiData) {
                 cmdidata.add((CmdiData) cd);
             }
-            if (cd instanceof BasicTranscriptionData) {
-                basictranscriptiondata.add((BasicTranscriptionData) cd);
+            if (cd instanceof EXMARaLDACorpusData) {
+                basictranscriptiondata.add((EXMARaLDACorpusData) cd);
             }
         }
         //and also the other collections maybe
@@ -163,7 +161,7 @@ public class Corpus {
         return cmdidata;
     }
 
-    public Collection<BasicTranscriptionData> getBasicTranscriptionData() {
+    public Collection<EXMARaLDACorpusData> getBasicTranscriptionData() {
         return basictranscriptiondata;
     }
 
@@ -215,7 +213,7 @@ public class Corpus {
         this.cmdidata = cmdidata;
     }
 
-    public void setBasicTranscriptionData(Collection<BasicTranscriptionData> basictranscriptions) {
+    public void setBasicTranscriptionData(Collection<EXMARaLDACorpusData> basictranscriptions) {
         this.basictranscriptiondata = basictranscriptions;
     }
 

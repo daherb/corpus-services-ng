@@ -9,12 +9,11 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import de.uni_hamburg.corpora.Report;
+
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -46,7 +45,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
 
     static String filename;
     BasicTranscription bt;
-    static BasicTranscriptionData btd;
+    static EXMARaLDACorpusData btd;
     ValidatorSettings settings;
     List<String> conventions = new ArrayList<String>();
     List<String> problems = new ArrayList<String>();
@@ -70,7 +69,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, JDOMException, XPathExpressionException, TransformerException {
         Report stats = new Report();
-        btd = new BasicTranscriptionData(cd.getURL());
+        btd = new EXMARaLDACorpusData(cd.getURL());
         if (language.equals("de")) {
             langTool = new JLanguageTool(new GermanyGerman());
             System.out.println("Language set to German");
@@ -157,7 +156,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         IsUsableFor.add(cl);
         return IsUsableFor;
     }

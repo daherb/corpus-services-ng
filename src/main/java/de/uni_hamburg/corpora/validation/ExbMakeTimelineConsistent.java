@@ -5,12 +5,9 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -20,7 +17,6 @@ import javax.xml.xpath.XPathExpressionException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.xml.sax.SAXException;
 
 /**
@@ -35,7 +31,7 @@ import org.xml.sax.SAXException;
 public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction {
 
     Document doc = null;
-    BasicTranscriptionData btd = null;
+    EXMARaLDACorpusData btd = null;
     Boolean interpolateTimeline = false;
 
     public ExbMakeTimelineConsistent() {
@@ -48,7 +44,7 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
         Report report = new Report();
         if (fix) {
 
-            btd = (BasicTranscriptionData) cd;
+            btd = (EXMARaLDACorpusData) cd;
             BasicTranscription bt = btd.getEXMARaLDAbt();
             bt.getBody().getCommonTimeline().makeConsistent();
             if (interpolateTimeline) {
@@ -75,7 +71,7 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
         IsUsableFor.add(cl);
         return IsUsableFor;
     }

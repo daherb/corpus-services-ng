@@ -22,11 +22,9 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import de.uni_hamburg.corpora.BasicTranscriptionData;
 import java.net.URL;
 import org.junit.Test;
-import org.xml.sax.SAXException;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+
 import static org.junit.Assert.assertTrue;
 
 public class BasicTranscriptTest {
@@ -41,7 +39,7 @@ public class BasicTranscriptTest {
                 String(Files.readAllBytes(Paths.get(exbFilename)), "UTF-8");
             File exbFile = new File(exbFilename);
             URL url = exbFile.toURI().toURL();
-            BasicTranscriptionData btd = new BasicTranscriptionData(url);
+            EXMARaLDACorpusData btd = new EXMARaLDACorpusData(url);
             //btd.loadFile(exbFile);
             String unprettyXML = btd.toUnformattedString();
             assertNotNull(unprettyXML);
