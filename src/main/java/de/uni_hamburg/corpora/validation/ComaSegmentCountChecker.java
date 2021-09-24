@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
@@ -168,10 +169,8 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(ComaData.class);
     }
 
     /**

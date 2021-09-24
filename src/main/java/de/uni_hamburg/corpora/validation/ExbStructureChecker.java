@@ -14,6 +14,7 @@ import de.uni_hamburg.corpora.EXMARaLDACorpusData;
 
 import java.io.IOException;
 import java.io.File;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Collection;
 import org.xml.sax.SAXException;
@@ -115,10 +116,8 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(EXMARaLDACorpusData.class);
     }
 
     /**

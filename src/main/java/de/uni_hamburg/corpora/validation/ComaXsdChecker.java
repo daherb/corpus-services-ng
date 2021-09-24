@@ -9,14 +9,12 @@
 
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -65,10 +63,8 @@ public class ComaXsdChecker extends Checker implements CorpusFunction {
     * segmented transcription, coma etc.) this feature can be used.
     */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(ComaData.class);
     }
 
     /**Default function which returns a two/three line description of what 

@@ -5,13 +5,11 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
+
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.regex.Pattern;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -103,10 +101,8 @@ public class FlextextPunctuationChecker extends Checker implements CorpusFunctio
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.FlextextData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton((FlextextData.class));
     }
 
 

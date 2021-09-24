@@ -1,16 +1,13 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -340,10 +337,8 @@ public class ComaKmlForLocations extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(ComaData.class);
     }
 
     /**

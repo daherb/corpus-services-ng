@@ -69,14 +69,9 @@ public class ComaTranscriptionsNameCheckerTest {
         System.out.println("getIsUsableFor");
         ComaTranscriptionsNameChecker instance = new ComaTranscriptionsNameChecker();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
 
 }

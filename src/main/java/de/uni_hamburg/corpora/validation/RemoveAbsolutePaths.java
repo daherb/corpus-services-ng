@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Attribute;
@@ -20,6 +21,7 @@ import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -172,13 +174,11 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(SegmentedTranscriptionData.class);
+        IsUsableFor.add(ComaData.class);
         return IsUsableFor;
     }
 

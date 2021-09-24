@@ -69,14 +69,9 @@ public class ComaTierOverviewCreatorTest {
         System.out.println("getIsUsableFor");
         ComaTierOverviewCreator instance = new ComaTierOverviewCreator();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
     
     

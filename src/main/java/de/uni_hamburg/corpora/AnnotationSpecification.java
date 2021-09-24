@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
  *
  * @author fsnv625
  */
-class AnnotationSpecification implements CorpusData, XMLData {
+public class AnnotationSpecification implements CorpusData, XMLData {
 
     String originalstring;
     Document jdom;

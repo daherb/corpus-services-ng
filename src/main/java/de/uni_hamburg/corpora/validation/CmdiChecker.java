@@ -15,6 +15,7 @@ import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -277,10 +278,8 @@ public class CmdiChecker extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.CmdiData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(CmdiData.class);
     }
 
     /**Default function which returns a two/three line description of what 

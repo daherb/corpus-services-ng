@@ -68,13 +68,8 @@ public class NgTierCheckerWithAnnotationTest {
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
         NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation();
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        assertNotNull(result);
     }
 
 }

@@ -1,15 +1,12 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -126,13 +123,13 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
-        IsUsableFor.add(cl);
-        //cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-        //IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(EXMARaLDACorpusData.class);
+//        IsUsableFor.add(UnspecifiedXMLData.class)
+        return IsUsableFor ;
     }
+
 
     /**Default function which returns a two/three line description of what 
      * this class is about.
