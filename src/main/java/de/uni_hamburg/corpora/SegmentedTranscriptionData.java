@@ -12,6 +12,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,6 +90,11 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
     @Override
     public void updateUnformattedString(String newUnformattedString) {
         originalstring = newUnformattedString;
+    }
+
+    @Override
+    public  Collection<String> getFileExtensions() {
+        return Collections.singleton("exs");
     }
 
     @Override

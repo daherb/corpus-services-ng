@@ -10,6 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import static java.lang.System.out;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -17,18 +20,18 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
 import org.apache.commons.io.IOUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.output.XMLOutputter;
+import org.reflections.Reflections;
 import org.xml.sax.SAXException;
 
 /**
@@ -41,27 +44,18 @@ public class CorpusIO {
     //that's the local filepath or repository url
     URL url;
     Collection<CorpusData> cdc = new ArrayList();
-    Collection<URL> recursed = new ArrayList();
     Collection<URL> alldata = new ArrayList();
     Collection<Class<? extends CorpusData>> allCorpusDataTypes = new ArrayList();
-    EXMARaLDACorpusData bt = new EXMARaLDACorpusData();
-    ComaData coma = new ComaData();
-    AnnotationSpecification asp = new AnnotationSpecification();
-    CmdiData cmdidata = new CmdiData();
-    UnspecifiedXMLData usdata = new UnspecifiedXMLData();
-    SegmentedTranscriptionData segdata = new SegmentedTranscriptionData();
-    ELANData elandata = new ELANData();
-    FlextextData flextextdata = new FlextextData();
 
     public CorpusIO() {
-        allCorpusDataTypes.add(bt.getClass());
-        allCorpusDataTypes.add(coma.getClass());
-        allCorpusDataTypes.add(asp.getClass());
-        allCorpusDataTypes.add(cmdidata.getClass());
-        allCorpusDataTypes.add(usdata.getClass());
-        allCorpusDataTypes.add(segdata.getClass());
-        allCorpusDataTypes.add(elandata.getClass());
-        allCorpusDataTypes.add(flextextdata.getClass());
+        // Use reflections to get all corpus data classes
+        Reflections reflections = new Reflections("de.uni_hamburg.corpora");
+        // Get all classes derived from CorpusData and add to list, using stream api
+        allCorpusDataTypes.addAll(reflections.getSubTypesOf(CorpusData.class).stream()
+                // But only select public classes that are not abstract
+                .filter((cd) -> Modifier.isPublic(cd.getModifiers()) && !Modifier.isAbstract(cd.getModifiers()))
+                // And convert the stream back to a set
+                .collect(Collectors.toSet()));
     }
 
     public String CorpusData2String(CorpusData cd) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
@@ -128,48 +122,50 @@ public class CorpusIO {
     //read a single file as a corpus data object from an url
     //only read it if it is needed
     public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, ClassNotFoundException, UnsupportedEncodingException {
-        CorpusData cd = null;
         if (new File(URLDecoder.decode(url.getFile(),"UTF-8")).isFile()) {
-            if (url.getPath().endsWith("exb") && clcds.contains(bt.getClass())) {
-                EXMARaLDACorpusData btd = new EXMARaLDACorpusData(url);
-                System.out.println(btd.getFilename() + " read");
-                return btd;
-            } else if (url.getPath().toLowerCase().endsWith("coma") && clcds.contains(coma.getClass())) {
-                ComaData cm = new ComaData(url);
-                System.out.println(cm.getFilename() + " read");
-                return cm;
-            } else if (url.getPath().toLowerCase().endsWith("xml") && ((url.getPath().toLowerCase().contains("Annotation"))) && clcds.contains(asp.getClass())) {
-                AnnotationSpecification as = new AnnotationSpecification(url);
-                System.out.println(as.getFilename() + " read");
-                return as;
-            } else if ((url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("cmdi")) && clcds.contains(cmdidata.getClass()) || url.getPath().toLowerCase().endsWith("cmdi") && clcds.contains(cmdidata.getClass())) {
-                CmdiData cmdi = new CmdiData(url);
-                System.out.println(cmdi.getFilename() + " read");
-                return cmdi;
-            } else if (url.getPath().toLowerCase().endsWith("xml") && clcds.contains(usdata.getClass())) {
-                UnspecifiedXMLData usd = new UnspecifiedXMLData(url);
-                System.out.println(usd.getFilename() + " read");
-                return usd;
-            } else if (url.getPath().toLowerCase().endsWith("exs") && clcds.contains(segdata.getClass())) {
-                SegmentedTranscriptionData seg = new SegmentedTranscriptionData(url);
-                System.out.println(seg.getFilename() + " read");
-                return seg;
-            } else if (url.getPath().toLowerCase().endsWith("eaf") && clcds.contains(elandata.getClass())) {
-                ELANData eld = new ELANData(url);
-                System.out.println(eld.getFilename() + " read");
-                return eld;
-            } else if (url.getPath().toLowerCase().endsWith("flextext") && clcds.contains(flextextdata.getClass())) {
-                FlextextData flx = new FlextextData(url);
-                System.out.println(flx.getFilename() + " read");
-                return flx;
+            if (url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("Annotation") && clcds.contains(AnnotationSpecification.class)) {
+                return new AnnotationSpecification(url);
+            } else if ((url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("cmdi")) && clcds.contains(CmdiData.class)) {
+                return new CmdiData(url);
             } else {
-                System.out.println(url + " will not be read");
-                return null;
+                for (Class<? extends CorpusData> c : clcds) {
+                    try {
+                        CorpusData cd = c.getDeclaredConstructor(URL.class).newInstance(url);
+                        for (String e : cd.getFileExtensions()) {
+                            if (url.getPath().toLowerCase().endsWith(e)) {
+                                return cd;
+                            }
+                        }
+                    } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        } else {
-            System.out.println("Critical: " + url + " cannot be read");
-            return null;
         }
+        // No suitable format found
+        System.out.println(url + " will not be read");
+        return null;
+    }
+
+    /**
+     * Generates the list of all known file extensions for corpus data objects
+     * @author bba1792, Dr. Herbert lange
+     * @version 20210924
+     * @return the list of all known file extensions for corpus data objects
+     */
+    private Collection<String> getAllExtensions() {
+        Set<String> allExts = new HashSet<>();
+        for (Class c : allCorpusDataTypes) {
+            try {
+                // Create an actual object from the class using reflections to access the constructor
+                CorpusData cd = (CorpusData) c.getDeclaredConstructor().newInstance();
+                allExts.addAll(cd.getFileExtensions());
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+                // Basically do nothing in case of an exception
+                allExts.addAll(Collections.EMPTY_SET);
+            }
+        }
+        return allExts ;
     }
 
     //read a single file as a corpus data object from an url
@@ -227,8 +223,7 @@ public class CorpusIO {
                 //we need to iterate    
                 //and add everything to the list
                 Path path = Paths.get(url.toURI());
-                listFiles(path);
-                for (URL urlread : recursed) {
+                for (URL urlread : listFiles(path)) {
                     if (!isDirectory(urlread)) {
                         alldata.add(urlread);
                     }
@@ -272,23 +267,32 @@ public class CorpusIO {
         write(cd.toSaveableString(), cd.getURL());
     }
 
-    public void copyInternalBinaryFile(String internalPath, URL url) throws FileNotFoundException, IOException {
+    public void copyInternalBinaryFile(String internalPath, URL url) throws IOException {
         InputStream in = getClass().getResourceAsStream(internalPath);
         OutputStream out = new FileOutputStream(new File(url.getFile()));
         IOUtils.copy(in, out);
     }
 
-    void listFiles(Path path) throws IOException {
+    Collection<URL> listFiles(Path path) throws IOException {
+        Collection<URL> recursed = new ArrayList();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
             for (Path entry : stream) {
+                // If we are in a directory we call ourself recursively
                 if (Files.isDirectory(entry)) {
-                    listFiles(entry);
+                    recursed.addAll(listFiles(entry));
                 }
+                // Othwereise we check the file extension if we know it
+                // First getting the file name
                 String sentry = entry.getFileName().toString().toLowerCase();
-                if (sentry.endsWith(".exb") || sentry.endsWith(".exs") || sentry.endsWith(".coma") || sentry.endsWith(".xml") || sentry.endsWith(".cmdi") || sentry.endsWith(".eaf") || sentry.endsWith(".flextext") || sentry.endsWith(".esa") || sentry.endsWith(".tei") || sentry.endsWith(".xsl")) {
+                // Getting all known extensions
+                Collection<String> allExts = getAllExtensions();
+                // Check if eny of these extensions happens to be the final part of sentry
+                // if yes we add the file to the list
+                if (allExts.stream().map(sentry::endsWith).reduce(Boolean::logicalOr).orElse(false)) {
                     recursed.add(entry.toUri().toURL());
                 }
             }
         }
+        return recursed;
     }
 }

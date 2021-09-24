@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collection;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -86,6 +86,14 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
     @Override
     public void updateUnformattedString(String newUnformattedString) {
         originalstring = newUnformattedString;
+    }
+
+    @Override
+    public Collection<String> getFileExtensions() {
+        Set<String> fileExts = new HashSet<>();
+        fileExts.add("xml");
+        fileExts.add("cmdi");
+        return fileExts;
     }
 
     @Override

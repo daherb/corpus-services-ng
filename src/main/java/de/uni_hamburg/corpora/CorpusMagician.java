@@ -150,7 +150,6 @@ public class CorpusMagician {
 
     //in the future (for repo and external users)
     public static void main(String[] args) {
-
         //first args needs to be the URL
         //check if it's a filepath, we could just convert it to an url    
         System.out.println("CorpusMagician is now doing its magic.");
@@ -265,8 +264,9 @@ public class CorpusMagician {
         allExistingCFs = new ArrayList<String>();
         // Use reflections to get all corpus data classes
         Reflections reflections = new Reflections("de.uni_hamburg.corpora");
-        // Get all classes derived from CorpusData
+        // Get all classes derived from CorpusFunction
         for (Class c : reflections.getSubTypesOf(CorpusFunction.class)) {
+            // Check if it is a proper class, ie public and not abstract
             if (Modifier.isPublic(c.getModifiers()) && !Modifier.isAbstract(c.getModifiers())) {
                 allExistingCFs.add(c.getSimpleName());
             }
