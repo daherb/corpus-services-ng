@@ -31,7 +31,7 @@ import org.xml.sax.SAXException;
  *
  * @author fsnv625
  */
-public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLData {
+public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData, XMLData {
 
     Document jdom;
     URL url;
@@ -41,11 +41,11 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
     String filenamewithoutending;
     List segmentCounts;
 
-    public SegmentedTranscriptionData() {
+    public SegmentedEXMARaLDATranscription() {
 
     }
 
-    public SegmentedTranscriptionData(URL url) {
+    public SegmentedEXMARaLDATranscription(URL url) {
         try {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
@@ -57,11 +57,11 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
         } catch (JDOMException ex) {
-            Logger.getLogger(SegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(SegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(SegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -112,35 +112,35 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
         return parenturl;
     }
 
-    @Override
-    public void setURL(URL nurl) {
-        url = nurl;
-    }
-
-    @Override
-    public void setParentURL(URL url) {
-        parenturl = url;
-    }
+//    @Override
+//    public void setURL(URL nurl) {
+//        url = nurl;
+//    }
+//
+//    @Override
+//    public void setParentURL(URL url) {
+//        parenturl = url;
+//    }
 
     @Override
     public String getFilename() {
         return filename;
     }
 
-    @Override
-    public void setFilename(String s) {
-        filename = s;
-    }
+//    @Override
+//    public void setFilename(String s) {
+//        filename = s;
+//    }
 
     @Override
     public String getFilenameWithoutFileEnding() {
         return filenamewithoutending;
     }
 
-    @Override
-    public void setFilenameWithoutFileEnding(String s) {
-        filenamewithoutending = s;
-    }
+//    @Override
+//    public void setFilenameWithoutFileEnding(String s) {
+//        filenamewithoutending = s;
+//    }
 
     public List getSegmentCounts() throws JDOMException {
         XPath context = XPath.newInstance("/segmented-transcription/head/meta-information/ud-meta-information/ud-information[starts-with(@attribute-name,'#')]");

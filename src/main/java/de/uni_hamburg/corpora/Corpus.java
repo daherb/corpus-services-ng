@@ -32,9 +32,9 @@ public class Corpus {
     Collection<ConfigParameters> configparameters = new ArrayList();
     private Collection<CmdiData> cmdidata = new ArrayList();
     Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList();
-    Collection<SegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList();
     Collection<ELANData> elandata = new ArrayList();
     Collection<FlextextData> flextextdata = new ArrayList();
+    Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptiondata = new ArrayList<>();
     ComaData comadata;
     //all the data together
     Collection<CorpusData> cdc = new ArrayList<CorpusData>();
@@ -72,8 +72,8 @@ public class Corpus {
                 contentdata.add((ContentData) cd);
                 if (cd instanceof EXMARaLDACorpusData) {
                     basictranscriptiondata.add((EXMARaLDACorpusData) cd);
-                } else if (cd instanceof SegmentedTranscriptionData) {
-                    segmentedtranscriptiondata.add((SegmentedTranscriptionData) cd);
+                } else if (cd instanceof SegmentedEXMARaLDATranscription) {
+                    segmentedtranscriptiondata.add((SegmentedEXMARaLDATranscription) cd);
                 } else if (cd instanceof ELANData) {
                     elandata.add((ELANData) cd);
                 } else if (cd instanceof FlextextData) {
@@ -165,7 +165,7 @@ public class Corpus {
         return basictranscriptiondata;
     }
 
-    public Collection<SegmentedTranscriptionData> getSegmentedTranscriptionData() {
+    public Collection<SegmentedEXMARaLDATranscription> getSegmentedTranscriptionData() {
         return segmentedtranscriptiondata;
     }
     
@@ -217,7 +217,7 @@ public class Corpus {
         this.basictranscriptiondata = basictranscriptions;
     }
 
-    public void setSegmentedTranscriptionData(Collection<SegmentedTranscriptionData> segmentedtranscriptions) {
+    public void setSegmentedTranscriptionData(Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptions) {
         this.segmentedtranscriptiondata = segmentedtranscriptions;
     }
     

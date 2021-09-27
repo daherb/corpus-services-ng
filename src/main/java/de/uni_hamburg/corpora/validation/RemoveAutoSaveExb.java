@@ -78,7 +78,7 @@ public class RemoveAutoSaveExb extends Checker implements CorpusFunction {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         IsUsableFor.add(EXMARaLDACorpusData.class);
-        IsUsableFor.add(SegmentedTranscriptionData.class);
+        IsUsableFor.add(SegmentedEXMARaLDATranscription.class);
         return IsUsableFor;
     }
 

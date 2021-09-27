@@ -82,7 +82,7 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
         IsUsableFor.add(EXMARaLDACorpusData.class);
         IsUsableFor.add(UnspecifiedXMLData.class);
         IsUsableFor.add(ComaData.class);
-        IsUsableFor.add(SegmentedTranscriptionData.class);
+        IsUsableFor.add(SegmentedEXMARaLDATranscription.class);
         return IsUsableFor;
     }
 
