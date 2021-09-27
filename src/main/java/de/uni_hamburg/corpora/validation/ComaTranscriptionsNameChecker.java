@@ -40,10 +40,8 @@ public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunc
      */
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
-        Document doc = null;
-        ComaData ccd = new ComaData();
-        ccd = (ComaData) cd;
-        doc = TypeConverter.JdomDocument2W3cDocument(ccd.getJdom()); // get the file as a document      
+        ComaData ccd = (ComaData) cd;
+        Document doc = TypeConverter.JdomDocument2W3cDocument(ccd.getJdom()); // get the file as a document¡
         NodeList communications = doc.getElementsByTagName("Communication"); // divide by Communication tags
         Report stats = new Report(); //create a new report
         for (int i = 0; i < communications.getLength(); i++) { //iterate through communications
