@@ -27,15 +27,9 @@ public interface CorpusData {
     
     public URL getParentURL();
     
-    public void setParentURL(URL url);
-    
     public String getFilename();
     
-    public void setFilename(String s);
-    
     public String getFilenameWithoutFileEnding();
-    
-    public void setFilenameWithoutFileEnding(String s);
 
     public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException;
 

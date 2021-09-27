@@ -109,23 +109,8 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
     }
 
     @Override
-    public void setURL(URL nurl) {
-        url = nurl;
-    }
-
-    @Override
-    public void setParentURL(URL url) {
-        parenturl = url;
-    }
-
-    @Override
     public String getFilename() {
         return filename;
-    }
-
-    @Override
-    public void setFilename(String s) {
-        filename = s;
     }
 
     @Override
@@ -133,8 +118,4 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
         return filenamewithoutending;
     }
 
-    @Override
-    public void setFilenameWithoutFileEnding(String s) {
-        filenamewithoutending = s;
-    }
 }

@@ -103,7 +103,6 @@ public class FlextextData implements CorpusData, ContentData, XMLData {
         return Collections.singleton("flextext");
     }
 
-
     public void setOriginalString(String s) {
         originalstring = s;
     }
@@ -128,33 +127,13 @@ public class FlextextData implements CorpusData, ContentData, XMLData {
     }
 
     @Override
-    public void setURL(URL nurl) {
-        url = nurl;
-    }
-
-    @Override
-    public void setParentURL(URL url) {
-        parenturl = url;
-    }
-
-    @Override
     public String getFilename() {
         return filename;
     }
 
     @Override
-    public void setFilename(String s) {
-        filename = s;
-    }
-
-    @Override
     public String getFilenameWithoutFileEnding() {
         return filenamewithoutending;
-    }
-
-    @Override
-    public void setFilenameWithoutFileEnding(String s) {
-        filenamewithoutending = s;
     }
 
 }
