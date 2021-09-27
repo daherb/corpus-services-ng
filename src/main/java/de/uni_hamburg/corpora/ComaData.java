@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdom.Document;
@@ -205,6 +206,11 @@ public class ComaData implements Metadata, CorpusData, XMLData {
 
     public void updateUnformattedString(String newUnformattedString) {
         originalstring = newUnformattedString;
+    }
+
+    @Override
+    public Collection<String> getFileExtensions() {
+        return Collections.singleton("coma");
     }
 
     public void setBaseDirectory(URL url) {

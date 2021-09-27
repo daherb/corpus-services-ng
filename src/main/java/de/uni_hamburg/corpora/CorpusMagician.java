@@ -66,6 +66,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -89,6 +90,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
+import org.reflections.Reflections;
 import org.xml.sax.SAXException;
 
 /**
@@ -146,10 +148,8 @@ public class CorpusMagician {
     public CorpusMagician() {
     }
 
-    //TODO we need a webservice for this functionality too
     //in the future (for repo and external users)
     public static void main(String[] args) {
-
         //first args needs to be the URL
         //check if it's a filepath, we could just convert it to an url    
         System.out.println("CorpusMagician is now doing its magic.");
@@ -258,74 +258,19 @@ public class CorpusMagician {
         return cio.URLtoList(url);
     }
 
-    //checks which functions exist in the code by checking for implementations of the corpus function interface
-    //this shows that it doesn't work to just check for implementations of corpus functions
-    //probably need to check for implementations of CorpusFunction?
-    //TODO
+    //checks which functions exist in the code by checking for implementations of CorpusFunction
+    // which are neither abstract nor private
     public static Collection<String> getAllExistingCFs() {
         allExistingCFs = new ArrayList<String>();
-        allExistingCFs.add("ComaApostropheChecker");
-        allExistingCFs.add("ComaNSLinksChecker");
-        allExistingCFs.add("ComaOverviewGeneration");
-        allExistingCFs.add("ComaChartsGeneration");
-        allExistingCFs.add("ZipCorpus");
-        allExistingCFs.add("HandlePidRegistration");
-        allExistingCFs.add("RemoveUnlinkedFiles");
-        allExistingCFs.add("ComaSegmentCountChecker");
-        allExistingCFs.add("ExbFileReferenceChecker");
-        allExistingCFs.add("ExbFileCoverageChecker");
-        allExistingCFs.add("ExbAnnotationPanelCheck");
-        allExistingCFs.add("EXB2INELISOTEI");
-        allExistingCFs.add("EXB2HIATISOTEI");
-        allExistingCFs.add("ExbStructureChecker");
-        allExistingCFs.add("ComaFileCoverageChecker");
-        allExistingCFs.add("NormalizeEXB");
-        allExistingCFs.add("PrettyPrintData");
-        allExistingCFs.add("RemoveAbsolutePaths");
-        allExistingCFs.add("RemoveAutoSaveExb");
-        allExistingCFs.add("XSLTChecker");
-        allExistingCFs.add("ComaAddTiersFromExbsCorrector");
-        allExistingCFs.add("ComaXsdChecker");
-        allExistingCFs.add("NgexmaraldaCorpusChecker");
-        allExistingCFs.add("FilenameChecker");
-        allExistingCFs.add("CmdiChecker");
-        allExistingCFs.add("ComaTiersDescriptionAnnotationPanelChecker");
-        allExistingCFs.add("ExbTierDisplayNameChecker");
-        allExistingCFs.add("NgTierCheckerWithAnnotation");
-        //allExistingCFs.add("XsltCheckerInel");
-        allExistingCFs.add("GenerateAnnotationPanel");
-        allExistingCFs.add("CorpusDataRegexReplacer");
-        allExistingCFs.add("ScoreHTML");
-        allExistingCFs.add("HScoreHTML");
-        allExistingCFs.add("CorpusHTML");
-        allExistingCFs.add("IAAFunctionality");
-        allExistingCFs.add("ListHTML");
-        allExistingCFs.add("ExbEventLinebreaksChecker");
-        allExistingCFs.add("MakeTimelineConsistent");
-        allExistingCFs.add("ExbSegmentationChecker");
-        allExistingCFs.add("CalculateAnnotatedTime");
-        allExistingCFs.add("AddCSVMetadataToComa");
-        allExistingCFs.add("ComaKmlForLocations");
-        allExistingCFs.add("RemoveEmptyEvents");
-        allExistingCFs.add("ComaTranscriptionsNameChecker");
-        allExistingCFs.add("ComaTierOverviewCreator");
-        allExistingCFs.add("GeneralTransformer");
-        allExistingCFs.add("ComaFedoraIdentifierLengthChecker");
-        allExistingCFs.add("ExbMP3Next2WavAdder");
-        allExistingCFs.add("ExbRefTierChecker");
-        allExistingCFs.add("ReportStatistics");
-        allExistingCFs.add("ExbSegmenter");
-        allExistingCFs.add("ExbScriptMixChecker");
-        allExistingCFs.add("DuplicateTierContentChecker");
-        allExistingCFs.add("LanguageToolChecker");
-        allExistingCFs.add("VikusViewer");
-        allExistingCFs.add("ExbEventTokenizationChecker");
-        allExistingCFs.add("ExbTimestampsChecker");
-        allExistingCFs.add("ExbForbiddenSymbolsChecker");
-        allExistingCFs.add("ElanPunctuationChecker");
-        allExistingCFs.add("FlextextPunctuationChecker");
-        allExistingCFs.add("ExbSeparateTiersForDifferentSpeakers");
-        allExistingCFs.add("ExbFixTimelineItems");
+        // Use reflections to get all corpus data classes
+        Reflections reflections = new Reflections("de.uni_hamburg.corpora");
+        // Get all classes derived from CorpusFunction
+        for (Class c : reflections.getSubTypesOf(CorpusFunction.class)) {
+            // Check if it is a proper class, ie public and not abstract
+            if (Modifier.isPublic(c.getModifiers()) && !Modifier.isAbstract(c.getModifiers())) {
+                allExistingCFs.add(c.getSimpleName());
+            }
+        }
         Collections.sort((List<String>) allExistingCFs);
         return allExistingCFs;
     }
@@ -371,14 +316,6 @@ public class CorpusMagician {
         Collection<CorpusFunction> cf2strcorpusfunctions = new ArrayList<CorpusFunction>();
         for (String function : corpusfunctionstrings) {
             switch (function.toLowerCase()) {
-                case "comaapostrophechecker":
-                    ComaApostropheChecker cac = new ComaApostropheChecker();
-                    cf2strcorpusfunctions.add(cac);
-                    break;
-                case "comanslinkschecker":
-                    ComaNSLinksChecker cnslc = new ComaNSLinksChecker();
-                    cf2strcorpusfunctions.add(cnslc);
-                    break;
                 case "comaoverviewgeneration":
                     ComaOverviewGeneration cog = new ComaOverviewGeneration();
                     if (cfProperties != null) {
@@ -400,22 +337,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(coc);
                     break;
-                case "comasegmentcountchecker":
-                    ComaSegmentCountChecker cscc = new ComaSegmentCountChecker();
-                    cf2strcorpusfunctions.add(cscc);
-                    break;
-                case "exbfilereferencechecker":
-                    ExbFileReferenceChecker efrc = new ExbFileReferenceChecker();
-                    cf2strcorpusfunctions.add(efrc);
-                    break;
-                case "exbfilecoveragechecker":
-                    ExbFileCoverageChecker efcc = new ExbFileCoverageChecker();
-                    cf2strcorpusfunctions.add(efcc);
-                    break;
-                case "exbannotationpanelcheck":
-                    ExbAnnotationPanelCheck eapc = new ExbAnnotationPanelCheck();
-                    cf2strcorpusfunctions.add(eapc);
-                    break;
                 case "comafilecoveragechecker":
                     ComaFileCoverageChecker fcc = new ComaFileCoverageChecker();
                     if (cfProperties != null) {
@@ -429,18 +350,6 @@ public class CorpusMagician {
                         }
                     }
                     cf2strcorpusfunctions.add(fcc);
-                    break;
-                case "prettyprintdata":
-                    PrettyPrintData pd = new PrettyPrintData();
-                    cf2strcorpusfunctions.add(pd);
-                    break;
-                case "removeabsolutepaths":
-                    RemoveAbsolutePaths rap = new RemoveAbsolutePaths();
-                    cf2strcorpusfunctions.add(rap);
-                    break;
-                case "removeautosaveexb":
-                    RemoveAutoSaveExb rase = new RemoveAutoSaveExb();
-                    cf2strcorpusfunctions.add(rase);
                     break;
                 case "xsltchecker":
                     XSLTChecker xc = new XSLTChecker();
@@ -456,46 +365,6 @@ public class CorpusMagician {
                         }
                     }
                     cf2strcorpusfunctions.add(xc);
-                    break;
-                case "comaaddtiersfromexbscorrector":
-                    ComaAddTiersFromExbsCorrector catfec = new ComaAddTiersFromExbsCorrector();
-                    cf2strcorpusfunctions.add(catfec);
-                    break;
-                case "comaxsdchecker":
-                    ComaXsdChecker cxsd = new ComaXsdChecker();
-                    cf2strcorpusfunctions.add(cxsd);
-                    break;
-                case "ngexmaraldacorpuschecker":
-                    NgexmaraldaCorpusChecker ngex = new NgexmaraldaCorpusChecker();
-                    cf2strcorpusfunctions.add(ngex);
-                    break;
-                case "filenamechecker":
-                    ComaFilenameChecker fnc = new ComaFilenameChecker();
-                    cf2strcorpusfunctions.add(fnc);
-                    break;
-                case "cmdichecker":
-                    CmdiChecker cmdi = new CmdiChecker();
-                    cf2strcorpusfunctions.add(cmdi);
-                    break;
-                case "comafedoraidentifierlengthchecker":
-                    ComaFedoraIdentifierLengthChecker cplc = new ComaFedoraIdentifierLengthChecker();
-                    cf2strcorpusfunctions.add(cplc);
-                    break;
-                case "comatranscriptionsnamechecker":
-                    ComaTranscriptionsNameChecker cnc = new ComaTranscriptionsNameChecker();
-                    cf2strcorpusfunctions.add(cnc);
-                    break;
-                case "comatiersdescriptionannotationpanelchecker":
-                    ComaTiersDescriptionAnnotationPanelChecker tcwa = new ComaTiersDescriptionAnnotationPanelChecker();
-                    cf2strcorpusfunctions.add(tcwa);
-                    break;
-                case "exbtierdisplaynamechecker":
-                    ExbTierDisplayNameChecker tc = new ExbTierDisplayNameChecker();
-                    cf2strcorpusfunctions.add(tc);
-                    break;
-                case "ngtiercheckerwithannotation":
-                    NgTierCheckerWithAnnotation ngtcwa = new NgTierCheckerWithAnnotation();
-                    cf2strcorpusfunctions.add(ngtcwa);
                     break;
                 case "exb2inelisotei":
                     EXB2HIATISOTEI eiit = new EXB2HIATISOTEI();
@@ -579,14 +448,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(ne);
                     break;
-                case "generateannotationpanel":
-                    GenerateAnnotationPanel gap = new GenerateAnnotationPanel();
-                    cf2strcorpusfunctions.add(gap);
-                    break;
-                case "iaafunctionality":
-                    IAAFunctionality iaa = new IAAFunctionality();
-                    cf2strcorpusfunctions.add(iaa);
-                    break;
                 case "comakmlforlocations":
                     ComaKmlForLocations ckml = new ComaKmlForLocations();
                     if (cfProperties != null) {
@@ -597,10 +458,6 @@ public class CorpusMagician {
                         }
                     }
                     cf2strcorpusfunctions.add(ckml);
-                    break;
-                case "reportstatistics":
-                    ReportStatistics rs = new ReportStatistics();
-                    cf2strcorpusfunctions.add(rs);
                     break;
                 case "corpusdataregexreplacer":
                     //ToDo                   
@@ -666,10 +523,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(hppr);
                     break;
-                case "removeunlinkedfiles":
-                    RemoveUnlinkedFiles ruf = new RemoveUnlinkedFiles();                    
-                    cf2strcorpusfunctions.add(ruf);
-                    break;
                 case "scorehtml":
                     ScoreHTML shtml = new ScoreHTML();
                     if (cfProperties != null) {
@@ -679,14 +532,6 @@ public class CorpusMagician {
                         }
                     }
                     cf2strcorpusfunctions.add(shtml);
-                    break;
-                case "hscorehtml":
-                    HScoreHTML hshtml = new HScoreHTML();
-                    cf2strcorpusfunctions.add(hshtml);
-                    break;
-                case "corpushtml":
-                    CorpusHTML chtml = new CorpusHTML();
-                    cf2strcorpusfunctions.add(chtml);
                     break;
                 case "listhtml":
                     ListHTML lhtml = new ListHTML();
@@ -707,10 +552,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(lhtml);
                     break;
-                case "exbeventlinebreakschecker":
-                    ExbEventLinebreaksChecker elb = new ExbEventLinebreaksChecker();
-                    cf2strcorpusfunctions.add(elb);
-                    break;
                 case "maketimelineconsistent":
                     ExbMakeTimelineConsistent emtc = new ExbMakeTimelineConsistent();
                     if (cfProperties != null) {
@@ -721,10 +562,6 @@ public class CorpusMagician {
                         }
                     }
                     cf2strcorpusfunctions.add(emtc);
-                    break;
-                case "exbstructurechecker":
-                    ExbStructureChecker esc = new ExbStructureChecker();
-                    cf2strcorpusfunctions.add(esc);
                     break;
                 case "exbsegmentationchecker":
                     ExbSegmentationChecker eseg = new ExbSegmentationChecker();
@@ -756,10 +593,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(esegr);
                     break;
-                case "calculateannotatedtime":
-                    ExbCalculateAnnotatedTime cat = new ExbCalculateAnnotatedTime();
-                    cf2strcorpusfunctions.add(cat);
-                    break;
                 case "addcsvmetadatatocoma":
                     AddCSVMetadataToComa acmtc = new AddCSVMetadataToComa();
                     if (cfProperties != null) {
@@ -774,14 +607,6 @@ public class CorpusMagician {
                         }
                     }
                     cf2strcorpusfunctions.add(acmtc);
-                    break;
-                case "removeemptyevents":
-                    RemoveEmptyEvents ree = new RemoveEmptyEvents();
-                    cf2strcorpusfunctions.add(ree);
-                    break;
-                case "comatieroverviewcreator":
-                    ComaTierOverviewCreator ctoc = new ComaTierOverviewCreator();
-                    cf2strcorpusfunctions.add(ctoc);
                     break;
                 case "generaltransformer":
                     GeneralTransformer gt = new GeneralTransformer();
@@ -809,18 +634,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(gt);
                     break;
-                case "exbmp3next2wavadder":
-                    ExbMP3Next2WavAdder emn2wa = new ExbMP3Next2WavAdder();
-                    cf2strcorpusfunctions.add(emn2wa);
-                    break;
-                case "exbreftierchecker":
-                    ExbRefTierChecker ertc = new ExbRefTierChecker();
-                    cf2strcorpusfunctions.add(ertc);
-                    break;
-                case "exbscriptmixchecker":
-                    ExbScriptMixChecker esmc = new ExbScriptMixChecker();
-                    cf2strcorpusfunctions.add(esmc);
-                    break;
                 case "duplicatetiercontentchecker":
                     DuplicateTierContentChecker duplc = new DuplicateTierContentChecker();
                     cf2strcorpusfunctions.add(duplc);
@@ -847,10 +660,6 @@ public class CorpusMagician {
                     }
                     cf2strcorpusfunctions.add(ltc);
                     break;
-                case "vikusviewer":
-                    VikusViewer vv = new VikusViewer();
-                    cf2strcorpusfunctions.add(vv);
-                    break;
                 case "exbeventtokenizationchecker":
                     ExbEventTokenizationChecker eetc = new ExbEventTokenizationChecker();
                     cf2strcorpusfunctions.add(eetc);
@@ -866,10 +675,6 @@ public class CorpusMagician {
                         }
                     }
                     break;
-                case "exbtimestampschecker":
-                    ExbTimestampsChecker extc = new ExbTimestampsChecker();
-                    cf2strcorpusfunctions.add(extc);
-                    break;
                 case "exbforbiddensymbolschecker":
                     ExbForbiddenSymbolsChecker efsc = new ExbForbiddenSymbolsChecker();
                     cf2strcorpusfunctions.add(efsc);
@@ -880,24 +685,24 @@ public class CorpusMagician {
                         }
                     }
                     break;
-                case "elanpunctuationchecker":
-                    ElanPunctuationChecker epc = new ElanPunctuationChecker();
-                    cf2strcorpusfunctions.add(epc);
-                    break;
-                case "flextextpunctuationchecker":
-                    FlextextPunctuationChecker fpc = new FlextextPunctuationChecker();
-                    cf2strcorpusfunctions.add(fpc);
-                    break;
-                case "exbseparatetiersfordifferentspeakers":
-                    ExbSeparateTiersForDifferentSpeakers estfds = new ExbSeparateTiersForDifferentSpeakers();
-                    cf2strcorpusfunctions.add(estfds);
-                    break;
-                case "exbfixtimelineitems":
-                    ExbFixTimelineItems efti = new ExbFixTimelineItems();
-                    cf2strcorpusfunctions.add(efti);
+                // Ignore these functions
+                case "gatlisthtml":
                     break;
                 default:
-                    report.addCritical("CommandlineFunctionality", "Function String \"" + function + "\" is not recognized");
+                    // Try to cast the name to a corpus function anyway
+                    try {
+                        // Use reflections to get all corpus data classes
+                        Reflections reflections = new Reflections("de.uni_hamburg.corpora");
+                        // Get all classes derived from CorpusData
+                        for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
+                            if (cf.getName().toLowerCase().endsWith(function.toLowerCase())) {
+                                cf2strcorpusfunctions.add((CorpusFunction) cf.getDeclaredConstructor().newInstance());
+                            }
+                        }
+                    }
+                    catch (Exception e) {
+                        report.addCritical("CommandlineFunctionality", "Function String \"" + function + "\" is not recognized");
+                    }
             }
         }
         return cf2strcorpusfunctions;
@@ -980,18 +785,14 @@ public class CorpusMagician {
         //choose those from the corpus
         //and run the checks on those files recursively
         Collection<Class<? extends CorpusData>> usableTypes = null;
-        try {
-            usableTypes = cf.getIsUsableFor();
-            //if the corpus files are an instance
-            //of the class cl, run the function
-            for (CorpusData cd : cdc) {
-                if (usableTypes.contains(cd.getClass())) {
-                    Report newReport = runCorpusFunction(cd, cf, fix);
-                    report.merge(newReport);
-                }
+        usableTypes = cf.getIsUsableFor();
+        //if the corpus files are an instance
+        //of the class cl, run the function
+        for (CorpusData cd : cdc) {
+            if (usableTypes.contains(cd.getClass())) {
+                Report newReport = runCorpusFunction(cd, cf, fix);
+                report.merge(newReport);
             }
-        } catch (ClassNotFoundException e) {
-            report.addException(e,"usable classes not found");
         }
 
         return report;
@@ -1232,14 +1033,10 @@ public class CorpusMagician {
         for (CorpusFunction cf : getAllExistingCFsAsCFs()) {
             desc = cf.getFunction() + ":   " + cf.getDescription();
             usable = "\nThe function can be used on:\n";
-            try {
-                for (Class cl : cf.getIsUsableFor()) {
-                    usable += cl.getSimpleName() + " ";
-                }
+            for (Class cl : cf.getIsUsableFor()) {
+                usable += cl.getSimpleName() + " ";
             }
-            catch (ClassNotFoundException e) {
-                report.addException(e, "usable classes not found");
-            }
+
             hasfix = "\nThe function has a fixing option: " + cf.getCanFix().toString();
             footerverbose += desc + hasfix + usable + "\n\n";
             usable = "";

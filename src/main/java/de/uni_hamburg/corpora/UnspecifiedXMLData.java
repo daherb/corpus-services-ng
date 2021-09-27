@@ -12,6 +12,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -85,6 +87,10 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
     @Override
     public void updateUnformattedString(String newUnformattedString) {
         originalstring = newUnformattedString;
+    }
+
+    public Collection<String> getFileExtensions() {
+        return Collections.singleton("xml");
     }
 
     @Override

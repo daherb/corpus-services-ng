@@ -6,7 +6,10 @@
 package de.uni_hamburg.corpora;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -41,4 +44,12 @@ public interface CorpusData {
     //needed if there were changes to the file so they are represented in the object too
     public void updateUnformattedString(String newUnformattedString);
 
+    /**
+     * Gets the collection of all expected file extensions for the file type.
+     *
+     * @return the file extensions in lower case
+     * @author bba1792, Dr. Herbert lange
+     * @version 20210924
+     */
+    public Collection<String> getFileExtensions();
 }

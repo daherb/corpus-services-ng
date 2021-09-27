@@ -77,14 +77,9 @@ public class GenerateAnnotationPanelTest {
         System.out.println("getIsUsableFor");
         GenerateAnnotationPanel instance = new GenerateAnnotationPanel();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
     
 }

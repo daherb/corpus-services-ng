@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -99,6 +101,11 @@ public class ELANData implements CorpusData, ContentData, XMLData {
     @Override
     public void updateUnformattedString(String newUnformattedString) {
         originalstring = newUnformattedString;
+    }
+
+    @Override
+    public  Collection<String> getFileExtensions() {
+        return Collections.singleton("eaf");
     }
 
 

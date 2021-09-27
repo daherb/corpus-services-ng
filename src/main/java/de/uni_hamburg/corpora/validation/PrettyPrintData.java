@@ -5,12 +5,7 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.UnspecifiedXMLData;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -18,6 +13,8 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -80,15 +77,12 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.SegmentedTranscriptionData");
-        IsUsableFor.add(cl);
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(UnspecifiedXMLData.class);
+        IsUsableFor.add(ComaData.class);
+        IsUsableFor.add(SegmentedEXMARaLDATranscription.class);
         return IsUsableFor;
     }
 

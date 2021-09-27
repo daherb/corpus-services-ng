@@ -1,8 +1,8 @@
 # List of formats currently supported in Corpus Services (class - .extension)
 
 - ComaData - .coma
-- BasicTranscriptionData - .exb
-- SegmentedTranscriptionData - .exs
+- EXMARaLDAData - .exb
+- SegmentedEXMARaLDATranscription - .exs
 - AnnotationSpecification - .xml (the filename should contain "Annotation")
 - CmdiData - .xml (the filename should contain "cmdi")
 - UnspecifiedXmlData - .xml
@@ -49,32 +49,13 @@ public BasicTranscriptionData(URL url) {
 }
 </code></pre> 
 
-## 2. Make changes to CorpusIO.java
+- The class also needs to implement the `Collection<String> getFileExtensions();` method that returns a list of
+  valid file extensions. This function is used both in `readFileURL` and `listFiles` in `CorpusIO`.
+  
+## 2. Optional: Make changes to CorpusIO.java
 
-- Read your new class as a variable
-
-<pre><code class="java">
-NewFormatData newformat = new NewFormatData();
-</code></pre>
-
-- Add your new class in the method `public CoupusIO()`
-
-<pre><code class="java">
-allCorpusDataTypes.add(newformat.getClass());
-</code></pre>
-
-- Add your class in the method `public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds)`
-
-<pre><code class="java">
-else if (url.getPath().toLowerCase().endsWith("newformatextension") && clcds.contains(newformat.getClass())) {
-                NewFormatData nfd = new NewFormatData(url);
-                System.out.println(nfd.getFilename() + " read");
-                return flx;
-            }
-</code></pre>
-
-- Add the format extension to the if clause under `void listFiles(Path path)`
-
+- Add your class in the method `public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds)`.
+  This is only necessary if your file suffix is not unique and the file type also depends e.g. on the file path
 
 ## 3. Make changes to Corpus.java
 

@@ -12,6 +12,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,7 @@ import org.xml.sax.SAXException;
  *
  * @author fsnv625
  */
-public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLData {
+public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData, XMLData {
 
     Document jdom;
     URL url;
@@ -39,11 +41,11 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
     String filenamewithoutending;
     List segmentCounts;
 
-    public SegmentedTranscriptionData() {
+    public SegmentedEXMARaLDATranscription() {
 
     }
 
-    public SegmentedTranscriptionData(URL url) {
+    public SegmentedEXMARaLDATranscription(URL url) {
         try {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
@@ -55,11 +57,11 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
         } catch (JDOMException ex) {
-            Logger.getLogger(SegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(SegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
-            Logger.getLogger(SegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -88,6 +90,11 @@ public class SegmentedTranscriptionData implements CorpusData, ContentData, XMLD
     @Override
     public void updateUnformattedString(String newUnformattedString) {
         originalstring = newUnformattedString;
+    }
+
+    @Override
+    public  Collection<String> getFileExtensions() {
+        return Collections.singleton("exs");
     }
 
     @Override

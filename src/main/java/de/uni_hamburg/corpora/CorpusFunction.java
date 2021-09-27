@@ -21,9 +21,7 @@ public Report execute(CorpusData cd, boolean fix);
 
 public Report execute(Corpus c, boolean fix);
 
-public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException ;
-
-public void setIsUsableFor(Collection<Class<? extends CorpusData>> cdc);
+public Collection<Class<? extends CorpusData>> getIsUsableFor() ;
 
 public String getDescription();
 
