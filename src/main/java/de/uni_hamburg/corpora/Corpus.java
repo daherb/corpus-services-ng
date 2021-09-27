@@ -44,7 +44,8 @@ public class Corpus {
     public Corpus() {
     }
 
-    public Corpus(URL url) {
+    public Corpus(URL url) throws JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException {
+        this(new CorpusIO().read(url));
     }
 
     //only read in the files we need!
