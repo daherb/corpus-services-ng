@@ -1,79 +1,37 @@
 package de.uni_hamburg.corpora;
 
-import de.uni_hamburg.corpora.validation.ComaAddTiersFromExbsCorrector;
-import de.uni_hamburg.corpora.validation.CmdiChecker;
 import de.uni_hamburg.corpora.publication.ZipCorpus;
 import de.uni_hamburg.corpora.conversion.EXB2HIATISOTEI;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
-import de.uni_hamburg.corpora.validation.ComaApostropheChecker;
-import de.uni_hamburg.corpora.validation.ComaNSLinksChecker;
 import de.uni_hamburg.corpora.validation.ComaOverviewGeneration;
-import de.uni_hamburg.corpora.validation.ComaXsdChecker;
-import de.uni_hamburg.corpora.validation.GenerateAnnotationPanel;
-import de.uni_hamburg.corpora.validation.ComaFedoraIdentifierLengthChecker;
-import de.uni_hamburg.corpora.validation.ComaSegmentCountChecker;
-import de.uni_hamburg.corpora.validation.ExbFileReferenceChecker;
-import de.uni_hamburg.corpora.validation.ExbFileCoverageChecker;
-import de.uni_hamburg.corpora.validation.ExbAnnotationPanelCheck;
-import de.uni_hamburg.corpora.validation.ExbRefTierChecker;
-import de.uni_hamburg.corpora.validation.ExbCalculateAnnotatedTime;
-import de.uni_hamburg.corpora.validation.ExbStructureChecker;
 import de.uni_hamburg.corpora.validation.ComaFileCoverageChecker;
-import de.uni_hamburg.corpora.validation.ComaFilenameChecker;
-import de.uni_hamburg.corpora.validation.IAAFunctionality;
 import de.uni_hamburg.corpora.validation.ExbNormalize;
-import de.uni_hamburg.corpora.validation.NgexmaraldaCorpusChecker;
-import de.uni_hamburg.corpora.validation.NgTierCheckerWithAnnotation;
-import de.uni_hamburg.corpora.validation.PrettyPrintData;
-import de.uni_hamburg.corpora.validation.RemoveAbsolutePaths;
-import de.uni_hamburg.corpora.validation.RemoveAutoSaveExb;
-import de.uni_hamburg.corpora.validation.ExbTierDisplayNameChecker;
-import de.uni_hamburg.corpora.validation.ComaTiersDescriptionAnnotationPanelChecker;
 import de.uni_hamburg.corpora.validation.XSLTChecker;
 import de.uni_hamburg.corpora.validation.CorpusDataRegexReplacer;
-import de.uni_hamburg.corpora.validation.ExbEventLinebreaksChecker;
 import de.uni_hamburg.corpora.validation.ExbMakeTimelineConsistent;
-import de.uni_hamburg.corpora.validation.ExbScriptMixChecker;
-import de.uni_hamburg.corpora.visualization.CorpusHTML;
 import de.uni_hamburg.corpora.visualization.ListHTML;
 import de.uni_hamburg.corpora.visualization.ScoreHTML;
 import de.uni_hamburg.corpora.validation.ComaKmlForLocations;
 import de.uni_hamburg.corpora.conversion.AddCSVMetadataToComa;
 import de.uni_hamburg.corpora.publication.HandlePidRegistration;
-import de.uni_hamburg.corpora.publication.RemoveUnlinkedFiles;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import de.uni_hamburg.corpora.validation.ComaChartsGeneration;
-import de.uni_hamburg.corpora.validation.ComaTierOverviewCreator;
 import de.uni_hamburg.corpora.validation.GeneralTransformer;
-import de.uni_hamburg.corpora.validation.RemoveEmptyEvents;
-import de.uni_hamburg.corpora.validation.ComaTranscriptionsNameChecker;
 import de.uni_hamburg.corpora.validation.DuplicateTierContentChecker;
-import de.uni_hamburg.corpora.validation.ExbMP3Next2WavAdder;
 import de.uni_hamburg.corpora.validation.ExbSegmentationChecker;
 import de.uni_hamburg.corpora.validation.LanguageToolChecker;
-import de.uni_hamburg.corpora.validation.ElanPunctuationChecker;
-import de.uni_hamburg.corpora.validation.FlextextPunctuationChecker;
-import de.uni_hamburg.corpora.visualization.HScoreHTML;
-import de.uni_hamburg.corpora.validation.ReportStatistics;
-import de.uni_hamburg.corpora.visualization.VikusViewer;
 import de.uni_hamburg.corpora.validation.ExbEventTokenizationChecker;
-import de.uni_hamburg.corpora.validation.ExbTimestampsChecker;
 import de.uni_hamburg.corpora.validation.ExbForbiddenSymbolsChecker;
-import de.uni_hamburg.corpora.validation.ExbSeparateTiersForDifferentSpeakers;
-import de.uni_hamburg.corpora.validation.ExbFixTimelineItems;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.nio.file.Paths;
-import java.util.Collections;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -81,9 +39,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -112,14 +68,12 @@ public class CorpusMagician {
     //all functions there are in the code
     static Collection<String> allExistingCFs;
     //all functions that should be run
-    static Collection<String> chosencorpusfunctions = new ArrayList<String>();
-    static Collection<CorpusFunction> corpusfunctions = new ArrayList<CorpusFunction>();
+    static Collection<String> chosencorpusfunctions = new ArrayList<>();
+    static Collection<CorpusFunction> corpusfunctions = new ArrayList<>();
     //need to have Map or something for this
-    static Collection<Class<? extends CorpusData>> neededcorpusdatatypes = new ArrayList<Class<? extends CorpusData>>();
+    static Collection<Class<? extends CorpusData>> neededcorpusdatatypes = new ArrayList<>();
     //the final Report
     static Report report = new Report();
-    //a list of all the available corpus data (no java objects, just URLs)
-    static ArrayList<URL> alldata = new ArrayList<URL>();
     static CorpusIO cio = new CorpusIO();
     static boolean fixing = false;
     static boolean iserrorsonly = false;
@@ -205,28 +159,28 @@ public class CorpusMagician {
 
     }
 
-//Give it a path to a parameters file that tells you
-//which functions with which parameters should be
-//run on which files
-    public void readConfig(URL url) {
-        //this depends on how this file will be structured
-    }
-
-    //this one can write a configfile with the workflow in the
-    //selected format
-    public void writeConfig(URL url) {
-        //needs to have more params
-        //this depends on how this file will be structured
-    }
-
-    public void registerCorpusFunction(CorpusFunction cf) {
-        allExistingCFs.add(cf.getClass().getName());
-    }
+////Give it a path to a parameters file that tells you
+////which functions with which parameters should be
+////run on which files
+//    public void readConfig(URL url) {
+//        //this depends on how this file will be structured
+//    }
+//
+//    //this one can write a configfile with the workflow in the
+//    //selected format
+//    public void writeConfig(URL url) {
+//        //needs to have more params
+//        //this depends on how this file will be structured
+//    }
+//
+//    public void registerCorpusFunction(CorpusFunction cf) {
+//        allExistingCFs.add(cf.getClass().getName());
+//    }
 
     //creates a corpus object from an URL (filepath or "real" url)
     //we need to make a difference between an unsorted folder, a miscellaneous file or a Coma file which represents a complete folder structure of the corpus
-    public void initDataWithURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws MalformedURLException, SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
-        if (cio.isDirectory(url)) {
+    public void initDataWithURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
+        if (CorpusIO.isDirectory(url)) {
             //TODO
             //only read the filetypes from clcds!
             cdc = cio.read(url, clcds);
@@ -251,17 +205,17 @@ public class CorpusMagician {
         }
     }
 
-    //creates a list of all the available data from an url (being a file oder directory)
-    public Collection<URL> createListofData(URL url) throws URISyntaxException, IOException {
-        //add just that url if its a file
-        //adds the urls recursively if its a directory
-        return cio.URLtoList(url);
-    }
+//    //creates a list of all the available data from an url (being a file oder directory)
+//    public Collection<URL> createListofData(URL url) throws URISyntaxException, IOException {
+//        //add just that url if its a file
+//        //adds the urls recursively if its a directory
+//        return cio.URLtoList(url);
+//    }
 
     //checks which functions exist in the code by checking for implementations of CorpusFunction
     // which are neither abstract nor private
     public static Collection<String> getAllExistingCFs() {
-        allExistingCFs = new ArrayList<String>();
+        allExistingCFs = new ArrayList<>();
         // Use reflections to get all corpus data classes
         Reflections reflections = new Reflections("de.uni_hamburg.corpora");
         // Get all classes derived from CorpusFunction
@@ -276,51 +230,50 @@ public class CorpusMagician {
     }
 
     public static String getAllExistingCFsAsString() {
-        String all = "";
-        for (Iterator<String> it = getAllExistingCFs().iterator(); it.hasNext();) {
-            String s = it.next();
-            all = all + "\n" + s;
+        StringBuilder all = new StringBuilder();
+        for (String cf : getAllExistingCFs()) {
+            all.append("\n");
+            all.append(cf);
         }
-        return all;
+        return all.toString();
     }
 
     public static Collection<CorpusFunction> getAllExistingCFsAsCFs() {
-
         return corpusFunctionStrings2Classes(getAllExistingCFs());
     }
 
-    //TODO checks which functions can be run on specified data
-    public Collection<CorpusFunction> getUsableFunctions(CorpusData cd) {
-        //cf.IsUsableFor();
-        //some switch or if else statements for the possible java objects
-        //and a list(?) which function can be apllied to what/which functions exist?
-        Collection<CorpusFunction> usablecorpusfunctions = null;
-        return usablecorpusfunctions;
-    }
+//    //TODO checks which functions can be run on specified data
+//    public Collection<CorpusFunction> getUsableFunctions(CorpusData cd) {
+//        //cf.IsUsableFor();
+//        //some switch or if else statements for the possible java objects
+//        //and a list(?) which function can be apllied to what/which functions exist?
+//        Collection<CorpusFunction> usablecorpusfunctions = null;
+//        return usablecorpusfunctions;
+//    }
 
-    //TODO return default functions, this is a list that needs to be somewhere
-    //or maybe its an option a corpusfunction can have?
-    public Collection<CorpusFunction> getDefaultUsableFunctions() {
-        Collection<CorpusFunction> defaultcorpusfunctions = null;
-        return defaultcorpusfunctions;
-    }
+//    //TODO return default functions, this is a list that needs to be somewhere
+//    //or maybe its an option a corpusfunction can have?
+//    public Collection<CorpusFunction> getDefaultUsableFunctions() {
+//        Collection<CorpusFunction> defaultcorpusfunctions = null;
+//        return defaultcorpusfunctions;
+//    }
 
-    //TODO a dialog to choose functions you want to apply
-    public Collection<String> chooseFunctionDialog() {
-        chosencorpusfunctions = null;
-        //add the chosen Functions
-        return chosencorpusfunctions;
-    }
+//    //TODO a dialog to choose functions you want to apply
+//    public Collection<String> chooseFunctionDialog() {
+//        chosencorpusfunctions = null;
+//        //add the chosen Functions
+//        return chosencorpusfunctions;
+//    }
 
     public static Collection<CorpusFunction> corpusFunctionStrings2Classes(Collection<String> corpusfunctionstrings) {
-        Collection<CorpusFunction> cf2strcorpusfunctions = new ArrayList<CorpusFunction>();
+        Collection<CorpusFunction> cf2strcorpusfunctions = new ArrayList<>();
         for (String function : corpusfunctionstrings) {
             switch (function.toLowerCase()) {
                 case "comaoverviewgeneration":
                     ComaOverviewGeneration cog = new ComaOverviewGeneration();
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
-                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).toLowerCase().equals("inel")) {
+                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
                             cog.setInel();
                             System.out.println("Mode set to inel");
                         }
@@ -330,7 +283,7 @@ public class CorpusMagician {
                 case "comachartsgeneration":
                     ComaChartsGeneration coc = new ComaChartsGeneration();if (cfProperties != null) {
                         // Pass on the configuration parameter
-                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).toLowerCase().equals("inel")) {
+                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
                             coc.setInel();
                             System.out.println("Mode set to inel");
                         }
@@ -341,7 +294,7 @@ public class CorpusMagician {
                     ComaFileCoverageChecker fcc = new ComaFileCoverageChecker();
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
-                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equals("inel")) {
+                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
                             fcc.addFileEndingWhiteListString("flextext");
                             fcc.addWhiteListString("report-output.html");
                             fcc.addWhiteListString("Segmentation_Errors.xml");
@@ -355,7 +308,7 @@ public class CorpusMagician {
                     XSLTChecker xc = new XSLTChecker();
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
-                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).toLowerCase().equals("inel")) {
+                        if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
                             xc.setXSLresource("/xsl/inel-checks.xsl");
                             System.out.println("Mode set to inel");
                         }
@@ -422,10 +375,10 @@ public class CorpusMagician {
                             System.out.println("Language set to " + cfProperties.getProperty(lang));
                         }
                         if (cfProperties.containsKey(mode)) {
-                            if (cfProperties.getProperty(mode).toLowerCase().equals("inel")) {
+                            if (cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
                                 ehit.setInel();
                                 System.out.println("Mode set to inel");
-                            } else if (cfProperties.getProperty(mode).toLowerCase().equals("token")) {
+                            } else if (cfProperties.getProperty(mode).equalsIgnoreCase("token")) {
                                 ehit.setToken();
                                 System.out.println("Mode set to token");
                             }
@@ -744,20 +697,20 @@ public class CorpusMagician {
     //run multiple functions on a corpus, that means all the files in the corpus
     //the function can run on
 
-    public Report runCorpusFunctions(Corpus c, Collection<CorpusFunction> cfc) {
-        Report report = new Report();
-        for (CorpusFunction cf : cfc) {
-            Report newReport = runCorpusFunction(c, cf);
-            report.merge(newReport);
-        }
-        return report;
-    }
+//    public Report runCorpusFunctions(Corpus c, Collection<CorpusFunction> cfc) {
+//        Report report = new Report();
+//        for (CorpusFunction cf : cfc) {
+//            Report newReport = runCorpusFunction(c, cf);
+//            report.merge(newReport);
+//        }
+//        return report;
+//    }
 
-    //run multiple functions on the set corpus, that means all the files in the corpus
-    //the function can run on
-    public Report runCorpusFunctions(Collection<CorpusFunction> cfc) {
-        return runCorpusFunctions(corpus, cfc);
-    }
+//    //run multiple functions on the set corpus, that means all the files in the corpus
+//    //the function can run on
+//    public Report runCorpusFunctions(Collection<CorpusFunction> cfc) {
+//        return runCorpusFunctions(corpus, cfc);
+//    }
 
     //run one function on a corpus, that means all the files in the corpus
     //the funciton can run on
@@ -784,8 +737,7 @@ public class CorpusMagician {
         //find out on which objects this corpus function can run
         //choose those from the corpus
         //and run the checks on those files recursively
-        Collection<Class<? extends CorpusData>> usableTypes = null;
-        usableTypes = cf.getIsUsableFor();
+        Collection<Class<? extends CorpusData>> usableTypes = cf.getIsUsableFor();
         //if the corpus files are an instance
         //of the class cl, run the function
         for (CorpusData cd : cdc) {
@@ -812,30 +764,30 @@ public class CorpusMagician {
         return cf.execute(cd, fix);
     }
 
-    public static Report runCorpusFunctions(CorpusData cd, Collection<CorpusFunction> cfc) {
-        Report report = new Report();
-        for (CorpusFunction cf : cfc) {
-            Report newReport = (cf.execute(cd));
-            report.merge(newReport);
-        }
-        return report;
-    }
+//    public static Report runCorpusFunctions(CorpusData cd, Collection<CorpusFunction> cfc) {
+//        Report report = new Report();
+//        for (CorpusFunction cf : cfc) {
+//            Report newReport = (cf.execute(cd));
+//            report.merge(newReport);
+//        }
+//        return report;
+//    }
 
-    public static Report runCorpusFunctions(CorpusData cd, Collection<CorpusFunction> cfc, boolean fix) {
-        Report report = new Report();
-        for (CorpusFunction cf : cfc) {
-            Report newReport = (cf.execute(cd, fix));
-            report.merge(newReport);
-        }
-        return report;
-    }
+//    public static Report runCorpusFunctions(CorpusData cd, Collection<CorpusFunction> cfc, boolean fix) {
+//        Report report = new Report();
+//        for (CorpusFunction cf : cfc) {
+//            Report newReport = (cf.execute(cd, fix));
+//            report.merge(newReport);
+//        }
+//        return report;
+//    }
 
-    //TODO
-    //to save individual corpusparameters in a file
-    //and maybe also save the functions todos there
-    public void readParameters() {
-        //read the XML file as variables
-    }
+//    //TODO
+//    //to save individual corpusparameters in a file
+//    //and maybe also save the functions todos there
+//    public void readParameters() {
+//        //read the XML file as variables
+//    }
 
     public void setCorpusData(CorpusData corpusData) {
         this.corpusData = corpusData;
@@ -857,7 +809,7 @@ public class CorpusMagician {
         return chosencorpusfunctions;
     }
 
-    public static void createReports() throws IOException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, XPathExpressionException, JDOMException {
+    public static void createReports() throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException, JDOMException {
         System.out.println(report.getFullReports());
         String reportOutput;
         for (URL reportlocation : reportlocations) {
@@ -897,7 +849,9 @@ public class CorpusMagician {
             File curationFolder = new File((new URL(basedirectory + "curation").getFile()));
             if (!curationFolder.exists()) {
                 //the curation folder it not there and needs to be created
-                curationFolder.mkdirs();
+                if (!curationFolder.mkdirs()) {
+                    throw new IOException("Error creating " + curationFolder);
+                }
             }
             Document exmaErrorList = TypeConverter.W3cDocument2JdomDocument(ExmaErrorList.createFullErrorList());
             String exmaErrorListString = TypeConverter.JdomDocument2String(exmaErrorList);
@@ -910,7 +864,7 @@ public class CorpusMagician {
                 System.out.println("Wrote ErrorList at " + errorlistlocation);
             }
             if (isfixesjson) {
-                String fixJson = "";
+                String fixJson;
                 if (isCorpus) {
                     fixJson = report.getFixJson(corpus);
                 } else {
@@ -949,13 +903,11 @@ public class CorpusMagician {
         }
         //now add the functionsstrings to array
         String[] corpusfunctionarray = cmd.getOptionValues("c");
-        for (String cf : corpusfunctionarray) {
-            CorpusMagician.chosencorpusfunctions.add(cf);
-        }
+        CorpusMagician.chosencorpusfunctions.addAll(Arrays.asList(corpusfunctionarray));
         System.out.println(CorpusMagician.chosencorpusfunctions.toString());
     }
 
-    private static void createCommandLineOptions(String[] args) throws FileNotFoundException, IOException {
+    private static void createCommandLineOptions(String[] args) throws IOException {
         Options options = new Options();
 
         Option input = new Option("i", "input", true, "input file path (coma file for corpus, folder or other file for unstructured data)");
@@ -1026,33 +978,33 @@ public class CorpusMagician {
 
         String header = "Specify a corpus folder or file and a function to be applied\n\n";
         //String footer = "\nthe available functions are:\n" + getAllExistingCFsAsString() + "\n\nPlease report issues at https://lab.multilingua.uni-hamburg.de/redmine/projects/corpus-services/issues";
-        String footerverbose = "\nthe available functions are:\n" + getAllExistingCFsAsString() + "\n\nDescriptions of the available functions follow:\n\n";
+        StringBuilder footerverbose = new StringBuilder("\nthe available functions are:\n" + getAllExistingCFsAsString() + "\n" +
+                "\nDescriptions of the available functions follow:\n\n");
         String desc;
         String hasfix;
-        String usable;
+        StringBuilder usable ;
         for (CorpusFunction cf : getAllExistingCFsAsCFs()) {
             desc = cf.getFunction() + ":   " + cf.getDescription();
-            usable = "\nThe function can be used on:\n";
+            usable = new StringBuilder("\nThe function can be used on:\n");
             for (Class cl : cf.getIsUsableFor()) {
-                usable += cl.getSimpleName() + " ";
+                usable.append(cl.getSimpleName() + " ");
             }
-
             hasfix = "\nThe function has a fixing option: " + cf.getCanFix().toString();
-            footerverbose += desc + hasfix + usable + "\n\n";
-            usable = "";
+            footerverbose.append(desc + hasfix + usable + "\n\n");
         }
-        footerverbose += "\n\nPlease report issues at https://lab.multilingua.uni-hamburg.de/redmine/projects/corpus-services/issues";
+        footerverbose.append("\n\nPlease report issues at https://lab.multilingua.uni-hamburg" +
+            ".de/redmine/projects/corpus-services/issues");
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
-            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose, true);
+            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose.toString(), true);
             System.exit(1);
         }
         
         if (cmd.hasOption("n") && cmd.hasOption("j")) {
             System.out.println("Options n and j are not allowed at the same time");
-            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose, true);
+            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose.toString(), true);
             System.exit(1);
         }
 
@@ -1060,14 +1012,14 @@ public class CorpusMagician {
         //in reality this never works because there will be an error since the required parameters are missing - but that returns the help as well....
         if (cmd.hasOption("h")) {
             // automatically generate the help statement
-            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose, true);
+            formatter.printHelp("hzsk-corpus-services", header, options, footerverbose.toString(), true);
             System.exit(1);
         }
 
         if (cmd.hasOption("p")) {
             if (cmd.hasOption("s")) {
                 System.out.println("Options s and p for parameters are not allowed at the same time!!");
-                formatter.printHelp("hzsk-corpus-services", header, options, footerverbose, true);
+                formatter.printHelp("hzsk-corpus-services", header, options, footerverbose.toString(), true);
                 System.exit(1);
             } else {
                 cfProperties = cmd.getOptionProperties("p");

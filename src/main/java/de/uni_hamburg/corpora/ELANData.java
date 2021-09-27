@@ -10,7 +10,7 @@ package de.uni_hamburg.corpora;
 
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 
-import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.jdom.Document;
@@ -52,20 +52,15 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
             jdom = builder.build(url);
-            File f = new File(url.toURI());
-            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), "UTF-8");
+            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
-        } catch (JDOMException ex) {
-            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        } catch (JDOMException | URISyntaxException | IOException ex) {
+            Logger.getLogger(ELANData.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 
@@ -75,9 +70,8 @@ public class ELANData implements CorpusData, ContentData, XMLData {
     //TODO
     private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException{
         PrettyPrinter pp = new PrettyPrinter();
-        String prettyCorpusData = pp.indent(toUnformattedString(), "event");
         //String prettyCorpusData = pp.indent(bt.toXML(bt.getTierFormatTable()), "event");
-        return prettyCorpusData;
+        return pp.indent(toUnformattedString(), "event");
     }
 
     public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException  {
