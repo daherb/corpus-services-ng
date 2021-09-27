@@ -21,12 +21,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.CommandLine;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -37,8 +33,7 @@ public class ComaFilenameChecker extends Checker implements CorpusFunction {
 
     Pattern acceptable;
     Pattern unacceptable;
-    String fileLoc = "";
-    ValidatorSettings settings;
+    ValidatorSettings settings = new ValidatorSettings();
 
     public ComaFilenameChecker() {
         //fixing is not possible
@@ -59,7 +54,7 @@ public class ComaFilenameChecker extends Checker implements CorpusFunction {
         String[] path = new String[1];
         path[0] = fp.getPath().substring(6);
        
-        List<Option> patternOptions = new ArrayList<Option>();
+        List<Option> patternOptions = new ArrayList<>();
         patternOptions.add(new Option("a", "accept", true, "add an acceptable "
                 + "pattern"));
         patternOptions.add(new Option("d", "disallow", true, "add an illegal "
@@ -125,10 +120,9 @@ public class ComaFilenameChecker extends Checker implements CorpusFunction {
      */
     @Override
     public String getDescription() {
-        String description = "This class checks if all file names linked in the coma file"
+        return "This class checks if all file names linked in the coma file"
                 + " to be deposited in HZSK repository; checks if there is a file"
                 + " which is not named according to coma file.";
-        return description;
     }
 
     @Override
