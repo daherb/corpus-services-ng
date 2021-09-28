@@ -2,8 +2,6 @@ package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -44,13 +42,11 @@ public class NgTierCheckerWithAnnotationTest {
      */
     @Test
     public void testCheck() throws Exception {
-
         System.out.println("check");
         String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation();
-        Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {
             assertNotNull(instance.check(cd));

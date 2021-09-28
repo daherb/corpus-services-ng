@@ -23,32 +23,33 @@ import org.xml.sax.SAXException;
 public class Corpus {
 
     //only the metadata file, coma or cmdi in most cases, or a list of files
-    Collection<Metadata> metadata = new ArrayList();
+    Collection<Metadata> metadata = new ArrayList<>();
     //the transcriptions
-    Collection<ContentData> contentdata = new ArrayList();
-    Collection<Recording> recording = new ArrayList();
-    Collection<AdditionalData> additionaldata = new ArrayList();
-    Collection<AnnotationSpecification> annotationspecification = new ArrayList();
-    Collection<ConfigParameters> configparameters = new ArrayList();
-    private Collection<CmdiData> cmdidata = new ArrayList();
-    Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList();
-    Collection<ELANData> elandata = new ArrayList();
-    Collection<FlextextData> flextextdata = new ArrayList();
+    Collection<ContentData> contentdata = new ArrayList<>();
+    Collection<Recording> recording = new ArrayList<>();
+    Collection<AdditionalData> additionaldata = new ArrayList<>();
+    Collection<AnnotationSpecification> annotationspecification = new ArrayList<>();
+    Collection<ConfigParameters> configparameters = new ArrayList<>();
+    private Collection<CmdiData> cmdidata = new ArrayList<>();
+    Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList<>();
     Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptiondata = new ArrayList<>();
+    Collection<ELANData> elandata = new ArrayList<>();
+    Collection<FlextextData> flextextdata = new ArrayList<>();
     ComaData comadata;
     //all the data together
-    Collection<CorpusData> cdc = new ArrayList<CorpusData>();
+    Collection<CorpusData> cdc = new ArrayList<>();
     URL basedirectory;
     String corpusname;
 
     public Corpus() {
     }
 
-    public Corpus(URL url) {
+    public Corpus(URL url) throws JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException {
+        this(new CorpusIO().read(url));
     }
 
     //only read in the files we need!
-    public Corpus(ComaData coma, Collection<Class<? extends CorpusData>> clcds) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
+    public Corpus(ComaData coma, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
         CorpusIO cio = new CorpusIO();
         //todo: only read what we need :)
         //cl.isInstance(cd) - needs to be read already for this :/
@@ -99,7 +100,7 @@ public class Corpus {
         cdc.add(coma);
     }
 
-    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
+    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, SAXException, JexmaraldaException {
         for (CorpusData cd : cdc) {
             this.cdc = cdc ;
             if (cd instanceof ContentData) {

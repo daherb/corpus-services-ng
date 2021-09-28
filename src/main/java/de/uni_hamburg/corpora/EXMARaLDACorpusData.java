@@ -12,6 +12,7 @@ import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.jdom.Document;
@@ -19,7 +20,6 @@ import org.jdom.input.SAXBuilder;
 import org.xml.sax.SAXException;
 import org.jdom.JDOMException;
 import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -67,22 +67,14 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
             //jdom = builder.build(url);
             //File f = new File(url.toURI());
             //loadFile(f);
-            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), "UTF-8");
+            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
-//        } catch (JDOMException ex) {
-//            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (SAXException ex) {
-//            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (JexmaraldaException ex) {
-//            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -103,7 +95,7 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     /*
     * uses the field of the Exmaralda Basic transcription to update the jdom field
     */
-    public void updateJdomDoc() throws SAXException, JexmaraldaException, MalformedURLException, JDOMException, IOException {
+    public void updateJdomDoc() throws SAXException, JexmaraldaException, JDOMException, IOException {
         String xmlString = bt.toXML();
         SAXBuilder builder = new SAXBuilder();
         jdom = builder.build(xmlString);
@@ -131,9 +123,8 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     //TODO
     private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException{
         PrettyPrinter pp = new PrettyPrinter();
-        String prettyCorpusData = pp.indent(toUnformattedString(), "event");
         //String prettyCorpusData = pp.indent(bt.toXML(bt.getTierFormatTable()), "event");
-        return prettyCorpusData;
+        return pp.indent(toUnformattedString(), "event");
     }
 
     public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException  {
@@ -166,26 +157,8 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
                 Files.move(Paths.get("tempfile.exb"), Paths.get(args[0]),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
-        } catch (SAXException saxe) {
+        } catch (SAXException | IOException | JexmaraldaException | TransformerException | ParserConfigurationException | XPathExpressionException saxe) {
             saxe.printStackTrace();
-            System.exit(1);
-        } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
-            System.exit(1);
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            System.exit(1);
-        } catch (JexmaraldaException je) {
-            je.printStackTrace();
-            System.exit(1);
-        } catch (TransformerException ex) {
-            ex.printStackTrace();
-            System.exit(1);
-        } catch (ParserConfigurationException ex) {
-            ex.printStackTrace();
-            System.exit(1);
-        } catch (XPathExpressionException ex) {
-            ex.printStackTrace();
             System.exit(1);
         }
     }
@@ -262,33 +235,13 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     }
 
     @Override
-    public void setURL(URL nurl) {
-        url = nurl;
-    }
-
-    @Override
-    public void setParentURL(URL url) {
-        parenturl = url;
-    }
-
-    @Override
     public String getFilename() {
         return filename;
     }
 
     @Override
-    public void setFilename(String s) {
-        filename = s;
-    }
-
-    @Override
     public String getFilenameWithoutFileEnding() {
         return filenamewithoutending;
-    }
-
-    @Override
-    public void setFilenameWithoutFileEnding(String s) {
-        filenamewithoutending = s;
     }
 
 }

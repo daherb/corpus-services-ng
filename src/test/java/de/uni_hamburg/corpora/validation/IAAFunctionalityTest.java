@@ -7,7 +7,6 @@ package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -50,11 +49,10 @@ public class IAAFunctionalityTest {
     public void testCheck() throws Exception {
         System.out.println("check");
         //CorpusData cd = "src/test/java/de/uni_hamburg/corpora/resources/example";
-        String corpusFolder = "src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example";
+        String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         IAAFunctionality instance = new IAAFunctionality();
-        Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
             assertNotNull(instance.function(cd,false));

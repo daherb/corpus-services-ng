@@ -28,7 +28,7 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
 
     String comaLoc = "";
     HashMap<String, Collection<String>> annotationsInComa; // list for holding annotations of coma file
-    ArrayList<String> annotations; // list for holding annotations of annotation spec file
+    ArrayList<String> annotations = new ArrayList<>(); // list for holding annotations of annotation spec file
     int counter = 0; // counter for controlling whether we are on coma or annotation spec file
 
     public NgTierCheckerWithAnnotation() {

@@ -55,7 +55,7 @@ public class FilenameCheckerTest {
         Corpus corp = new Corpus(corpusURL);
         ComaFilenameChecker instance = new ComaFilenameChecker();
         Collection<CorpusData> cdc;
-        
+
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
             assertNotNull(instance.function(cd,false));

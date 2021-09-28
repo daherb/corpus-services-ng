@@ -93,7 +93,7 @@ public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        File f = new File(new File(cd.getURL().getFile()).getParentFile() + "\\AnnotationSpecFromExbs.xml");
+        File f = new File(new File(cd.getURL().getFile()).getParentFile() + "/AnnotationSpecFromExbs.xml");
         URI u = f.toURI();
         StreamResult result = new StreamResult(new File(u));
         transformer.transform(source, result);

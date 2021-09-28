@@ -53,7 +53,8 @@ public class ExbSchemaChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, JDOMException, IOException, JexmaraldaException, TransformerException, ParserConfigurationException, XPathExpressionException{
         System.out.println("Checking the exb file against DTD...");
-        String exbSchemaPath = new File("src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\schemas\\exb_schema.xsd").getAbsolutePath();
+        String exbSchemaPath = new File("src/main/java/de/uni_hamburg/corpora/validation/resources/schemas" +
+                "/exb_schema.xsd").getAbsolutePath();
         URL exbSchema = Paths.get(exbSchemaPath).toUri().toURL();//;new URL(exbSchemaPath);
         Source xmlStream = new StreamSource(TypeConverter.String2InputStream(cd.toSaveableString()));
         SchemaFactory schemaFactory =

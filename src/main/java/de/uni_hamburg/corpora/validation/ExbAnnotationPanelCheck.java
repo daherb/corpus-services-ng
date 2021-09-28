@@ -32,8 +32,7 @@ import org.xml.sax.SAXException;
  */
 public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
 
-    ArrayList<String> allTagStrings;
-    String tierLoc = "";
+    ArrayList<String> allTagStrings = new ArrayList<>();
 
     public ExbAnnotationPanelCheck() {
         //no fixing option available
@@ -53,7 +52,6 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
         org.w3c.dom.Document doc = db.parse(TypeConverter.String2InputStream(cd.toSaveableString())); // get the file as a document
 
         if (cd.getURL().toString().endsWith(".xml")) {          // when the annotation spec file is read
-            allTagStrings = new ArrayList<String>();
             NodeList tags = doc.getElementsByTagName("tag"); // divide by tags
             for (int i = 0; i < tags.getLength(); i++) { //iterate through tags
                 org.w3c.dom.Element tag = (org.w3c.dom.Element) tags.item(i);
@@ -105,7 +103,7 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add((Class<? extends CorpusData>) AnnotationSpecification.class);
+        IsUsableFor.add(AnnotationSpecification.class);
         IsUsableFor.add(EXMARaLDACorpusData.class);
         return IsUsableFor;
     }
@@ -116,9 +114,8 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
      */
     @Override
     public String getDescription() {
-        String description = "This class checks whether the annotations in exb "
+        return "This class checks whether the annotations in exb "
                 + "files comply with the annotation specification panel. ";
-        return description;
     }
 
     @Override
