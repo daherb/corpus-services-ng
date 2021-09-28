@@ -35,6 +35,7 @@ import org.xml.sax.SAXException;
  */
 public abstract class Checker implements CorpusFunction {
 
+    // Same as below with report
     CorpusData cd;
     // This is dangerous and should be solved differently
     // Report report = new Report();
