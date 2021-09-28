@@ -300,7 +300,7 @@ public class ReportItem {
     public String toString() {
         String str = getLocation() + ": " + getWhat() + ". " + getHowto() + ". " +
             getLocalisedMessage() ;
-        if (getStackTrace().equals("")) {
+        if (!getStackTrace().equals("")) {
             str += "\n" + getStackTrace();
         }
         return str ;
