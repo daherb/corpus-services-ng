@@ -10,6 +10,7 @@
 package de.uni_hamburg.corpora;
 
 import de.uni_hamburg.corpora.utilities.TypeConverter;
+import org.apache.commons.text.StringEscapeUtils;
 import org.xml.sax.SAXParseException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
@@ -488,16 +489,16 @@ public class ReportItem {
             }
             report += error.getLocation() + "</td>";
             report += "<td style='border: red solid 1px; white-space: pre'>" +
-                error.getWhat() +
                 "</td>";
             report += "<td style='border: green solid 1px; white-space: pre'>" +
-                error.getHowto() +
                 "</td>";
             report += "<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre'>(" +
-                error.getLocalisedMessage() +
                 ")</td>\n";
-            report += "<!-- " + error.getStackTrace() + " -->\n";
             report += "</tr>";
+                StringEscapeUtils.escapeHtml4(error.getWhat()) +
+                StringEscapeUtils.escapeHtml4(error.getHowto()) +
+                StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
+            report.append("<!-- " + StringEscapeUtils.escapeHtml4(error.getStackTrace()) + " -->\n");
         }
         report += "  </tbody>\n  </table>\n";
         return report;
@@ -576,19 +577,17 @@ public class ReportItem {
                     report += "<tr class='other'><td style='border-left: black solid 3px'>Other</td><td>";
                     break;
             }
-            report += error.getFunction() + "</td><td>";
-            report += error.getLocation() + "</td>";
+            report.append(StringEscapeUtils.escapeHtml4(error.getFunction()) + "</td><td>");
+            report.append(StringEscapeUtils.escapeHtml4(error.getLocation()) + "</td>");
             report += "<td style='white-space: pre'>" +
-                error.getWhat() +
-                "</td>";
             report += "<td style='white-space: pre'>" +
-                error.getHowto() +
-                "</td>";
             report += "<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre;'>(" +
-                error.getLocalisedMessage() +
                 ")</td>\n";
-            report += "<!-- " + error.getStackTrace() + " -->\n";
             report += "</tr>";
+                StringEscapeUtils.escapeHtml4(error.getWhat()) +
+                StringEscapeUtils.escapeHtml4(error.getHowto()) +
+                StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
+            report.append("<!-- " + StringEscapeUtils.escapeHtml4(error.getStackTrace()) + " -->\n");
         }
         report += "  </tbody>\n  </table>\n";
         
