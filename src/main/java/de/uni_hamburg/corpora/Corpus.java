@@ -90,6 +90,8 @@ public class Corpus {
         String commonPrefix =
                 StringUtils.getCommonPrefix(cdc.stream().map((cd) -> cd.getParentURL().toString()).toArray(String[]::new));
         // Convert to basedirectory
+        if (commonPrefix.isEmpty())
+            commonPrefix = "file:///" ;
         basedirectory = new URL(commonPrefix) ;
     }
 
