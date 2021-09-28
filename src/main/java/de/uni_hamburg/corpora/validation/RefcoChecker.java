@@ -49,6 +49,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private final String valueSeparator = "\\s*[,;:]\\s*" ;
     // Separator used to separate words/token
     private final String tokenSeparator = "\\s+" ;
+    // Separator used to separate morpheme glosses (see https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf)
+    private final String glossSeparator = "[-=;:\\\\>()<~\\[\\]]+" ;
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
@@ -57,6 +59,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private final Namespace textNamespace =
             Namespace.getNamespace("text","urn:oasis:names:tc:opendocument:xmlns:text:1.0") ;
 
+    // The hand-picked list of languages acceptable for translation tiers
+    private final String[] translationLanguages = {"mandarin chinese", "english", "french", "german", "indonesian",
+            "portuguese", "russian", "spanish"};
 
     /**
      * A pair of information with potentially associated notes, used e.g. in the Overview table
@@ -154,10 +159,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         InformationNotes numberTranscribedWords ;
         InformationNotes numberAnnotatedWords ;
         // Annotation Strategies
-        /* TODO: Is this the proper interpretation of translationLanguages?
-           This currently assumes that all languages are in a single cell but it could
-           be that they are actually listed in separate rows
-         */
+        // All languages are in a single cell
         InformationNotes translationLanguages ;
         // Tab: Corpus Compositions
         ArrayList<Session> sessions = new ArrayList<>() ;
@@ -201,6 +203,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *  The frequency list of all transcription tokens in the corpus
      */
     HashMap<String,Integer> tokenFreq = new HashMap<>();
+
+    /**
+     * The frequency list of all annotation/morphology morphemes in the corpus
+     */
+    HashMap<String,Integer> morphemeFreq = new HashMap<>();
 
     /**
      * The frequency list of all annotation/morphology glosses in the corpus
@@ -306,16 +313,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         report.merge(refcoGenericCheck());
         // Initialize frequency list for glosses
         for (Gloss gloss : criteria.glosses) {
-            glossFreq.put(gloss.gloss,0);
+            morphemeFreq.put(gloss.gloss,0);
         }
         // Apply function for each of the supported file. Again merge the reports
         for (CorpusData cdata : usableFiles) {
             report.merge(function(cdata, fix));
         }
-        // Check for glosses that never occurred in the complete corpus
-        for (Map.Entry<String,Integer> e : glossFreq.entrySet()) {
+        // Check for morpheme glosses that never occurred in the complete corpus
+        for (Map.Entry<String,Integer> e : morphemeFreq.entrySet()) {
             if (e.getValue() == 0)
-                report.addWarning(function,  "Gloss never encountered in corpus: " + e.getKey()) ;
+                report.addWarning(function,  "Morpheme gloss never encountered in corpus: " + e.getKey()) ;
         }
         return report;
     }
@@ -385,6 +392,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 fw.write(html) ;
                 fw.close() ;
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Done") ;
+                ObjectMapper mapper = new ObjectMapper();
+                // Allows serialization even when getters are missing
+                mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+                mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
+                try {
+                    fw = new FileWriter("/tmp/glosses.json") ;
+                    fw.write(mapper.writeValueAsString(rc.glossFreq));
+                    fw.close();
+                    fw = new FileWriter("/tmp/gloss-morphemes.json") ;
+                    fw.write(mapper.writeValueAsString(rc.morphemeFreq));
+                    fw.close();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             } catch (URISyntaxException | IOException | SAXException | JexmaraldaException | ClassNotFoundException | XPathExpressionException | NoSuchAlgorithmException | ParserConfigurationException | JDOMException | FSMException | TransformerException e) {
                 e.printStackTrace() ;
             }
@@ -858,6 +880,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (Gloss g : criteria.glosses) {
             if (g.gloss == null || g.gloss.isEmpty())
                 report.addCritical(function,"Gloss is empty");
+            if (g.gloss.split(glossSeparator).length > 1)
+                report.addWarning(function,
+                        "Gloss contains separating character (" + glossSeparator + "): " + g.gloss);
             if (g.meaning == null || g.meaning.isEmpty())
                 report.addCritical(function,"Gloss meaning is empty: " + g.gloss);
             // We skip comments assuming it is optional
@@ -1084,15 +1109,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Tokenize text
             for (String token : t.getText().split(tokenSeparator)) {
                 // Check if token is a gloss
-                if (!glosses.contains(token)) {
-                    missing += 1 ;
-                    // This would lead to large amount of warnings
-                    // report.addWarning(function,cd,"Invalid token: " + token);
+                for (String morpheme : token.split(glossSeparator)) {
+                    if (!glosses.contains(morpheme)) {
+                        missing += 1;
+                        // <></>his would lead to large amount of warnings
+                        // report.addWarning(function,cd,"Invalid token: " + token);
+                    } else {
+                        matched += 1;
+                    }
+                    morphemeFreq.compute(morpheme,(k, v) -> (v == null) ? 1 : v + 1);
                 }
-                else {
-                    glossFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
-                    matched += 1 ;
-                }
+                glossFreq.compute(token,(k, v) -> (v == null) ? 1 : v + 1);
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
@@ -1155,8 +1182,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     // Add the length of the gloss to matched
                     matched += token.length() ;
                 }
-                if (mismatch)
-                    report.addWarning(function,cd,"Transcription token contains invalid characters: " + token);
+                if (mismatch) {
+                    report.addWarning(function, cd, "Transcription token contains invalid characters: " + token);
+                }
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
@@ -1180,8 +1208,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return if the identifier is valid
      */
     public boolean checkLanguage(String lang) {
+        // Check if the language is in the list of known translation languages
+        if (Arrays.stream(translationLanguages).map((tl) -> tl.contains(lang.toLowerCase())).reduce(Boolean::logicalOr)
+                .orElse(false))
+            return true ;
         // ISO code
-        if (lang.length() == 3) {
+        else if (lang.length() == 3) {
             // Just check the list
             return isoList.contains(lang);
         }
