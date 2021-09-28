@@ -1,17 +1,11 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,7 +28,7 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
 
     String comaLoc = "";
     HashMap<String, Collection<String>> annotationsInComa; // list for holding annotations of coma file
-    ArrayList<String> annotations; // list for holding annotations of annotation spec file
+    ArrayList<String> annotations = new ArrayList<>(); // list for holding annotations of annotation spec file
     int counter = 0; // counter for controlling whether we are on coma or annotation spec file
 
     public NgTierCheckerWithAnnotation() {
@@ -168,11 +162,10 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.AnnotationSpecification");
-        IsUsableFor.add(cl);
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(AnnotationSpecification.class);
+        IsUsableFor.add(EXMARaLDACorpusData.class);
         return IsUsableFor;
     }
 

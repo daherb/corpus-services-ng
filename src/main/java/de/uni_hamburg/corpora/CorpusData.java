@@ -6,7 +6,10 @@
 package de.uni_hamburg.corpora;
 
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -18,27 +21,27 @@ import org.xml.sax.SAXException;
  */
 public interface CorpusData {
 
-    public URL getURL();
+    URL getURL();
     
-    public void setURL(URL url);
+    URL getParentURL();
     
-    public URL getParentURL();
+    String getFilename();
     
-    public void setParentURL(URL url);
-    
-    public String getFilename();
-    
-    public void setFilename(String s);
-    
-    public String getFilenameWithoutFileEnding();
-    
-    public void setFilenameWithoutFileEnding(String s);
+    String getFilenameWithoutFileEnding();
 
-    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException;
+    String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException;
 
-    public String toUnformattedString();
+    String toUnformattedString();
     
     //needed if there were changes to the file so they are represented in the object too
-    public void updateUnformattedString(String newUnformattedString);
+    void updateUnformattedString(String newUnformattedString);
 
+    /**
+     * Gets the collection of all expected file extensions for the file type.
+     *
+     * @return the file extensions in lower case
+     * @author bba1792, Dr. Herbert lange
+     * @version 20210924
+     */
+    Collection<String> getFileExtensions();
 }

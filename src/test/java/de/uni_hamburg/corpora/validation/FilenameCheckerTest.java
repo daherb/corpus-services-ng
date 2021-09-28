@@ -55,7 +55,7 @@ public class FilenameCheckerTest {
         Corpus corp = new Corpus(corpusURL);
         ComaFilenameChecker instance = new ComaFilenameChecker();
         Collection<CorpusData> cdc;
-        
+
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
             assertNotNull(instance.function(cd,false));
@@ -75,13 +75,8 @@ public class FilenameCheckerTest {
         System.out.println("getIsUsableFor");
         ComaFilenameChecker instance = new ComaFilenameChecker();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
 }

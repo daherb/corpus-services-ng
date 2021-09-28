@@ -1,18 +1,14 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.ComaData;
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.SegmentedTranscriptionData;
+import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.SegmentedEXMARaLDATranscription;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import static de.uni_hamburg.corpora.utilities.TypeConverter.JdomDocument2W3cDocument;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
@@ -53,7 +49,7 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
         NodeList communications = doc.getElementsByTagName("Communication"); // divide by Communication tags
         ArrayList<String> algorithmNames = new ArrayList<>(); // array for holding algorithm names
         CorpusIO cio = new CorpusIO();
-        SegmentedTranscriptionData exs;
+        SegmentedEXMARaLDATranscription exs;
         if (fix) {
             List<org.jdom.Element> toRemove = new ArrayList<org.jdom.Element>();
             XPath context;
@@ -81,7 +77,7 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
                         String s = e.getChildText("NSLink");
                         //System.out.println("NSLink:" + s);
                         url = new URL(cd.getParentURL() + s);
-                        exs = (SegmentedTranscriptionData) cio.readFileURL(url);
+                        exs = (SegmentedEXMARaLDATranscription) cio.readFileURL(url);
                         List segmentCounts = exs.getSegmentCounts();
                         for (Object segmentCount : segmentCounts) {
                             if (segmentCount instanceof org.jdom.Element) {
@@ -168,10 +164,8 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(ComaData.class);
     }
 
     /**

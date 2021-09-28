@@ -8,6 +8,8 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.Report;
+
+import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -66,6 +68,8 @@ public class GenerateAnnotationPanelTest {
                 assertNotNull(instance.function(cd,false));
                 //assertFalse(instance.CorpusDataIsAlreadyPretty(cd));
             }
+            // Remove the file created for the dolgan corpus
+            new File("src/test/java/de/uni_hamburg/corpora/resources/example/DolganCorpus/AnnotationSpecFromExbs.xml").delete();
     }
 
 
@@ -77,14 +81,9 @@ public class GenerateAnnotationPanelTest {
         System.out.println("getIsUsableFor");
         GenerateAnnotationPanel instance = new GenerateAnnotationPanel();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
     
 }

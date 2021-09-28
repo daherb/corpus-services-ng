@@ -39,7 +39,6 @@ public abstract class Checker implements CorpusFunction {
     CorpusData cd;
     // This is dangerous and should be solved differently
     // Report report = new Report();
-    Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<Class<? extends CorpusData>>();
     final String function;
     Boolean canfix;
 
@@ -147,13 +146,7 @@ public abstract class Checker implements CorpusFunction {
     //To implement in the class
     public abstract Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException;
 
-    public abstract Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException;
-
-    public void setIsUsableFor(Collection<Class<? extends CorpusData>> cdc) {
-        for (Class<? extends CorpusData> cl : cdc) {
-            IsUsableFor.add(cl);
-        }
-    }
+    public abstract Collection<Class<? extends CorpusData>> getIsUsableFor() ;
 
     public String getFunction() {
         return function;

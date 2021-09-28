@@ -7,8 +7,6 @@ package de.uni_hamburg.corpora;
 
 import java.net.URL;
 import java.util.Collection;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusIO;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -27,30 +25,33 @@ import org.xml.sax.SAXException;
 public class Corpus {
 
     //only the metadata file, coma or cmdi in most cases, or a list of files
-    Collection<Metadata> metadata = new ArrayList();
+    Collection<Metadata> metadata = new ArrayList<>();
     //the transcriptions
-    Collection<ContentData> contentdata = new ArrayList();
-    Collection<Recording> recording = new ArrayList();
-    Collection<AdditionalData> additionaldata = new ArrayList();
-    Collection<AnnotationSpecification> annotationspecification = new ArrayList();
-    Collection<ConfigParameters> configparameters = new ArrayList();
-    private Collection<CmdiData> cmdidata = new ArrayList();
-    Collection<BasicTranscriptionData> basictranscriptiondata = new ArrayList();
-    Collection<SegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList();
+    Collection<ContentData> contentdata = new ArrayList<>();
+    Collection<Recording> recording = new ArrayList<>();
+    Collection<AdditionalData> additionaldata = new ArrayList<>();
+    Collection<AnnotationSpecification> annotationspecification = new ArrayList<>();
+    Collection<ConfigParameters> configparameters = new ArrayList<>();
+    private Collection<CmdiData> cmdidata = new ArrayList<>();
+    Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList<>();
+    Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptiondata = new ArrayList<>();
+    Collection<ELANData> elandata = new ArrayList<>();
+    Collection<FlextextData> flextextdata = new ArrayList<>();
     ComaData comadata;
     //all the data together
-    Collection<CorpusData> cdc = new ArrayList<CorpusData>();
+    Collection<CorpusData> cdc = new ArrayList<>();
     URL basedirectory;
     String corpusname;
 
     public Corpus() {
     }
 
-    public Corpus(URL url) {
+    public Corpus(URL url) throws JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException {
+        this(new CorpusIO().read(url));
     }
 
     //only read in the files we need!
-    public Corpus(ComaData coma, Collection<Class<? extends CorpusData>> clcds) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
+    public Corpus(ComaData coma, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
         CorpusIO cio = new CorpusIO();
         //todo: only read what we need :)
         //cl.isInstance(cd) - needs to be read already for this :/
@@ -99,10 +100,14 @@ public class Corpus {
         for (CorpusData cd : cdc) {
             if (cd instanceof ContentData) {
                 contentdata.add((ContentData) cd);
-                if (cd instanceof BasicTranscriptionData) {
-                    basictranscriptiondata.add((BasicTranscriptionData) cd);
-                } else if (cd instanceof SegmentedTranscriptionData) {
-                    segmentedtranscriptiondata.add((SegmentedTranscriptionData) cd);
+                if (cd instanceof EXMARaLDACorpusData) {
+                    basictranscriptiondata.add((EXMARaLDACorpusData) cd);
+                } else if (cd instanceof SegmentedEXMARaLDATranscription) {
+                    segmentedtranscriptiondata.add((SegmentedEXMARaLDATranscription) cd);
+                } else if (cd instanceof ELANData) {
+                    elandata.add((ELANData) cd);
+                } else if (cd instanceof FlextextData) {
+                    flextextdata.add((FlextextData) cd);
                 }
             } else if (cd instanceof Recording) {
                 recording.add((Recording) cd);
@@ -154,14 +159,22 @@ public class Corpus {
         return cmdidata;
     }
 
-    public Collection<BasicTranscriptionData> getBasicTranscriptionData() {
+    public Collection<EXMARaLDACorpusData> getBasicTranscriptionData() {
         return basictranscriptiondata;
     }
 
-    public Collection<SegmentedTranscriptionData> getSegmentedTranscriptionData() {
+    public Collection<SegmentedEXMARaLDATranscription> getSegmentedTranscriptionData() {
         return segmentedtranscriptiondata;
     }
+    
+    public Collection<ELANData> getELANData() {
+        return elandata;
+    }
 
+    public Collection<FlextextData> getFlextextData() {
+        return flextextdata;
+    }
+ 
     public ComaData getComaData() {
         return comadata;
     }
@@ -198,12 +211,20 @@ public class Corpus {
         this.cmdidata = cmdidata;
     }
 
-    public void setBasicTranscriptionData(Collection<BasicTranscriptionData> basictranscriptions) {
+    public void setBasicTranscriptionData(Collection<EXMARaLDACorpusData> basictranscriptions) {
         this.basictranscriptiondata = basictranscriptions;
     }
 
-    public void setSegmentedTranscriptionData(Collection<SegmentedTranscriptionData> segmentedtranscriptions) {
+    public void setSegmentedTranscriptionData(Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptions) {
         this.segmentedtranscriptiondata = segmentedtranscriptions;
+    }
+    
+    public void setELANData(Collection<ELANData> elandata) {
+        this.elandata = elandata;
+    }
+    
+    public void setFlextextData(Collection<FlextextData> flextextdata) {
+        this.flextextdata = flextextdata;
     }
 
     public void setComaData(ComaData coma) {

@@ -85,14 +85,9 @@ public class ExbRefTierCheckerTest {
         System.out.println("getIsUsableFor");
         ExbRefTierChecker instance = new ExbRefTierChecker();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
 
 }

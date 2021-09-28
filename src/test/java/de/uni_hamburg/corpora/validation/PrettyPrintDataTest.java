@@ -5,32 +5,20 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.CorpusMagician;
-import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
-import de.uni_hamburg.corpora.utilities.TypeConverter;
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -169,14 +157,9 @@ public class PrettyPrintDataTest {
         System.out.println("getIsUsableFor");
         PrettyPrintData instance = new PrettyPrintData();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
     
 }

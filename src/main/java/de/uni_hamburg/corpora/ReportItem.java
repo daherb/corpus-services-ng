@@ -102,14 +102,14 @@ public class ReportItem {
         this(s,e,what);
         this.filename = filename;
     }
-    
+
     public ReportItem(Severity s, String filename, String what, String function) {
         // Call constructor above
         this(s,what);
         this.filename = filename;
         this.function = function;
     }
-    
+
     /**
      * Errors found by XML validation errors should always include a
      * SAXParseException. This can be used to extract file location informations
@@ -201,7 +201,7 @@ public class ReportItem {
                 throw new IllegalArgumentException("Missed a severity case in isSevere :-( " + this.severity);
         }
     }
-    
+
         /**
      * whether the stuff should be counted towards bad statistic.
      */
@@ -258,7 +258,7 @@ public class ReportItem {
             return "";
         }
     }
-    
+
     /**
      * A suggested fix to the error.
      */
@@ -503,8 +503,8 @@ public class ReportItem {
         return report.toString();
     }
 
-    
-    
+
+
     /**
      * Generate a simple HTML snippet version of validation errors.
      * Includes quite ugly table of all the reports with a java script to hide
@@ -536,7 +536,7 @@ public class ReportItem {
                 "/DataTables/buttons.dataTables.min.css")) + "</style>\n");
         report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
                 "/bootstrap/bootstrap-3.3.7.min.css")) + "</style>\n");
-        
+	
         //add custom CSS
         report.append("<style>"+
                 "body{padding:15px;}"+
@@ -557,6 +557,7 @@ public class ReportItem {
         report.append(timestamp + "</div>\n");
         
         report.append("<table>\n  <thead><tr>" +
+
             "<th>Type</th>"+
             "<th>Function</th>"+
             "<th>Filename:line.column</th>"+
@@ -602,6 +603,7 @@ public class ReportItem {
         //initiate DataTable on <table>
         report.append("<script>$(document).ready( function () {\n" +
                   "    $('table').DataTable({ 'iDisplayLength': 50 });\n" +
+
                   "} );</script>");
         
         report.append("   <footer style='white-space: pre'>" + summarylines + "</footer>");
@@ -609,7 +611,7 @@ public class ReportItem {
         
         return report.toString();
     }
-    
+
     /* Generate a CSV file with validation errors list with double quotes as delimeters*/
     public static String GenerateCSV (Collection<ReportItem> errors, String summarylines) {
         StringBuilder report = new StringBuilder();

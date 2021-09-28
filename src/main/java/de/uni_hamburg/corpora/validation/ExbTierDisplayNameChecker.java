@@ -1,21 +1,18 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+
 import org.jdom.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,8 +24,6 @@ import org.xml.sax.SAXException;
  * category, speaker abbreviation and display name for each tier.
  */
 public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction {
-
-    String tierLoc = "";
 
     public ExbTierDisplayNameChecker() {
         //fixing not possible
@@ -55,7 +50,7 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
         }
         NodeList tiers = doc.getElementsByTagName("tier"); // get all tiers of the transcript
         NodeList speakers = doc.getElementsByTagName("speaker"); // get all speakers of the transcript 
-        HashMap<String, String> speakerMap = new HashMap<String, String>(); // map for each speaker and its corresponding abbreviation
+        HashMap<String, String> speakerMap = new HashMap<>(); // map for each speaker and its corresponding abbreviation
         Report stats = new Report(); // create a new report for the transcript
         for (int i = 0; i < speakers.getLength(); i++) { // put speakers and their abbreviations into the map
             Element speaker = (Element) speakers.item(i);
@@ -76,7 +71,8 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
                     openingPar = displayName.indexOf("[");
                     closingPar = displayName.indexOf("]");
                     displayNameCategory = displayName.substring(openingPar + 1, closingPar);
-                    displayNameSpeaker = displayName.substring(0, openingPar - 1);
+                    // The use of max solves the issue of negative index but the result might not be the intended one
+                    displayNameSpeaker = displayName.substring(0, Integer.max(0,openingPar - 1));
                 } else if (displayName.contains("-")){
                     openingPar = displayName.lastIndexOf("-");
                     closingPar = displayName.length();
@@ -126,23 +122,22 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-        IsUsableFor.add(cl);
-        //cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-        //IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(EXMARaLDACorpusData.class);
+//        IsUsableFor.add(UnspecifiedXMLData.class)
+        return IsUsableFor ;
     }
+
 
     /**Default function which returns a two/three line description of what 
      * this class is about.
      */
     @Override
     public String getDescription() {
-        String description = "This class checks exb tiers and finds out if there"
+        return "This class checks exb tiers and finds out if there"
                 + " is a mismatch between category, speaker abbreviation and display"
                 + " name for each tier.";
-        return description;
     }
 
      @Override

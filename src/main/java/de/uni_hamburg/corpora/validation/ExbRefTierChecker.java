@@ -1,17 +1,16 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
+import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import de.uni_hamburg.corpora.Report;
+
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -40,10 +39,8 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(EXMARaLDACorpusData.class);
     }
 
     //testRefIds
@@ -51,8 +48,8 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws IOException, SAXException, TransformerException, ParserConfigurationException, XPathExpressionException {
         Report stats = new Report(); // create a new report for the transcript
         Document doc = null;
-        BasicTranscriptionData bcd = new BasicTranscriptionData();
-        bcd = (BasicTranscriptionData) cd;
+        EXMARaLDACorpusData bcd = new EXMARaLDACorpusData();
+        bcd = (EXMARaLDACorpusData) cd;
         doc = TypeConverter.JdomDocument2W3cDocument(bcd.getJdom()); // get the file as a document      
         String transcriptName;
         if (doc.getElementsByTagName("transcription-name").getLength() > 0) {   // check if transcript name exists for the exb file

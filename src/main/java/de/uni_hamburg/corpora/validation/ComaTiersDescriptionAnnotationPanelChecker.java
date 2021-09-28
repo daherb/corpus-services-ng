@@ -1,17 +1,13 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import de.uni_hamburg.corpora.Report;
+
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -145,11 +141,10 @@ public class ComaTiersDescriptionAnnotationPanelChecker extends Checker implemen
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.AnnotationSpecification");
-        IsUsableFor.add(cl);
+    public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(ComaData.class);
+        IsUsableFor.add(AnnotationSpecification.class);
         return IsUsableFor;
     }
 

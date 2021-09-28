@@ -3,10 +3,7 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import java.io.IOException;
@@ -15,6 +12,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
@@ -73,19 +72,16 @@ public class GeneralTransformer extends Checker {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl ;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         if (exb) {
-            cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
+            IsUsableFor.add(EXMARaLDACorpusData.class);
         }
         if (exs) {
-            cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
-            IsUsableFor.add(cl);
+            IsUsableFor.add(UnspecifiedXMLData.class);
         }
         if (coma) {
-            cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl);
+            IsUsableFor.add(ComaData.class);
         }
         return IsUsableFor;
     }

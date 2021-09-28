@@ -9,10 +9,7 @@
 
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +17,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -55,7 +53,8 @@ public class ExbSchemaChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, JDOMException, IOException, JexmaraldaException, TransformerException, ParserConfigurationException, XPathExpressionException{
         System.out.println("Checking the exb file against DTD...");
-        String exbSchemaPath = new File("src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\schemas\\exb_schema.xsd").getAbsolutePath();
+        String exbSchemaPath = new File("src/main/java/de/uni_hamburg/corpora/validation/resources/schemas" +
+                "/exb_schema.xsd").getAbsolutePath();
         URL exbSchema = Paths.get(exbSchemaPath).toUri().toURL();//;new URL(exbSchemaPath);
         Source xmlStream = new StreamSource(TypeConverter.String2InputStream(cd.toSaveableString()));
         SchemaFactory schemaFactory =
@@ -73,10 +72,8 @@ public class ExbSchemaChecker extends Checker implements CorpusFunction {
     * segmented transcription, coma etc.) this feature can be used.
     */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(EXMARaLDACorpusData.class);
     }
 
     /**Default function which returns a two/three line description of what 

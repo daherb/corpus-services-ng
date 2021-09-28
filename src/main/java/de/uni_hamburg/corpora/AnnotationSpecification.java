@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,7 +25,7 @@ import org.xml.sax.SAXException;
  *
  * @author fsnv625
  */
-class AnnotationSpecification implements CorpusData, XMLData {
+public class AnnotationSpecification implements CorpusData, XMLData {
 
     String originalstring;
     Document jdom;
@@ -40,17 +43,13 @@ class AnnotationSpecification implements CorpusData, XMLData {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
             jdom = builder.build(url);
-            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), "UTF-8");
+            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
-        } catch (JDOMException ex) {
-            Logger.getLogger(CmdiData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(CmdiData.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
+        } catch (JDOMException | IOException | URISyntaxException ex) {
             Logger.getLogger(AnnotationSpecification.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -72,9 +71,8 @@ class AnnotationSpecification implements CorpusData, XMLData {
 
     private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         PrettyPrinter pp = new PrettyPrinter();
-        String prettyCorpusData = pp.indent(toUnformattedString(), "event");
         //String prettyCorpusData = pp.indent(bt.toXML(bt.getTierFormatTable()), "event");
-        return prettyCorpusData;
+        return pp.indent(toUnformattedString(), "event");
     }
 
     @Override
@@ -83,18 +81,13 @@ class AnnotationSpecification implements CorpusData, XMLData {
     }
 
     @Override
+    public Collection<String> getFileExtensions() {
+        return Collections.singleton("xml");
+    }
+
+    @Override
     public URL getParentURL() {
         return parenturl;
-    }
-
-    @Override
-    public void setURL(URL nurl) {
-        url = nurl;
-    }
-
-    @Override
-    public void setParentURL(URL url) {
-        parenturl = url;
     }
 
     @Override
@@ -103,18 +96,8 @@ class AnnotationSpecification implements CorpusData, XMLData {
     }
 
     @Override
-    public void setFilename(String s) {
-        filename = s;
-    }
-
-    @Override
     public String getFilenameWithoutFileEnding() {
         return filenamewithoutending;
-    }
-
-    @Override
-    public void setFilenameWithoutFileEnding(String s) {
-        filenamewithoutending = s;
     }
 
     @Override

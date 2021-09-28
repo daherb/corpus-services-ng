@@ -7,7 +7,6 @@ package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -52,6 +51,7 @@ public class ComaTierOverviewCreatorTest {
             System.out.println("check");
             String corpusFolder = "K:\\Kamas\\KamasCorpus";
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
+
             Corpus corp = new Corpus(corpusURL);
             ComaTierOverviewCreator instance = new ComaTierOverviewCreator();
             Collection<CorpusData> cdc;
@@ -69,14 +69,9 @@ public class ComaTierOverviewCreatorTest {
         System.out.println("getIsUsableFor");
         ComaTierOverviewCreator instance = new ComaTierOverviewCreator();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
     
     

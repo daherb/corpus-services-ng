@@ -7,9 +7,9 @@ See the list of all currently available validation functions [List of corpus fun
 
 ## 1. Create a new class with a describing name to the matching package (e.g. `PrettyPrintData` in validation package)
 
-- The class needs to extend the abstract class of the package (e.g. in validation the class called `Checker`) and it needs to implement the Interface CorpusFunction(`corpus-services\src\main\java\de\uni_hamburg\corpora\CorpusFunction.java`)
+- The class needs to extend the abstract class of the package (e.g. in validation the class called `Checker`) and it needs to implement the Interface CorpusFunction(`corpus-services/src/main/java/de/uni_hamburg/corpora/CorpusFunction.java`)
 - The constructor needs to overwrite the constructor of the abstract class it implements, using the super(Boolean) method
-  - the super method takes a Boolean as a parameter, `false` means you class does not have a fixing option, `true` means it does have one
+  - the super method takes a Boolean as a parameter, `false` means you class does not have a fixing option, `true` means it does have one. The super constructor also properly sets up the `function` attribute containing the current class name, which can be used as a parameter in the report items.
   - example:
 <pre><code class="java">
 public MyNewFunction(){
@@ -17,10 +17,10 @@ super(false);
 }
 </code></pre>
 
-- the new function needs to give back a `Report`, the fix option also gives back a `Report` but additionally needs to use a write() method in the Class CorpusIO`(corpus-services\src\main\java\de\uni_hamburg\corpora\CorpusIO.java`) so the fix will be done
+- the new function needs to give back a `Report`, the fix option also gives back a `Report` but additionally needs to use a write() method in the Class CorpusIO`(corpus-services/src/main/java/de/uni_hamburg/corpora/CorpusIO.java`) so the fix will be done
 - a fix should add a 'FIX' report item to the report when the fix was carried out successfully (`Report.addFix(...)` method)
 - you need to implement the methods function(CorpusData cd, Boolean fix) and the function(Corpus c, Boolean fix). The function for the Corpus object will iterate over the files present in the corpus and then call the CorpusData function for each, using the Report.merge(Report) function to merge the different Reports together
-- the `getIsUsableFor()` method needs to add all the Classes (in our java project, e.g. `BasicTranscriptionData`,`SegmentedTranscriptionData`,`ComaData`,`UnspecifiedXMLData` to the IsUsableFor Collection
+- the `getIsUsableFor()` method needs to return all classes derived from CorpusData`(corpus-services/src/main/java/de/uni_hamburg/corpora/CorpusData.java`) (in our java project, e.g. `BasicTranscriptionData`,`SegmentedTranscriptionData`,`ComaData`,`UnspecifiedXMLData`
 - example:
 <pre><code class="language-java">
     /**
@@ -30,13 +30,9 @@ super(false);
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-            IsUsableFor.add(cl);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, " usable class not found");
-        }
-        return IsUsableFor;
+    	Set<Class<? extends CorpusData> IsUsableFor = new HashSet<>()
+        IsUsableFor.add(EXMARaLDACorpusData.class);
+        return IsUsableFor;  // In this case we could also just return Collections.singleton(EXMARaLDACorpusData.class);
     }
 </code></pre>
 
@@ -62,8 +58,6 @@ You can issue WARNING, CRITICAL, CORRECT and FIX report items using a corpus dat
         return stats; // return the report with warnings
     }
 </code></pre>
-
-
 
 
 When it makes sense to display the Errors in an Exmaralda ErrorList (that can be opened with the PartiturEditor), you can add the exma error additionally.
@@ -93,17 +87,20 @@ Example:
     }
 </code></pre>
 
-## 4. when you're done, add changes in the CorpusMagician (`corpus-services\src\main\java\de\uni_hamburg\corpora\CorpusMagician.java`)
+## 4. You are (mostly) done
 
-- in the method `public Collection<String> getAllExistingCFs()` add your new Class as a String 
-- in the method `Collection<CorpusFunction> corpusFunctionStrings2Classes()` add a string to the switch statement that will instantiate your new class, you can also use parameters given from the command line to set variables in your class etc.
+- The corpus magician automatically discovers all classes derived from CorpusFunction and provides them to the user
+- Only if your checker expects (command line) parameters, you have to update the method `corpusFunctionStrings2Classes` to handle these parameters
 
 ## (Optional: 4. Write JUnit tests for your newly created class)
+
+It is strongly recommend that you also provide unit tests for your corpus function to make sure that they work as expected and that they continue working
+when the corpus services are changed.
 
 In Netbeans there is the plugin "JUnit" (installed by default) which you can use to create an empty JUnit test class for your class. 
 To use it: 
 - right-click class
 - `>Tools >Create/Update Test` this creates an empty template test class, that gives errors by default
-Fill this class with sensible test, one existing test class for reference is `corpus-services\src\test\java\de\uni_hamburg\corpora\validation\PrettyPrintDataTest.java`
-There are some test files in the code with mockup audio and video  located here: `corpus-services\src\test\java\de\uni_hamburg\corpora\resources\example`
+Fill this class with sensible test, one existing test class for reference is `corpus-services/src/test/java/de/uni_hamburg/corpora/validation/PrettyPrintDataTest.java`
+There are some test files in the code with mockup audio and video  located here: `corpus-services/src/test/java/de/uni_hamburg/corpora/resources/example`
 Run the test and only merge into develop if the test passes.

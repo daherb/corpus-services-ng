@@ -70,14 +70,9 @@ public class ComaXsdCheckerTest {
         System.out.println("getIsUsableFor");
         ComaXsdChecker instance = new ComaXsdChecker();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
     
 }

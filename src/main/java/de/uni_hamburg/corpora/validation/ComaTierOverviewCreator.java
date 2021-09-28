@@ -1,12 +1,7 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.BasicTranscriptionData;
-import de.uni_hamburg.corpora.ComaData;
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.CorpusIO;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.EXMARaLDACorpusData;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.util.ArrayList;
 import java.io.IOException;
@@ -51,7 +46,7 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
         CorpusIO cio = new CorpusIO();
         Collection<URL> resulturls;
         ArrayList<Tier> tiers = new ArrayList<>();
-        ArrayList<BasicTranscriptionData> btds = new ArrayList<>();
+        ArrayList<EXMARaLDACorpusData> btds = new ArrayList<>();
         String htmltemplate = TypeConverter.InputStream2String(getClass().getResourceAsStream("/xsl/tier_overview_datatable_template.html"));
         String overviewTable = "";
         String communicationsTable = "";
@@ -59,7 +54,7 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
         for (URL resulturl : resulturls) {
             CorpusData cdexb = cio.readFileURL(resulturl);
             if (cdexb!=null) {
-            BasicTranscriptionData btexb = (BasicTranscriptionData) cdexb;
+            EXMARaLDACorpusData btexb = (EXMARaLDACorpusData) cdexb;
 
             btds.add(btexb);
             Tier t;
@@ -129,7 +124,7 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
                     + "   </thead>\n"
                     + "   <tbody>\n";
             String content = "";
-            for (BasicTranscriptionData btd : btds) {
+            for (EXMARaLDACorpusData btd : btds) {
                 //first is the column for filename, then all the tier category/type combinations
                 content = content + "<tr><td class=\"compact\">" + btd.getFilename() + "</td>";
                 for (String s : hash_Set) {
@@ -193,10 +188,8 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-        IsUsableFor.add(cl);
-        return IsUsableFor;
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        return Collections.singleton(ComaData.class);
     }
 
     /**

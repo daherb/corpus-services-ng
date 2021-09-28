@@ -1,19 +1,21 @@
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.*;
+
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
-import de.uni_hamburg.corpora.Report;
+
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.Event;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -30,8 +32,7 @@ import org.xml.sax.SAXException;
  */
 public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
 
-    ArrayList<String> allTagStrings;
-    String tierLoc = "";
+    ArrayList<String> allTagStrings = new ArrayList<>();
 
     public ExbAnnotationPanelCheck() {
         //no fixing option available
@@ -51,7 +52,6 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
         org.w3c.dom.Document doc = db.parse(TypeConverter.String2InputStream(cd.toSaveableString())); // get the file as a document
 
         if (cd.getURL().toString().endsWith(".xml")) {          // when the annotation spec file is read
-            allTagStrings = new ArrayList<String>();
             NodeList tags = doc.getElementsByTagName("tag"); // divide by tags
             for (int i = 0; i < tags.getLength(); i++) { //iterate through tags
                 org.w3c.dom.Element tag = (org.w3c.dom.Element) tags.item(i);
@@ -101,11 +101,10 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
      * used.
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
-        Class cl = Class.forName("de.uni_hamburg.corpora.AnnotationSpecification");
-        IsUsableFor.add(cl);
-        cl = Class.forName("de.uni_hamburg.corpora.BasicTranscriptionData");
-        IsUsableFor.add(cl);
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
+        Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
+        IsUsableFor.add(AnnotationSpecification.class);
+        IsUsableFor.add(EXMARaLDACorpusData.class);
         return IsUsableFor;
     }
 
@@ -115,9 +114,8 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
      */
     @Override
     public String getDescription() {
-        String description = "This class checks whether the annotations in exb "
+        return "This class checks whether the annotations in exb "
                 + "files comply with the annotation specification panel. ";
-        return description;
     }
 
     @Override

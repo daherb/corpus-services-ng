@@ -7,7 +7,6 @@ package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -53,10 +52,10 @@ public class ComaTranscriptionsNameCheckerTest {
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
         ComaTranscriptionsNameChecker instance = new ComaTranscriptionsNameChecker();
-        Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {
-            assertNotNull(instance.function(cd,false));
+            if (instance.getIsUsableFor().contains(cd.getClass()))
+                assertNotNull(instance.function(cd,false));
         }
     }
 
@@ -69,14 +68,9 @@ public class ComaTranscriptionsNameCheckerTest {
         System.out.println("getIsUsableFor");
         ComaTranscriptionsNameChecker instance = new ComaTranscriptionsNameChecker();
         //Collection<Class> expResult = null;
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull(result);
-        }
-        catch (ClassNotFoundException e) {
-            fail("Class not found");
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull(result);
     }
 
 }
