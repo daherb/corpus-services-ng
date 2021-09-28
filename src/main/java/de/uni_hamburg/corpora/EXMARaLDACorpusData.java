@@ -43,7 +43,7 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
 
     private BasicTranscription bt;
     URL url ;
-    Document jdom = new Document();
+    Document jdom = null;
     String originalstring;
     URL parenturl;
     String filename;
@@ -63,17 +63,17 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     public EXMARaLDACorpusData(URL url) {
         try {
             this.url = url;
-            SAXBuilder builder = new SAXBuilder();
-            jdom = builder.build(url);
-            File f = new File(url.toURI());
-            loadFile(f);
+            //SAXBuilder builder = new SAXBuilder();
+            //jdom = builder.build(url);
+            //File f = new File(url.toURI());
+            //loadFile(f);
             originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
-        } catch (JDOMException | IOException | URISyntaxException | SAXException | JexmaraldaException ex) {
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -168,7 +168,11 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
         return url;
     }
 
-    public Document getReadbtasjdom() {
+    public Document getReadbtasjdom() throws JDOMException, IOException {
+        if (jdom == null) {
+            SAXBuilder builder = new SAXBuilder();
+            jdom = builder.build(url);
+        };
         return jdom;
     }
 
@@ -188,7 +192,14 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     }
 
     public BasicTranscription getEXMARaLDAbt() {
-        return bt;
+        try {
+            File f = new File(url.toURI());
+            loadFile(f);
+            return bt;
+        } catch (SAXException | JexmaraldaException | MalformedURLException | URISyntaxException e) {
+            System.out.println("IO Exception caught in BasicTranscriptionData");
+            return null;
+        }
     }
 
     public void setEXMARaLDAbt(BasicTranscription btn) {
@@ -200,8 +211,13 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     }
 
     @Override
-    public Document getJdom() {
-        return getReadbtasjdom();
+    public Document getJdom(){
+        try {
+            return getReadbtasjdom();
+        } catch (IOException | JDOMException e) {
+            System.out.println("IO Exception caught in BasicTranscriptionData");
+            return null;
+        }
     }
 
     @Override
