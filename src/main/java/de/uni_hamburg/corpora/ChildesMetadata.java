@@ -93,20 +93,8 @@ public class ChildesMetadata implements Metadata, CorpusData {
     }
 
     @Override
-    public void setURL(URL url) {
-        // Setters are not supported because they don't make sense without reloading the data
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public URL getParentURL() {
         return parentUrl;
-    }
-
-    @Override
-    public void setParentURL(URL url) {
-        // Setters are not supported because they don't make sense without reloading the data
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -115,20 +103,8 @@ public class ChildesMetadata implements Metadata, CorpusData {
     }
 
     @Override
-    public void setFilename(String s) {
-        // Setters are not supported because they don't make sense without reloading the data
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public String getFilenameWithoutFileEnding() {
         return baseName;
-    }
-
-    @Override
-    public void setFilenameWithoutFileEnding(String s) {
-        // Setters are not supported because they don't make sense without reloading the data
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -144,6 +120,11 @@ public class ChildesMetadata implements Metadata, CorpusData {
     @Override
     public void updateUnformattedString(String newUnformattedString) {
         this.unformatedString = newUnformattedString ;
+    }
+
+    @Override
+    public Collection<String> getFileExtensions() {
+        return Collections.singleton("cdc");
     }
 
     @Override

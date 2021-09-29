@@ -174,15 +174,10 @@ public class RefcoCheckerTest {
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
         RefcoChecker instance = new RefcoChecker();
-        try {
-            Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
-            //no null object here
-            assertNotNull("The class list is not null", result);
-            assertTrue("Checker is usable for ELAN", result.contains(ELANData.class));
-        }
-        catch (ClassNotFoundException e) {
-            fail("Unexpected exception: " + e + "\ncaused by " + e.getCause()) ;
-        }
+        Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
+        //no null object here
+        assertNotNull("The class list is not null", result);
+        assertTrue("Checker is usable for ELAN", result.contains(ELANData.class));
     }
 
     /**

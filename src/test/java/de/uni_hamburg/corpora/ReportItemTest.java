@@ -3,14 +3,10 @@ package de.uni_hamburg.corpora;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static org.junit.Assert.*;
 

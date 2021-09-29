@@ -44,10 +44,9 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      * Function to retrieve the collection of all classes the checker is suitable for
      *
      * @return a collection of classes the checker is suitable for
-     * @throws ClassNotFoundException inherited
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Valid for IMDI format
         return Collections.singleton(IMDIData.class);
     }
@@ -56,7 +55,7 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      * Function to get a collection of values based on a locator
      *
      * @param locator the locator for the values
-     * @return the values determiend by the locator
+     * @return the values determined by the locator
      */
     @Override
     protected Report getValuesForLocator(CorpusData cd, String locator, Collection<String> values) {

@@ -37,7 +37,7 @@ import java.util.zip.ZipFile;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20210720
+ * @version 20210929
  * The checker for Refco set of criteria.
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
@@ -331,10 +331,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Function to retrieve the collection of all classes the checker is suitable for
      *
      * @return a collection of classes the checker is suitable for
-     * @throws ClassNotFoundException inherited
      */
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Only ELAN is supported
         return Collections.singleton(ELANData.class) ;
     }

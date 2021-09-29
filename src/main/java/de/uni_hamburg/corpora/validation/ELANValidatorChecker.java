@@ -14,14 +14,11 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +27,7 @@ import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 public class ELANValidatorChecker extends Checker implements CorpusFunction {
 
     // The local logger that can be used for debugging
-    Logger logger = Logger.getLogger(this.getClass().toString());
+    // Logger logger = Logger.getLogger(this.getClass().toString());
 
     public ELANValidatorChecker(boolean hasfixingoption) {
         super(hasfixingoption);
@@ -103,7 +100,7 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Only works for ELAN data
         return Collections.singleton(ELANData.class);
     }

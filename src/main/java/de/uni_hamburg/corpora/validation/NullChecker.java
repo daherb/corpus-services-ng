@@ -40,7 +40,7 @@ public class NullChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Use reflections to get all corpus data classes
         Reflections reflections = new Reflections("de.uni_hamburg.corpora");
         // Get all classes derived from CorpusData

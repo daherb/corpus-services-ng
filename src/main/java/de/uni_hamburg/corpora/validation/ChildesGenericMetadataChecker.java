@@ -85,7 +85,7 @@ public class ChildesGenericMetadataChecker extends GenericMetadataChecker implem
 //        }
 
     @Override
-    public Collection<Class<? extends CorpusData>> getIsUsableFor() throws ClassNotFoundException {
+    public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Only valid for CHILDES metadata format
         return Collections.singleton(ChildesMetadata.class);
     }
