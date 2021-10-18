@@ -573,83 +573,147 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             criteria.translationLanguages = getInformationNotes(cellXPath, overviewTable, "Translation language(s)");
             // Read CorpusComposition tab
             Element sessionTable = (Element) XPath.newInstance("//table:table[@table:name='CorpusComposition']").selectSingleNode(refcoDoc);
-            for (Element row : listToParamList(Element.class, sessionTable.getChildren("table-row",tableNamespace))) {
-                List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell",tableNamespace)) ;
-                if (columns.size() > 1 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
-                        && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Sessions")) {
-                    Session session = new Session();
-                    session.sessionName = safeGetText(columns.get(0).getChild("p", textNamespace)) ;
-                    session.fileName = safeGetText(columns.get(1).getChild("p", textNamespace)) ;
-                    session.speakerName = safeGetText(columns.get(2).getChild("p", textNamespace)) ;
-                    session.speakerAge = safeGetText(columns.get(3).getChild("p", textNamespace)) ;
-                    session.speakerGender = safeGetText(columns.get(4).getChild("p", textNamespace)) ;
-                    session.recordingLocation = safeGetText(columns.get(5).getChild("p", textNamespace)) ;
-                    session.recordingDate = safeGetText(columns.get(6).getChild("p", textNamespace)) ;
-                    session.genre = safeGetText(columns.get(7).getChild("p", textNamespace)) ;
-                    session.ageGroup = safeGetText(columns.get(8).getChild("p", textNamespace)) ;
-                    criteria.sessions.add(session);
+            if (sessionTable == null)
+                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{function,refcoShortName,"CorpusComposition table not found"}));
+            else {
+                boolean missingData = false;
+                for (Element row : listToParamList(Element.class, sessionTable.getChildren("table-row", tableNamespace))) {
+                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    if (columns.size() > 7 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Sessions")) {
+                        Session session = new Session();
+                        session.sessionName = safeGetText(columns.get(0).getChild("p", textNamespace));
+                        session.fileName = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        session.speakerName = safeGetText(columns.get(2).getChild("p", textNamespace));
+                        session.speakerAge = safeGetText(columns.get(3).getChild("p", textNamespace));
+                        session.speakerGender = safeGetText(columns.get(4).getChild("p", textNamespace));
+                        session.recordingLocation = safeGetText(columns.get(5).getChild("p", textNamespace));
+                        session.recordingDate = safeGetText(columns.get(6).getChild("p", textNamespace));
+                        session.genre = safeGetText(columns.get(7).getChild("p", textNamespace));
+                        // session.ageGroup = safeGetText(columns.get(8).getChild("p", textNamespace));
+                        criteria.sessions.add(session);
+                    } else
+                        missingData = true;
+                }
+                if (missingData) {
+                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename",
+                                    "description"},
+                            new Object[]{function, refcoShortName,"Wrong number of columns or missing data in " +
+                            "CorpusComposition table"}));
                 }
             }
             // Read AnnotationTiers tab
             Element tierTable = (Element) XPath.newInstance("//table:table[@table:name='AnnotationTiers']").selectSingleNode(refcoDoc);
-            for (Element row : listToParamList(Element.class, tierTable.getChildren("table-row",tableNamespace))) {
-                List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace)) ;
-                if (columns.size() > 1 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
-                        && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Names")) {
-                    Tier tier = new Tier();
-                    tier.tierName = safeGetText(columns.get(0).getChild("p", textNamespace)) ;
-                    tier.tierFunction = safeGetText(columns.get(1).getChild("p", textNamespace)) ;
-                    tier.segmentationStrategy = safeGetText(columns.get(2).getChild("p", textNamespace)) ;
-                    tier.languages = safeGetText(columns.get(3).getChild("p", textNamespace)) ;
-                    tier.morphemeDistinction = safeGetText(columns.get(4).getChild("p", textNamespace)) ;
-                    criteria.tiers.add(tier);
+            if (tierTable == null)
+                report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                        new Object[]{function, refcoShortName,"AnnotationTiers table not found"}));
+            else {
+                boolean missingData = false;
+                for (Element row : listToParamList(Element.class, tierTable.getChildren("table-row", tableNamespace))) {
+                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    if (columns.size() > 4 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Names")) {
+                        Tier tier = new Tier();
+                        tier.tierName = safeGetText(columns.get(0).getChild("p", textNamespace)).trim();
+                        tier.tierFunction = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        tier.segmentationStrategy = safeGetText(columns.get(2).getChild("p", textNamespace));
+                        tier.languages = safeGetText(columns.get(3).getChild("p", textNamespace));
+                        tier.morphemeDistinction = safeGetText(columns.get(4).getChild("p", textNamespace));
+                        criteria.tiers.add(tier);
+                    } else
+                        missingData = true;
                 }
+                if (missingData)
+                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename",
+                                    "description"},
+                            new Object[]{function, refcoShortName,"Wrong number of columns or missing data in " +
+                                    "AnnotationTiers table"}));
             }
             // Read Transcription tab
             Element transcriptionTable = (Element) XPath.newInstance("//table:table[@table:name='Transcription']").selectSingleNode(refcoDoc);
-            for (Element row : listToParamList(Element.class, transcriptionTable.getChildren("table-row",tableNamespace))) {
-                List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
-                if (columns.size() > 1 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
-                        && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Graphemes")) {
-                    Transcription transcription = new Transcription();
-                    transcription.grapheme = safeGetText(columns.get(0).getChild("p", textNamespace)) ;
-                    transcription.linguisticValue = safeGetText(columns.get(1).getChild("p", textNamespace)) ;
-                    transcription.linguisticConvention = safeGetText(columns.get(2).getChild("p", textNamespace)) ;
-                    criteria.transcriptions.add(transcription);
+            if (transcriptionTable == null)
+                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{function,refcoShortName,"Transcription table not found"}));
+            else {
+                boolean missingData = false;
+                for (Element row : listToParamList(Element.class, transcriptionTable.getChildren("table-row", tableNamespace))) {
+                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    if (columns.size() > 2 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Graphemes")) {
+                        Transcription transcription = new Transcription();
+                        transcription.grapheme = safeGetText(columns.get(0).getChild("p", textNamespace));
+                        transcription.linguisticValue = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        transcription.linguisticConvention = safeGetText(columns.get(2).getChild("p", textNamespace));
+                        criteria.transcriptions.add(transcription);
+                    } else
+                        missingData = true;
                 }
+                if (missingData)
+                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description"},
+                            new Object[]{function, refcoShortName,"Wrong number of columns or missing data in " +
+                                    "Transcription table"}));
             }
             // Read Glosses tab
-            Element glossesTable = (Element) XPath.newInstance("//table:table[@table:name='Glosses']").selectSingleNode(refcoDoc);
-            for (Element row : listToParamList(Element.class, glossesTable.getChildren("table-row",tableNamespace))) {
-                List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
-                if (columns.size() > 1&& !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
-                        && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Glosses")) {
-                    Gloss gloss = new Gloss();
-                    gloss.gloss = safeGetText(columns.get(0).getChild("p", textNamespace)) ;
-                    gloss.meaning = safeGetText(columns.get(1).getChild("p", textNamespace)) ;
-                    gloss.comments = safeGetText(columns.get(2).getChild("p", textNamespace)) ;
-                    gloss.tiers = safeGetText(columns.get(3).getChild("p", textNamespace)) ;
-                    criteria.glosses.add(gloss);
+            Element glossesTable =
+                    (Element) XPath.newInstance("//table:table[starts-with(@table:name,'Gloss')]").selectSingleNode(refcoDoc);
+            if (glossesTable == null)
+                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{function,refcoShortName,"Glosses table not found"}));
+            else {
+                boolean missingData = false;
+                for (Element row : listToParamList(Element.class, glossesTable.getChildren("table-row", tableNamespace))) {
+                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Glosses")) {
+                        Gloss gloss = new Gloss();
+                        gloss.gloss = safeGetText(columns.get(0).getChild("p", textNamespace));
+                        gloss.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        gloss.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
+                        gloss.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
+                        criteria.glosses.add(gloss);
+                    } else
+                        missingData = true;
                 }
+                if (missingData)
+                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description"},
+                            new Object[]{function,refcoShortName,"Wrong number of columns or missing data in " +
+                                    "Glosses table"}));
             }
             // Read Punctuation tab
             Element punctuationsTable = (Element) XPath.newInstance("//table:table[@table:name='Punctuations']").selectSingleNode(refcoDoc);
-            for (Element row : listToParamList(Element.class, punctuationsTable.getChildren("table-row",tableNamespace))) {
-                List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace)) ;
-                if (columns.size() > 1 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
-                        && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Characters")) {
-                    Punctuation punctuation = new Punctuation();
-                    punctuation.character = safeGetText(columns.get(0).getChild("p", textNamespace)) ;
-                    punctuation.meaning = safeGetText(columns.get(1).getChild("p", textNamespace)) ;
-                    punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace)) ;
-                    punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace)) ;
-                    criteria.punctuations.add(punctuation) ;
+            if (punctuationsTable == null)
+                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{function,refcoShortName,"Punctuation table not found"}));
+            else {
+                boolean missingData = false;
+                for (Element row : listToParamList(Element.class, punctuationsTable.getChildren("table-row", tableNamespace))) {
+                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Characters")) {
+                        Punctuation punctuation = new Punctuation();
+                        punctuation.character = safeGetText(columns.get(0).getChild("p", textNamespace));
+                        punctuation.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
+                        punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
+                        criteria.punctuations.add(punctuation);
+                    } else
+                        missingData = true;
                 }
+                 if (missingData)
+                     report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
+                                     "description"},
+                             new Object[]{function,refcoShortName,"Wrong number of columns or missing data in " +
+                             "Punctuation table"}));
             }
-            //System.out.println(criteria.subjectLanguages.stream().reduce((s1,s2) -> s1 + "/" + s2));
-        } catch (JDOMException | NullPointerException jdomException) {
-            jdomException.printStackTrace();
+        } catch (JDOMException | NullPointerException exception) {
+            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "exception"},
+                    new Object[]{function,refcoShortName,"Unexpected exception",exception}));
         }
+        return report;
     }
 
     /**
