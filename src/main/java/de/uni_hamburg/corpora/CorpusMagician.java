@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -780,11 +781,22 @@ public class CorpusMagician {
         Collection<Class<? extends CorpusData>> usableTypes = cf.getIsUsableFor();
         //if the corpus files are an instance
         //of the class cl, run the function
-        for (CorpusData cd : cdc) {
+//        for (CorpusData cd : cdc) {
+//            if (usableTypes.contains(cd.getClass())) {
+//                Report newReport = runCorpusFunction(cd, cf, fix);
+//                report.merge(newReport);
+//            }
+//        }
+        // Create a deep copy of the corpus documents
+        Collection<Object> tmpCdc = cdc.stream().map((cd) -> cd.clone()).collect(Collectors.toSet());
+        Iterator<Object> it = tmpCdc.iterator();
+        while (it.hasNext()) {
+            CorpusData cd = (CorpusData) it.next();
             if (usableTypes.contains(cd.getClass())) {
-                Report newReport = runCorpusFunction(cd, cf, fix);
-                report.merge(newReport);
+                report.merge(runCorpusFunction(cd, cf, fix)) ;
             }
+            // Remove the corpus data after running the function
+            it.remove();
         }
 
         return report;
