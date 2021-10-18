@@ -638,6 +638,46 @@ public class CorpusMagician {
                         }
                     }
                     break;
+                case "imdigenericmetadatachecker":
+                    IMDIGenericMetadataChecker imdi = new IMDIGenericMetadataChecker();
+                    cf2strcorpusfunctions.add(imdi);
+                    if (cfProperties != null) {
+                        if (cfProperties.containsKey("imdi-criteria-file")) {
+                            imdi.setCriteriaFile(cfProperties.getProperty("imdi-criteria-file"));
+
+                        }
+                    }
+                    break;
+                case "comagenericmetadatachecker":
+                    ComaGenericMetadataChecker coma = new ComaGenericMetadataChecker();
+                    cf2strcorpusfunctions.add(coma);
+                    if (cfProperties != null) {
+                        if (cfProperties.containsKey("coma-criteria-file")) {
+                            coma.setCriteriaFile(cfProperties.getProperty("coma-criteria-file"));
+
+                        }
+                    }
+                    break;
+                case "teigenericmetadatachecker":
+                    TEIGenericMetadataChecker tei = new TEIGenericMetadataChecker();
+                    cf2strcorpusfunctions.add(tei);
+                    if (cfProperties != null) {
+                        if (cfProperties.containsKey("tei-criteria-file")) {
+                            tei.setCriteriaFile(cfProperties.getProperty("tei-criteria-file"));
+
+                        }
+                    }
+                    break;
+                case "refcochecker":
+                    RefcoChecker rc = new RefcoChecker();
+                    cf2strcorpusfunctions.add(rc);
+                    if (cfProperties != null) {
+                        if (cfProperties.containsKey("refco-file")) {
+                            // Load config and add potential problems to log
+                            report.merge(rc.setRefcoFile(cfProperties.getProperty("refco-file")));
+                        }
+                    }
+                    break;
                 // Ignore these functions
                 case "gatlisthtml":
                     break;

@@ -1,26 +1,35 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
+import org.exmaralda.partitureditor.fsm.FSMException;
+import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20210728
+ * @version 20211007
  *
- * Checker for the generic metadata within an IMDI corpus
+ * Checker for the generic metadata using TEI headers
  */
-public class IMDIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
+public class TEIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public IMDIGenericMetadataChecker() {
+    public TEIGenericMetadataChecker() {
         this(false);
     }
 
@@ -28,7 +37,7 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      * Default constructor with optional fixing option
      * @param hasfixingoption the fixing option
      */
-    public IMDIGenericMetadataChecker(boolean hasfixingoption) {
+    public TEIGenericMetadataChecker(boolean hasfixingoption) {
         super(hasfixingoption);
     }
 
@@ -38,7 +47,7 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      */
     @Override
     public String getDescription() {
-        return "Checks the generic metadata in an IMDI corpus";
+        return "Checks the generic metadata in an TEI corpus";
     }
 
     /**
@@ -48,10 +57,17 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        // Valid for IMDI format
-        return Collections.singleton(IMDIData.class);
+        // Valid for TEI format (and XML)
+        return Arrays.asList(new Class[]{TEIData.class,UnspecifiedXMLData.class});
     }
 
+//    @Override
+//    public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+//        Report report = new Report();
+//        report.addNote(function,"Checking " + cd.getFilename());
+//        report.merge(super.function(cd,fix));
+//        return report;
+//    }
     /**
      * Function to get a collection of values based on a locator
      *
@@ -65,8 +81,9 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
         // http://www.edankert.com/defaultnamespaces.html
         try {
             XPath xpath = XPath.newInstance(locator);
-            xpath.addNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
-            List<Object> nodes = xpath.selectNodes(((IMDIData) cd).getJdom());
+            xpath.addNamespace(Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0"));
+            List<Object> nodes = xpath.selectNodes(((TEIData) cd).getJdom());
+            xpath = null;
             // Convert nodes to string values
             for (Object o : nodes) {
                 // Get the value of the node, either from an element or an attribute
