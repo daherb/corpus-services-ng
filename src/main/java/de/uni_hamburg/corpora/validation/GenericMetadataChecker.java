@@ -129,8 +129,12 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                     new URI(value);
                                     parsable = true;
                                 } catch (URISyntaxException e) {
-                                    report.addCritical(function, cd, "Invalid URI syntax " + e);
-                                    break ;
+                                    // We only want to create a log item if there is no fallback to string
+                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
+                                            .collect(Collectors.toSet()).contains("string"))
+                                        report.addCritical(function, cd, "Invalid URI syntax " + e);
+                                    // But we skip the rest of this iteration
+                                    continue ;
                                 }
                                 // Also try it as a URL
                                 URL url = null;
@@ -149,8 +153,12 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         url = new URL(value);
                                     }
                                 } catch (MalformedURLException e) {
-                                    report.addWarning(function, cd, "Malformed URL " + e);
-                                    break ;
+                                    // We only want to create a log item if there is no fallback to string
+                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
+                                            .collect(Collectors.toSet()).contains("string"))
+                                        report.addWarning(function, cd, "Malformed URL " + e);
+                                    // But we skip the rest of this iteration
+                                    continue ;
                                 }
                                 // If we succeed in creating a URL object we can try to connect
                                 /*if (url != null) {
