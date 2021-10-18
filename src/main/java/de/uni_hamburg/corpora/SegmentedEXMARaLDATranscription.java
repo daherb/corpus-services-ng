@@ -124,4 +124,8 @@ public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData,
         return segmentCounts;
     }
 
+    @Override
+    public Object clone() {
+        return new SegmentedEXMARaLDATranscription(this.url);
+    }
 }

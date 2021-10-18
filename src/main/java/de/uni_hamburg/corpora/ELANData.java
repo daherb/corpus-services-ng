@@ -135,4 +135,8 @@ public class ELANData implements CorpusData, ContentData, XMLData {
         return filenamewithoutending;
     }
 
+    @Override
+    public Object clone() {
+        return new ELANData(this.url);
+    }
 }

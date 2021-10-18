@@ -114,4 +114,9 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
         return filenamewithoutending;
     }
 
+    @Override
+    public Object clone() {
+        return new UnspecifiedXMLData(this.url);
+    }
+
 }

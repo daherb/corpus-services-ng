@@ -44,4 +44,6 @@ public interface CorpusData {
      * @version 20210924
      */
     Collection<String> getFileExtensions();
+
+    Object clone() ;
 }

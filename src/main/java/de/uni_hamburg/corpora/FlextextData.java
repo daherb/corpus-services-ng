@@ -131,4 +131,9 @@ public class FlextextData implements CorpusData, ContentData, XMLData {
         return filenamewithoutending;
     }
 
+    @Override
+    public Object clone() {
+        return new FlextextData(this.url);
+    }
+
 }

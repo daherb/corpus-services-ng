@@ -132,4 +132,9 @@ public class ChildesMetadata implements Metadata, CorpusData {
         // Return empty list assuming that there are no corpus urls referenced in CHILDES meta-data
         return new ArrayList<>();
     }
+
+    @Override
+    public Object clone() {
+        return new ChildesMetadata(this.url);
+    }
 }

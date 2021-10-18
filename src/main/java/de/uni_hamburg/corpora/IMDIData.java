@@ -14,4 +14,8 @@ public class IMDIData extends UnspecifiedXMLData implements XMLData, CorpusData 
 
     public IMDIData() { super(); }
 
+    @Override
+    public Object clone() {
+        return new IMDIData(this.url);
+    }
 }

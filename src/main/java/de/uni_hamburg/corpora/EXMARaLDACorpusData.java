@@ -244,4 +244,8 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
         return filenamewithoutending;
     }
 
+    @Override
+    public Object clone() {
+        return new EXMARaLDACorpusData(this.url);
+    }
 }

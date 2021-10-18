@@ -272,4 +272,14 @@ public class ComaData implements Metadata, CorpusData, XMLData {
     public Element getCorpusData() throws JDOMException{
       return (Element) XPath.selectSingleNode(readcomaasjdom, "/Corpus/CorpusData");
     }
+
+    @Override
+    public Object clone() {
+        try {
+            return new ComaData(this.url);
+        } catch (SAXException | JexmaraldaException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 }
