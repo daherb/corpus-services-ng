@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -39,7 +40,7 @@ public class Corpus {
     Collection<FlextextData> flextextdata = new ArrayList<>();
     ComaData comadata;
     //all the data together
-    Collection<CorpusData> cdc = new ArrayList<>();
+    Collection<CorpusData> cdc = new HashSet<>();
     URL basedirectory;
     String corpusname;
 
