@@ -15,7 +15,7 @@ import org.xml.sax.SAXParseException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Error message class is meant to facilitate creating user friendly error
@@ -89,6 +89,38 @@ public class ReportItem {
         this();
         this.severity = s;
         this.what = what;
+    }
+
+    /**
+     * Creates a new report item based on parameters given in a mp
+     * @param s the severity level
+     * @param parameters a map containing all relevant parameters
+     * @auther bba1792, Dr. Herbert Lange
+     */
+    public ReportItem(Severity s, Map<String,Object> parameters) {
+        this();
+        severity = s;
+        if (parameters.containsKey("function"))
+            this.function = (String) parameters.get("function");
+        if (parameters.containsKey("filename"))
+            this.filename= (String) parameters.get("filename");
+        if (parameters.containsKey("exception"))
+            this.e = (Throwable) parameters.get("exception");
+        if (parameters.containsKey("description"))
+            this.what = (String) parameters.get("description");
+        if (parameters.containsKey("columns"))
+            this.columns = (String) parameters.get("columns");
+        if (parameters.containsKey("lines"))
+            this.lines = (String) parameters.get("lines");
+        if (parameters.containsKey("howtoFix"))
+            this.howto = (String) parameters.get("howtoFix");
+
+    }
+
+    public ReportItem(Severity s, String function, String what) {
+        // Call constructor above
+        this(s,what);
+        this.function = function ;
     }
 
     public ReportItem(Severity s, Throwable e, String what) {
@@ -642,5 +674,25 @@ public class ReportItem {
             report.append(error.getStackTrace() +"\n");
         }
         return report.toString();
+       }
+
+    /**
+     * Creates a new map from a string array of keys and an object array of values.
+     * Only covers the shorter one completely
+     * @param keys the keys
+     * @param vals the values
+     * @return the map
+     */
+    public static Map<String,Object> newParamMap(String[] keys, Object[] vals) {
+        List<String> validKeys = Arrays.asList(new String[]{"function", "filename", "exception", "description",
+                "columns", "lines", "howtoFix"});
+           HashMap<String,Object> params = new HashMap<>();
+           for (int i = 0 ; i < Math.min(keys.length,vals.length); i++) {
+               if (validKeys.contains(keys[i]))
+                   params.put(keys[i],vals[i]);
+               else
+                   throw new IllegalArgumentException("Invalid key for parameter given");
+           }
+           return params;
        }
 }
