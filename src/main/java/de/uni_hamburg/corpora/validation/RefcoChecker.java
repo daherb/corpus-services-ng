@@ -1126,8 +1126,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Document content = ((ELANData) cd).getJdom();
         // Get morphology tiers TODO that is very hand-wavy
         List<String> morphologyTiers = criteria.tiers.stream()
-                .filter((t) -> t.tierName.toLowerCase().startsWith("morpho")
-                        || t.tierFunction.toLowerCase().contains("morpho"))
+                .filter((t) ->
+                        t.tierFunction.toLowerCase().contains("morpho") ||
+                        t.tierFunction.toLowerCase().contains("gloss")
+                )
                 .map((t) -> t.tierName).collect(Collectors.toList()) ;
         // Get all valid Glosses
         HashSet<String> validGlosses = new HashSet<>() ;
