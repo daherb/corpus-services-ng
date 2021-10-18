@@ -128,7 +128,7 @@ public class GenericMetadataCriterion {
     // Custom parser is defined in ToType
     @CsvCustomBindByPosition(position = 2, converter = ToType.class)
     List<Optional<String>> type ;
-    // Final column are potential locators, just split on " OR "
+    // Fourth column are potential locators, just split on " OR "
     @CsvBindAndSplitByPosition(position = 3, elementType = String.class, splitOn = "\\s+OR\\s+")
     List<String> locator;
 }
