@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20210628
+ * @version 20211018
  * Test cases for all methods defined in ReportItem class.
  */
 public class ReportItemTest {
@@ -55,7 +55,7 @@ public class ReportItemTest {
         try {
             fileName = ri.getClass().getDeclaredField("filename") ;
             fileName.setAccessible(true);
-            assertEquals("No parameter - filename should be null", null, fileName.get(ri));
+            assertNull("No parameter - filename should be null", fileName.get(ri));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("No parameter - cannot access filename");
         }
@@ -71,7 +71,7 @@ public class ReportItemTest {
         try {
             fileName = ri.getClass().getDeclaredField("filename") ;
             fileName.setAccessible(true);
-            assertEquals("Parameters severity and what - filename should be null", null, fileName.get(ri));
+            assertNull("Parameters severity and what - filename should be null", fileName.get(ri));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Parameters severity and what - cannot access filename");
         }
@@ -87,7 +87,7 @@ public class ReportItemTest {
         try {
             fileName = ri.getClass().getDeclaredField("filename") ;
             fileName.setAccessible(true);
-            assertEquals("Parameters severity, exception and what - filename should be null", null, fileName.get(ri));
+            assertNull("Parameters severity, exception and what - filename should be null", fileName.get(ri));
         } catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Parameters severity, exception and what - cannot access filename");
         }
@@ -167,7 +167,7 @@ public class ReportItemTest {
         try {
             Field exception = ri.getClass().getDeclaredField("e");
             exception.setAccessible(true);
-            assertEquals("First null exception", null, exception.get(ri));
+            assertNull("First null exception", exception.get(ri));
         }
         catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Error accessing field");
@@ -176,16 +176,16 @@ public class ReportItemTest {
         try {
             Field exception = ri.getClass().getDeclaredField("e");
             exception.setAccessible(true);
-            assertEquals("Second null exception", null, exception.get(ri));
+            assertNull("Second null exception", exception.get(ri));
         }
         catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Error accessing field");
         }
-        ri = new ReportItem(ReportItem.Severity.CRITICAL,null, "some what");
+        ri = new ReportItem(ReportItem.Severity.CRITICAL, (Throwable) null, "some what");
         try {
             Field exception = ri.getClass().getDeclaredField("e");
             exception.setAccessible(true);
-            assertEquals("Third null exception", null, exception.get(ri));
+            assertNull("Third null exception", exception.get(ri));
         }
         catch (NoSuchFieldException | IllegalAccessException e) {
             fail("Error accessing field");
@@ -196,7 +196,8 @@ public class ReportItemTest {
     public void testIsGood() {
         logger.info("Run isGood test");
         // Set of all acceptable items
-        Set<ReportItem.Severity> goodItems = new HashSet<>(Arrays.asList(new ReportItem.Severity[]{ReportItem.Severity.CORRECT, ReportItem.Severity.NOTE, ReportItem.Severity.IFIXEDITFORYOU}));
+        Set<ReportItem.Severity> goodItems = new HashSet<>(Arrays.asList(ReportItem.Severity.CORRECT,
+                ReportItem.Severity.NOTE, ReportItem.Severity.IFIXEDITFORYOU));
         // Check all possible values if they meet the expectation
         for (ReportItem.Severity s : ReportItem.Severity.values()) {
             ReportItem ri = new ReportItem(s,"Test isGood");
@@ -208,7 +209,7 @@ public class ReportItemTest {
     public void testIsBad() {
         logger.info("Run isBad test");
         // Set of all acceptable items
-        Set<ReportItem.Severity> badItems = new HashSet<>(Arrays.asList(new ReportItem.Severity[]{ReportItem.Severity.WARNING, ReportItem.Severity.CRITICAL, ReportItem.Severity.MISSING, ReportItem.Severity.UNKNOWN}));
+        Set<ReportItem.Severity> badItems = new HashSet<>(Arrays.asList(ReportItem.Severity.WARNING, ReportItem.Severity.CRITICAL, ReportItem.Severity.MISSING, ReportItem.Severity.UNKNOWN));
         // Check all possible values if they meet the expectation
         for (ReportItem.Severity s : ReportItem.Severity.values()) {
             ReportItem ri = new ReportItem(s,"Test isBad");
@@ -220,7 +221,7 @@ public class ReportItemTest {
     public void testIsSevere() {
         logger.info("Run isSevere test");
         // Set of all acceptable items
-        Set<ReportItem.Severity> severeItems = new HashSet<>(Arrays.asList(new ReportItem.Severity[]{ReportItem.Severity.CRITICAL, ReportItem.Severity.MISSING, ReportItem.Severity.UNKNOWN}));
+        Set<ReportItem.Severity> severeItems = new HashSet<>(Arrays.asList(ReportItem.Severity.CRITICAL, ReportItem.Severity.MISSING, ReportItem.Severity.UNKNOWN));
         // Check all possible values if they meet the expectation
         for (ReportItem.Severity s : ReportItem.Severity.values()) {
             ReportItem ri = new ReportItem(s,"Test isSevere");
@@ -232,7 +233,7 @@ public class ReportItemTest {
     public void testIsFix() {
         logger.info("Run isFix test");
         // Set of all acceptable items
-        Set<ReportItem.Severity> fixItems = new HashSet<>(Arrays.asList(new ReportItem.Severity[]{ReportItem.Severity.IFIXEDITFORYOU}));
+        Set<ReportItem.Severity> fixItems = new HashSet<>(Collections.singletonList(ReportItem.Severity.IFIXEDITFORYOU));
         // Check all possible values if they meet the expectation
         for (ReportItem.Severity s : ReportItem.Severity.values()) {
             ReportItem ri = new ReportItem(s,"Test isFix");
@@ -303,7 +304,7 @@ public class ReportItemTest {
         assertEquals("No message", "", ri.getLocalisedMessage());
         ri = new ReportItem(ReportItem.Severity.CRITICAL,(Throwable) null, "some what");
         assertEquals("Null exception", "", ri.getLocalisedMessage());
-        ri = new ReportItem(ReportItem.Severity.CRITICAL, null, "some what");
+        ri = new ReportItem(ReportItem.Severity.CRITICAL, (Throwable) null, "some what");
         assertEquals("Null SAX exception", "", ri.getLocalisedMessage());
         ri = new ReportItem(ReportItem.Severity.CRITICAL,new RuntimeException("Some error occurred"), "some what");
         assertEquals("First exception", "Some error occurred", ri.getLocalisedMessage());
