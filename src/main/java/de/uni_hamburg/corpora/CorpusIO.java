@@ -63,7 +63,7 @@ public class CorpusIO {
     }
 
     public void write(CorpusData cd, URL url) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        write(cd.toSaveableString(), cd.getURL());
+        write(cd.toSaveableString(), url);
     }
 
     //TODO
