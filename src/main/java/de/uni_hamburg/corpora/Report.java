@@ -110,7 +110,7 @@ public class Report {
      */
     public void addCritical(String statId, String description) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
+        stat.add(new ReportItem(ReportItem.Severity.CRITICAL, statId,
                 description));
     }
 
