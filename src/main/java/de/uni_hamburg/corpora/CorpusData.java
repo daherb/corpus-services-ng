@@ -6,10 +6,8 @@
 package de.uni_hamburg.corpora;
 
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
