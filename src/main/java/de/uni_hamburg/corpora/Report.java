@@ -115,6 +115,16 @@ public class Report {
     }
 
     /**
+     * Puts a new repoty item into a bucket using the information given in a map
+     * @param statId the bucket the item has to be put into
+     * @param params the map for all relevant parameters
+     */
+    public void addCritical(String statId, Map<String,Object> params) {
+        Collection<ReportItem> stat = getOrCreateStatistic(statId);
+        stat.add(new ReportItem(ReportItem.Severity.CRITICAL, params));
+    }
+
+    /**
      * Add a critical error in named statistics bucket.
      *
      * @todo extrablah
@@ -191,6 +201,16 @@ public class Report {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
         stat.add(new ReportItem(ReportItem.Severity.WARNING,
                 cd.getURL().toString(), description, statId));
+    }
+
+    /**
+     * Puts a new repoty item into a bucket using the information given in a map
+     * @param statId the bucket the item has to be put into
+     * @param params the map for all relevant parameters
+     */
+    public void addWarning(String statId, Map<String,Object> params) {
+        Collection<ReportItem> stat = getOrCreateStatistic(statId);
+        stat.add(new ReportItem(Severity.WARNING, params));
     }
 
     /**
