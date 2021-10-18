@@ -418,8 +418,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Function to store the spreadsheet as XML data
      *
      * @param fileName the spreadsheet file name
+     * @return a report containing potential problems when reading the documentation file
      */
-    public void setRefcoFile(String fileName) {
+    public Report setRefcoFile(String fileName) {
         // Save the file name
         refcoFileName = fileName ;
         refcoShortName = new File(fileName).getName();
@@ -453,7 +454,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             e.printStackTrace();
         }
         // Extract the criteria from the XML
-        readRefcoCriteria(refcoDoc);
+        return readRefcoCriteria(refcoDoc);
     }
 
     /**
@@ -552,8 +553,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * Method that reads the XML data from the spreadsheet into a java data structure
      * @param refcoDoc the spreadsheet document
+     * @return a report containing potential problems when reading the documentation file
      */
-    private void readRefcoCriteria(Document refcoDoc) {
+    private Report readRefcoCriteria(Document refcoDoc) {
+        Report report = new Report();
         try {
             // Read Overview tab
             Element overviewTable = (Element) XPath.newInstance("//table:table[@table:name='Overview']").selectSingleNode(refcoDoc);
