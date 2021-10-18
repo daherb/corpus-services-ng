@@ -2,13 +2,9 @@ package de.uni_hamburg.corpora;
 
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+
+import java.io.*;
+
 import static java.lang.System.out;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +12,7 @@ import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,12 +37,9 @@ import org.xml.sax.SAXException;
  * @author fsnv625
  */
 public class CorpusIO {
-
-    //that's the local filepath or repository url
-    URL url;
-    Collection<CorpusData> cdc = new ArrayList();
-    Collection<URL> alldata = new ArrayList();
-    Collection<Class<? extends CorpusData>> allCorpusDataTypes = new ArrayList();
+    Collection<CorpusData> cdc = new HashSet<>();
+    Collection<URL> alldata = new ArrayList<>();
+    Collection<Class<? extends CorpusData>> allCorpusDataTypes = new ArrayList<>();
 
     public CorpusIO() {
         // Use reflections to get all corpus data classes
@@ -67,17 +61,17 @@ public class CorpusIO {
     }
 
     //TODO
-    public void write(String s, URL url) throws FileNotFoundException, IOException {
+    public void write(String s, URL url) throws IOException {
         //If URL is on fileserver only...
         System.out.println("started writing document...");
         outappend("============================\n");
-        FileOutputStream fos = new FileOutputStream(new File(url.getFile()));
-        fos.write(s.getBytes(("UTF-8")));
+        FileOutputStream fos = new FileOutputStream(url.getFile());
+        fos.write(s.getBytes(StandardCharsets.UTF_8));
         fos.close();
         System.out.println("Document written...");
     }
 
-    public void write(Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, ParserConfigurationException, UnsupportedEncodingException, UnsupportedEncodingException, SAXException, XPathExpressionException {
+    public void write(Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
         XMLOutputter xmOut = new XMLOutputter();
         String unformattedCorpusData = xmOut.outputString(doc);
         PrettyPrinter pp = new PrettyPrinter();
@@ -85,7 +79,7 @@ public class CorpusIO {
         write(prettyCorpusData, url);
     }
 
-    public void write(org.w3c.dom.Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, ParserConfigurationException, UnsupportedEncodingException, UnsupportedEncodingException, SAXException, XPathExpressionException {
+    public void write(org.w3c.dom.Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
         String unformattedCorpusData = TypeConverter.W3cDocument2String(doc);
         PrettyPrinter pp = new PrettyPrinter();
         String prettyCorpusData = pp.indent(unformattedCorpusData, "event");
@@ -123,7 +117,7 @@ public class CorpusIO {
     //only read it if it is needed
     public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, ClassNotFoundException, UnsupportedEncodingException {
         if (new File(URLDecoder.decode(url.getFile(),"UTF-8")).isFile()) {
-            if (url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("Annotation") && clcds.contains(AnnotationSpecification.class)) {
+            if (url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("annotation") && clcds.contains(AnnotationSpecification.class)) {
                 return new AnnotationSpecification(url);
             } else if ((url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("cmdi")) && clcds.contains(CmdiData.class)) {
                 return new CmdiData(url);
@@ -133,6 +127,7 @@ public class CorpusIO {
                         CorpusData cd = c.getDeclaredConstructor(URL.class).newInstance(url);
                         for (String e : cd.getFileExtensions()) {
                             if (url.getPath().toLowerCase().endsWith(e)) {
+                                out.println("Read " + url);
                                 return cd;
                             }
                         }
@@ -174,24 +169,21 @@ public class CorpusIO {
     }
 
     //read all the files as corpus data objects from a directory url
-    public Collection<CorpusData> read(URL url) throws URISyntaxException, IOException, SAXException, JexmaraldaException, ClassNotFoundException {
-        alldata = URLtoList(url);
-        for (URL readurl : alldata) {
-            CorpusData cdread = readFileURL(readurl);
-            if (cdread != null && !cdc.contains(cdread)) {
-                cdc.add(cdread);
-            }
-        }
-        return cdc;
+    public Collection<CorpusData> read(URL url) throws URISyntaxException, IOException, SAXException,
+            JexmaraldaException,
+            ClassNotFoundException {
+        return read(url,allCorpusDataTypes);
     }
 
     //read only the files as corpus data objects from a directory url that are specified in the Collection
-    public Collection<CorpusData> read(URL url, Collection<Class<? extends CorpusData>> chosencdc) throws URISyntaxException, IOException, SAXException, JexmaraldaException, ClassNotFoundException {
+    public Collection<CorpusData> read(URL url, Collection<Class<? extends CorpusData>> chosencdc) throws URISyntaxException,
+            IOException, SAXException, JexmaraldaException, ClassNotFoundException {
         //To do
         alldata = URLtoList(url);
         for (URL readurl : alldata) {
-            CorpusData cdread = readFileURL(readurl);
-            if (cdread != null && !cdc.contains(cdread)) {
+            CorpusData cdread = readFileURL(readurl,chosencdc);
+            if (cdread != null) {
+                // cdc is a set so we don't have to check if the file is already in there
                 cdc.add(cdread);
             }
         }
@@ -210,9 +202,6 @@ public class CorpusIO {
     public String readExternalResourceAsString(String path2resource) throws JDOMException, IOException, URISyntaxException {
         String xslstring = new String(Files.readAllBytes(Paths.get(new URL(path2resource).toURI())));
         System.out.println(path2resource);
-        if (xslstring == null) {
-            throw new IOException("File not found!");
-        }
         return xslstring;
     }
 
@@ -264,17 +253,20 @@ public class CorpusIO {
     }
 
     public void writePrettyPrinted(CorpusData cd, URL url) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        write(cd.toSaveableString(), cd.getURL());
+        write(cd.toSaveableString(), url);
     }
 
     public void copyInternalBinaryFile(String internalPath, URL url) throws IOException {
         InputStream in = getClass().getResourceAsStream(internalPath);
-        OutputStream out = new FileOutputStream(new File(url.getFile()));
-        IOUtils.copy(in, out);
+        OutputStream out = new FileOutputStream(url.getFile());
+        if (in != null)
+            IOUtils.copy(in, out);
+        //else
+        // TODO show some error
     }
 
     Collection<URL> listFiles(Path path) throws IOException {
-        Collection<URL> recursed = new ArrayList();
+        Collection<URL> recursed = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
             for (Path entry : stream) {
                 // If we are in a directory we call ourself recursively
