@@ -178,6 +178,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * The filename of the RefCo spreadsheet
      */
     String refcoFileName;
+    String refcoShortName;
 
     /**
      * The XML DOM of the RefCo spreadsheet
@@ -421,6 +422,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public void setRefcoFile(String fileName) {
         // Save the file name
         refcoFileName = fileName ;
+        refcoShortName = new File(fileName).getName();
         // Extract XML from spreadsheet file
         try {
             // Plain XML file
