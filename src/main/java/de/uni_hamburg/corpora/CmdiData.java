@@ -87,7 +87,8 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
     @Override
     public Collection<String> getFileExtensions() {
         Set<String> fileExts = new HashSet<>();
-        fileExts.add("xml");
+        // XML extension is handled separately in CorpusIO
+        // fileExts.add("xml");
         fileExts.add("cmdi");
         return fileExts;
     }
