@@ -66,7 +66,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * A pair of information with potentially associated notes, used e.g. in the Overview table
      */
-    class InformationNotes {
+    static class InformationNotes {
         public InformationNotes(String information, String notes) {
             this.information = information;
             this.notes = notes;
@@ -80,7 +80,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Representation of information in the CorpusComposition table consisting of e.g.
      * speaker information, location and date
      */
-    class Session {
+    static class Session {
         String sessionName ;
         String fileName ;
         String speakerName ;
@@ -97,7 +97,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Representation of information in the AnnotationTiers table consisting of e.g.
      * tier functions and languages
      */
-    class Tier {
+    static class Tier {
         String tierName ;
         String tierFunction ;
         String segmentationStrategy ;
@@ -109,7 +109,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Representation of information in the Transcriptions table consisting of e.g.
      * the list of valid graphemes used in transcription tiers
      */
-    class Transcription {
+    static class Transcription {
         String grapheme ;
         String linguisticValue ;
         String linguisticConvention ;
@@ -119,7 +119,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Representation of information in the Glosses table consisting of e.g.
      * list of expected glosses and the tiers they are valid in
      */
-    class Gloss {
+    static class Gloss {
         String gloss ;
         String meaning ;
         String comments ;
@@ -130,7 +130,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Representation of information in the Punctuation table consisting of e.g.
      * valid punctuation characters and the tiers they are valid in
      */
-    class Punctuation {
+    static class Punctuation {
         String character ;
         String meaning ;
         String comments ;
@@ -140,7 +140,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * Representation of the complete information defined in the RefCo spreadsheet
      */
-    class RefcoCriteria {
+    static class RefcoCriteria {
         // Tab: Overview
         // Corpus information
         String corpusTitle ;
