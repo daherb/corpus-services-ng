@@ -1,4 +1,4 @@
-package de.uni_hamburg.corpora.utilities;
+package de.uni_hamburg.corpora.utilities.quest;
 
 import java.io.BufferedReader;
 import java.io.File;

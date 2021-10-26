@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.utilities.DictionaryAutomaton;
+import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
