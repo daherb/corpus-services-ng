@@ -1,4 +1,4 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.fsm.FSMException;
@@ -99,7 +99,7 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
                 }
                 else {
                     // Error if it is neither element nor attribute
-                    report.addCritical(function, cd, "Unexpected object type: " + o.getClass().getName());
+                    report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
                     break;
                 }
             }

@@ -1,6 +1,7 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.validation.Checker;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
@@ -26,7 +27,7 @@ public class NullChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) {
         Report stats = new Report();
         // report success
-        stats.addCorrect(function,cd,"Success");
+        stats.addCorrect(getFunction(),cd,"Success");
         return stats;
     }
 

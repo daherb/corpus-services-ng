@@ -1,4 +1,4 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import com.opencsv.bean.*;
 import com.opencsv.exceptions.CsvConstraintViolationException;

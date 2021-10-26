@@ -1,6 +1,7 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -63,7 +64,7 @@ public class ExbLangCodes extends Checker implements CorpusFunction {
             // get the language from the attribute and check if it is in the list
             Attribute langAttrib = (Attribute) node;
             if (!langlist.contains(langAttrib.getValue())) {
-                stats.addWarning(function, "Unknown lang code " + langAttrib.getValue());
+                stats.addWarning(getFunction(), "Unknown lang code " + langAttrib.getValue());
             }
         }
 

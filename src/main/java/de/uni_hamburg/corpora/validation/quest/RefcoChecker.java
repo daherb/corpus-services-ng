@@ -1,4 +1,4 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.DictionaryAutomaton;
+import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.ini4j.InvalidFileFormatException;
@@ -89,7 +90,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String recordingLocation ;
         String recordingDate ;
         String genre ; // is this a controlled vocabulary?
-        String ageGroup ; // is this a controlled vocabulary?
+//        String ageGroup ; // is this a controlled vocabulary?
     }
 
 
@@ -140,7 +141,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * Representation of the complete information defined in the RefCo spreadsheet
      */
-    static class RefcoCriteria {
+    public static class RefcoCriteria {
         // Tab: Overview
         // Corpus information
         String corpusTitle ;
@@ -172,6 +173,81 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Tab: Punctuation
         ArrayList<Punctuation> punctuations = new ArrayList<>() ;
 
+        public String getCorpusTitle() {
+            return corpusTitle;
+        }
+
+        public String getSubjectLanguages() {
+            return subjectLanguages;
+        }
+
+        public String getArchive() {
+            return archive;
+        }
+
+        public String getPersistentId() {
+            return persistentId;
+        }
+
+        public String getAnnotationLicense() {
+            return annotationLicense;
+        }
+
+        public String getRecordingLicense() {
+            return recordingLicense;
+        }
+
+        public String getCreatorName() {
+            return creatorName;
+        }
+
+        public String getCreatorContact() {
+            return creatorContact;
+        }
+
+        public String getCreatorInstitution() {
+            return creatorInstitution;
+        }
+
+        public InformationNotes getRefcoVersion() {
+            return refcoVersion;
+        }
+
+        public InformationNotes getNumberSessions() {
+            return numberSessions;
+        }
+
+        public InformationNotes getNumberTranscribedWords() {
+            return numberTranscribedWords;
+        }
+
+        public InformationNotes getNumberAnnotatedWords() {
+            return numberAnnotatedWords;
+        }
+
+        public InformationNotes getTranslationLanguages() {
+            return translationLanguages;
+        }
+
+        public ArrayList<Session> getSessions() {
+            return sessions;
+        }
+
+        public ArrayList<Tier> getTiers() {
+            return tiers;
+        }
+
+        public ArrayList<Transcription> getTranscriptions() {
+            return transcriptions;
+        }
+
+        public ArrayList<Gloss> getGlosses() {
+            return glosses;
+        }
+
+        public ArrayList<Punctuation> getPunctuations() {
+            return punctuations;
+        }
     }
 
     /**
@@ -184,6 +260,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * The XML DOM of the RefCo spreadsheet
      */
     Document refcoDoc ;
+
+    public RefcoCriteria getCriteria() {
+        return criteria;
+    }
 
     /**
      * The criteria extracted from the Refco spreadsheet
@@ -310,21 +390,25 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Create a new corpus from only these files, keeping the original corpus name and base directory
         // This corpus is among others used to check the existence of referenced files
         refcoCorpus = new Corpus(c.getCorpusName(), c.getBaseDirectory(), usableFiles) ;
+        // Apply function for each of the supported file. Again merge the reports
+        for (CorpusData cdata : usableFiles) {
+            report.merge(function(cdata, fix));
+        }
         // Run the generic tests and merge their reports into the current report
+        logger.info("Merge generic");
         report.merge(refcoGenericCheck());
         // Initialize frequency list for glosses
         for (Gloss gloss : criteria.glosses) {
             morphemeFreq.put(gloss.gloss,0);
         }
-        // Apply function for each of the supported file. Again merge the reports
-        for (CorpusData cdata : usableFiles) {
-            report.merge(function(cdata, fix));
-        }
         // Check for morpheme glosses that never occurred in the complete corpus
         for (Map.Entry<String,Integer> e : morphemeFreq.entrySet()) {
             if (e.getValue() == 0)
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename","description"},
-                        new Object[]{function, refcoShortName, "Morpheme gloss never encountered in corpus: " + e.getKey()}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename","description",
+                                "howtoFix"},
+                        new Object[]{getFunction(), refcoShortName,
+                                "Corpus data: Morpheme gloss never encountered in corpus: " + e.getKey(),
+                                "Check for potential errors or remove gloss from documentation"}));
         }
         return report;
     }
@@ -359,7 +443,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Loading RefCo file");
             // Set the filename of the RefCo spreadsheet. This also triggers the parser for the spreadsheet
             // and initializes the criteria field
-            rc.setRefcoFile(args[0]);
+            Report report = rc.setRefcoFile(args[0]);
             // Safe the Refco criteria to file
             // Generate pretty-printed json using an object mapper
             // DEBUG write criteria to json file
@@ -385,10 +469,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 Corpus corpus = new Corpus(rc.criteria.corpusTitle, url, cio.read(url));
                 // Run the tests on the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Running tests");
-                Report report = rc.function(corpus,false);
+                report.merge(rc.function(corpus,false));
                 // When the tests are done write the report to file
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Writing report");
                 String html = ReportItem.generateDataTableHTML(report.getRawStatistics(),report.getSummaryLines());
+                report.dump("/tmp/report.json");
                 FileWriter fw = new FileWriter(args[2]) ;
                 fw.write(html) ;
                 fw.close() ;
@@ -405,6 +490,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     fw.write(mapper.writeValueAsString(rc.morphemeFreq));
                     fw.close();
                 }
+
                 catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -424,6 +510,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Save the file name
         refcoFileName = fileName ;
         refcoShortName = new File(fileName).getName();
+        // New report
+        Report report = new Report();
         // Extract XML from spreadsheet file
         try {
             // Plain XML file
@@ -453,8 +541,31 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         } catch (Exception e) {
             e.printStackTrace();
         }
+         if (!refcoFileName.matches("\\d{8}_\\w+_RefCo-Report.f?ods")) {
+            logger.info("Filename warning");
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(), refcoShortName, "General: Filename does not match schema " +
+                            "yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoFileName,
+                            "Rename documentation file"}));
+        }
+        else {
+            // Check date in file name is valid
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            try {
+                df.parse(refcoFileName.substring(8));
+            }
+            catch (ParseException e) {
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                        "exception", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,
+                                "General: Date given in filename not valid ", e,
+                                "Check that date is following format YYYYMMDD (ISO 8601)"}));
+            }
+        }
         // Extract the criteria from the XML
-        return readRefcoCriteria(refcoDoc);
+        report.merge(readRefcoCriteria(refcoDoc));
+        return report;
     }
 
     /**
@@ -475,7 +586,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 colCount = Integer.parseInt(node.getAttribute("number-columns-repeated", tableNamespace).getValue());
                 // Do not expand too many cells
                 if (colCount > 1000)
-                    colCount = 1 ;
+                    colCount = 0 ;
             }
             catch (NumberFormatException e) {
                 logger.log(Level.SEVERE,"Error parsing number",e);
@@ -483,6 +594,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (int i = 0; i < colCount; i++){
                 Element e = (Element) node.clone();
                 e.removeAttribute("number-columns-repeated", tableNamespace);
+                e.setAttribute("ignore","true");
                 replacement.add(e);
             }
             // Replace the original cell by the sequence of new ones
@@ -558,6 +670,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private Report readRefcoCriteria(Document refcoDoc) {
         Report report = new Report();
         try {
+
             // Read Overview tab
             Element overviewTable = (Element) XPath.newInstance("//table:table[@table:name='Overview']").selectSingleNode(refcoDoc);
             String cellXPath =
@@ -579,8 +692,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Read CorpusComposition tab
             Element sessionTable = (Element) XPath.newInstance("//table:table[@table:name='CorpusComposition']").selectSingleNode(refcoDoc);
             if (sessionTable == null)
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"CorpusComposition table not found"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus documentation: CorpusComposition table not found",
+                                "Add table CorpusComposition to corpus documentation"}));
             else {
                 boolean missingData = false;
                 for (Element row : listToParamList(Element.class, sessionTable.getChildren("table-row", tableNamespace))) {
@@ -598,21 +713,27 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         session.genre = safeGetText(columns.get(7).getChild("p", textNamespace));
                         // session.ageGroup = safeGetText(columns.get(8).getChild("p", textNamespace));
                         criteria.sessions.add(session);
-                    } else
+                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+                            "Sessions")) {
                         missingData = true;
+                    }
                 }
                 if (missingData) {
-                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename",
-                                    "description"},
-                            new Object[]{function, refcoShortName,"Wrong number of columns or missing data in " +
-                            "CorpusComposition table"}));
+                    report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
+                                    "description", "howtoFix"},
+                            new Object[]{getFunction(), refcoShortName,"Corpus documentation: Wrong number of columns or " +
+                                    "missing data in CorpusComposition table",
+                                    "Check number of columns and presence of data in all cells"}));
                 }
             }
             // Read AnnotationTiers tab
             Element tierTable = (Element) XPath.newInstance("//table:table[@table:name='AnnotationTiers']").selectSingleNode(refcoDoc);
             if (tierTable == null)
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                        new Object[]{function, refcoShortName,"AnnotationTiers table not found"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description"
+                                , "howtoFix"},
+                        new Object[]{getFunction(), refcoShortName,
+                                "Corpus documentation: AnnotationTiers table not found",
+                                "Add table AnnotationTiers to corpus documentation"}));
             else {
                 boolean missingData = false;
                 for (Element row : listToParamList(Element.class, tierTable.getChildren("table-row", tableNamespace))) {
@@ -626,20 +747,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         tier.languages = safeGetText(columns.get(3).getChild("p", textNamespace));
                         tier.morphemeDistinction = safeGetText(columns.get(4).getChild("p", textNamespace));
                         criteria.tiers.add(tier);
-                    } else
+                    }  else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+                            "Names")) {
+                        logger.info(String.valueOf(columns.size()));
                         missingData = true;
+                    }
                 }
                 if (missingData)
-                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename",
-                                    "description"},
-                            new Object[]{function, refcoShortName,"Wrong number of columns or missing data in " +
-                                    "AnnotationTiers table"}));
+                    report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
+                                    "description", "howtoFix"},
+                            new Object[]{getFunction(), refcoShortName,"Corpus documentation: Wrong number of columns or " +
+                                    "missing data in AnnotationTiers table", "Check number of columns and presence of" +
+                                    " data in all cells"}));
             }
             // Read Transcription tab
             Element transcriptionTable = (Element) XPath.newInstance("//table:table[@table:name='Transcription']").selectSingleNode(refcoDoc);
             if (transcriptionTable == null)
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Transcription table not found"}));
+                report.addCritical(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function","filename", "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus documentation: Transcription table not found",
+                                "Add table Transcription to corpus documentation"}));
             else {
                 boolean missingData = false;
                 for (Element row : listToParamList(Element.class, transcriptionTable.getChildren("table-row", tableNamespace))) {
@@ -651,21 +778,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         transcription.linguisticValue = safeGetText(columns.get(1).getChild("p", textNamespace));
                         transcription.linguisticConvention = safeGetText(columns.get(2).getChild("p", textNamespace));
                         criteria.transcriptions.add(transcription);
-                    } else
+                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+                            "Graphemes")) {
                         missingData = true;
+                    }
                 }
                 if (missingData)
-                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
-                                    "description"},
-                            new Object[]{function, refcoShortName,"Wrong number of columns or missing data in " +
-                                    "Transcription table"}));
+                    report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description", "howtoFix"},
+                            new Object[]{getFunction(), refcoShortName,"Corpus documentation: Wrong number of columns or " +
+                                    "missing data in Transcription table",
+                                    "Check number of columns and presence of data in all cells"}));
             }
             // Read Glosses tab
             Element glossesTable =
                     (Element) XPath.newInstance("//table:table[starts-with(@table:name,'Gloss')]").selectSingleNode(refcoDoc);
             if (glossesTable == null)
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Glosses table not found"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Glosses table not found",
+                                "Add table Glosses to corpus documentation"}));
             else {
                 boolean missingData = false;
                 for (Element row : listToParamList(Element.class, glossesTable.getChildren("table-row", tableNamespace))) {
@@ -678,20 +810,25 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         gloss.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         gloss.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
                         criteria.glosses.add(gloss);
-                    } else
+                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+                            "Glosses")) {
                         missingData = true;
+                    }
                 }
                 if (missingData)
-                    report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
-                                    "description"},
-                            new Object[]{function,refcoShortName,"Wrong number of columns or missing data in " +
-                                    "Glosses table"}));
+                    report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description", "howtoFix"},
+                            new Object[]{getFunction(),refcoShortName,"Corpus documentation: Wrong number of columns or " +
+                                    "missing data in Glosses table",
+                                    "Check number of columns and presence of data in all cells"}));
             }
             // Read Punctuation tab
             Element punctuationsTable = (Element) XPath.newInstance("//table:table[@table:name='Punctuations']").selectSingleNode(refcoDoc);
             if (punctuationsTable == null)
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Punctuation table not found"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Punctuation table not found",
+                                "Add table Punctuation to corpus documentation"}));
             else {
                 boolean missingData = false;
                 for (Element row : listToParamList(Element.class, punctuationsTable.getChildren("table-row", tableNamespace))) {
@@ -704,19 +841,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
                         criteria.punctuations.add(punctuation);
-                    } else
+                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+                            "Characters")) {
                         missingData = true;
+                    }
                 }
                  if (missingData)
-                     report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
-                                     "description"},
-                             new Object[]{function,refcoShortName,"Wrong number of columns or missing data in " +
-                             "Punctuation table"}));
+                     report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                     "description", "howtoFix"},
+                             new Object[]{getFunction(),refcoShortName,"Corpus documentation: Wrong number of columns or " +
+                                     "missing data in Punctuation table",
+                                     "Check number of columns and presence of data in all cells"}));
             }
         } catch (JDOMException | NullPointerException exception) {
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description",
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "exception"},
-                    new Object[]{function,refcoShortName,"Unexpected exception",exception}));
+                    new Object[]{getFunction(),refcoShortName,"Corpus documentation: Unexpected exception",exception}));
         }
         return report;
     }
@@ -727,29 +867,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the detailed report of all checks performed
      */
     private Report refcoGenericCheck() {
+        logger.info("Generic checks");
         Report report = new Report() ;
-        if (!refcoFileName.matches("\\d{8}_\\w+_RefCo-Report.f?ods"))
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Filename does not match schema " +
-                            "yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoFileName}));
-        else {
-            // Check date in file name is valid
-            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            try {
-                df.parse(refcoFileName.substring(8));
-            }
-            catch (ParseException e) {
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description",
-                        "exception"},
-                        new Object[]{function,refcoShortName,"Date given in filename not valid",e}));
-            }
-        }
         if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Corpus title is empty"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Corpus title is empty", "Add a corpus title"}));
         if (criteria.subjectLanguages == null || criteria.subjectLanguages.isEmpty())
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Subject languages is empty"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Subject languages is empty",
+                                "Add a subject language"}));
         else {
             // Each cell can contain several languages. Split the languages and check for each one if it is a
             // valid language code
@@ -758,40 +886,55 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     .split(valueSeparator)));
             for (String l : subjectLangList) {
                 if (!checkLanguage(l)) {
-                    report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Language is neither a Glottolog, a ISO-639-3 language code nor otherwise " +
-                                    "known: " + l}));
+                    report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Language is neither a Glottolog, a ISO-639-3 " +
+                                "language code nor otherwise known: " + l, "Use a valid language code"}));
                 }
             }
         }
         if (criteria.archive == null || criteria.archive.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Archive name is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Archive name is empty", "Add an archive name"}));
         if (criteria.persistentId == null || criteria.persistentId.isEmpty())
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Persistent identifier is empty"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Persistent identifier is empty",
+                            "Add a persistent identifier"}));
         else if (!checkUrl(criteria.persistentId)){
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Persistent identifer not a URL"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Persistent identifier not a URL",
+                            "Use a valid URL as the persistent identifier"}));
         }
         if (criteria.annotationLicense == null || criteria.annotationLicense.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Annotation license is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Annotation license is empty",
+                            "Add annotation license"}));
         if (criteria.recordingLicense == null || criteria.recordingLicense.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Recording license is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Recording license is empty",
+                            "Add recording license"}));
         if (criteria.creatorName == null || criteria.creatorName.isEmpty())
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Creator name is empty"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Creator name is empty","Add creator name"}));
         if (criteria.creatorContact == null || criteria.creatorContact.isEmpty())
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Creator contact is empty"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Creator contact is empty","Add Creator contact"}));
         if (criteria.creatorInstitution == null || criteria.creatorInstitution.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Creator institution is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Creator institution is empty",
+                            "Add creator institution"}));
         if (criteria.refcoVersion.information == null || criteria.refcoVersion.information.isEmpty())
-            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"RefCo version is empty"}));
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: RefCo version is empty","Add RefCo version"}));
         else {
             try {
                 // Check the number by trying to parse it
@@ -799,31 +942,39 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // TODO do something with this number
             }
             catch (NumberFormatException e) {
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Refco version is not a number"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Refco version is not a number",
+                                "Check the RefCo version number"}));
             }
         }
         if (criteria.numberSessions.information == null || criteria.numberSessions.information.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Number of sessions is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Number of sessions is empty"}));
         else {
             try {
                 // Check the number by trying to parse it
                 int i = Integer.parseInt(criteria.numberSessions.information);
                 // Compare it to the number of rows in the CorpusComposition table
                 if (i != criteria.sessions.size())
-                    report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                            new Object[]{function,refcoShortName,"Number of sessions does not match number of sessions " +
-                                    "in CorpusComposition"}));
+                    report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description", "howtoFix"},
+                            new Object[]{getFunction(),refcoShortName,"Corpus composition: Number of sessions does not " +
+                                    "match number of sessions, expected " + i + " and found: " + criteria.sessions.size(),
+                            "Compare the number given in Overview to the number of sessions in Corpus composition"}));
             }
             catch (NumberFormatException e) {
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Number of sessions is not a number"}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Number of sessions is not a number",
+                                "Check the number of sessions"}));
             }
         }
         if (criteria.numberTranscribedWords.information == null || criteria.numberTranscribedWords.information.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Number of transcribed words is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Number of transcribed words is empty",
+                            "Add word count"}));
         else {
             try {
                 // Check the number by trying to parse it
@@ -831,22 +982,29 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Compare it to our own count
                 int c = countTranscribedWords();
                 if (i==0 || c == 0 || 0.8 < (float)c/i || (float)c/i > 1.2)
-                    report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                            new Object[]{function,refcoShortName,"Word count is either 0 or more than 20 percent off. Counted " +
-                                    c + " expected " + i}));
+                    report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description", "howtoFix"},
+                            new Object[]{getFunction(),refcoShortName,"Overview: Word count is either 0 or more than 20 " +
+                                    "percent off. Counted " +
+                                    c + " expected " + i,"Correct the word count"}));
             }
             catch (JDOMException e) {
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Exception encountered when counting words"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Exception encountered when counting words"}));
             }
             catch (NumberFormatException e) {
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Number of transcribed words is not a number"}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Number of transcribed words is not a number",
+                                "Check the word count and make sure it is given as a proper number"
+                        }));
             }
         }
         if (criteria.numberAnnotatedWords.information == null || criteria.numberAnnotatedWords.information.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Number of annotated words is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Overview: Number of annotated words is empty",
+                                "Add the number of annotated words"}));
         else {
             try {
                 // Check the number by trying to parse it
@@ -855,13 +1013,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // The name of the annotation tier does not seem stable
             }
             catch (NumberFormatException e) {
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Number of annotated words is not a number"}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Number of annotated words is not a number"}));
             }
         }
         if (criteria.translationLanguages.information == null || criteria.translationLanguages.information.isEmpty())
-            report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{function,refcoShortName,"Translation languages is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                    new Object[]{getFunction(),refcoShortName,"Translation languages is empty"}));
         else {
             // Each cell can contain several languages. Split the languages and check for each one if it is a
             // valid language code
@@ -870,8 +1028,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     Arrays.asList(criteria.translationLanguages.information.split(valueSeparator)));
             for (String l : translationLangList) {
                 if (!checkLanguage(l)) {
-                    report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Language is neither a Glottolog, a ISO-639-3 language code " +
+                    report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Language is neither a Glottolog, a ISO-639-3 language code " +
                                 "nor otherwise known: " + l}));
                 }
             }
@@ -879,11 +1037,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Check each of the sessions
         for (Session s : criteria.sessions) {
             if (s.speakerName == null || s.speakerName.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Session name is empty"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Session name is empty"}));
             if (s.fileName == null || s.fileName.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Session file name is empty: " + s.sessionName}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Session file name is empty: " + s.sessionName}));
             else {
                 // Each cell can contain several files. Split the files and check for each one if it exists
                 ArrayList<String> filenames = new ArrayList<>(
@@ -898,9 +1056,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists();
                         }
                         catch (MalformedURLException | URISyntaxException e) {
-                            report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename",
+                            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                             "description","exception"},
-                                    new Object[]{function,refcoShortName,
+                                    new Object[]{getFunction(),refcoShortName,
                                             "Exception encountered checking file name: "+ f, e}));
                         }
                     // if it is a wav file, it can should be in the recordings folder
@@ -911,66 +1069,70 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists();
                         }
                         catch (MalformedURLException | URISyntaxException e) {
-                            report.addCritical(function,ReportItem.newParamMap(new String[]{"function", "filename",
+                            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
                                             "description","exception"},
-                                    new Object[]{function,refcoShortName,"Exception encountered checking file name: "+ f,e}));
+                                    new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
                         }
                     }
                     if (!fileExists)
-                        report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                                new Object[]{function,refcoShortName,"File does not exist: " + f}));
+                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                        "description", "howtoFix"},
+                                new Object[]{getFunction(),refcoShortName,"Corpus composition: File does not exist: " + f,
+                                        "Check the file reference in the documentation and remove the reference to " +
+                                                "the file if it is removed intentionally"}));
                 }
             }
             if (s.speakerName == null || s.speakerName.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Speaker name is empty"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker name is empty"}));
             if (s.speakerAge == null || s.speakerAge.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Speaker age is empty: " + s.speakerName}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker age is empty: " + s.speakerName}));
             else if (!s.speakerAge.matches("~?\\d{1,3}"))
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Speaker age does not match schema: " + s.speakerAge}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker age does not match schema: " + s.speakerAge}));
             if (s.speakerGender == null || s.speakerGender.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Speaker gender is empty: " + s.speakerName}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker gender is empty: " + s.speakerName}));
             if (s.recordingLocation == null || s.recordingLocation.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Recording location is empty: " + s.speakerName}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Recording location is empty: " + s.speakerName}));
             if (s.recordingLocation == null || s.recordingDate.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Recording date is empty: " + s.speakerName}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Recording date is empty: " + s.speakerName}));
             else {
                 // Check date by trying to parse it
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 try {
                     df.parse(s.recordingDate);
                 } catch (ParseException e) {
-                    report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Recording date in invalid format. Expected yyyy-mm-dd, got: "
+                    report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Recording date in invalid format. Expected yyyy-mm-dd, got: "
                                 + s.recordingDate}));
                 }
             }
             if (s.genre == null || s.genre.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Genre is empty"}));
-            if (s.ageGroup == null || s.ageGroup.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Age group is empty"}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Genre is empty"}));
+            // This is a custom column
+//            if (s.ageGroup == null || s.ageGroup.isEmpty())
+//                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+//                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
         }
         // Check all tiers
         for (Tier t : criteria.tiers) {
             if (t.tierName == null || t.tierName.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Tier name is empty"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Tier name is empty"}));
             if (t.tierFunction == null || t.tierFunction.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Tier function is empty: " + t.tierName}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Tier function is empty: " + t.tierName}));
             if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Segmentation strategy is empty: " + t.tierName}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Segmentation strategy is empty: " + t.tierName}));
             if (t.languages == null || t.languages.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Tier languages is empty: " + t.tierName}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Tier languages is empty: " + t.tierName}));
             else {
                 // Each cell can contain several languages. Split the languages and check for each one if it is a
                 // valid language code
@@ -978,45 +1140,51 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 ArrayList<String> tierLangList = new ArrayList<>(Arrays.asList(t.languages.split(valueSeparator)));
                 for (String l : tierLangList) {
                     if (!checkLanguage(l)) {
-                        report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                                new Object[]{function,refcoShortName,"Language is neither a Glottolog, a ISO-639-3 language code nor " +
+                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                                new Object[]{getFunction(),refcoShortName,"Language is neither a Glottolog, a ISO-639-3 language code nor " +
                                         "otherwise known: " + l}));
                     }
                 }
             }
             if (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Morpheme distinction is empty: " + t.tierName}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Morpheme distinction is empty: " + t.tierName}));
         }
         // Check all transcription graphemes
         for (Transcription t : criteria.transcriptions) {
             if (t.grapheme == null || t.grapheme.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Grapheme is empty"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Grapheme is empty"}));
             if (t.linguisticValue == null || t.linguisticValue.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Grapheme linguistic value is empty: " + t.grapheme}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Grapheme linguistic value is empty: " + t.grapheme}));
             if (t.linguisticConvention == null || t.linguisticConvention.isEmpty())
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,
                                 "Grapheme linguistic convention is empty: " + t.grapheme}));
         }
         // Check all glosses
         for (Gloss g : criteria.glosses) {
             if (g.gloss == null || g.gloss.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Gloss is empty"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Glosses: Gloss is empty"}));
             if (g.gloss.split(glossSeparator).length > 1)
-                report.addWarning(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,
-                                "Gloss contains separating character (" + glossSeparator + "): " + g.gloss}));
+                report.addWarning(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function","filename", "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,
+                                "Glosses: Gloss contains separating character (" + glossSeparator + "): " + g.gloss,
+                                "Document the gloss parts separately"}));
             if (g.meaning == null || g.meaning.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Gloss meaning is empty: " + g.gloss}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Glosses: Gloss meaning is empty: " + g.gloss,
+                                "Add a gloss definition to the corpus documentation"}));
             // We skip comments assuming it is optional
             if (g.tiers == null || g.tiers.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Gloss tiers is empty: " + g.gloss}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus data: Gloss tiers are empty: " + g.gloss,
+                                "Check that all gloss tiers are documented as such"}));
             // If the tiers is not "all", check if its valid tiers
             else if (!g.tiers.equalsIgnoreCase("all")) {
                 // Each cell can contain several tiers. Split the tiers and check for each one if it is a
@@ -1025,23 +1193,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 for (String t : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
                     if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunction.contains(t)).toArray().length == 0)
-                        report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                                new Object[]{function,refcoShortName,"Gloss tier not defined in AnnotationTiers: " + t}));
+                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                                new Object[]{getFunction(),refcoShortName,
+                                        "Annotation tiers: Gloss tier not defined: " + t}));
                 }
             }
         }
         // Check all punctuation
         for (Punctuation p : criteria.punctuations) {
             if (p.character == null || p.character.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Punctuation character is empty"}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Punctuation character is empty"}));
             if (p.meaning == null || p.meaning.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Punctuation meaning is empty: " + p.character}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Punctuation meaning is empty: " + p.character}));
             // We skip comments assuming it is optional
             if (p.tiers == null || p.tiers.isEmpty())
-                report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{function,refcoShortName,"Punctuation tiers is empty: " + p.character}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                        new Object[]{getFunction(),refcoShortName,"Punctuation tiers is empty: " + p.character}));
             // If the tiers is not "all", check if its valid tiers
             else if (!p.tiers.equalsIgnoreCase("all")) {
                  // Each cell can contain several tiers. Split the tiers and check for each one if it is a
@@ -1050,8 +1219,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 for (String t : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
                     if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunction.equals(t)).toArray().length == 0)
-                        report.addCritical(function,ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                                new Object[]{function,refcoShortName,"Punctuation tier not defined in " +
+                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                                new Object[]{getFunction(),refcoShortName,"Punctuation tier not defined in " +
                                         "AnnotationTiers: " + t}));
                 }
             }
@@ -1074,9 +1243,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.merge(checkTranscription(cd));
             }
             catch (JDOMException e) {
-                report.addCritical(function,
+                report.addCritical(getFunction(),
                         ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
-                        new Object[]{function, cd.getFilename(), "Exception encountered when reading Transcription " +
+                        new Object[]{getFunction(), cd.getFilename(), "Exception encountered when reading Transcription " +
                                 "tier", e}));
             }
             // Check the morphology
@@ -1084,15 +1253,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.merge(checkMorphology(cd));
             }
             catch (JDOMException e) {
-                report.addCritical(function,
+                report.addCritical(getFunction(),
                         ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
-                        new Object[]{function, cd.getFilename(),
+                        new Object[]{getFunction(), cd.getFilename(),
                                 "Exception encountered when reading Morphology tier", e}));
             }
         }
         else {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{function, refcoShortName, "Not supported corpus type: " + cd.getClass().getName()}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                    new Object[]{getFunction(), refcoShortName, "Not supported corpus type: " + cd.getClass().getName()}));
         }
         return report ;
     }
@@ -1163,20 +1332,28 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check if one of the relevant variables is empty and, if yes, skip the transcription test
         if (transcriptionTiers.isEmpty()) {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                            new Object[]{function, cd.getFilename(), "No transcription tiers found"}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                            new Object[]{getFunction(), cd.getFilename(), "Corpus data: No transcription tiers found",
+                                    "Check that all transcription tiers are documented"}));
             return report;
         }
         if (validTranscriptionCharacters.isEmpty()) {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{function, cd.getFilename(), "No valid transcription characters " +
-                            "(graphemes/punctuation) defined"}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(), "Transcription/Punctuation: No valid transcription " +
+                            "characters " +
+                            "(graphemes/punctuation) defined",
+                            "Define all graphemes and punctuation characters used in the corpus"}));
             return report;
         }
         if (transcriptionText.isEmpty()) {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{function, cd.getFilename(), "No transcribed text found in one of the expected tiers: " +
-                            String.join(", ", transcriptionTiers)}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: No transcribed text found in one of the " +
+                            "expected tiers: " +
+                            String.join(", ", transcriptionTiers),
+                            "Check that all documented transcription tiers exist in the corpus"}));
             return report;
         }
         report.merge(checkTranscriptionText(cd,transcriptionText,validTranscriptionCharacters,validGlosses));
@@ -1221,18 +1398,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check if one of the relevant variables is empty and, if yes, skip the transcription test
         if (morphologyTiers.isEmpty()) {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{function, cd.getFilename(), "No morphology tiers found"}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                    new Object[]{getFunction(), cd.getFilename(), "No morphology tiers found"}));
             return report;
         }
         if (validGlosses.isEmpty()) {
-            report.addWarning(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                            new Object[]{function, cd.getFilename(), "No valid glosses defined"}));
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                            new Object[]{getFunction(), cd.getFilename(), "No valid glosses defined"}));
             return report;
         }
         if (glossText.isEmpty()) {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{function, cd.getFilename(), "No annotated text found in one of the expected tiers: " +
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                    new Object[]{getFunction(), cd.getFilename(), "No annotated text found in one of the expected tiers: " +
                     String.join(", ", morphologyTiers)}));
             return report;
         }
@@ -1263,7 +1440,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     if (!glosses.contains(morpheme)) {
                         missing += 1;
                         // <></>his would lead to large amount of warnings
-                        // report.addWarning(function,cd,"Invalid token: " + token);
+                        // report.addWarning(getFunction(),cd,"Invalid token: " + token);
                     } else {
                         matched += 1;
                     }
@@ -1274,15 +1451,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         float percentValid = (float)matched/(matched+missing) ;
         if (percentValid < 0.2)
-            report.addWarning(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                            new Object[]{function, cd.getFilename(), "Less than 20 percent of tokens are valid glosses. " +
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                            new Object[]{getFunction(), cd.getFilename(), "Corpus data: Less than 20 percent of tokens are" +
+                                    " valid glosses. " +
                     "Valid: " + matched + " Invalid: " + missing + " Percentage vald: " +
-                    Math.round(percentValid*100)}));
+                    Math.round(percentValid*100), "Improve the gloss documentation to cover more tokens"}));
         else
-            report.addNote(function,cd,"More than 20 percent of tokens are valid glosses. " +
-                    "Valid: " + matched + " Invalid: " + missing + " Percentage valid: " +
-                    Math.round(percentValid*100)) ;
-        return report ;
+            report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                    new Object[] {getFunction(),cd.getFilename(), "Corpus data: More than 20 percent of tokens are " +
+                    "valid glosses. Valid: " + matched + " Invalid: " + missing + " Percentage valid: " +
+                    Math.round(percentValid*100),"Documentation can be improved but no fix necessary"}));
+        return report;
     }
 
     /**
@@ -1334,20 +1514,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     matched += token.length() ;
                 }
                 if (mismatch) {
-                    report.addWarning(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                            new Object[]{function, cd.getFilename(), "Transcription token contains invalid characters: " +
+                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                            new Object[]{getFunction(), cd.getFilename(), "Transcription token contains invalid characters: " +
                                     token}));
                 }
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
         if (percentValid < 0.5) {
-            report.addCritical(function, ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{function, cd.getFilename(), "Less than 50 percent of transcription characters are valid. " +
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                    new Object[]{getFunction(), cd.getFilename(), "Less than 50 percent of transcription characters are valid. " +
                     "Valid: " + matched + " Invalid: " + missing + " Percentage: " + Math.round(percentValid * 100)}));
         }
         else {
-            report.addNote(function, cd, "More than 50 percent of transcription characters are valid. " +
+            report.addNote(getFunction(), cd, "More than 50 percent of transcription characters are valid. " +
                     "Valid: " + matched + " Invalid: " + missing + " Percentage: " +
                     Math.round(percentValid * 100));
         }

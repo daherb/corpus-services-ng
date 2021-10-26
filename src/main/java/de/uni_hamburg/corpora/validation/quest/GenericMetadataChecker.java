@@ -1,4 +1,4 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 //import com.fasterxml.jackson.annotation.JsonAutoDetect;
 //import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -7,6 +7,7 @@ package de.uni_hamburg.corpora.validation;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;
@@ -96,12 +97,12 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 // Check if we have at least lower bound elements (if lower bounds are defined, i.e. not N/A)
                 if (c.bounds.lower != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
                         GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.lower) < 0)
-                    report.addCritical(function, cd, "Less than " + GenericMetadataCriterion
+                    report.addCritical(getFunction(), cd, "Less than " + GenericMetadataCriterion
                             .Bounds.toString(c.bounds.lower) + " occurrences of " + c.name + " found: " + values.size());
                 // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
                 if (c.bounds.upper != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
                         GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0)
-                    report.addCritical(function, cd, "More than " + GenericMetadataCriterion
+                    report.addCritical(getFunction(), cd, "More than " + GenericMetadataCriterion
                             .Bounds.toString(c.bounds.upper) + " occurrences of " + c.name + " found: " + values.size());
                 // Now check all the results
                 for (String value : values) {
@@ -132,7 +133,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                     // We only want to create a log item if there is no fallback to string
                                     if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
                                             .collect(Collectors.toSet()).contains("string"))
-                                        report.addCritical(function, cd, "Invalid URI syntax " + e);
+                                        report.addCritical(getFunction(), cd, "Invalid URI syntax " + e);
                                     // But we skip the rest of this iteration
                                     continue ;
                                 }
@@ -156,7 +157,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                     // We only want to create a log item if there is no fallback to string
                                     if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
                                             .collect(Collectors.toSet()).contains("string"))
-                                        report.addWarning(function, cd, "Malformed URL " + e);
+                                        report.addWarning(getFunction(), cd, "Malformed URL " + e);
                                     // But we skip the rest of this iteration
                                     continue ;
                                 }
@@ -168,9 +169,9 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         con.setRequestMethod("GET");
                                         int code = con.getResponseCode();
                                         if (code != 200)
-                                            report.addWarning(function, cd, "Error connecting to url " + url + ": " + code);
+                                            report.addWarning(getFunction(), cd, "Error connecting to url " + url + ": " + code);
                                     } catch (IOException | InterruptedException e) {
-                                        report.addWarning(function, cd, "Exception when connecting to url " + e);
+                                        report.addWarning(getFunction(), cd, "Exception when connecting to url " + e);
                                     }
 
                                 }*/
@@ -211,16 +212,16 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         c.type.stream().map((s) -> s.orElse("n/a")).collect(Collectors.toSet()));
                         // Create error message for problematic value. Only warn if it is unknown but create error if unspecified
                         if (value.equals("Unknown"))
-                            report.addWarning(function, cd, "Unexpected value " + value +
+                            report.addWarning(getFunction(), cd, "Unexpected value " + value +
                                     " for " + c.name + ". Expected type: " + attemptedTypes);
                         else
-                            report.addCritical(function, cd, "Unexpected value " + value +
+                            report.addCritical(getFunction(), cd, "Unexpected value " + value +
                                     " for " + c.name + ". Expected type: " + attemptedTypes);
                     }
                 }
             }
         } else
-            report.addCritical(function, cd, "No criteria file loaded");
+            report.addCritical(getFunction(), cd, "No criteria file loaded");
         return report;
     }
 
@@ -254,7 +255,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 }
             }
         } else
-            report.addCritical(function, "No criteria file loaded");
+            report.addCritical(getFunction(), "No criteria file loaded");
         return report;
     }
 

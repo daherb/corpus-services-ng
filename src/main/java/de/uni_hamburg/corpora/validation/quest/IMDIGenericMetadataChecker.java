@@ -1,4 +1,4 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import org.jdom.Attribute;
@@ -6,21 +6,20 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
-
 import java.util.*;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20211007
+ * @version 20210728
  *
- * Checker for the generic metadata within a Coma corpus
+ * Checker for the generic metadata within an IMDI corpus
  */
-public class ComaGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
+public class IMDIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public ComaGenericMetadataChecker() {
+    public IMDIGenericMetadataChecker() {
         this(false);
     }
 
@@ -28,7 +27,7 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker implement
      * Default constructor with optional fixing option
      * @param hasfixingoption the fixing option
      */
-    public ComaGenericMetadataChecker(boolean hasfixingoption) {
+    public IMDIGenericMetadataChecker(boolean hasfixingoption) {
         super(hasfixingoption);
     }
 
@@ -38,7 +37,7 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker implement
      */
     @Override
     public String getDescription() {
-        return "Checks the generic metadata in an Coma corpus";
+        return "Checks the generic metadata in an IMDI corpus";
     }
 
     /**
@@ -48,8 +47,8 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker implement
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        // Valid for Coma format
-        return Collections.singleton(ComaData.class);
+        // Valid for IMDI format
+        return Collections.singleton(IMDIData.class);
     }
 
     /**
@@ -65,8 +64,8 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker implement
         // http://www.edankert.com/defaultnamespaces.html
         try {
             XPath xpath = XPath.newInstance(locator);
-            xpath.addNamespace(Namespace.getNamespace("schema", "¡http://www.w3.org/2001/XMLSchema-instance"));
-            List<Object> nodes = xpath.selectNodes(((ComaData) cd).getJdom());
+            xpath.addNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
+            List<Object> nodes = xpath.selectNodes(((IMDIData) cd).getJdom());
             // Convert nodes to string values
             for (Object o : nodes) {
                 // Get the value of the node, either from an element or an attribute
@@ -82,7 +81,7 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker implement
                 }
                 else {
                     // Error if it is neither element nor attribute
-                    report.addCritical(function, cd, "Unexpected object type: " + o.getClass().getName());
+                    report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
                     break;
                 }
             }

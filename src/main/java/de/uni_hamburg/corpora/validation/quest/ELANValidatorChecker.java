@@ -1,6 +1,7 @@
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.validation.Checker;
 import mpi.eudico.server.corpora.util.ProcessReport;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -24,6 +25,13 @@ import java.util.regex.Pattern;
 
 import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 
+
+/**
+ * Using the built-in ELAN file checker in corpus services
+ *
+ * @author bba1792 Dr. Herbert Lange
+ * @version 20211019
+ */
 public class ELANValidatorChecker extends Checker implements CorpusFunction {
 
     // The local logger that can be used for debugging
@@ -56,16 +64,16 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
             int warningCount = Integer.parseInt(m.group(1));
             int errorCount = Integer.parseInt(m.group(2));
             if (warningCount == 0 && errorCount == 0)
-                report.addNote(function, "No errors and warnings");
+                report.addNote(getFunction(), "No errors and warnings");
             else if (warningCount > 0 && errorCount == 0)
-                report.addWarning(function, "Encountered " + warningCount + " warnings and no errors");
+                report.addWarning(getFunction(), "Encountered " + warningCount + " warnings and no errors");
             else if (warningCount == 0 && errorCount > 0)
-                report.addCritical(function, "Encountered no warnings and " + errorCount + " errors");
+                report.addCritical(getFunction(), "Encountered no warnings and " + errorCount + " errors");
             else
-                report.addCritical(function, "Encountered " + warningCount + " warnings and " + errorCount + " errors");
+                report.addCritical(getFunction(), "Encountered " + warningCount + " warnings and " + errorCount + " errors");
         }
         else
-            report.addCritical(function, "Error extracting warning and error counts");
+            report.addCritical(getFunction(), "Error extracting warning and error counts");
         return report;
     }
 
