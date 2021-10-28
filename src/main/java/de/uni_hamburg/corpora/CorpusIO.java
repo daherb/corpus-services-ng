@@ -132,7 +132,8 @@ public class CorpusIO {
                     try {
                         CorpusData cd = c.getDeclaredConstructor(URL.class).newInstance(url);
                         for (String e : cd.getFileExtensions()) {
-                            if (url.getPath().toLowerCase().endsWith(e)) {
+                            // Check extension including the dot
+                            if (url.getPath().toLowerCase().endsWith("." + e)) {
                                 return cd;
                             }
                         }
@@ -159,7 +160,8 @@ public class CorpusIO {
             try {
                 // Create an actual object from the class using reflections to access the constructor
                 CorpusData cd = (CorpusData) c.getDeclaredConstructor().newInstance();
-                allExts.addAll(cd.getFileExtensions());
+                // Add all extensions. Also include the dot
+                allExts.addAll(cd.getFileExtensions().stream().map((e) -> "." + e).collect(Collectors.toList()));
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 // Basically do nothing in case of an exception
                 allExts.addAll(Collections.EMPTY_SET);
