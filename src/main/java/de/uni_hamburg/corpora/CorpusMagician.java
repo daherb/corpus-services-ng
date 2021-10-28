@@ -22,6 +22,7 @@ import de.uni_hamburg.corpora.validation.ExbSegmentationChecker;
 import de.uni_hamburg.corpora.validation.LanguageToolChecker;
 import de.uni_hamburg.corpora.validation.ExbEventTokenizationChecker;
 import de.uni_hamburg.corpora.validation.ExbForbiddenSymbolsChecker;
+import de.uni_hamburg.corpora.validation.ExbReplaceGlosses;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -638,6 +639,47 @@ public class CorpusMagician {
                         }
                     }
                     break;
+                case "exbreplaceglosses":
+                    ExbReplaceGlosses erg = new ExbReplaceGlosses();
+                    cf2strcorpusfunctions.add(erg);
+                    if (cfProperties != null) {
+                        if (cfProperties.containsKey("original")) {
+                            erg.setOriginalValue(cfProperties.getProperty("original"));
+                            System.out.println("The value to replace is set to " + cfProperties.getProperty("original"));
+                        }
+                        if (cfProperties.containsKey("new")) {
+                            erg.setNewValue(cfProperties.getProperty("new"));
+                            System.out.println("It will be replaced to " + cfProperties.getProperty("new"));
+                        }
+                        if (cfProperties.containsKey("tier")) {
+                            erg.setReplacementTier(cfProperties.getProperty("tier"));
+                            System.out.println("The tier to perform the replacement is set to " + cfProperties.getProperty("tier"));
+                        }
+                        if (cfProperties.containsKey("replacement_prefix")) {
+                            erg.setReplacementPrefix(cfProperties.getProperty("replacement_prefix"));
+                            System.out.println("The replacement prefix is set to " + cfProperties.getProperty("replacement_prefix"));
+                        }
+                        if (cfProperties.containsKey("replacement_suffix")) {
+                            erg.setReplacementSuffix(cfProperties.getProperty("replacement_suffix"));
+                            System.out.println("The replacement suffix is set to " + cfProperties.getProperty("replacement_suffix"));
+                        }
+                        if (cfProperties.containsKey("context_value")) {
+                            erg.setContextValue(cfProperties.getProperty("context_value"));
+                            System.out.println("The context value is set to " + cfProperties.getProperty("context_value"));
+                        }
+                        if (cfProperties.containsKey("context_tier")) {
+                            erg.setContextTier(cfProperties.getProperty("context_tier"));
+                            System.out.println("Its tier is " + cfProperties.getProperty("context_tier"));
+                        }
+                        if (cfProperties.containsKey("context_prefix")) {
+                            erg.setContextPrefix(cfProperties.getProperty("context_prefix"));
+                            System.out.println("The context prefix is set to " + cfProperties.getProperty("context_prefix"));
+                        }
+                        if (cfProperties.containsKey("context_suffix")) {
+                            erg.setContextSuffix(cfProperties.getProperty("context_suffix"));
+                            System.out.println("The context suffix is set to " + cfProperties.getProperty("context_suffix"));
+                        }
+                    }
                 // Ignore these functions
                 case "gatlisthtml":
                     break;

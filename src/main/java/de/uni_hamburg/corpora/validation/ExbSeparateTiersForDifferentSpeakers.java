@@ -36,7 +36,7 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
         
     /**
      * One of the main functionalities of the feature; fixes tier alignment f
-     * or basic transctiption files with multiple speakers.
+     * or basic transcription files with multiple speakers.
      */
     @Override
     public Report function(CorpusData cd, Boolean fix) // check whether there's any illegal apostrophes '
@@ -236,6 +236,98 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
                     }
                 }
                 
+                //clean up the format table
+                XPath formatTableXpath = XPath.newInstance("//tierformat-table");
+                XPath tierList = XPath.newInstance("//tier");
+                List tl = tierList.selectNodes(doc);
+                ArrayList<String> tierNames = new ArrayList();
+                for (int tier = 0; tier < tl.size(); tier++) {
+                    Object to = tl.get(tier);
+                    if (to instanceof Element) {
+                        Element te = (Element) to;
+                        tierNames.add(te.getAttributeValue("id"));
+                    }
+                }
+                tierNames.add("COLUMN-LABEL");
+                tierNames.add("ROW-LABEL");
+                Object formatTableObj = formatTableXpath.selectSingleNode(doc);
+                Element formatTable = (Element) formatTableObj;
+                formatTable.removeChildren("tier-format");
+                for (String name : tierNames) {
+                    Element tierFormat = new Element("tier-format");
+                    tierFormat.setAttribute("tierref", name);
+                    
+                    Element rowHeight = new Element ("property");
+                    rowHeight.setAttribute("name", "row-height-calculation");
+                    rowHeight.setText("Generous");
+                    tierFormat.addContent(rowHeight);
+                    
+                    Element rowHeightFixed = new Element ("property");
+                    rowHeightFixed.setAttribute("name", "fixed-row-height");
+                    rowHeightFixed.setText("10");
+                    tierFormat.addContent(rowHeightFixed);
+                    
+                    Element fontFace = new Element ("property");
+                    fontFace.setAttribute("name", "font-face");
+                    if (name.startsWith("st-") || name.startsWith("ROW-LABEL")) {
+                        fontFace.setText("Bold");
+                    } else {
+                        fontFace.setText("Plain");
+                    }
+                    tierFormat.addContent(fontFace);
+                    
+                    Element fontColor = new Element ("property");
+                    fontColor.setAttribute("name", "font-color");
+                    if (name.startsWith("ts-")) {
+                        fontColor.setText("#R00G99B33");
+                    } else if (name.startsWith("fr-")) {
+                        fontColor.setText("#RccG00B00");
+                    } else if (name.startsWith("tx-")) {
+                        fontColor.setText("#R00G00B99");
+                    } else if (name.startsWith("ROW-LABEL") || name.startsWith("COLUMN-LABEL")) {
+                        fontColor.setText("blue");
+                    }else {
+                        fontColor.setText("Black");
+                    }
+                    tierFormat.addContent(fontColor);
+                    
+                    Element chunkBorderStyle = new Element ("property");
+                    chunkBorderStyle.setAttribute("name", "chunk-border-sryle");
+                    chunkBorderStyle.setText("solid");
+                    tierFormat.addContent(chunkBorderStyle);
+                    
+                    Element bgColor = new Element ("property");
+                    bgColor.setAttribute("name", "bg-color");
+                    bgColor.setText("white");
+                    tierFormat.addContent(bgColor);
+                    
+                    Element textAlignment = new Element ("property");
+                    textAlignment.setAttribute("name", "text-alignment");
+                    textAlignment.setText("Left");
+                    tierFormat.addContent(textAlignment);
+                    
+                    Element chunkBorderColor = new Element ("property");
+                    chunkBorderColor.setAttribute("name", "chunk-border-color");
+                    chunkBorderColor.setText("#R00G00B00");
+                    tierFormat.addContent(chunkBorderColor);
+                    
+                    Element chunkBorder = new Element ("property");
+                    chunkBorder.setAttribute("name", "chunk-border");
+                    tierFormat.addContent(chunkBorder);
+                    
+                    Element fontSize = new Element ("property");
+                    fontSize.setAttribute("name", "font-size");
+                    fontSize.setText("12");
+                    tierFormat.addContent(fontSize);
+                    
+                    Element fontName = new Element ("property");
+                    fontName.setAttribute("name", "font-name");
+                    fontName.setText("Charis SIL");
+                    tierFormat.addContent(fontName);
+                    
+                    formatTable.addContent(tierFormat);
+                }             
+                                
                 //write out the file
                 cd.updateUnformattedString(TypeConverter.JdomDocument2String(doc));
                 cio.write(cd, cd.getURL());
