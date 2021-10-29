@@ -298,6 +298,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * The global report, will be filled by the constructor and the function applied to the complete corpus
      */
+    Report report = new Report();
 
     /**
      * Default constructor with fixing option as parameter
