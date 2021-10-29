@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
 
 import static org.junit.Assert.*;
 

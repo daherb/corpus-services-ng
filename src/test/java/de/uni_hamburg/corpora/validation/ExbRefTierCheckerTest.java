@@ -11,6 +11,8 @@ import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -52,7 +54,7 @@ public class ExbRefTierCheckerTest {
         String corpusFolder = "K:/Dolgan/DolganCorpus";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ExbRefTierChecker instance = new ExbRefTierChecker();
+        ExbRefTierChecker instance = new ExbRefTierChecker(new Properties());
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
@@ -69,7 +71,7 @@ public class ExbRefTierCheckerTest {
         String corpusFolder = "K:/Dolgan/DolganCorpus";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ExbRefTierChecker instance = new ExbRefTierChecker();
+        ExbRefTierChecker instance = new ExbRefTierChecker(new Properties());
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
@@ -83,7 +85,7 @@ public class ExbRefTierCheckerTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ExbRefTierChecker instance = new ExbRefTierChecker();
+        ExbRefTierChecker instance = new ExbRefTierChecker(new Properties());
         //Collection<Class> expResult = null;
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here

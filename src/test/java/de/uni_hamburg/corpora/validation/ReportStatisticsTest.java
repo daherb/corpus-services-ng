@@ -11,6 +11,8 @@ import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -54,7 +56,7 @@ public class ReportStatisticsTest {
         String corpusFolder = "K:/Selkup/SelkupCorpus";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ReportStatistics instance = new ReportStatistics();
+        ReportStatistics instance = new ReportStatistics(new Properties());
         Collection<CorpusData> cdc;
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {
@@ -71,7 +73,7 @@ public class ReportStatisticsTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ReportStatistics instance = new ReportStatistics();
+        ReportStatistics instance = new ReportStatistics(new Properties());
         //Collection<Class> expResult = null;
         //Collection<Class> result = instance.getIsUsableFor();
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();

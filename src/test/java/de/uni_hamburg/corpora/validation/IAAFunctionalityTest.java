@@ -10,6 +10,8 @@ import de.uni_hamburg.corpora.CorpusData;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -52,7 +54,7 @@ public class IAAFunctionalityTest {
         String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        IAAFunctionality instance = new IAAFunctionality();
+        IAAFunctionality instance = new IAAFunctionality(new Properties());
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
             assertNotNull(instance.function(cd,false));
@@ -68,7 +70,7 @@ public class IAAFunctionalityTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        IAAFunctionality instance = new IAAFunctionality();
+        IAAFunctionality instance = new IAAFunctionality(new Properties());
         //Collection<Class> expResult = null;
         //Collection<Class> result = instance.getIsUsableFor();
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();

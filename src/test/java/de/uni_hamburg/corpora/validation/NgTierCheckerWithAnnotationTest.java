@@ -5,6 +5,8 @@ import de.uni_hamburg.corpora.CorpusData;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -46,7 +48,7 @@ public class NgTierCheckerWithAnnotationTest {
         String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation();
+        NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation(new Properties());
         //what happens when we check coma files
         for (CorpusData cd : corp.getMetadata()) {
             assertNotNull(instance.check(cd));
@@ -63,7 +65,7 @@ public class NgTierCheckerWithAnnotationTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation();
+        NgTierCheckerWithAnnotation instance = new NgTierCheckerWithAnnotation(new Properties());
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         assertNotNull(result);
     }

@@ -11,6 +11,8 @@ import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -53,7 +55,7 @@ public class ComaKmlForLocationsTest {
         String corpusFolder = "src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\DolganCorpus";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ComaKmlForLocations instance = new ComaKmlForLocations();
+        ComaKmlForLocations instance = new ComaKmlForLocations(new Properties());
         instance.setKMLFilePath("src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\INEL_LangsRecolored.kml");
         Collection<CorpusData> cdc;
         //what happens when we check coma files
@@ -73,7 +75,7 @@ public class ComaKmlForLocationsTest {
         String corpusFolder = "src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\DolganCorpus";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ComaKmlForLocations instance = new ComaKmlForLocations();
+        ComaKmlForLocations instance = new ComaKmlForLocations(new Properties());
         instance.setKMLFilePath("src\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\INEL_LangsRecolored.kml");
         Collection<CorpusData> cdc;
         //what happens when we fix coma files
@@ -89,7 +91,7 @@ public class ComaKmlForLocationsTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ComaKmlForLocations instance = new ComaKmlForLocations();
+        ComaKmlForLocations instance = new ComaKmlForLocations(new Properties());
         //Collection<Class> expResult = null;
         //Collection<Class> result = instance.getIsUsableFor();
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();

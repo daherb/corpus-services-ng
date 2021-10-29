@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.uni_hamburg.corpora.validation;
+package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -44,6 +43,8 @@ public class RefcoCheckerTest {
 
     private final String cellXPath =
             "//table:table-row[table:table-cell[text:p=\"%s\"]]/table:table-cell[position()=%d]/text:p";
+
+    private Properties props;
 
     public RefcoCheckerTest() {
     }
@@ -123,6 +124,7 @@ public class RefcoCheckerTest {
                     + "</ANNOTATION_DOCUMENT>" ;
             ODSDOM = new SAXBuilder().build(new StringReader(ODSXML));
             ELANDOM = new SAXBuilder().build(new StringReader(ELANXML)) ;
+            props = new Properties();
         } catch (JDOMException | IOException e) {
             fail("Unexpected exception: " + e + "\ncaused by " + e.getCause()) ;
         }
@@ -134,7 +136,7 @@ public class RefcoCheckerTest {
 
     @Test
     public void testConstructor() {
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         try {
             Field isoListField = rc.getClass().getDeclaredField("isoList");
             isoListField.setAccessible(true);
@@ -152,7 +154,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testGetDescription() {
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         String description = rc.getDescription();
         assertNotNull("Description is not null", description);
     }
@@ -173,7 +175,7 @@ public class RefcoCheckerTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        RefcoChecker instance = new RefcoChecker();
+        RefcoChecker instance = new RefcoChecker(props);
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here
         assertNotNull("The class list is not null", result);
@@ -191,7 +193,7 @@ public class RefcoCheckerTest {
 
     @Test
     public void testExpandTableCells() {
-        RefcoChecker rc = new RefcoChecker() ;
+        RefcoChecker rc = new RefcoChecker(props) ;
         try {
             Document expanded = (Document) ODSDOM.clone();
             // Get private method and make it accessible/public
@@ -215,7 +217,7 @@ public class RefcoCheckerTest {
     @Test
     public void testGetCellText() {
         try {
-            RefcoChecker rc = new RefcoChecker() ;
+            RefcoChecker rc = new RefcoChecker(props) ;
             // Get private method and make it accessible/public
             Method getCellText = rc.getClass()
                     .getDeclaredMethod("getCellText", String.class, Element.class, String.class);
@@ -255,7 +257,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testSafeGetText() {
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         try {
             // Get private method and make it accessible/public
             Method safeGetText = rc.getClass().getDeclaredMethod("safeGetText", Element.class);
@@ -279,7 +281,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testGetTextInRow() {
-        RefcoChecker rc = new RefcoChecker() ;
+        RefcoChecker rc = new RefcoChecker(props) ;
         try {
             // Get private method and make it accessible/public
             Method getTextInRow = rc.getClass().getDeclaredMethod("getTextInRow", String.class, Element.class,
@@ -306,7 +308,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testGetInformationNotes() {
-        RefcoChecker rc = new RefcoChecker() ;
+        RefcoChecker rc = new RefcoChecker(props) ;
         try {
             // Get private method and make it accessible/public
             Method getTextInRow = rc.getClass().getDeclaredMethod("getInformationNotes", String.class, Element.class, String.class) ;
@@ -373,7 +375,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testCheckTranscriptionText() {
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         try {
             Method checkTranscriptionText = rc.getClass().getDeclaredMethod("checkTranscriptionText", CorpusData.class, List.class, List.class, Set.class);
             checkTranscriptionText.setAccessible(true);
@@ -383,23 +385,20 @@ public class RefcoCheckerTest {
             urlField.set(corpusData,new URL("file://./test.eaf"));
             //corpusData.setJdom(ELANDOM);
             List<Text> transcriptionText = rc.getTextsInTierByType(ELANDOM, "Transcription");
-            List<String> allCharacters = Arrays.asList(new String[] {
-                    "avyn", "stor",
+            List<String> allCharacters = Arrays.asList("avyn", "stor",
                     "moq", "tog", "kal", "roh", "hre", "sob", "mao", "vis",
                     "Ga", "vu", "na", "Ok", "ar", "gy",
-                    "=", "?", ",", "-", "i", "n", ",", "d", "a", "q", "r", "o", "h"} );
+                    "=", "?", ",", "-", "i", "n", ",", "d", "a", "q", "r", "o", "h");
 
-            List<String> moreThan80percent = Arrays.asList(new String[] {
-                    "avyn", "stor",
+            List<String> moreThan80percent = Arrays.asList("avyn", "stor",
                     "moq", "tog", "kal", "roh", "hre", "sob", "mao", "vis",
                     "Ga", "vu", "na", // "Ok", "ar", "gy",
-                    "=", "?", "-", "i", "n", ",", "d", "a", "q", "r", "o", "h"} );
-            List<String> lessThan40percent = Arrays.asList(new String[] {
-                    "avyn", "stor",
+                    "=", "?", "-", "i", "n", ",", "d", "a", "q", "r", "o", "h");
+            List<String> lessThan40percent = Arrays.asList("avyn", "stor",
                     "moq", "tog", "kal", // "roh", "hre", "sob", "mao", "vis",
                     "Ga", "vu", "na", // "Ok", "ar", "gy",
-                    "=", "?", "-", "i", //"n", ",", "d", "a", "q", "r", "o", "h"
-            } );
+                    "=", "?", "-", "i" //"n", ",", "d", "a", "q", "r", "o", "h"
+            );
             Report r = (Report) checkTranscriptionText.invoke(rc,corpusData,transcriptionText,allCharacters,
                     new HashSet<String>());
             assertTrue("Sufficient characters are matched for all valid characters", ReportItem.generatePlainText(r.getRawStatistics(), true)
@@ -435,7 +434,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testCheckLanguage() {
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         // Neither ISO-639-3 nor Glottolog
         assertFalse("Invalid language foo", rc.checkLanguage("foobar"));
         // Potential ISO-639-3
@@ -462,9 +461,9 @@ public class RefcoCheckerTest {
     @Test
     public void testGetTextsInTierByType() {
         try {
-            RefcoChecker rc = new RefcoChecker();
+            RefcoChecker rc = new RefcoChecker(props);
             String transcriptionText = rc.getTextsInTierByType(ELANDOM,"Transcription").stream()
-                    .map(Text::getText).reduce(String::concat).get();
+                    .map(Text::getText).reduce(String::concat).orElse(null);
             assertNotEquals("The text is not null", null, transcriptionText);
             assertEquals("The expected text",
                     "Ga=vu moq?Ok, na=tog na=kal nstori avyn-i, visgy-n nahre ari,avyn dara=sob roh qarmao,",
@@ -483,9 +482,9 @@ public class RefcoCheckerTest {
     @Test
     public void testGetTextsInTierByID() {
         try {
-            RefcoChecker rc = new RefcoChecker();
+            RefcoChecker rc = new RefcoChecker(props);
             String transcriptionText = rc.getTextsInTierByID(ELANDOM,"Aven").stream()
-                    .map(Text::getText).reduce(String::concat).get();
+                    .map(Text::getText).reduce(String::concat).orElse(null);
             assertNotEquals("The text is not null", null, transcriptionText);
             assertEquals("The expected text",
                     "Ga=vu moq?Ok, na=tog na=kal nstori avyn-i, visgy-n nahre ari,avyn dara=sob roh qarmao,",
@@ -504,7 +503,7 @@ public class RefcoCheckerTest {
     @Test
     public void testCountWordsInTierByType() {
         try {
-            RefcoChecker rc = new RefcoChecker();
+            RefcoChecker rc = new RefcoChecker(props);
             // Preparation: Update the internal corpus of the Checker object to set it to the ELANDOM
             Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
             refcoCorpusField.setAccessible(true);
@@ -534,7 +533,7 @@ public class RefcoCheckerTest {
     @Test
     public void testCountTranscribedWords() {
         try {
-            RefcoChecker rc = new RefcoChecker();
+            RefcoChecker rc = new RefcoChecker(props);
             // Preparation: Update the internal corpus of the Checker object to set it to the ELANDOM
             Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
             refcoCorpusField.setAccessible(true);
@@ -561,7 +560,7 @@ public class RefcoCheckerTest {
      */
     @Test
     public void testListToParamList() {
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         String[] ss = { "x","1",".","a" } ;
         // Get first list from plain array
         ArrayList<String> l = new ArrayList<>(Arrays.asList(ss)) ;
@@ -569,7 +568,7 @@ public class RefcoCheckerTest {
         // Generate a Object list by means of streams
         List tmp = Arrays.stream(l.toArray()).collect(Collectors.toList());
         assertEquals("New list as long as the old one", l.size(),tmp.size());
-        List<String> ll = (List<String>) rc.listToParamList(String.class, tmp);
+        List<String> ll = rc.listToParamList(String.class, tmp);
         assertEquals("Final list as long as the original one", l.size(), ll.size());
         // Check the presence of all original elements in the new list
         for (String s : l) {
@@ -584,7 +583,7 @@ public class RefcoCheckerTest {
     public void testGetChars() {
         String s = "abc" ;
         String c = "." ;
-        RefcoChecker rc = new RefcoChecker();
+        RefcoChecker rc = new RefcoChecker(props);
         assertEquals("For a short string the char is the same as the string", new Character('.'),
                 rc.getChars(c).get(0));
         for (int i = 0; i < s.length(); i++) {
