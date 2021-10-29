@@ -466,6 +466,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 e.printStackTrace();
             }*/
             try {
+                Report report = new Report();
                 // Read the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Reading corpus");
                 CorpusIO cio = new CorpusIO();
