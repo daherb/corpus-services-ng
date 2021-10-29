@@ -61,8 +61,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             Namespace.getNamespace("text","urn:oasis:names:tc:opendocument:xmlns:text:1.0") ;
 
     // The hand-picked list of languages acceptable for translation tiers
-    private final String[] translationLanguages = {"mandarin chinese", "english", "french", "german", "indonesian",
-            "portuguese", "russian", "spanish"};
+    private final List<String> translationLanguages = Arrays.asList("mandarin chinese", "english", "french", "german"
+            , "indonesian", "portuguese", "russian", "spanish");
+
 
     /**
      * A pair of information with potentially associated notes, used e.g. in the Overview table
