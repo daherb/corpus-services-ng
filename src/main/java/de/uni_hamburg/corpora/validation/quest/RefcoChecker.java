@@ -434,8 +434,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param args the first argument being the refco spreadsheet and the second one being the corpus directory
      */
     public static void main(String[] args) {
-        // Create the checker
-        RefcoChecker rc = new RefcoChecker();
         // Check the number of arguments and report the usage if parameters are missing
         if (args.length < 3) {
             System.out.println("Usage: RefcoChecker RefcoFile CorpusDirectory ReportFile");
@@ -444,10 +442,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             System.out.println("\tReportFile      : the output file containing the report as a HTML page");
         }
         else {
-            Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Loading RefCo file");
-            // Set the filename of the RefCo spreadsheet. This also triggers the parser for the spreadsheet
+            Properties props = new Properties();
+            // Set the filename of the RefCo spreadsheet
+            props.setProperty("refco-file",args[0]);
+            Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO,
+                    "Loading RefCo file");
+            // Create the checker. This also triggers the parser for the spreadsheet
             // and initializes the criteria field
-            Report report = rc.setRefcoFile(args[0]);
+            RefcoChecker rc = new RefcoChecker(props);
             // Safe the Refco criteria to file
             // Generate pretty-printed json using an object mapper
             // DEBUG write criteria to json file
