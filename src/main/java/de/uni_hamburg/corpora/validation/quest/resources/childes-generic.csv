@@ -1,0 +1,34 @@
+Property,Cardinality,Value type,Locator
+Identifier,1 - unbounded,URI,CMDI_PID OR Identifier
+Title,1 - unbounded,string,Title
+Description,1 - unbounded,string,Description
+Version,0 - 1,string,N/A
+Keywords,0 - 1,string,N/A
+License,1 - 1,URI OR string,Rights
+Rightsholder,0 - 1,string,N/A
+Access Rights,0 - 1,string,CMDI_PID and Identifier
+PublicationYear,1 - 1,date,Date
+Publisher,1 - 1,string,Publisher
+Creator,1 - unbounded,string,Creator
+CreatorName,0 - 1,string,N/A
+FamilyName,1 - 1,string,N/A
+GivenName,0 - 1,string,N/A
+CreatorIdentifier,1 - unbounded,URI,N/A
+Affiliation,0 - unbounded,N/A,N/A
+CreatorEmail,0 - unbounded,N/A,N/A
+Organisation,N/A,N/A,N/A
+OrganisationName,1 - 1,string,N/A
+OrganisationIdentifier,0 - unbounded,N/A,N/A
+OrganisationURL,0 - 1,URI,N/A
+OrganisationEmail,0 - 1,URI OR string,N/A
+sameAs,0 - unbounded,URI,Relation
+isPartOf,0 - unbounded,URI,Relation
+hasPart,0 - unbounded,URI,Relation
+isBasedOn,0 - unbounded,URI,Relation
+ObjectLanguage,1 - unbounded,string,Subject.olac:language OR Language
+LinguisticDataType,0 - unbounded,string,Type.olac:linguistic-type
+Modality,0 - unbounded,string,IMDI_Modalities
+Language,N/A,N/A,Session/Content/Languages/Language
+LanguageName,1 - 1,string,Language
+LanguagePreferredLable,0 - 1,URI OR string,N/A
+LanguageIdentifier,1 - unbounded,URI,Subject.olac:language
