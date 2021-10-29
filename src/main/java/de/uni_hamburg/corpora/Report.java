@@ -528,7 +528,6 @@ public class Report {
         List<ReportItem> allStats = new ArrayList<ReportItem>();
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
-            Logger.getLogger(this.getClass().toString()).info("KEY: " + kv.getKey());
             allStats.addAll(kv.getValue());
         }
         return allStats;
