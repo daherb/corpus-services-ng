@@ -548,6 +548,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             // expand compressed cells
             expandTableCells(refcoDoc);
+            removeEmptyCells(refcoDoc);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -609,6 +610,29 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             // Replace the original cell by the sequence of new ones
             node.getParentElement().setContent(node.getParentElement().indexOf(node),replacement);
+        }
+
+    /**
+     * Removes both table cells without text content (i.e. without p-tag as children) and rows without table cells
+     * @param document the document to be modified
+     * @throws JDOMException in case the XPath expressions fail
+     */
+    private void removeEmptyCells(Document document) throws JDOMException {
+        boolean deleted = true;
+        while (deleted) {
+            deleted = false;
+            for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-cell[not(text:p) and " +
+                            "position() = last()]")
+                    .selectNodes(document))) {
+                node.detach();
+                deleted = true;
+            }
+            for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-row[not" +
+                            "(table:table-cell) and position() = last()]")
+                    .selectNodes(document))) {
+                node.detach();
+                deleted = true;
+            }
         }
     }
 
