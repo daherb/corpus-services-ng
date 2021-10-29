@@ -64,6 +64,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private final List<String> translationLanguages = Arrays.asList("mandarin chinese", "english", "french", "german"
             , "indonesian", "portuguese", "russian", "spanish");
 
+    // The hand-picked list of acceptable tier functions
+    private final List<String> tierFunctions = Arrays.asList("Transcription", "Reference", "Note", "Part-of-speech",
+            "Morpheme gloss", "Morpheme segmentation", "Free Translation");
 
     /**
      * A pair of information with potentially associated notes, used e.g. in the Overview table
