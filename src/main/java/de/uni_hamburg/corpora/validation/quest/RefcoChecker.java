@@ -1601,7 +1601,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     public boolean checkLanguage(String lang) {
         // Check if the language is in the list of known translation languages
-        if (Arrays.stream(translationLanguages).map((tl) -> tl.contains(lang.toLowerCase())).reduce(Boolean::logicalOr)
+        if (translationLanguages.stream().map((tl) -> tl.contains(lang.toLowerCase())).reduce(Boolean::logicalOr)
                 .orElse(false))
             return true ;
         // ISO code
