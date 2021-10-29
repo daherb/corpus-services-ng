@@ -754,7 +754,7 @@ public class CorpusMagician {
     //run one function on a corpus, that means all the files in the corpus
     //the funciton can run on
     public Report runCorpusFunction(Corpus c, CorpusFunction cf, boolean fix) {
-        return runCorpusFunction(c.getCorpusData(),cf,fix);
+        return cf.execute(c,fix);
     }
 
     //run one function on a corpus, that means all the files in the corpus
