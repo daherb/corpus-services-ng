@@ -447,7 +447,7 @@ public class ReportItem {
      * Includes quite ugly table of all the reports with a java script to hide
      * errors based on severity.
      */
-    public static String generateHTML(Collection<ReportItem>
+    public static String generateHTML(List<ReportItem>
             errors) {
         int criticals = 0;
         int warnings = 0;
@@ -500,6 +500,7 @@ public class ReportItem {
             "</tr></thead>\n");
         report.append("  <tbody>\n");
         for (ReportItem error : errors) {
+
             switch (error.getSeverity()) {
                 case CRITICAL:
                     report.append("<tr class='critical'><td style='border-left: red solid 3px'>");
@@ -542,7 +543,7 @@ public class ReportItem {
      * Includes quite ugly table of all the reports with a java script to hide
      * errors based on severity.
      */
-    public static String generateDataTableHTML(Collection<ReportItem> errors, String summarylines) {
+    public static String generateDataTableHTML(List<ReportItem> errors, String summarylines) {
         
         StringBuilder report = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         
