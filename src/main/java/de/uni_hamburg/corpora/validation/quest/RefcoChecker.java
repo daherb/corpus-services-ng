@@ -552,12 +552,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-         if (!refcoFileName.matches("\\d{8}_\\w+_RefCo-Report.f?ods")) {
-            logger.info("Filename warning");
+         if (!refcoShortName.matches("\\d{8}_\\w+_RefCo-Report.f?ods")) {
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(), refcoShortName, "General: Filename does not match schema " +
-                            "yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoFileName,
+                            "yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoShortName,
                             "Rename documentation file"}));
         }
         else {
