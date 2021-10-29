@@ -113,9 +113,9 @@ public class Report {
     }
 
     /**
-     * Puts a new repoty item into a bucket using the information given in a map
+     * Puts a new repot item into a bucket using the information given in a map
      * @param statId the bucket the item has to be put into
-     * @param params the map for all relevant parameters
+     * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
      */
     public void addCritical(String statId, Map<String,Object> params) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
@@ -227,6 +227,16 @@ public class Report {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
         stat.add(new ReportItem(ReportItem.Severity.MISSING,
                 cd.getURL().toString(), description, statId));
+    }
+
+     /**
+     * Puts a new repot item into a bucket using the information given in a map
+     * @param statId the bucket the item has to be put into
+     * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
+     */
+    public void addCorrect(String statId, Map<String,Object> params) {
+        Collection<ReportItem> stat = getOrCreateStatistic(statId);
+        stat.add(new ReportItem(Severity.CORRECT, params));
     }
 
     /**
