@@ -1007,8 +1007,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         if (criteria.numberSessions.information == null || criteria.numberSessions.information.isEmpty())
-            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                    new Object[]{getFunction(),refcoShortName,"Overview: Number of sessions is empty"}));
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                            "howtoFix"},
+                    new Object[]{getFunction(),refcoShortName,"Overview: Number of sessions is empty",
+                            "Add number of sessions"}));
         else {
             try {
                 // Check the number by trying to parse it
@@ -1032,7 +1034,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Number of transcribed words is empty",
-                            "Add word count"}));
+                            "Add number of transcribed words count"}));
         else {
             try {
                 // Check the number by trying to parse it
@@ -1042,13 +1044,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 if (i==0 || c == 0 || 0.8 < (float)c/i || (float)c/i > 1.2)
                     report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
-                            new Object[]{getFunction(),refcoShortName,"Overview: Word count is either 0 or more than 20 " +
-                                    "percent off. Counted " +
-                                    c + " expected " + i,"Correct the word count"}));
+                            new Object[]{getFunction(),refcoShortName,"Overview: Transcription word count is either 0" +
+                                    " or more than 20 percent off. Counted " + c + " expected " + i,"Correct the word" +
+                                    " count"}));
             }
             catch (JDOMException e) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Overview: Exception encountered when counting words"}));
+                        new Object[]{getFunction(),refcoShortName,"Overview: Exception encountered when counting " +
+                                "transcribed words"}));
             }
             catch (NumberFormatException e) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
@@ -1181,16 +1184,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (Tier t : criteria.tiers) {
             if (t.tierName == null || t.tierName.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Tier name is empty"}));
+                        new Object[]{getFunction(),refcoShortName,"Annotation Tiers: tier name is empty"}));
             if (t.tierFunction == null || t.tierFunction.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Tier function is empty: " + t.tierName}));
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                "description","howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,
+                                "Annotation Tiers: tier function is empty: " + t.tierName,"Add tier function"}));
             if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Segmentation strategy is empty: " + t.tierName}));
+                        new Object[]{getFunction(),refcoShortName,
+                                "Annotation Tiers: segmentation strategy is empty: " + t.tierName}));
             if (t.languages == null || t.languages.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Tier languages is empty: " + t.tierName}));
+                        new Object[]{getFunction(),refcoShortName,
+                                "Annotation Tiers: tier languages is empty: " + t.tierName}));
             else {
                 // Each cell can contain several languages. Split the languages and check for each one if it is a
                 // valid language code
@@ -1199,14 +1206,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 for (String l : tierLangList) {
                     if (!checkLanguage(l)) {
                         report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                                new Object[]{getFunction(),refcoShortName,"Language is neither a Glottolog, a ISO-639-3 language code nor " +
-                                        "otherwise known: " + l}));
+                                new Object[]{getFunction(),refcoShortName,"Annotation Tiers: language is neither a " +
+                                        "Glottolog, a ISO-639-3 language code nor otherwise known: " + l}));
                     }
                 }
             }
             if (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty())
-                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Morpheme distinction is empty: " + t.tierName}));
+                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Morpheme distinction is empty: " + t.tierName,
+                                "Add morpheme distinction"}));
         }
         // Check all transcription graphemes
         for (Transcription t : criteria.transcriptions) {
@@ -1261,14 +1270,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (Punctuation p : criteria.punctuations) {
             if (p.character == null || p.character.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Punctuation character is empty"}));
+                        new Object[]{getFunction(),refcoShortName,"Punctuation: grapheme is empty"}));
             if (p.meaning == null || p.meaning.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Punctuation meaning is empty: " + p.character}));
+                        new Object[]{getFunction(),refcoShortName,
+                                "Punctuation: meaning is empty for grapheme: " + p.character}));
             // We skip comments assuming it is optional
             if (p.tiers == null || p.tiers.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Punctuation tiers is empty: " + p.character}));
+                        new Object[]{getFunction(),refcoShortName,
+                                "Punctuation: tiers is empty for grapheme: " + p.character}));
             // If the tiers is not "all", check if its valid tiers
             else if (!p.tiers.equalsIgnoreCase("all")) {
                  // Each cell can contain several tiers. Split the tiers and check for each one if it is a
@@ -1456,8 +1467,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check if one of the relevant variables is empty and, if yes, skip the transcription test
         if (morphologyTiers.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{getFunction(), cd.getFilename(), "No morphology tiers found"}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"
+                    ,"howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(), "Corpus composition: No morphology tiers found",
+                            "Add documentation for tiers of type Morphology gloss"}));
             return report;
         }
         if (validGlosses.isEmpty()) {
@@ -1466,9 +1479,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return report;
         }
         if (glossText.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                    "howtoFix"},
                     new Object[]{getFunction(), cd.getFilename(), "No annotated text found in one of the expected tiers: " +
-                    String.join(", ", morphologyTiers)}));
+                    String.join(", ", morphologyTiers),
+                            "Check the tier documentation to make sure that your morphology tiers are covered"}));
             return report;
         }
         report.merge(checkMorphologyGloss(cd,glossText,validGlosses));
@@ -1513,7 +1528,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             "howtoFix"},
                             new Object[]{getFunction(), cd.getFilename(), "Corpus data: Less than 20 percent of tokens are" +
                                     " valid glosses. " +
-                    "Valid: " + matched + " Invalid: " + missing + " Percentage vald: " +
+                    "Valid: " + matched + " Invalid: " + missing + " Percentage valid: " +
                     Math.round(percentValid*100), "Improve the gloss documentation to cover more tokens"}));
         else
             report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
