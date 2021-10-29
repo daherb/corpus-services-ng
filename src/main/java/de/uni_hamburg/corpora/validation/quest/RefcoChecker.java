@@ -1738,8 +1738,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @throws JDOMException on XPath problems
      */
     private int countAnnotatedWords() throws JDOMException {
-        // TODO this seems to be problematic
-        return countWordsInTierByType("Morphologie") ;
+        return countWordsInTierByType("Morpheme gloss") ;
     }
 
     /**
