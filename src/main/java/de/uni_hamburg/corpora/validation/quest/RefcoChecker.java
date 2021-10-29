@@ -597,7 +597,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 colCount = Integer.parseInt(node.getAttribute("number-columns-repeated", tableNamespace).getValue());
                 // Do not expand too many cells
                 if (colCount > 1000)
-                    colCount = 0 ;
+                    colCount = 1 ;
             }
             catch (NumberFormatException e) {
                 logger.log(Level.SEVERE,"Error parsing number",e);
@@ -611,6 +611,31 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Replace the original cell by the sequence of new ones
             node.getParentElement().setContent(node.getParentElement().indexOf(node),replacement);
         }
+        // Expand rows as well
+        for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-row[@table:number-rows-repeated]")
+                .selectNodes(document))) {
+            // Generate as many blank cells as neede
+            ArrayList<Element> replacement = new ArrayList<>();
+            int rowCount = 0;
+            try {
+                rowCount = Integer.parseInt(node.getAttribute("number-rows-repeated", tableNamespace).getValue());
+                // Do not expand too many cells
+                if (rowCount > 1000)
+                    rowCount = 1 ;
+            }
+            catch (NumberFormatException e) {
+                logger.log(Level.SEVERE,"Error parsing number",e);
+            }
+            for (int i = 0; i < rowCount; i++){
+                Element e = (Element) node.clone();
+                e.removeAttribute("number-rows-repeated", tableNamespace);
+                e.setAttribute("ignore","true");
+                replacement.add(e);
+            }
+            // Replace the original cell by the sequence of new ones
+            node.getParentElement().setContent(node.getParentElement().indexOf(node),replacement);
+        }
+    }
 
     /**
      * Removes both table cells without text content (i.e. without p-tag as children) and rows without table cells
