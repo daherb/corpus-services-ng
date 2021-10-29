@@ -575,6 +575,7 @@ public class ReportItem {
                 "body{padding:15px;}"+
                 "#timestamp{margin-bottom:30px;}"+
                 ".critical{ background:#ffdddd; } "+
+                ".correct{ background:#ddffdd; } "+
                 ".other{ background:#ffd39e; } "+
                 ".warning{ background:#fafcc2; } "+
                 ".char_Cyrillic{ color:#b51d0d; } "+
@@ -590,7 +591,7 @@ public class ReportItem {
         report.append(timestamp + "</div>\n");
         
         report.append("<table>\n  <thead><tr>" +
-
+            "<th>ID</th>" +
             "<th>Type</th>"+
             "<th>Function</th>"+
             "<th>Filename:line.column</th>"+
@@ -602,19 +603,22 @@ public class ReportItem {
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
-                    report.append("<tr class='critical'><td style='border-left: red solid 3px'>Critical</td><td>");
+                    report.append("<tr class='critical'><td>" + errors.indexOf(error) + "</td><td style='border-left: red solid 3px'>Critical</td><td>");
+                    break;
+                case CORRECT:
+                    report.append("<tr class='correct'><td>" + errors.indexOf(error) + "</td><td style='border-left: green solid 3px'>Correct</td><td>");
                     break;
                 case WARNING:
-                    report.append("<tr class='warning'><td style='border-left: yellow solid 3px'>Warning</td><td>");
+                    report.append("<tr class='warning'><td>" + errors.indexOf(error) + "</td><td style='border-left: yellow solid 3px'>Warning</td><td>");
                     break;
                 case NOTE:
-                    report.append("<tr class='note'><td style='border-left: green solid 3px'>Note</td><td>");
+                    report.append("<tr class='note'><td>" + errors.indexOf(error) + "</td><td style='border-left: green solid 3px'>Note</td><td>");
                     break;
                 case UNKNOWN:
-                    report.append("<tr class='unknown'><td style='border-left: orange solid 3px'>Unknown</td><td>");
+                    report.append("<tr class='unknown'><td>" + errors.indexOf(error) + "</td><td style='border-left: orange solid 3px'>Unknown</td><td>");
                     break;
                 default:
-                    report.append("<tr class='other'><td style='border-left: black solid 3px'>Other</td><td>");
+                    report.append("<tr class='other'><td>" + errors.indexOf(error) + "</td><td style='border-left: black solid 3px'>Other</td><td>");
                     break;
             }
             report.append(StringEscapeUtils.escapeHtml4(error.getFunction()) + "</td><td>");
