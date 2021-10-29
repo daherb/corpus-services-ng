@@ -6,6 +6,7 @@
 package de.uni_hamburg.corpora;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  *
@@ -22,6 +23,8 @@ public Report execute(CorpusData cd, boolean fix);
 public Report execute(Corpus c, boolean fix);
 
 public Collection<Class<? extends CorpusData>> getIsUsableFor() ;
+
+public Map<String,String> getParameters();
 
 public String getDescription();
 
