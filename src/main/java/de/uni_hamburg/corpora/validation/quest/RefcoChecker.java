@@ -564,13 +564,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Check date in file name is valid
             SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             try {
-                df.parse(refcoFileName.substring(8));
+                df.parse(refcoShortName.substring(0,8));
             }
             catch (ParseException e) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                         "exception", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "General: Date given in filename not valid ", e,
+                                "General: Date given in filename not valid: "+ refcoShortName.substring(0,8), e,
                                 "Check that date is following format YYYYMMDD (ISO 8601)"}));
             }
         }
