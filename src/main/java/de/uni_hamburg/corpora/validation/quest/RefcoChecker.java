@@ -477,7 +477,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // When the tests are done write the report to file
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Writing report");
                 String html = ReportItem.generateDataTableHTML(report.getRawStatistics(),report.getSummaryLines());
-                report.dump("/tmp/report.json");
                 FileWriter fw = new FileWriter(args[2]) ;
                 fw.write(html) ;
                 fw.close() ;
