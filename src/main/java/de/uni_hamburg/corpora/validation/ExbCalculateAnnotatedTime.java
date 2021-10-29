@@ -3,10 +3,7 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,9 +26,9 @@ public class ExbCalculateAnnotatedTime extends Checker implements CorpusFunction
     //HashMap<String, HashMap<String, String>> eventMap; // hash map for holding events of annotation tiers
     HashMap<String, HashMap<String, String>> tierMap; // all the annotation tiers of all the exb files of the corpus
 
-    public ExbCalculateAnnotatedTime() {
+    public ExbCalculateAnnotatedTime(Properties properties) {
         //has no fixing option
-        super(false);
+        super(false, properties);
     }
 
     @Override

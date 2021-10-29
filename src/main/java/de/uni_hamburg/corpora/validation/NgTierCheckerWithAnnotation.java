@@ -31,8 +31,9 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
     ArrayList<String> annotations = new ArrayList<>(); // list for holding annotations of annotation spec file
     int counter = 0; // counter for controlling whether we are on coma or annotation spec file
 
-    public NgTierCheckerWithAnnotation() {
-        super(false);
+    public NgTierCheckerWithAnnotation(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     /**

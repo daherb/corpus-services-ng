@@ -19,16 +19,8 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public TEIGenericMetadataChecker() {
-        this(false);
-    }
-
-    /**
-     * Default constructor with optional fixing option
-     * @param hasfixingoption the fixing option
-     */
-    public TEIGenericMetadataChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
+    public TEIGenericMetadataChecker(Properties properties) {
+        super(properties);
     }
 
     /**

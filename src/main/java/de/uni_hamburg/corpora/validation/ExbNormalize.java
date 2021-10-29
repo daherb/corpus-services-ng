@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -34,8 +35,8 @@ public class ExbNormalize extends Checker implements CorpusFunction {
     EXMARaLDACorpusData btd = null;
     Boolean fixWhiteSpaces = false;
 
-    public ExbNormalize() {
-        super(true);
+    public ExbNormalize(Properties properties) {
+        super(true, properties);
     }
 
     @Override

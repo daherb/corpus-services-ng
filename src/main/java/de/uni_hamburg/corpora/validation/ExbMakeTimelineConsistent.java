@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -35,9 +36,9 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
     EXMARaLDACorpusData btd = null;
     Boolean interpolateTimeline = false;
 
-    public ExbMakeTimelineConsistent() {
+    public ExbMakeTimelineConsistent(Properties properties) {
         //fixing option available
-        super(true);
+        super(true, properties);
     }
 
     @Override

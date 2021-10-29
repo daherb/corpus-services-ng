@@ -47,12 +47,9 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
     private String comadirname;
     final String NSLC = "nslc";
 
-    public NgexmaraldaCorpusChecker() {
-
-        /**
-         * No fix is applicable for this feature.
-         */
-        super(false);
+    public NgexmaraldaCorpusChecker(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     public Report check() {
@@ -497,7 +494,7 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
     public static void main(String[] args) {
         NgexmaraldaCorpusChecker checker;
         try {
-            checker = new NgexmaraldaCorpusChecker();
+            checker = new NgexmaraldaCorpusChecker(new Properties());
             checker.exceptionalCheck();
             System.exit(0);
         } catch (JDOMException ex) {

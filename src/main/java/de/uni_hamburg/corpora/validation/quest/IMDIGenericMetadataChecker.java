@@ -19,18 +19,9 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public IMDIGenericMetadataChecker() {
-        this(false);
+    public IMDIGenericMetadataChecker(Properties properties) {
+        super(properties);
     }
-
-    /**
-     * Default constructor with optional fixing option
-     * @param hasfixingoption the fixing option
-     */
-    public IMDIGenericMetadataChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
-    }
-
     /**
      * Function providing a description of a checker
      * @return the checker description

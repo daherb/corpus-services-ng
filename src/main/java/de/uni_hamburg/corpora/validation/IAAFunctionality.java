@@ -7,11 +7,7 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,9 +40,9 @@ public class IAAFunctionality extends Checker implements CorpusFunction {
     private int noOfAnnotations = 0;     // total no of annotations
     private int noOfDifferentAnnotations = 0; // total number of different annotations between different two different versions 
 
-    public IAAFunctionality() {
-        //no fixing available
-        super(false);
+    public IAAFunctionality(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     /**

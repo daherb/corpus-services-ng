@@ -37,9 +37,9 @@ public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
     boolean generateDoc = true; // flag for whether the file created or not
     int iterateExbs = 0;
 
-    public GenerateAnnotationPanel() {
-        //fixing not available
-        super(false);
+    public GenerateAnnotationPanel(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     /**

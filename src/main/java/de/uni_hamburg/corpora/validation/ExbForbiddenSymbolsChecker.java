@@ -9,16 +9,13 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
-import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.w3c.dom.Document;
@@ -45,9 +42,9 @@ public class ExbForbiddenSymbolsChecker extends Checker implements CorpusFunctio
     static Pattern forbSymbEx = Pattern.compile("[$§&]"); //the list of symbols to check for
     boolean forbidden = false;
     
-    public ExbForbiddenSymbolsChecker(){
+    public ExbForbiddenSymbolsChecker(Properties properties){
         // fixing option not available
-        super(false);
+        super(false, properties);
     }
     
     @Override

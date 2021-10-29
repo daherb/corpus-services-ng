@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  *
@@ -31,8 +32,8 @@ import java.util.Collections;
 
 public class ExbLangCodes extends Checker implements CorpusFunction {
     private final ArrayList<String> langlist = new ArrayList<>();
-    public ExbLangCodes() {
-        super( false) ;
+    public ExbLangCodes(Properties properties) {
+        super( false, properties) ;
         try {
             InputStream in = getClass().getResourceAsStream("/iso-639-3.tab");
             BufferedReader bReader = new BufferedReader(new InputStreamReader(in));

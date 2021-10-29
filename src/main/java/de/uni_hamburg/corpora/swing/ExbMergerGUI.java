@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -264,7 +265,7 @@ public class ExbMergerGUI extends javax.swing.JFrame {
     private void compareButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compareButtonActionPerformed
         String firstFilePath = (String) firstVersion.getSelectedItem();
         String secondFilePath = (String) secondVersion.getSelectedItem();
-        instance = new ExbMerger();
+        instance = new ExbMerger(new Properties());
         URL firstURL = null;
         URL secondURL = null;
         try {

@@ -9,10 +9,7 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -40,8 +37,8 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
     Document doc = null;
     XPath context;
 
-    public CorpusDataRegexReplacer() {
-        super(true);
+    public CorpusDataRegexReplacer(Properties properties) {
+        super(true, properties);
     }
 
     /**

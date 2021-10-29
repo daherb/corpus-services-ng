@@ -4,12 +4,10 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.SegmentedEXMARaLDATranscription;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import static de.uni_hamburg.corpora.utilities.TypeConverter.JdomDocument2W3cDocument;
-import java.util.ArrayList;
+
+import java.util.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -30,9 +28,9 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
 
     String comaLoc = "";
 
-    public ComaSegmentCountChecker() {
+    public ComaSegmentCountChecker(Properties properties) {
         //fixing is available
-        super(true);
+        super(true,properties);
     }
 
     /**

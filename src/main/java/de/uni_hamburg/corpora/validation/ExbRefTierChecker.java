@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -29,8 +30,8 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
 
     String tierLoc = "";
 
-    public ExbRefTierChecker() {
-        super(true);
+    public ExbRefTierChecker(Properties properties) {
+        super(true, properties);
     }
 
     /**

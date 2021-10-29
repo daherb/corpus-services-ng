@@ -29,9 +29,9 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
     Document doc;
     //XMLOutputter xmOut = new XMLOutputter(); //for testing
 
-    public ExbSeparateTiersForDifferentSpeakers() {
-        //fixing option available
-        super(true);
+    public ExbSeparateTiersForDifferentSpeakers(Properties properties) {
+        //fixing is possible
+        super(true, properties);
     }
         
     /**

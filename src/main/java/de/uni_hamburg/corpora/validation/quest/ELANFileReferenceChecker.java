@@ -23,14 +23,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 
 public class ELANFileReferenceChecker extends Checker implements CorpusFunction {
 
-    public ELANFileReferenceChecker() {
-        super(false);
-    }
-    public ELANFileReferenceChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
+    public ELANFileReferenceChecker(Properties properties) {
+        super(false, properties);
     }
 
     @Override

@@ -10,6 +10,7 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.regex.Pattern;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -35,9 +36,9 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
     XPath context;
     Document doc;
 
-    public ElanPunctuationChecker() {
+    public ElanPunctuationChecker(Properties properties) {
         //fixing option not available
-        super(false);
+        super(false,properties);
     }
 
     /**

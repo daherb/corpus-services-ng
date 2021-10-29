@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,12 +38,8 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
     // The local logger that can be used for debugging
     // Logger logger = Logger.getLogger(this.getClass().toString());
 
-    public ELANValidatorChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
-    }
-
-    public ELANValidatorChecker() {
-        this(false) ;
+    public ELANValidatorChecker(Properties properties) {
+        super(false, properties) ;
     }
 
     @Override
@@ -122,7 +119,7 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
             CorpusIO cio = new CorpusIO();
             try {
                 Corpus corpus = new Corpus(cio.read(Paths.get(args[0]).toAbsolutePath().normalize().toUri().toURL()));
-                ELANValidatorChecker eav = new ELANValidatorChecker();
+                ELANValidatorChecker eav = new ELANValidatorChecker(new Properties());
                 Report report = eav.function(corpus,false);
                 BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
                 bw.write(ReportItem.generateHTML(report.getRawStatistics()));

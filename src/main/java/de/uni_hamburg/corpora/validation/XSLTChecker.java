@@ -40,9 +40,9 @@ public class XSLTChecker extends Checker implements CorpusFunction {
     String UTTERANCEENDSYMBOLS = "[.!?…:]";
     String FSMpath = "";
 
-    public XSLTChecker() {
+    public XSLTChecker(Properties parameters) {
         //fixing is not possible
-        super(false);
+        super(false,parameters);
     }
 
     @Override

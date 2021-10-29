@@ -33,9 +33,9 @@ public class ExbFixTimelineItems extends Checker implements CorpusFunction {
     Document doc;
     XMLOutputter xmOut = new XMLOutputter(); //for testing
 
-    public ExbFixTimelineItems() {
+    public ExbFixTimelineItems(Properties properties) {
         //fixing option available
-        super(true);
+        super(true,properties);
     }
     
       

@@ -6,16 +6,13 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class NullChecker extends Checker implements CorpusFunction {
 
-    public NullChecker() {
-        super(false);
-    }
-
-    public NullChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
+    public NullChecker(Properties properties) {
+        super(false,properties);
     }
 
     @Override

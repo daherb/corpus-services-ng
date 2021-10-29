@@ -25,9 +25,9 @@ import org.xml.sax.SAXException;
  */
 public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction {
 
-    public ExbTierDisplayNameChecker() {
+    public ExbTierDisplayNameChecker(Properties properties) {
         //fixing not possible
-        super(false);
+        super(false, properties);
     }
 
     /**

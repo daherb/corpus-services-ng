@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -23,9 +25,9 @@ public class ComaApostropheChecker extends Checker implements CorpusFunction {
     String comaFile = "";
     boolean apostrophe = false;
 
-    public ComaApostropheChecker() {
+    public ComaApostropheChecker(Properties properties) {
         //can fix
-        super(true);
+        super(true,properties);
     }
 
     /**

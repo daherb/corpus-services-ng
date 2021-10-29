@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -219,4 +221,8 @@ public abstract class Visualizer implements CorpusFunction {
         return canfix;
     }
 
+    @Override
+    public Map<String, String> getParameters() {
+        return Collections.EMPTY_MAP;
+    }
 }

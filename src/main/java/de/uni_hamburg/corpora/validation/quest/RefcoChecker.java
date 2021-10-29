@@ -296,20 +296,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     HashMap<String,Integer> glossFreq = new HashMap<>();
 
     /**
-     * Default constructor without parameter, sets the fixing option to false
+     * The global report, will be filled by the constructor and the function applied to the complete corpus
      */
-    public RefcoChecker() {
-        // Call the constructor below with the default parameter
-        this(false);
-    }
 
     /**
      * Default constructor with fixing option as parameter
-     * @param hasfixingoption switch for fixing option
+     * @param properties global properties
      */
-    public RefcoChecker(boolean hasfixingoption) {
+    public RefcoChecker(Properties properties) {
         // Call the inherited constructor
-        super(hasfixingoption);
+        super(false, properties);
         // Read the list of ISO-639-3 language codes
         try {
             // In a jar this would be one of the resources
@@ -329,6 +325,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             catch (IOException e) {
                 logger.log(Level.SEVERE,"Unable to load ISO-639-3 language list", e);
             }
+        if (properties.containsKey("refco-file")) {
+            // Load config and add potential problems to log
+            report.merge(setRefcoFile(properties.getProperty("refco-file")));
+        }
+        else {
+            report.addCritical(getFunction(),"Missing corpus documentation file property");
+        }
     }
 
     /**
@@ -1691,5 +1694,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return Chars.asList(s.toCharArray());
     }
 
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> params = new HashMap<>();
+        params.put("refco-file","The corpus documentation file as a ODS of FODS spreadsheet");
+        return params;
+    }
 
 }

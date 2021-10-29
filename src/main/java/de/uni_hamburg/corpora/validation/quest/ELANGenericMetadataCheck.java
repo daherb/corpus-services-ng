@@ -3,15 +3,12 @@ package de.uni_hamburg.corpora.validation.quest;
 import de.uni_hamburg.corpora.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 
 public class ELANGenericMetadataCheck extends GenericMetadataChecker implements CorpusFunction {
 
-    public ELANGenericMetadataCheck() {
-        super(false);
-    }
-
-    public ELANGenericMetadataCheck(boolean hasfixingoption) {
-        super(hasfixingoption);
+    public ELANGenericMetadataCheck(Properties properties) {
+        super(properties);
     }
 
 

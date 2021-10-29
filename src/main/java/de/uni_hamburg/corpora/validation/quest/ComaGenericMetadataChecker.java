@@ -20,18 +20,9 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker implement
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public ComaGenericMetadataChecker() {
-        this(false);
+    public ComaGenericMetadataChecker(Properties properties) {
+        super(properties);
     }
-
-    /**
-     * Default constructor with optional fixing option
-     * @param hasfixingoption the fixing option
-     */
-    public ComaGenericMetadataChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
-    }
-
     /**
      * Function providing a description of a checker
      * @return the checker description

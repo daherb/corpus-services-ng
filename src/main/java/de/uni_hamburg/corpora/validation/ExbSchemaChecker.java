@@ -18,6 +18,7 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -38,8 +39,8 @@ import org.xml.sax.SAXException;
 public class ExbSchemaChecker extends Checker implements CorpusFunction {
 
 
-    public ExbSchemaChecker() {
-        super(false);
+    public ExbSchemaChecker(Properties properties) {
+        super(false, properties);
     }
 
     /**

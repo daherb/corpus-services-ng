@@ -34,12 +34,8 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
     // The local logger that can be used for debugging
     Logger logger = Logger.getLogger(this.getClass().toString());
 
-    public EXMARaLDAValidatorChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
-    }
-
-    public EXMARaLDAValidatorChecker() {
-        this(false) ;
+    public EXMARaLDAValidatorChecker(Properties properties) {
+        super(false, properties) ;
     }
 
     @Override
@@ -145,7 +141,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
             CorpusIO cio = new CorpusIO();
             try {
                 Corpus corpus = new Corpus(cio.read(Paths.get(args[0]).toAbsolutePath().normalize().toUri().toURL()));
-                EXMARaLDAValidatorChecker exv = new EXMARaLDAValidatorChecker();
+                EXMARaLDAValidatorChecker exv = new EXMARaLDAValidatorChecker(new Properties());
                 Report report = exv.function(corpus,false);
                 BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
                 bw.write(ReportItem.generateHTML(report.getRawStatistics()));

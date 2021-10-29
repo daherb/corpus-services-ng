@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -36,9 +37,9 @@ public class GeneralTransformer extends Checker {
     boolean exb = false;
     boolean exs = false;
 
-    public GeneralTransformer() {
-        //fixing is available
-        super(true);
+    public GeneralTransformer(Properties properties) {
+        //fixing is possible
+        super(true, properties);
     }
 
     @Override

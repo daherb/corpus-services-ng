@@ -14,6 +14,8 @@ import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -133,4 +135,8 @@ public abstract class Publisher implements CorpusFunction {
         return canfix;
     }
 
+    @Override
+    public Map<String, String> getParameters() {
+        return Collections.EMPTY_MAP;
+    }
 }

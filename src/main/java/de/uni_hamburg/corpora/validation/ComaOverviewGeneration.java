@@ -13,6 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -33,9 +35,9 @@ public class ComaOverviewGeneration extends Checker implements CorpusFunction {
     boolean inel = false;
     String xslpath = "/xsl/Output_metadata_summary.xsl";
     
-    public ComaOverviewGeneration() {
+    public ComaOverviewGeneration(Properties properties) {
         //no fixing available
-        super(false);
+        super(false,properties);
     }
 
     @Override

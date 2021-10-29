@@ -17,10 +17,7 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -54,12 +51,9 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
     String language = "de";
     JLanguageTool langTool;
 
-    public LanguageToolChecker() {
-        
-    /**
-     * No fix is applicable for this feature.
-     */
-        super(false);
+    public LanguageToolChecker(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     /**

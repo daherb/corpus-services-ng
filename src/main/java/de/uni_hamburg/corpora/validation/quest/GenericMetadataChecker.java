@@ -41,16 +41,8 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public GenericMetadataChecker() {
-        this(false);
-    }
-
-    /**
-     * Default constructor with optional fixing option
-     * @param hasfixingoption the fixing option
-     */
-    public GenericMetadataChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
+    public GenericMetadataChecker(Properties properties) {
+        super(false, properties);
     }
 
     // The local logger that can be used for debugging

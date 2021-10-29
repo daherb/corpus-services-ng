@@ -13,6 +13,8 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,9 +39,9 @@ public class ComaFedoraIdentifierLengthChecker extends Checker implements Corpus
      * Check for existence of files in a coma file.
      *
      */
-    public ComaFedoraIdentifierLengthChecker() {
+    public ComaFedoraIdentifierLengthChecker(Properties properties) {
         //no fix available
-        super(false);
+        super(false, properties);
     }
 
     /**

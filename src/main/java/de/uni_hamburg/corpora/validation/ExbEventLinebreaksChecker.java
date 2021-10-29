@@ -10,6 +10,7 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.regex.Pattern;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -40,9 +41,9 @@ public class ExbEventLinebreaksChecker extends Checker implements CorpusFunction
     XPath context;
     Document doc;
 
-    public ExbEventLinebreaksChecker() {
+    public ExbEventLinebreaksChecker(Properties properties) {
         //fixing option available
-        super(true);
+        super(true, properties);
     }
 
     /**

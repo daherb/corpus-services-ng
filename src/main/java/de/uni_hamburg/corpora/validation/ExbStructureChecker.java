@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import java.net.URISyntaxException;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -38,9 +39,9 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
     ValidatorSettings settings;
     String filename;
 
-    public ExbStructureChecker() {
+    public ExbStructureChecker(Properties properties) {
         //fixing is not possible
-        super(false);
+        super(false, properties);
     }
     
     /**

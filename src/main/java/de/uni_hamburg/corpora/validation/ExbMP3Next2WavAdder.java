@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -30,9 +31,9 @@ import javax.xml.xpath.XPathExpressionException;
  */
 public class ExbMP3Next2WavAdder extends Checker implements CorpusFunction {
 
-    public ExbMP3Next2WavAdder() {
+    public ExbMP3Next2WavAdder(Properties properties) {
         //fixing option available
-        super(true);
+        super(true, properties);
     }
 
     @Override

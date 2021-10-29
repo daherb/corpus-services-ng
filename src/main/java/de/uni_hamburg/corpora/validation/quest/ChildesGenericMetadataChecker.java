@@ -4,6 +4,7 @@ import com.helger.collection.pair.Pair;
 import de.uni_hamburg.corpora.*;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * @author bba1792 Dr. Herbert Lange
@@ -13,13 +14,10 @@ import java.util.Collections;
  */
 public class ChildesGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
-    public ChildesGenericMetadataChecker() {
-        this(false);
+    public ChildesGenericMetadataChecker(Properties properties) {
+        super(properties);
     }
 
-    public ChildesGenericMetadataChecker(boolean hasfixingoption) {
-        super(hasfixingoption);
-    }
 
     @Override
     public String getDescription() {
