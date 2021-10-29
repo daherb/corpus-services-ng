@@ -51,7 +51,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Separator used to separate words/token
     private final String tokenSeparator = "\\s+" ;
     // Separator used to separate morpheme glosses (see https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf)
-    private final String glossSeparator = "[-=;:\\\\>()<~\\[\\]]+" ;
+    private final String glossSeparator = "-"; // "[-=;:\\\\>()<~\\[\\]]+" ;
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
