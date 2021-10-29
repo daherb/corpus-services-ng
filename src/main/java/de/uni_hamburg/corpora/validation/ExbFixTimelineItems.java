@@ -52,7 +52,7 @@ public class ExbFixTimelineItems extends Checker implements CorpusFunction {
         
         //temporary stopgap to prevent working on files with multiple speakers
         Boolean stopgap = false;
-        XPath xpathStopgap = XPath.newInstance("//tier[@category='ts'");
+        XPath xpathStopgap = XPath.newInstance("//tier[@category='ts']");
         List stopList = xpathStopgap.selectNodes(doc);
         if (stopList.size() > 1) {
             stopgap = true;
