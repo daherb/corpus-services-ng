@@ -398,16 +398,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Create a new corpus from only these files, keeping the original corpus name and base directory
         // This corpus is among others used to check the existence of referenced files
         refcoCorpus = new Corpus(c.getCorpusName(), c.getBaseDirectory(), usableFiles) ;
-        // Apply function for each of the supported file. Again merge the reports
-        for (CorpusData cdata : usableFiles) {
-            report.merge(function(cdata, fix));
+        // Initialize frequency list for glosses
+        for (Gloss gloss : criteria.glosses) {
+            morphemeFreq.put(gloss.gloss,0);
         }
         // Run the generic tests and merge their reports into the current report
         logger.info("Merge generic");
         report.merge(refcoGenericCheck());
-        // Initialize frequency list for glosses
-        for (Gloss gloss : criteria.glosses) {
-            morphemeFreq.put(gloss.gloss,0);
+        // Apply function for each of the supported file. Again merge the reports
+        for (CorpusData cdata : usableFiles) {
+            report.merge(function(cdata, fix));
         }
         // Check for morpheme glosses that never occurred in the complete corpus
         for (Map.Entry<String,Integer> e : morphemeFreq.entrySet()) {
