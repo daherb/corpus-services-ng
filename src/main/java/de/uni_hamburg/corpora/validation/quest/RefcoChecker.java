@@ -756,7 +756,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table CorpusComposition to corpus documentation"}));
             else {
                 boolean missingData = false;
-                for (Element row : listToParamList(Element.class, sessionTable.getChildren("table-row", tableNamespace))) {
+                List<Element> rowList = listToParamList(Element.class, sessionTable.getChildren("table-row",
+                        tableNamespace));
+                for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 7 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Sessions")) {
@@ -776,7 +778,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingData = true;
                     }
                 }
-                if (missingData) {
+                if (missingData || rowList.size() <= 1) {
                     report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
                                     "description", "howtoFix"},
                             new Object[]{getFunction(), refcoShortName,"Corpus documentation: Wrong number of columns or " +
@@ -794,7 +796,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table AnnotationTiers to corpus documentation"}));
             else {
                 boolean missingData = false;
-                for (Element row : listToParamList(Element.class, tierTable.getChildren("table-row", tableNamespace))) {
+                List<Element> rowList = listToParamList(Element.class, tierTable.getChildren("table-row",
+                        tableNamespace));
+                for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 4 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Names")) {
@@ -811,7 +815,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingData = true;
                     }
                 }
-                if (missingData)
+                if (missingData || rowList.size() <= 1)
                     report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
                                     "description", "howtoFix"},
                             new Object[]{getFunction(), refcoShortName,"Corpus documentation: Wrong number of columns or " +
@@ -827,7 +831,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table Transcription to corpus documentation"}));
             else {
                 boolean missingData = false;
-                for (Element row : listToParamList(Element.class, transcriptionTable.getChildren("table-row", tableNamespace))) {
+                List<Element> rowList = listToParamList(Element.class, transcriptionTable.getChildren("table-row",
+                        tableNamespace));
+                for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 2 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Graphemes")) {
@@ -841,7 +847,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingData = true;
                     }
                 }
-                if (missingData)
+                if (missingData || rowList.size() <= 1)
                     report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
                             new Object[]{getFunction(), refcoShortName,"Corpus documentation: Wrong number of columns or " +
@@ -858,7 +864,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table Glosses to corpus documentation"}));
             else {
                 boolean missingData = false;
-                for (Element row : listToParamList(Element.class, glossesTable.getChildren("table-row", tableNamespace))) {
+                List<Element> rowList = listToParamList(Element.class, glossesTable.getChildren("table-row",
+                        tableNamespace));
+                for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Glosses")) {
@@ -873,7 +881,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingData = true;
                     }
                 }
-                if (missingData)
+                if (missingData || rowList.size() <= 1)
                     report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
                             new Object[]{getFunction(),refcoShortName,"Corpus documentation: Wrong number of columns or " +
@@ -889,7 +897,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table Punctuation to corpus documentation"}));
             else {
                 boolean missingData = false;
-                for (Element row : listToParamList(Element.class, punctuationsTable.getChildren("table-row", tableNamespace))) {
+                List<Element> rowList = listToParamList(Element.class, punctuationsTable.getChildren("table-row",
+                        tableNamespace));
+                for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Characters")) {
@@ -904,7 +914,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingData = true;
                     }
                 }
-                 if (missingData)
+                 if (missingData || rowList.size() <= 1)
                      report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                      "description", "howtoFix"},
                              new Object[]{getFunction(),refcoShortName,"Corpus documentation: Wrong number of columns or " +
