@@ -390,7 +390,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         // Create the current report
-        Report report = new Report();
+        //Report report = new Report();
         // Get all usable formats for the checker
         Collection<Class<? extends CorpusData>> usableFormats = this.getIsUsableFor();
         // Get all usable files from the corpus, i.e. the ones whose format is included in usableFormats
