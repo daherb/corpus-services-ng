@@ -404,10 +404,10 @@
     <xsl:template name="MAKE_FOOTER">
         <div id="footer-new">
             <p>
-                This visualization was generated on <xsl:value-of select="format-date(current-date(), '[D01].[M01].[Y0001]')"/>.
+                This visualization was generated on <xsl:value-of select="format-date(current-date(), '[D01].[M01].[Y0001]')"/> with Corpus Services.
                 <!--with <xsl:value-of select="$WEBSERVICE_NAME"
                 />.-->
-                Please contact HZSK for more information: <xsl:value-of select="$EMAIL_ADDRESS"/> </p>
+                <!--Please contact HZSK for more information: <xsl:value-of select="$EMAIL_ADDRESS"/>--> </p>
         </div>
     </xsl:template>
 
@@ -417,11 +417,11 @@
                 <div class="collapse_title"> Web service information </div>
                 <div class="collapse_content" style="width:310;">
                     <p>
-                        Generated on <xsl:value-of select="format-date(current-date(), '[D01].[M01].[Y0001]')"/>.
+                        Generated on <xsl:value-of select="format-date(current-date(), '[D01].[M01].[Y0001]')"/> with Corpus Services.
                         <!--with <xsl:value-of select="$WEBSERVICE_NAME"
                         />.-->
                     </p>
-                    <p>Please contact the <a href="{$HZSK_WEBSITE}" title="Hamburger Zentrum für Sprachkorpora">HZSK</a> for more information.</p>
+                    <!--p>Please contact the <a href="{$HZSK_WEBSITE}" title="Hamburger Zentrum für Sprachkorpora">HZSK</a> for more information.</p-->
                 </div>
             </div>
         </div>

@@ -224,9 +224,9 @@
         <div class="sidebarcontrol">
             <div class="collapse_box" id="tier_display">
                 <p>
-                    This visualization was generated on <xsl:value-of select="format-date(current-date(), '[D01].[M01].[Y0001]')"/>.
-                    Please contact the <a
-                    target="_blank" href="{$HZSK_WEBSITE}" title="Hamburger Zentrum für Sprachkorpora">HZSK</a> for more information.
+                    This visualization was generated on <xsl:value-of select="format-date(current-date(), '[D01].[M01].[Y0001]')"/> with Corpus Services.
+                    <!--Please contact the <a
+                    target="_blank" href="{$HZSK_WEBSITE}" title="Hamburger Zentrum für Sprachkorpora">HZSK</a> for more information.-->
                 </p>
             </div>
         </div>

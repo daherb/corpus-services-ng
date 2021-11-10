@@ -233,7 +233,7 @@
                             Generated on <xsl:value-of select="current-dateTime()"/>
                             with <xsl:value-of select="$WEBSERVICE_NAME"/>.
                         </p>
-                        <p>Please contact the <a href="{$HZSK_WEBSITE}" title="Hamburger Zentrum für Sprachkorpora">HZSK</a> for more information.</p>
+                        <!--p>Please contact the <a href="{$HZSK_WEBSITE}" title="Hamburger Zentrum für Sprachkorpora">HZSK</a> for more information.</p-->
                     </div>
                 </div>
             </div>
