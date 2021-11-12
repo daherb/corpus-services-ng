@@ -237,9 +237,10 @@
             <!-- if this entitiy has a start point with an absolute time value... -->
             <xsl:if test="//tli[@id = current()/descendant::ts[1]/@s]/@time">
                 <xsl:variable name="TIME" select="0 + //tli[@id = current()/descendant::ts[1]/@s]/@time"/>
-                <a onclick="jump('{format-number(($TIME - 0.1), '#.##')}');">
-                    <img class="media" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" src="{$TOP_LEVEL_PATH}play_button.gif"/>
-                </a>
+                    <span id="play_button_{exmaralda:FORMAT_TIME($TIME)}" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" class="play">
+                        <a onclick="jump('{format-number(($TIME - 0.1), '#.##')}');document.getElementById('play_button_{exmaralda:FORMAT_TIME($TIME)}').style.cssText = 'text-decoration: underline black;color: black';">▶</a>
+                    </span>
+                    <!-- <img class="media" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" src="{$TOP_LEVEL_PATH}play_button.gif"/> -->
             </xsl:if>
         </td>
     </xsl:template>
