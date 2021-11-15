@@ -112,6 +112,10 @@ public class ReportItem {
             this.columns = (String) parameters.get("columns");
         if (parameters.containsKey("lines"))
             this.lines = (String) parameters.get("lines");
+        if (parameters.containsKey("tier"))
+            this.lines = (String) parameters.get("tier");
+        if (parameters.containsKey("segment"))
+            this.columns = (String) parameters.get("segment");
         if (parameters.containsKey("howtoFix"))
             this.howto = (String) parameters.get("howtoFix");
 
@@ -690,7 +694,7 @@ public class ReportItem {
      */
     public static Map<String,Object> newParamMap(String[] keys, Object[] vals) {
         List<String> validKeys = Arrays.asList(new String[]{"function", "filename", "exception", "description",
-                "columns", "lines", "howtoFix"});
+                "columns", "lines", "howtoFix", "tier", "segment"});
            HashMap<String,Object> params = new HashMap<>();
            for (int i = 0 ; i < Math.min(keys.length,vals.length); i++) {
                if (validKeys.contains(keys[i]))
