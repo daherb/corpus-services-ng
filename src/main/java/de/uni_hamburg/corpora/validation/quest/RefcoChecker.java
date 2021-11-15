@@ -1760,10 +1760,27 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     // Add the length of the gloss to matched
                     matched += token.length() ;
                 }
-                if (mismatch) {
-                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
-                            new Object[]{getFunction(), cd.getFilename(), "Transcription token contains invalid characters: " +
-                                    token}));
+                if (mismatch && !token.isEmpty()) {
+                    String dictAlphabet = "[" +
+                            dict.getAlphabet().stream().map(Object::toString).collect(Collectors.joining())
+                                    .replace("[","\\[")
+                                    .replace("]","\\]") +
+                            "]";
+                    try {
+                        Location l = getLocation((ELANData) cd, token);
+                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description", "tier" , "segment", "howtoFix"},
+                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+                                        "invalid character(s):\n" + token + " containing: [" +
+                                        token.replaceAll(dictAlphabet, "") + "]", l.tier, l.segment,
+                                        "Add all transcription characters to the documentation"}));
+                    } catch (JDOMException e) {
+                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description", "exception"},
+                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to" +
+                                        "locate token " + token,
+                                        e}));
+                    }
                 }
             }
         }
