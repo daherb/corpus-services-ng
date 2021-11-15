@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
+import de.uni_hamburg.corpora.utilities.quest.UniversalLevenshteinAutomatonK1;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -422,6 +423,42 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Corpus data: Morpheme gloss never encountered in corpus: " + e.getKey(),
                                 "Check for potential errors or remove gloss from documentation"}));
         }
+        // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
+        // Levenshtein difference 1 with a higher frequency count
+        /*DictionaryAutomaton glossDictionary =
+                new DictionaryAutomaton(new ArrayList<>(glossFreq.keySet()));
+        logger.info("Doing the fancy experiment");
+        for (String gloss : glossFreq.keySet()) {
+            if (glossFreq.get(gloss) < 10) {
+                for (String similar : UniversalLevenshteinAutomatonK1.matchDictionary(gloss, glossDictionary)) {
+                    if (glossFreq.get(similar) > 100)
+                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename","description",
+                                        "howtoFix"},
+                                new Object[]{getFunction(), refcoShortName,
+                                        "EXPERIMENTAL Corpus data: Similar gloss found that is more common: " + similar +
+                                                " with count " + glossFreq.get(similar) + " instead of " + gloss +
+                                                " with count " + glossFreq.get(gloss),
+                                        "Check for typo"}));
+                }
+            }
+        }
+        // Same for transcription
+        DictionaryAutomaton tokenDictionary =
+                new DictionaryAutomaton(new ArrayList<>(tokenFreq.keySet()));
+        for (String token : tokenFreq.keySet()) {
+            if (tokenFreq.get(token) < 10 && token.length() > 5) {
+                for (String similar : UniversalLevenshteinAutomatonK1.matchDictionary(token, tokenDictionary)) {
+                    if (tokenFreq.get(similar) > 100)
+                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename","description",
+                                        "howtoFix"},
+                                new Object[]{getFunction(), refcoShortName,
+                                        "EXPERIMENTAL Corpus data: Similar gloss found that is more common: " + similar +
+                                                " with count " + tokenFreq.get(similar) + " instead of " + token + " " +
+                                                "with count " + tokenFreq.get(token),
+                                        "Check for typo"}));
+                }
+            }
+        }*/
         return report;
     }
 
