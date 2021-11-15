@@ -812,6 +812,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         session.recordingLocation = safeGetText(columns.get(5).getChild("p", textNamespace));
                         session.recordingDate = safeGetText(columns.get(6).getChild("p", textNamespace));
                         session.genre = safeGetText(columns.get(7).getChild("p", textNamespace));
+                        // Age group was a custom column
                         // session.ageGroup = safeGetText(columns.get(8).getChild("p", textNamespace));
                         criteria.sessions.add(session);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
@@ -841,18 +842,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         tableNamespace));
                 for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
-                    if (columns.size() > 4 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                    if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Names")) {
                         Tier tier = new Tier();
                         tier.tierName = safeGetText(columns.get(0).getChild("p", textNamespace)).trim();
-                        tier.tierFunction = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        tier.tierFunctions = Arrays.stream(safeGetText(columns.get(1).getChild("p", textNamespace))
+                                .split(valueSeparator)).map(String::toLowerCase).collect(Collectors.toList());
                         tier.segmentationStrategy = safeGetText(columns.get(2).getChild("p", textNamespace));
                         tier.languages = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        tier.morphemeDistinction = safeGetText(columns.get(4).getChild("p", textNamespace));
+                        // Morpheme distinction is optional
+                        if (columns.size() > 4)
+                            tier.morphemeDistinction = safeGetText(columns.get(4).getChild("p", textNamespace));
                         criteria.tiers.add(tier);
                     }  else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
                             "Names")) {
-                        logger.info(String.valueOf(columns.size()));
                         missingData = true;
                     }
                 }
@@ -910,15 +913,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
-                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Glosses")) {
+                            && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Abbreviations")) {
                         Gloss gloss = new Gloss();
-                        gloss.gloss = safeGetText(columns.get(0).getChild("p", textNamespace));
+                        gloss.gloss = safeGetText(columns.get(0).getChild("p", textNamespace)).replace("\\s+","");
                         gloss.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
                         gloss.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         gloss.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
                         criteria.glosses.add(gloss);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
-                            "Glosses")) {
+                            "Abbreviations")) {
                         missingData = true;
                     }
                 }
@@ -949,6 +952,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         punctuation.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
                         punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
+                        // TODO Function is optional?
+                        if (columns.size()>4)
+                            punctuation.function = safeGetText(columns.get(4).getChild("p", textNamespace));
                         criteria.punctuations.add(punctuation);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
                             "Characters")) {
