@@ -46,6 +46,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // The local logger that can be used for debugging
     private final Logger logger = Logger.getLogger(this.getClass().toString());
 
+    // Percentage of characters in transcription tokens to be valid
+    private static final int transcriptionCharactersValid = 99;
+    // Percentage of gloss token morphemes to be valid
+    private static final int glossMorphemesValid = 70;
     // Separator used to separate multiple values in a cell
     private final String valueSeparator = "\\s*[,;:]\\s*" ;
     // Separator used to separate words/token
@@ -1533,18 +1537,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
-        if (percentValid < 0.2)
+        if (percentValid < glossMorphemesValid / 100.0)
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
                             "howtoFix"},
-                            new Object[]{getFunction(), cd.getFilename(), "Corpus data: Less than 20 percent of tokens are" +
-                                    " valid glosses. " +
-                    "Valid: " + matched + " Invalid: " + missing + " Percentage valid: " +
-                    Math.round(percentValid*100), "Improve the gloss documentation to cover more tokens"}));
+                            new Object[]{getFunction(), cd.getFilename(),
+                                    "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
+                                            " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                            " Percentage valid: " + Math.round(percentValid*1000)/10.0,
+                                    "Improve the gloss documentation to cover more tokens"}));
         else
             report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
-                    new Object[] {getFunction(),cd.getFilename(), "Corpus data: More than 20 percent of tokens are " +
-                    "valid glosses. Valid: " + matched + " Invalid: " + missing + " Percentage valid: " +
-                    Math.round(percentValid*100),"Documentation can be improved but no fix necessary"}));
+                    new Object[] {getFunction(),cd.getFilename(),
+                            "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
+                                    "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                    " Percentage valid: " + Math.round(percentValid*1000)/10.0,
+                            "Documentation can be improved but no fix necessary"}));
         return report;
     }
 
@@ -1604,15 +1611,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
-        if (percentValid < 0.5) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{getFunction(), cd.getFilename(), "Less than 50 percent of transcription characters are valid. " +
-                    "Valid: " + matched + " Invalid: " + missing + " Percentage: " + Math.round(percentValid * 100)}));
+        if (percentValid < (transcriptionCharactersValid / 100.0)) {
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"
+                            ,"howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(),
+                            "Corpus data: Less than " + transcriptionCharactersValid + " percent of transcription " +
+                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                    "Percentage: " +
+                                    Math.round(percentValid * 1000)/10.0,
+                    "Add documentation for all graphemes and punctuation marks used in transcription"}));
         }
         else {
-            report.addNote(getFunction(), cd, "More than 50 percent of transcription characters are valid. " +
-                    "Valid: " + matched + " Invalid: " + missing + " Percentage: " +
-                    Math.round(percentValid * 100));
+            report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(),
+                            "Corpus data: More than " + transcriptionCharactersValid + " percent of transcription " +
+                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                    "Percentage: " +
+                    Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
         return report ;
     }
