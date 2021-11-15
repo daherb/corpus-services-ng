@@ -176,7 +176,12 @@ public class CorpusMagician {
             //only read the filetypes from clcds!
             cdc = cio.read(url, clcds);
             basedirectory = url;
-            isCollection = true;
+            if (isCorpus) {
+                corpus = new Corpus(corpusname, url, cdc);
+            }
+            else {
+                isCollection = true;
+            }
         } else {
             CorpusData cdata = cio.readFileURL(url);
             //get the basedirectory
@@ -190,7 +195,8 @@ public class CorpusMagician {
                 //only read the filetypes from clcds!
                 corpus = new Corpus((ComaData) cdata, clcds);
                 //otherwise it is a single file I want to check
-            } else {
+            }
+            else {
                 corpusData = cdata;
             }
         }
@@ -946,6 +952,11 @@ public class CorpusMagician {
                 reportlocations.add(s);
             }
         }
+        if (cmd.hasOption("corpus")) {
+            isCorpus = true;
+            corpusname = cmd.getOptionValue("corpus");
+        }
+
         //now add the functionsstrings to array
         String[] corpusfunctionarray = cmd.getOptionValues("c");
         CorpusMagician.chosencorpusfunctions.addAll(Arrays.asList(corpusfunctionarray));
@@ -1016,6 +1027,11 @@ public class CorpusMagician {
         Option nocuration = new Option("n", "nocuration", false, "do not create curation folder and exma-error file");
         fix.setRequired(false);
         options.addOption(nocuration);
+
+        Option corpus = new Option("cn", "corpus", true, "corpus name (if the data should be treated as a corpus)");
+        corpus.setRequired(false);
+        corpus.setArgName("CORPUS NAME");
+        options.addOption(corpus);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
