@@ -628,10 +628,10 @@ public class ReportItem {
             report.append(StringEscapeUtils.escapeHtml4(error.getFunction()) + "</td><td>");
             report.append(StringEscapeUtils.escapeHtml4(error.getLocation()) + "</td>");
             report.append("<td style='white-space: pre'>" +
-                StringEscapeUtils.escapeHtml4(error.getWhat()) +
+                StringEscapeUtils.escapeHtml4(error.getWhat()).replace("\n", "<br>") +
                 "</td>");
             report.append("<td style='white-space: pre'>" +
-                StringEscapeUtils.escapeHtml4(error.getHowto()) +
+                StringEscapeUtils.escapeHtml4(error.getHowto()).replace("\n", "<br>") +
                 "</td>");
             report.append("<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre;'>(" +
                 StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
