@@ -150,6 +150,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String meaning ;
         String comments ;
         String tiers ;
+        String function;
     }
 
     /**
