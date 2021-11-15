@@ -75,6 +75,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private final List<String> tierFunctions = Arrays.asList("Transcription", "Reference", "Note", "Part-of-speech",
             "Morpheme gloss", "Morpheme segmentation", "Free Translation");
 
+    // The set of all undocumented languages we encountered. To skip duplicate warnings
+    private final Set<String> knownLanguages = new HashSet<>();
+
     /**
      * A pair of information with potentially associated notes, used e.g. in the Overview table
      */
@@ -1740,6 +1743,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return if the identifier is valid
      */
     public boolean checkLanguage(String lang) {
+        // We encountered an unknown language before
+        if (knownLanguages.contains(lang.toLowerCase())) {
+            return true;
+        }
         // Check if the language is in the list of known translation languages
         if (translationLanguages.stream().map((tl) -> tl.contains(lang.toLowerCase())).reduce(Boolean::logicalOr)
                 .orElse(false))
@@ -1754,6 +1761,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return checkUrl("https://glottolog.org/resource/languoid/id/" + lang);
         }
         else
+            knownLanguages.add(lang.toLowerCase());
             return false ;
     }
 
