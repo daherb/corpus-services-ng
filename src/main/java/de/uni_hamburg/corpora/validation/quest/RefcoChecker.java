@@ -114,7 +114,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     static class Tier {
         String tierName ;
-        String tierFunction ;
+        List<String> tierFunctions;
         String segmentationStrategy ;
         String languages ;
         String morphemeDistinction;
@@ -1282,15 +1282,39 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
         }
         // Check all tiers
+        // Get all tiers from the corpus
+        Map<String,Set<String>> allTiers;
+        try {
+            allTiers = getTierIDs();
+        }
+        catch (Exception e) {
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"
+                            ,"exception"},
+                        new Object[]{getFunction(),refcoShortName,"Corpus data: exception when extracting all tiers",
+                                e}));
+            e.printStackTrace();
+            allTiers = new HashMap<>();
+        }
         for (Tier t : criteria.tiers) {
+            allTiers.remove(t.tierName);
             if (t.tierName == null || t.tierName.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Annotation Tiers: tier name is empty"}));
-            if (t.tierFunction == null || t.tierFunction.isEmpty())
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Annotation Tiers: tier name is empty",
+                                "Add tier name"}));
+            if (t.tierFunctions == null || t.tierFunctions.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
                                 "Annotation Tiers: tier function is empty: " + t.tierName,"Add tier function"}));
+            else if (t.tierFunctions.stream().filter(validTierFunctions::contains).collect(Collectors.toSet()).isEmpty()) {
+                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                 "description","howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,
+                                "Annotation Tiers: potential custom tier detected:\n" + t.tierName + " with tier " +
+                                        "function " + t.tierFunctions,
+                                "Check if custom tier function is intended or change tier function"}));
+            }
             if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
@@ -1317,11 +1341,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            if (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty())
+            if (t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Morpheme distinction is empty: " + t.tierName,
                                 "Add morpheme distinction"}));
+        }
+        if (allTiers.size()>0) {
+            Map<String, Set<String>> finalAllTiers = allTiers;
+            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Tiers are not documented:\n" +
+                                //String.join(", ", allTiers),
+                                allTiers.keySet().stream().map((k) ->
+                                        finalAllTiers.get(k).stream().map((v) -> v + ":" + k)
+                                                .collect(Collectors.joining(",\n"))).collect(Collectors.joining(",\n")),
+                                "Add documentation for all tiers"}));
         }
         // Check all transcription graphemes
         for (Transcription t : criteria.transcriptions) {
@@ -1370,10 +1405,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 ArrayList<String> tierList = new ArrayList<>(Arrays.asList(g.tiers.split(valueSeparator)));
                 for (String t : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
-                    if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunction.contains(t)).toArray().length == 0)
-                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
+                    if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunctions.contains(t)).toArray().length == 0)
+                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                        "description", "howtoFix"},
                                 new Object[]{getFunction(),refcoShortName,
-                                        "Annotation tiers: Gloss tier not defined: " + t}));
+                                        "Glosses: Gloss tier not defined in Annotation Tiers: " + t,
+                                        "Add documentation for tier"}));
                 }
             }
         }
@@ -1398,15 +1435,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add valid tiers for punctuation"}));
             // If the tiers is not "all", check if its valid tiers
             else if (!p.tiers.equalsIgnoreCase("all")) {
-                 // Each cell can contain several tiers. Split the tiers and check for each one if it is a
+                // Each cell can contain several tiers. Split the tiers and check for each one if it is a
                 // valid tier defined in AnnotationTiers
                 ArrayList<String> tierList = new ArrayList<>(Arrays.asList(p.tiers.split(valueSeparator)));
-                for (String t : tierList) {
+                for (String tierName : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
-                    if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunction.equals(t)).toArray().length == 0)
-                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                                new Object[]{getFunction(),refcoShortName,"Punctuation tier not defined in " +
-                                        "AnnotationTiers: " + t}));
+                    boolean isDocumented = false;
+                    for (Tier tier : criteria.tiers) {
+                        if (tier.tierName.equalsIgnoreCase(tierName) ||
+                                tier.tierFunctions.contains(tierName.toLowerCase())) {
+                            isDocumented = true;
+                            break;
+                        }
+                    }
+                    if (!isDocumented) {
+                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description", "howtoFix"},
+                                new Object[]{getFunction(), refcoShortName, "Punctuation: tier not defined in " +
+                                        "Annotation Tiers: " + tierName,
+                                        "Add documentation for tier"}));
+                    }
                 }
             }
         }
@@ -1467,7 +1515,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         transcriptionTiers.add("transcription") ; // Add default tier function for transcription
         for (Tier t: criteria.tiers) {
             // Also add all tiers that contain transcription in the tier function
-            if (t.tierFunction.toLowerCase().contains("transcription")) {
+            if (t.tierFunctions.contains("transcription")) {
                 transcriptionTiers.add(t.tierName);
             }
         }
@@ -1555,11 +1603,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         // Get the dom
         Document content = ((ELANData) cd).getJdom();
-        // Get morphology tiers TODO that is very hand-wavy
+        // Get morphology tiers
         List<String> morphologyTiers = criteria.tiers.stream()
                 .filter((t) ->
-                        t.tierFunction.toLowerCase().contains("morpho") ||
-                        t.tierFunction.toLowerCase().contains("gloss")
+                        t.tierFunctions.contains("morpheme gloss")
                 )
                 .map((t) -> t.tierName).collect(Collectors.toList()) ;
         // Get all valid Glosses
@@ -1910,6 +1957,27 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return params;
     }
 
+
+    /**
+     * Extracts all tier ids  from the globalcorpus
+     * @return A map from tier id to files in which it is defined
+     * @throws JDOMException on problems with the xpath expressions
+     */
+    private Map<String,Set<String>> getTierIDs() throws JDOMException{
+        Map<String,Set<String>> allTiers = new HashMap<>();
+        for (ELANData cd : refcoCorpus.getELANData()) {
+            for (String tier_id :
+                    (List<String>) XPath.newInstance("//TIER/@TIER_ID").selectNodes(cd.getJdom())
+                            .stream().map((a) -> ((Attribute) a).getValue()).collect(Collectors.toList())) {
+                if (allTiers.containsKey(tier_id) && allTiers.get(tier_id) != null) {
+                    allTiers.get(tier_id).add(cd.getFilename());
+                }
+                else
+                    allTiers.put(tier_id,new HashSet<>(Collections.singleton(cd.getFilename())));
+            }
+        }
+        return allTiers;
+    }
 
     /**
      * Class representing a location in a corpus given by a tier id and an annotation id
