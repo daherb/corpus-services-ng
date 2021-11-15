@@ -297,12 +297,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     HashMap<String,Integer> tokenFreq = new HashMap<>();
 
     /**
-     * The frequency list of all annotation/morphology morphemes in the corpus
+     * The frequency list of all segmented annotation/morphology glosses in the corpus
      */
     HashMap<String,Integer> morphemeFreq = new HashMap<>();
 
     /**
-     * The frequency list of all annotation/morphology glosses in the corpus
+     * The frequency list of all non-segmented annotation/morphology glosses in the corpus
      */
     HashMap<String,Integer> glossFreq = new HashMap<>();
 
