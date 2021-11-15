@@ -68,12 +68,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             Namespace.getNamespace("text","urn:oasis:names:tc:opendocument:xmlns:text:1.0") ;
 
     // The hand-picked list of languages acceptable for translation tiers
-    private final List<String> translationLanguages = Arrays.asList("mandarin chinese", "english", "french", "german"
+    private final List<String> validTranslationLanguages = Arrays.asList("mandarin chinese", "english", "french", "german"
             , "indonesian", "portuguese", "russian", "spanish");
 
     // The hand-picked list of acceptable tier functions
-    private final List<String> tierFunctions = Arrays.asList("Transcription", "Reference", "Note", "Part-of-speech",
-            "Morpheme gloss", "Morpheme segmentation", "Free Translation");
+    private final List<String> validTierFunctions = Arrays.asList("transcription", "reference", "note",
+            "part-of-speech", "morpheme gloss", "morpheme segmentation", "free translation");
 
     // The set of all undocumented languages we encountered. To skip duplicate warnings
     private final Set<String> knownLanguages = new HashSet<>();
@@ -1586,7 +1586,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"
                     ,"howtoFix"},
                     new Object[]{getFunction(), cd.getFilename(), "Corpus composition: No morphology tiers found",
-                            "Add documentation for tiers of type Morphology gloss"}));
+                            "Add documentation for tiers of type morphology gloss"}));
             return report;
         }
         if (validGlosses.isEmpty()) {
@@ -1748,7 +1748,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return true;
         }
         // Check if the language is in the list of known translation languages
-        if (translationLanguages.stream().map((tl) -> tl.contains(lang.toLowerCase())).reduce(Boolean::logicalOr)
+        if (validTranslationLanguages.stream().map((tl) -> tl.contains(lang.toLowerCase())).reduce(Boolean::logicalOr)
                 .orElse(false))
             return true ;
         // ISO code
