@@ -1128,9 +1128,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else {
             try {
                 // Check the number by trying to parse it
-                Integer.parseInt(criteria.numberAnnotatedWords.information);
-                // TODO do something with this number
-                // The name of the annotation tier does not seem stable
+                int documentedWords = Integer.parseInt(criteria.numberAnnotatedWords.information);
+                try {
+                    int countedWords = countAnnotatedWords();
+                    if (documentedWords==0 || countedWords == 0 || 0.8 < (float)countedWords/documentedWords ||
+                            (float)countedWords/documentedWords > 1.2)
+                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description", "howtoFix"},
+                                new Object[]{getFunction(),refcoShortName,"Overview: Annotation word count is either " +
+                                        "0 or more than 20 percent off. Counted " + countedWords + " expected " +
+                                        documentedWords, "Correct the word count"}));
+                }
+                catch (JDOMException e) {
+                    report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                    "description","exception"},
+                        new Object[]{getFunction(),refcoShortName,"Exception when counting annotated words",e}));
+                }
             }
             catch (NumberFormatException e) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
@@ -1732,9 +1745,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (d == null)
             return new ArrayList<>();
         else {
-            List texts = XPath.newInstance(
-                    String.format("//TIER[@LINGUISTIC_TYPE_REF=\"%s\"]//ANNOTATION_VALUE/text()", tier))
-                    .selectNodes(d);
+            String path = String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier);
+            List texts = XPath.newInstance(path).selectNodes(d);
             return listToParamList(Text.class, texts);
         }
     }
@@ -1761,19 +1773,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * Function to count all words in certain tiers of the corpus stored in the Checker object. The tier is identified
      * by type
      *
-     * @param tier the tier type
+     * @param tierFunction the tier function
      * @return the number of words encountered in the selected tiers of all documents in the corpus
      * @throws JDOMException on XPath problems
      */
-    private int countWordsInTierByType(String tier) throws JDOMException{
+    private int countWordsInTierByType(String tierFunction) throws JDOMException{
         int count = 0 ;
-        for (CorpusData cd : refcoCorpus.getCorpusData()) {
-            if (cd instanceof ELANData) {
-                // Get all texts from given annotation tier
-                List<Text> texts = getTextsInTierByType(((ELANData) cd).getJdom(), tier);
-                for (Text t : texts) {
-                    // Word separation simply on spaces
-                    count += t.getText().split(tokenSeparator).length;
+        List<String> tierList =
+                criteria.tiers.stream().filter((t) -> t.tierFunctions
+                                .contains(tierFunction.toLowerCase())).map((tn) -> tn.tierName)
+                        .collect(Collectors.toList());
+        for (String tierName :
+                tierList) {
+            for (CorpusData cd : refcoCorpus.getCorpusData()) {
+                if (cd instanceof ELANData) {
+                    // Get all texts from given annotation tier
+                    List<Text> texts = getTextsInTierByType(((ELANData) cd).getJdom(), tierName);
+                    for (Text t : texts) {
+                        // Word separation simply on spaces
+                        count += t.getText().split(tokenSeparator).length;
+                    }
                 }
             }
         }
