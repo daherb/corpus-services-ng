@@ -1380,13 +1380,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Check all glosses
         for (Gloss g : criteria.glosses) {
             if (g.gloss == null || g.gloss.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-                        new Object[]{getFunction(),refcoShortName,"Glosses: Gloss is empty"}));
-            if (g.gloss.split(glossSeparator).length > 1)
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,"Glosses: Gloss is empty",
+                                "Add gloss abbreviations"}));
+            // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
+            // lower-case letters)
+            if (g.gloss.split(glossSeparator).length > 1 && !g.gloss.matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
                         ReportItem.newParamMap(new String[]{"function","filename", "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Glosses: Gloss contains separating character (" + glossSeparator + "): " + g.gloss,
+                                "Glosses: Gloss contains separating character:\n" + g.gloss + " contains one of " +
+                                glossSeparator,
                                 "Document the gloss parts separately"}));
             if (g.meaning == null || g.meaning.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
@@ -1675,7 +1680,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (String token : t.getText().split(tokenSeparator)) {
                 // Check if token is a gloss
                 for (String morpheme : token.split(glossSeparator)) {
-                    if (!glosses.contains(morpheme)) {
+                    // TODO take properly care of morpheme distinction
+                    if (morpheme.matches("[0-9A-Z]+") && !glosses.contains(morpheme)) {
                         missing += 1;
                         // <></>his would lead to large amount of warnings
                         // report.addWarning(getFunction(),cd,"Invalid token: " + token);
