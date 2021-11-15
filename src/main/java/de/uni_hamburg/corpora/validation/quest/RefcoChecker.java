@@ -9,6 +9,7 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
 import de.uni_hamburg.corpora.utilities.quest.UniversalLevenshteinAutomatonK1;
 import de.uni_hamburg.corpora.validation.Checker;
+import org.apache.commons.lang.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.ini4j.InvalidFileFormatException;
@@ -29,6 +30,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -1839,4 +1841,42 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return params;
     }
 
+
+    /**
+     * Class representing a location in a corpus given by a tier id and an annotation id
+     */
+    private static class Location {
+        String tier;
+        String segment;
+
+        public Location(String tier, String segment) {
+            this.tier = tier;
+            this.segment = segment;
+        }
+    }
+
+    /**
+     * Gives the location of a text token in a corpus document
+     * @param cd the corpus document
+     * @param token the token to be looked up
+     * @throws JDOMException on problems with the xpath expressions
+     * @return the location consisting of a tier and a segment
+     */
+    private Location getLocation(ELANData cd, String token) throws JDOMException {
+        String tier_id = ((Attribute) XPath.newInstance("//TIER/@TIER_ID[contains(string(..),'" + token + "')]")
+                .selectSingleNode(cd.getJdom()))
+                .getValue();
+        String annotation_segment = ((Attribute) XPath.newInstance("//*[contains(text(),'" + token + "')]/" +
+                "../@ANNOTATION_ID").selectSingleNode(cd.getJdom()))
+                .getValue();
+        int start_time = Integer.parseInt(((Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=" +
+                "//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + annotation_segment + "']/@TIME_SLOT_REF1]/@TIME_VALUE")
+                .selectSingleNode(cd.getJdom())).getValue());
+        int end_time = Integer.parseInt(((Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=" +
+                "//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + annotation_segment + "']/@TIME_SLOT_REF2]/@TIME_VALUE")
+                .selectSingleNode(cd.getJdom())).getValue());
+        return new Location("[Tier:" + tier_id + "]","[Segment:" + annotation_segment + ", Time:" +
+                DurationFormatUtils.formatDuration(start_time,"mm:ss.SSSS") + "-" +
+                DurationFormatUtils.formatDuration(end_time,"mm:ss.SSSS") + "]");
+    }
 }
