@@ -113,9 +113,8 @@ span.syll{
 
 span.play{
     font-size:12pt;
-    color:rgb(0,0,255);
-    text-decoration: underline blue;
-    text-underline-position: under;
+    color:rgb(0,0,0);
+    cursor: pointer;
 }
 
 

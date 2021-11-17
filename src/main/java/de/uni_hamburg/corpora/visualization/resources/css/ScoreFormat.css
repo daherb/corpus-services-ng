@@ -241,3 +241,9 @@ td.hd {
 	color: rgb(100,100,100)
 }
 
+span.play{
+    font-size:12pt;
+    color:rgb(0,0,0);
+    cursor: pointer;
+}
+
