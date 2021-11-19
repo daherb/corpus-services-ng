@@ -89,6 +89,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
         String information ;
         String notes;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            InformationNotes that = (InformationNotes) o;
+            return Objects.equals(information, that.information) && Objects.equals(notes, that.notes);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(information, notes);
+        }
     }
 
     /**
@@ -105,6 +118,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String recordingDate ;
         String genre ; // is this a controlled vocabulary?
 //        String ageGroup ; // is this a controlled vocabulary?
+
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Session session = (Session) o;
+            return Objects.equals(sessionName, session.sessionName) && Objects.equals(fileName, session.fileName) && Objects.equals(speakerName, session.speakerName) && Objects.equals(speakerAge, session.speakerAge) && Objects.equals(speakerGender, session.speakerGender) && Objects.equals(recordingLocation, session.recordingLocation) && Objects.equals(recordingDate, session.recordingDate) && Objects.equals(genre, session.genre);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(sessionName, fileName, speakerName, speakerAge, speakerGender, recordingLocation, recordingDate, genre);
+        }
     }
 
 
@@ -118,6 +145,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String segmentationStrategy ;
         String languages ;
         String morphemeDistinction;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Tier tier = (Tier) o;
+            return Objects.equals(tierName, tier.tierName) && Objects.equals(tierFunctions, tier.tierFunctions) && Objects.equals(segmentationStrategy, tier.segmentationStrategy) && Objects.equals(languages, tier.languages) && Objects.equals(morphemeDistinction, tier.morphemeDistinction);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(tierName, tierFunctions, segmentationStrategy, languages, morphemeDistinction);
+        }
     }
 
     /**
@@ -128,6 +168,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String grapheme ;
         String linguisticValue ;
         String linguisticConvention ;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Transcription that = (Transcription) o;
+            return Objects.equals(grapheme, that.grapheme) && Objects.equals(linguisticValue, that.linguisticValue) && Objects.equals(linguisticConvention, that.linguisticConvention);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(grapheme, linguisticValue, linguisticConvention);
+        }
     }
 
     /**
@@ -139,6 +192,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String meaning ;
         String comments ;
         String tiers ;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Gloss gloss1 = (Gloss) o;
+            return Objects.equals(gloss, gloss1.gloss) && Objects.equals(meaning, gloss1.meaning) && Objects.equals(comments, gloss1.comments) && Objects.equals(tiers, gloss1.tiers);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(gloss, meaning, comments, tiers);
+        }
     }
 
     /**
@@ -262,6 +328,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
         public ArrayList<Punctuation> getPunctuations() {
             return punctuations;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            RefcoCriteria that = (RefcoCriteria) o;
+            return Objects.equals(corpusTitle, that.corpusTitle) && Objects.equals(subjectLanguages, that.subjectLanguages) && Objects.equals(archive, that.archive) && Objects.equals(persistentId, that.persistentId) && Objects.equals(annotationLicense, that.annotationLicense) && Objects.equals(recordingLicense, that.recordingLicense) && Objects.equals(creatorName, that.creatorName) && Objects.equals(creatorContact, that.creatorContact) && Objects.equals(creatorInstitution, that.creatorInstitution) && Objects.equals(refcoVersion, that.refcoVersion) && Objects.equals(numberSessions, that.numberSessions) && Objects.equals(numberTranscribedWords, that.numberTranscribedWords) && Objects.equals(numberAnnotatedWords, that.numberAnnotatedWords) && Objects.equals(translationLanguages, that.translationLanguages) && Objects.equals(sessions, that.sessions) && Objects.equals(tiers, that.tiers) && Objects.equals(transcriptions, that.transcriptions) && Objects.equals(glosses, that.glosses) && Objects.equals(punctuations, that.punctuations);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(corpusTitle, subjectLanguages, archive, persistentId, annotationLicense, recordingLicense, creatorName, creatorContact, creatorInstitution, refcoVersion, numberSessions, numberTranscribedWords, numberAnnotatedWords, translationLanguages, sessions, tiers, transcriptions, glosses, punctuations);
         }
     }
 
