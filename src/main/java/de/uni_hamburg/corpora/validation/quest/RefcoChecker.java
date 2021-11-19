@@ -675,7 +675,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 ZipFile f = new ZipFile(new File(refcoFileName));
                 ZipEntry e = f.getEntry("content.xml");
                 if (e == null) {
-                    throw new InvalidFileFormatException(refcoFileName + " does not contain content.xml") ;
+                    report.addCritical(getFunction(),ReportItem.newParamMap(
+                            new String[]{"function","filename","description","howtoFix"},
+                            new Object[]{getFunction(),refcoShortName, "General: ODS file invalid",
+                                    //"does not contain content.xml",
+                            "Check spreadsheet file and only use proper ODS files"})) ;
                 }
                 SAXBuilder builder = new SAXBuilder();
                 refcoDoc = builder.build(f.getInputStream(e));
@@ -683,7 +687,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // refcoDoc = builder.build(new StringReader(OdfSpreadsheetDocument.loadDocument(refcoFileName).getContentDom().toString()));
             }
             else {
-                throw new InvalidFileFormatException(refcoFileName + " is neither an ods nor fods file") ;
+                 report.addCritical(getFunction(),ReportItem.newParamMap(
+                            new String[]{"function","filename","description","howtoFix"},
+                            new Object[]{getFunction(),refcoShortName,
+                                    "General: Spreadsheet is neither an ODS nor FODS file",
+                                    "Only use proper (F)ODS files"})) ;
             }
             // expand compressed cells
             expandTableCells(refcoDoc);
