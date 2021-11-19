@@ -217,6 +217,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String comments ;
         String tiers ;
         String function;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Punctuation that = (Punctuation) o;
+            return Objects.equals(character, that.character) && Objects.equals(meaning, that.meaning) && Objects.equals(comments, that.comments) && Objects.equals(tiers, that.tiers) && Objects.equals(function, that.function);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(character, meaning, comments, tiers, function);
+        }
     }
 
     /**
