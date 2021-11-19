@@ -678,7 +678,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-         if (!refcoShortName.matches("\\d{8}_\\w+_RefCo-Report.f?ods")) {
+        if (!refcoShortName.matches("\\d{8}_\\w+_RefCo-Report.f?ods")) {
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(), refcoShortName, "General: Filename does not match schema " +
@@ -687,15 +687,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         else {
             // Check date in file name is valid
-            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
-            try {
-                df.parse(refcoShortName.substring(0,8));
-            }
-            catch (ParseException e) {
+            if (!refcoShortName.substring(0,8).matches("[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])")) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
-                        "exception", "howtoFix"},
+                                "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "General: Date given in filename not valid: "+ refcoShortName.substring(0,8), e,
+                                "General: Date given in filename not valid: "+ refcoShortName.substring(0,8),
                                 "Check that date is following format YYYYMMDD (ISO 8601)"}));
             }
         }
