@@ -443,6 +443,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
+     * Returns the global report used e.g. for report items in the constructor
+     * @return
+     */
+    public Report getReport() { return report; }
+
+    /**
      * Gives the description of what the checker does
      * @return the description of the checker
      */
