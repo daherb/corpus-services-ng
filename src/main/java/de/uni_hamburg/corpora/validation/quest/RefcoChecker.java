@@ -360,13 +360,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * The filename of the RefCo spreadsheet
      */
-    String refcoFileName;
-    String refcoShortName;
+    private String refcoFileName;
+    private String refcoShortName;
 
     /**
      * The XML DOM of the RefCo spreadsheet
      */
-    Document refcoDoc ;
+    private Document refcoDoc ;
 
     public RefcoCriteria getCriteria() {
         return criteria;
@@ -375,37 +375,37 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * The criteria extracted from the Refco spreadsheet
      */
-    RefcoCriteria criteria = new RefcoCriteria() ;
+    private RefcoCriteria criteria = new RefcoCriteria() ;
 
     /**
      * The list of ISO-639-3 language codes
      */
-    ArrayList<String> isoList = new ArrayList<>() ;
+    private ArrayList<String> isoList = new ArrayList<>() ;
 
     /**
      * The corpus with all usable files
      */
-    Corpus refcoCorpus ;
+    private Corpus refcoCorpus ;
 
     /**
      *  The frequency list of all transcription tokens in the corpus
      */
-    HashMap<String,Integer> tokenFreq = new HashMap<>();
+    private HashMap<String,Integer> tokenFreq = new HashMap<>();
 
     /**
      * The frequency list of all segmented annotation/morphology glosses in the corpus
      */
-    HashMap<String,Integer> morphemeFreq = new HashMap<>();
+    private HashMap<String,Integer> morphemeFreq = new HashMap<>();
 
     /**
      * The frequency list of all non-segmented annotation/morphology glosses in the corpus
      */
-    HashMap<String,Integer> glossFreq = new HashMap<>();
+    private HashMap<String,Integer> glossFreq = new HashMap<>();
 
     /**
      * The global report, will be filled by the constructor and the function applied to the complete corpus
      */
-    Report report = new Report();
+    private Report report = new Report();
 
     /**
      * Default constructor with fixing option as parameter
