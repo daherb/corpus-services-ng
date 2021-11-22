@@ -6,7 +6,6 @@
 package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.utilities.quest.ClassInfo;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.ini4j.InvalidFileFormatException;
 import org.jdom.*;
