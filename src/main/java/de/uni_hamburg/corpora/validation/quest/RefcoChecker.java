@@ -876,7 +876,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Method that reads the XML data from the spreadsheet into a java data structure
+     * Method that reads the XML data from the spreadsheet into a java data structure. Expects a clean table, i.e.
+     * expanded and removed empty cells
      * @param refcoDoc the spreadsheet document
      * @return a report containing potential problems when reading the documentation file
      */
