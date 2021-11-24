@@ -500,13 +500,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         // Create the current report
         //Report report = new Report();
-        // Get all usable formats for the checker
-        Collection<Class<? extends CorpusData>> usableFormats = this.getIsUsableFor();
-        // Get all usable files from the corpus, i.e. the ones whose format is included in usableFormats
-        Collection<CorpusData> usableFiles = c.getCorpusData().stream().filter((cd) -> usableFormats.contains(cd.getClass())).collect(Collectors.toList());
-        // Create a new corpus from only these files, keeping the original corpus name and base directory
-        // This corpus is among others used to check the existence of referenced files
-        refcoCorpus = new Corpus(c.getCorpusName(), c.getBaseDirectory(), usableFiles) ;
+        // Set the RefCo corpus
+        setRefcoCorpus(c);
         // Initialize frequency list for glosses
         for (Gloss gloss : criteria.glosses) {
             morphemeFreq.put(gloss.gloss,0);
@@ -515,7 +510,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         logger.info("Merge generic");
         report.merge(refcoGenericCheck());
         // Apply function for each of the supported file. Again merge the reports
-        for (CorpusData cdata : usableFiles) {
+        for (CorpusData cdata : c.getCorpusData()) {
             report.merge(function(cdata, fix));
         }
         // Check for morpheme glosses that never occurred in the complete corpus
@@ -727,6 +722,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report;
     }
 
+    /** Create a new corpus from only these files, keeping the original corpus name and base directory
+     * This corpus is among others used to check the existence of referenced files
+     */
+    private void setRefcoCorpus(Corpus c) throws MalformedURLException, JexmaraldaException, SAXException {
+        // Get all usable formats for the checker
+        Collection<Class<? extends CorpusData>> usableFormats = this.getIsUsableFor();
+        // Get all usable files from the corpus, i.e. the ones whose format is included in usableFormats
+        Collection<CorpusData> usableFiles = c.getCorpusData().stream().filter((cd) -> usableFormats.contains(cd.getClass())).collect(Collectors.toList());
+        refcoCorpus = new Corpus(c.getCorpusName(), c.getBaseDirectory(), usableFiles);
+    }
+    
     /**
      * Functions that expands compressed cells by replacing them by several blank cells. ODS files use some kind of
      * run-length compression for multiple blank cells in a row which is problematic for the parser.
