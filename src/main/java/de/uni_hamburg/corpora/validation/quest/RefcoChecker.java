@@ -1213,12 +1213,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 int i = Integer.parseInt(criteria.numberTranscribedWords.information);
                 // Compare it to our own count
                 int c = countTranscribedWords();
-                if (i==0 || c == 0 || 0.8 < (float)c/i || (float)c/i > 1.2)
+                if (i==0 || c == 0 || 0.8 > (float)c/i || (float)c/i > 1.2)
                     report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
                             new Object[]{getFunction(),refcoShortName,"Overview: Transcription word count is either 0" +
-                                    " or more than 20 percent off. Counted " + c + " expected " + i,"Correct the word" +
-                                    " count"}));
+                                    " or more than 20 percent off. Counted " + c + " expected " + i,
+                                    "Correct the word count"}));
             }
             catch (JDOMException e) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
@@ -1244,7 +1244,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 int documentedWords = Integer.parseInt(criteria.numberAnnotatedWords.information);
                 try {
                     int countedWords = countAnnotatedWords();
-                    if (documentedWords==0 || countedWords == 0 || 0.8 < (float)countedWords/documentedWords ||
+                    if (documentedWords==0 || countedWords == 0 || 0.8 > (float)countedWords/documentedWords ||
                             (float)countedWords/documentedWords > 1.2)
                         report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
