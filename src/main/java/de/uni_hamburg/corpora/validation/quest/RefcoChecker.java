@@ -1302,40 +1302,37 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 ArrayList<String> filenames = new ArrayList<>(
                     Arrays.asList(s.fileName.split(valueSeparator)));
                 for (String f : filenames) {
-                    boolean fileExists = new File(f).exists();
-                    // If it is an ELAN file, it can/should be in the annotation folder
-                    if (f.toLowerCase().endsWith("eaf"))
-                        try {
+                    boolean fileExists = false;
+                    try {
+                        File file = new File(new URI(refcoCorpus.getBaseDirectory() + f));
+                        fileExists = file.exists();
+                        // If it is an ELAN file, it can/should be in the annotation folder
+                        if (f.toLowerCase().endsWith("eaf")) {
                             fileExists = fileExists
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() +"/Annotations/" + f).toURI()).exists()
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).exists()
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists();
                         }
-                        catch (MalformedURLException | URISyntaxException e) {
-                            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
-                                            "description","exception"},
-                                    new Object[]{getFunction(),refcoShortName,
-                                            "Exception encountered checking file name: "+ f, e}));
-                        }
-                    // if it is a wav file, it can should be in the recordings folder
-                    else if (f.toLowerCase().endsWith("wav")) {
-                        try {
+                        // if it is a wav file, it can should be in the recordings folder
+                        else if (f.toLowerCase().endsWith("wav")) {
                             fileExists = fileExists
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).exists()
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists();
-                        }
-                        catch (MalformedURLException | URISyntaxException e) {
-                            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
-                                            "description","exception"},
-                                    new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
+
                         }
                     }
-                    if (!fileExists)
-                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                    catch (MalformedURLException | URISyntaxException e) {
+                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description","exception"},
+                                new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
+                    }
+                    if (!fileExists) {
+                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                         "description", "howtoFix"},
-                                new Object[]{getFunction(),refcoShortName,"Corpus composition: File does not " +
+                                new Object[]{getFunction(), refcoShortName, "Corpus composition: File does not " +
                                         "exist:\n" + f,
                                         "Check the file reference in the documentation and remove the reference to " +
                                                 "the file if it is removed intentionally"}));
+                    }
                 }
             }
             if (s.speakerName == null || s.speakerName.isEmpty())
