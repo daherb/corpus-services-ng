@@ -1092,13 +1092,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Function that performs generic checks on the RefCo documentation stored in the Checker object (using setRefcoFile)
+     * Function that performs generic checks on the RefCo documentation stored in the Checker object (using
+     * setRefcoFile)
      *
      * @return the detailed report of all checks performed
      */
-    private Report refcoGenericCheck() {
-        logger.info("Generic checks");
-        Report report = new Report() ;
+    public Report refcoGenericCheck() {
+                Report report = new Report() ;
         if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
@@ -1286,6 +1286,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
         }
+        return report;
+    }
+
+    /**
+     * Function that performs session checks on the RefCo documentation stored in the Checker object (using
+     * setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    public Report refcoSessionCheck() {
+        Report report = new Report();
         // Check each of the sessions
         for (Session s : criteria.sessions) {
             if (s.speakerName == null || s.speakerName.isEmpty())
@@ -1388,50 +1399,58 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
 //                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
         }
+        return report;
+    }
+
+    /**
+     * Function that performs tier checks on the RefCo documentation stored in the Checker object (using setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    public Report refcoTierCheck() {
         // Check all tiers
         // Get all tiers from the corpus
-        Map<String,Set<String>> allTiers;
+        Map<String, Set<String>> allTiers;
         try {
             allTiers = getTierIDs();
-        }
-        catch (Exception e) {
-            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"
-                            ,"exception"},
-                        new Object[]{getFunction(),refcoShortName,"Corpus data: exception when extracting all tiers",
-                                e}));
+        } catch (Exception e) {
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
+                            , "exception"},
+                    new Object[]{getFunction(), refcoShortName, "Corpus data: exception when extracting all tiers",
+                            e}));
             e.printStackTrace();
             allTiers = new HashMap<>();
         }
         for (Tier t : criteria.tiers) {
             allTiers.remove(t.tierName);
             if (t.tierName == null || t.tierName.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Annotation Tiers: tier name is empty",
+                        new Object[]{getFunction(), refcoShortName, "Annotation Tiers: tier name is empty",
                                 "Add tier name"}));
             if (t.tierFunctions == null || t.tierFunctions.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
-                                "description","howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
-                                "Annotation Tiers: tier function is empty: " + t.tierName,"Add tier function"}));
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(), refcoShortName,
+                                "Annotation Tiers: tier function is empty: " + t.tierName, "Add tier function"}));
             else if (t.tierFunctions.stream().filter(validTierFunctions::contains).collect(Collectors.toSet()).isEmpty()) {
-                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
-                                 "description","howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(), refcoShortName,
                                 "Annotation Tiers: potential custom tier detected:\n" + t.tierName + " with tier " +
                                         "function " + t.tierFunctions,
                                 "Check if custom tier function is intended or change tier function"}));
             }
             if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
-                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
+                        new Object[]{getFunction(), refcoShortName,
                                 "Annotation Tiers: segmentation strategy is empty: " + t.tierName,
                                 "Add segmentation strategy"}));
             if (t.languages == null || t.languages.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
+                        new Object[]{getFunction(), refcoShortName,
                                 "Annotation Tiers: tier languages is empty: " + t.tierName, "Add tier language"}));
             else {
                 // Each cell can contain several languages. Split the languages and check for each one if it is a
@@ -1440,77 +1459,98 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 ArrayList<String> tierLangList = new ArrayList<>(Arrays.asList(t.languages.split(valueSeparator)));
                 for (String l : tierLangList) {
                     if (!checkLanguage(l)) {
-                        report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
-                                        "description","howtoFix"},
-                                new Object[]{getFunction(),refcoShortName,"Annotation Tiers: language is neither a " +
+                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description", "howtoFix"},
+                                new Object[]{getFunction(), refcoShortName, "Annotation Tiers: language is neither a " +
                                         "Glottolog, a ISO-639-3 language code nor otherwise known:\n" + l,
                                         "Use a valid language code"}));
                     }
                 }
             }
             if (t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
-                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Morpheme distinction is empty: " + t.tierName,
+                        new Object[]{getFunction(), refcoShortName, "Morpheme distinction is empty: " + t.tierName,
                                 "Add morpheme distinction"}));
         }
-        if (allTiers.size()>0) {
+        if (allTiers.size() > 0) {
             Map<String, Set<String>> finalAllTiers = allTiers;
-            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
-                                "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Tiers are not documented:\n" +
-                                //String.join(", ", allTiers),
-                                allTiers.keySet().stream().map((k) ->
-                                        finalAllTiers.get(k).stream().map((v) -> v + ":" + k)
-                                                .collect(Collectors.joining(",\n"))).collect(Collectors.joining(",\n")),
-                                "Add documentation for all tiers"}));
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                            "description", "howtoFix"},
+                    new Object[]{getFunction(), refcoShortName, "Tiers are not documented:\n" +
+                            //String.join(", ", allTiers),
+                            allTiers.keySet().stream().map((k) ->
+                                    finalAllTiers.get(k).stream().map((v) -> v + ":" + k)
+                                            .collect(Collectors.joining(",\n"))).collect(Collectors.joining(",\n")),
+                            "Add documentation for all tiers"}));
         }
+        return report;
+    }
+
+    /**
+     * Function that performs transcription checks on the RefCo documentation stored in the Checker object (using
+     * setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    public Report refcoTranscriptionCheck() {
+        Report report = new Report();
         // Check all transcription graphemes
         for (Transcription t : criteria.transcriptions) {
             if (t.grapheme == null || t.grapheme.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Grapheme is empty", "Add grapheme"}));
+                        new Object[]{getFunction(), refcoShortName, "Grapheme is empty", "Add grapheme"}));
             if (t.linguisticValue == null || t.linguisticValue.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Grapheme linguistic value is empty: " + t.grapheme
+                        new Object[]{getFunction(), refcoShortName, "Grapheme linguistic value is empty: " + t.grapheme
                                 , "Add linguistic value"}));
             if (t.linguisticConvention == null || t.linguisticConvention.isEmpty())
-                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
+                        new Object[]{getFunction(), refcoShortName,
                                 "Grapheme linguistic convention is empty: " + t.grapheme,
                                 "Add linguistic convention"}));
         }
+        return report;
+    }
+
+    /**
+     * Function that performs gloss checks on the RefCo documentation stored in the Checker object (using setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    public Report refcoGlossCheck() {
+        Report report = new Report();
         // Check all glosses
         for (Gloss g : criteria.glosses) {
             if (g.gloss == null || g.gloss.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Glosses: Gloss is empty",
+                        new Object[]{getFunction(), refcoShortName, "Glosses: Gloss is empty",
                                 "Add gloss abbreviations"}));
             // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
             // lower-case letters)
             if (g.gloss.split(glossSeparator).length > 1 && !g.gloss.matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function","filename", "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
-                                "Glosses: Gloss contains separating character:\n" + g.gloss + " contains one of " +
-                                glossSeparator,
-                                "Document the gloss parts separately"}));
+                        ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                                new Object[]{getFunction(), refcoShortName,
+                                        "Glosses: Gloss contains separating character:\n" + g.gloss + " contains one of " +
+                                                glossSeparator,
+                                        "Document the gloss parts separately"}));
             if (g.meaning == null || g.meaning.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                 "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Glosses: Gloss meaning is empty: " + g.gloss,
+                        new Object[]{getFunction(), refcoShortName, "Glosses: Gloss meaning is empty: " + g.gloss,
                                 "Add a gloss definition to the corpus documentation"}));
             // We skip comments assuming it is optional
             if (g.tiers == null || g.tiers.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                 "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Corpus data: Gloss tiers are empty: " + g.gloss,
+                        new Object[]{getFunction(), refcoShortName, "Corpus data: Gloss tiers are empty: " + g.gloss,
                                 "Check that all gloss tiers are documented as such"}));
-            // If the tiers is not "all", check if its valid tiers
+                // If the tiers is not "all", check if its valid tiers
             else if (!g.tiers.equalsIgnoreCase("all")) {
                 // Each cell can contain several tiers. Split the tiers and check for each one if it is a
                 // valid tier defined in AnnotationTiers
@@ -1518,14 +1558,25 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 for (String t : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
                     if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunctions.contains(t)).toArray().length == 0)
-                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                         "description", "howtoFix"},
-                                new Object[]{getFunction(),refcoShortName,
+                                new Object[]{getFunction(), refcoShortName,
                                         "Glosses: Gloss tier not defined in Annotation Tiers: " + t,
                                         "Add documentation for tier"}));
                 }
             }
         }
+        return report;
+    }
+
+    /**
+     * Function that performs punctuation checks on the RefCo documentation stored in the Checker object (using
+     * setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    public Report refcoPunctuationCheck() {
+        Report report = new Report();
         // Check all punctuation
         for (Punctuation p : criteria.punctuations) {
             if (p.character == null || p.character.isEmpty())
@@ -1573,6 +1624,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report ;
     }
 
+    /**
+     * Function that performs checks on the RefCo documentation stored in the Checker object (using setRefcoFile)
+     *
+     * @return the detailed report of all checks performed
+     */
+    private Report refcoDocumentationCheck() {
+        logger.info("Generic checks");
+        Report report = new Report();
+        report.merge(refcoGenericCheck());
+        report.merge(refcoSessionCheck());
+        report.merge(refcoTierCheck());
+        report.merge(refcoTranscriptionCheck());
+        report.merge(refcoGlossCheck());
+        report.merge(refcoPunctuationCheck());
+        return report;
+    }
     /**
      * Function that checks a corpus document based on the RefCo documentation stored in the checker object (using setRefcoFile)
      *
