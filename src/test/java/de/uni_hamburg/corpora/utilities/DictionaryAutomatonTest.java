@@ -29,6 +29,7 @@ public class DictionaryAutomatonTest {
                 bw.newLine();
             }
             bw.close();
+            tmpDict.deleteOnExit();
         } catch (IOException e) {
             fail("Exception when creating temp file");
         }
