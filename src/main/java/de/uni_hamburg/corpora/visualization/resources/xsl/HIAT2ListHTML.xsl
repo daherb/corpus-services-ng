@@ -80,6 +80,7 @@
     <!-- ************************ -->
 
     <xsl:template match="/">
+      <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
         <html>
             <head>
                 <title> <xsl:value-of select="$CORPUS_NAME"/>: <xsl:value-of select="$TRANSCRIPTION_NAME"/> </title>
@@ -212,7 +213,7 @@
                     <audio controls="controls" data-tlid="media">
                         <source src="{$RECORDING_PATH}" type="audio/{$RECORDING_TYPE}"/>
                         <xsl:if test="not(starts-with($RECORDING_PATH, 'http'))">
-                            <source src="https://corpora.uni-hamburg.de/hzsk/de/islandora/object/recording:{replace(lower-case($CORPUS_NAME), '\s+corpus\s+', '-')}_{$TRANSCRIPTION_NAME}/datastream/{upper-case($RECORDING_TYPE)}/{$RECORDING_PATH}" type="audio/{$RECORDING_TYPE}"/>
+                            <!--source src="https://corpora.uni-hamburg.de/hzsk/de/islandora/object/recording:{replace(lower-case($CORPUS_NAME), '\s+corpus\s+', '-')}_{$TRANSCRIPTION_NAME}/datastream/{upper-case($RECORDING_TYPE)}/{$RECORDING_PATH}" type="audio/{$RECORDING_TYPE}"/-->
                         </xsl:if>
                     </audio>
                 </xsl:when>
@@ -237,10 +238,10 @@
             <!-- if this entitiy has a start point with an absolute time value... -->
             <xsl:if test="//tli[@id = current()/descendant::ts[1]/@s]/@time">
                 <xsl:variable name="TIME" select="0 + //tli[@id = current()/descendant::ts[1]/@s]/@time"/>
-                    <span id="play_button_{exmaralda:FORMAT_TIME($TIME)}" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" class="play">
-                        <a onclick="jump('{format-number(($TIME - 0.1), '#.##')}');document.getElementById('play_button_{exmaralda:FORMAT_TIME($TIME)}').style.cssText = 'text-decoration: underline black;color: black';">▶</a>
-                    </span>
-                    <!-- <img class="media" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" src="{$TOP_LEVEL_PATH}play_button.gif"/> -->
+                    <a onclick="jump('{format-number(($TIME - 0.1), '#.##')}');">
+                        <span id="play_button" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" class="play">&#9658;</span>
+                        <!-- <img class="media" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" src="{$TOP_LEVEL_PATH}play_button.gif"/> -->
+                    </a>
             </xsl:if>
         </td>
     </xsl:template>

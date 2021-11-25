@@ -90,7 +90,8 @@
     <!-- ************************ -->
 
     <xsl:template match="/">
-        <html>
+      <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
+         <html>
             <head>
                 <title>
                     <xsl:value-of select="concat($CORPUS_NAME, ': ', $TRANSCRIPTION_NAME)"/>
@@ -181,9 +182,10 @@
             <!-- anchor for media playback -->
             <xsl:if test="//tli[@id = current()/@id]/@time">
                 <xsl:variable name="TIME" select="0 + //tli[@id = current()/@id]/@time"/>
-                <a onclick="jump('{format-number(($TIME + 0.03), '#.##')}');">
-                    <img class="media invert" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" src="{$TOP_LEVEL_PATH}pbn.gif"/>
-                </a>
+                    <a onclick="jump('{format-number(($TIME - 0.1), '#.##')}');">
+                        <span id="play_button" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" class="play">&#9658;</span>
+                        <!-- <img class="media" title="{exmaralda:FORMAT_TIME($TIME)}&#x0020;-&#x0020;Click to start player" src="{$TOP_LEVEL_PATH}play_button.gif"/> -->
+                    </a>
             </xsl:if>
         </td>
     </xsl:template>
@@ -349,7 +351,7 @@
                 <audio controls="controls" data-tlid="media">
                     <source src="{$DATASTREAM_AUDIO}" type="audio/{$RECORDING_TYPE}"/>
                     <xsl:if test="not(starts-with($RECORDING_PATH, 'http'))">
-                        <source src="https://corpora.uni-hamburg.de/hzsk/de/islandora/object/recording:{replace(lower-case($CORPUS_NAME), '\s+corpus\s+', '-')}_{$TRANSCRIPTION_NAME}/datastream/{upper-case($RECORDING_TYPE)}/{$RECORDING_PATH}" type="audio/{$RECORDING_TYPE}"/>
+                        <!--source src="https://corpora.uni-hamburg.de/hzsk/de/islandora/object/recording:{replace(lower-case($CORPUS_NAME), '\s+corpus\s+', '-')}_{$TRANSCRIPTION_NAME}/datastream/{upper-case($RECORDING_TYPE)}/{$RECORDING_PATH}" type="audio/{$RECORDING_TYPE}"/-->
                     </xsl:if>
                 </audio>
             </xsl:if>
