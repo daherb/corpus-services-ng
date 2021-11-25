@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 public class CorpusHTML extends Visualizer {
 
     // resources loaded from directory supplied in pom.xml
-    static final String STYLESHEET_PATH = "/xsl/Coma2HTML.xsl";
+    static final String STYLESHEET_PATH = "/xsl/coma2html.xsl";
     private static final String SERVICE_NAME = "ComaHTML";
     URL targeturl;
     CorpusData cod;
@@ -41,8 +41,8 @@ public class CorpusHTML extends Visualizer {
 
         try {
 
-            String corpusPrefix = coma.split("<Key Name=\"hzsk:corpusPrefix\">")[1].split("</Key>")[0];
-            String corpusVersion = coma.split("<Key Name=\"hzsk:corpusVersion\">")[1].split("</Key>")[0];
+            String corpusPrefix = coma.split("<Key Name=\"inel:corpusPrefix\">")[1].split("</Key>")[0];
+            String corpusVersion = coma.split("<Key Name=\"inel:corpusVersion\">")[1].split("</Key>")[0];
 
             // read the XSL stylesheet into a String
             String xsl = TypeConverter.InputStream2String(getClass().getResourceAsStream(STYLESHEET_PATH));
