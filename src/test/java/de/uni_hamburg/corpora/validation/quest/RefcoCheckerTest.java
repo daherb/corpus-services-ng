@@ -7,20 +7,15 @@ package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.ini4j.InvalidFileFormatException;
 import org.jdom.*;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.junit.*;
 import org.xml.sax.SAXException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.lang.reflect.*;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -480,6 +475,19 @@ public class RefcoCheckerTest {
     }
 
     /**
+     * Helper to check the error log to not be null or empty and contain exactly one error item
+     * @param item the item that was modified
+     * @param report the error report
+     */
+    private void checkReport(String item, Report report) {
+        assertNotNull("Report is null for " + item, report);
+        assertFalse("Report is empty for " + item, report.getRawStatistics().isEmpty());
+        assertEquals("More than one error for " + item, 1, report.getErrorStatistics().size());
+        logger.info(report.getFullReports());
+
+    }
+
+    /**
      * Test for "private Report readRefcoCriteria(Document arg0)"
      */
     @Test
@@ -511,8 +519,8 @@ public class RefcoCheckerTest {
     /**
      * Test for "private Report refcoGenericCheck()"
      */
-    @Test
-    public void refcoGenericCheckTest() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
+    /*@Test
+    public void refcoGenericCheckTest() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
         Properties props = new Properties();
         props.setProperty("refco-file",refcoODS.toString());
         RefcoChecker rc = new RefcoChecker(props);
@@ -525,9 +533,9 @@ public class RefcoCheckerTest {
                 cio.read(corpusUrl)));
         Method refcoGenericCheckMethod = rc.getClass().getDeclaredMethod("refcoGenericCheck");
         refcoGenericCheckMethod.setAccessible(true);
+        // Valid corpus documentation
         Report report = (Report) refcoGenericCheckMethod.invoke(rc);
         assertNotNull("Report is null", report);
-        logger.info(report.getFullReports());
         assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
         // Check for all string fields for errors if null or empty
         for (Field f : rc.getCriteria().getClass().getDeclaredFields()) {
@@ -535,16 +543,24 @@ public class RefcoCheckerTest {
                 String orig = (String) f.get(rc.getCriteria());
                 f.set(rc.getCriteria(),(String) null);
                 report = (Report) refcoGenericCheckMethod.invoke(rc);
-                assertNotNull("Report is null for null " + f.getName(), report);
-                assertFalse("Report is empty for null " + f.getName(), report.getRawStatistics().isEmpty());
-                assertEquals("More than one error for null " + f.getName(), 1, report.getErrorStatistics().size());
+                checkReport("null " + f.getName(), report);
                 f.set(rc.getCriteria(),"");
                 report = (Report) refcoGenericCheckMethod.invoke(rc);
-                assertNotNull("Report is null for empty " + f.getName(), report);
-                assertFalse("Report is empty for empty " + f.getName(), report.getRawStatistics().isEmpty());
-                assertEquals("More than one error for empty " + f.getName(), 1, report.getErrorStatistics().size());
+                checkReport("empty " + f.getName(), report);
                 f.set(rc.getCriteria(),orig);
             }
+            else if (f.getType() == RefcoChecker.InformationNotes.class) {
+                RefcoChecker.InformationNotes orig = (RefcoChecker.InformationNotes) f.get(rc.getCriteria());
+                f.set(rc.getCriteria(),new RefcoChecker.InformationNotes((String) null,orig.notes));
+                report = (Report) refcoGenericCheckMethod.invoke(rc);
+                checkReport("null "+ f.getName() + "information", report);
+                f.set(rc.getCriteria(),new RefcoChecker.InformationNotes("",orig.notes));
+                report = (Report) refcoGenericCheckMethod.invoke(rc);
+                checkReport("empty "+ f.getName() + "information", report);
+                f.set(rc.getCriteria(),orig);
+            }
+            else
+                logger.info("HERE " + f.getName() + ":" + f.getType());
         }
         // More in-depth tests
         // Check subject languages
@@ -552,19 +568,23 @@ public class RefcoCheckerTest {
             String origSubjectLanguages = rc.getCriteria().subjectLanguages;
             rc.getCriteria().subjectLanguages = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for illegal subject languages", report);
-            assertFalse("Report is empty for illegal subject languages", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for illegal subject languages", 1, report.getErrorStatistics().size());
+            checkReport("illegal subject language", report);
             rc.getCriteria().subjectLanguages = origSubjectLanguages;
+        }
+        // Check persistent identifier
+        {
+            String origPersistentIdentifier = rc.getCriteria().persistentId;
+            rc.getCriteria().persistentId = "foo";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            checkReport("illegal persistent identifier", report);
+            rc.getCriteria().persistentId = origPersistentIdentifier;
         }
         // Check refco version
         {
             String origRefcoVersion = rc.getCriteria().refcoVersion.information;
             rc.getCriteria().refcoVersion.information = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for illegal refco version", report);
-            assertFalse("Report is empty for illegal refco version", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for illegal refco version", 1, report.getErrorStatistics().size());
+            checkReport("illegal refco version", report);
             rc.getCriteria().refcoVersion.information = origRefcoVersion;
         }
         // Check number of sessions
@@ -572,14 +592,10 @@ public class RefcoCheckerTest {
             String origNumberSessions = rc.getCriteria().numberSessions.information;
             rc.getCriteria().numberSessions.information = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for illegal number of sessions", report);
-            assertFalse("Report is empty for illegal number of sessions", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for illegal number of sessions", 1, report.getErrorStatistics().size());
+            checkReport("illegal number of sessions", report);
             rc.getCriteria().numberSessions.information = "42";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for wrong number of sessions", report);
-            assertFalse("Report is empty for wrong number of sessions", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for wrong number of sessions", 1, report.getErrorStatistics().size());
+            checkReport("wrong number of sessions", report);
             rc.getCriteria().numberSessions.information = origNumberSessions;
         }
         // Check number of transcribed words
@@ -587,15 +603,10 @@ public class RefcoCheckerTest {
             String origNumberTranscribedWords = rc.getCriteria().numberTranscribedWords.information;
             rc.getCriteria().numberTranscribedWords.information = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for illegal number of transcribed words", report);
-            assertFalse("Report is empty for illegal number of transcribed words", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for illegal number of transcribed words", 1, report.getErrorStatistics().size());
+            checkReport("illegal number of transcribed words", report);
             rc.getCriteria().numberTranscribedWords.information = "42";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            logger.info(report.getFullReports());
-            assertNotNull("Report is null for wrong number of transcribed words", report);
-            assertFalse("Report is empty for wrong number of transcribed words", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for wrong number of transcribed words", 1, report.getErrorStatistics().size());
+            checkReport("wrong number of transcribed words", report);
             rc.getCriteria().numberTranscribedWords.information = origNumberTranscribedWords;
         }
         // Check number of annotated words
@@ -603,15 +614,10 @@ public class RefcoCheckerTest {
             String origNumberAnnotatedWords = rc.getCriteria().numberAnnotatedWords.information;
             rc.getCriteria().numberAnnotatedWords.information = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for illegal number of transcribed words", report);
-            assertFalse("Report is empty for illegal number of transcribed words", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for illegal number of transcribed words", 1, report.getErrorStatistics().size());
+            checkReport("illegal number of annotated words", report);
             rc.getCriteria().numberAnnotatedWords.information = "42";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            logger.info(report.getFullReports());
-            assertNotNull("Report is null for wrong number of transcribed words", report);
-            assertFalse("Report is empty for wrong number of transcribed words", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for wrong number of transcribed words", 1, report.getErrorStatistics().size());
+            checkReport("wrong number of annotated words", report);
             rc.getCriteria().numberAnnotatedWords.information = origNumberAnnotatedWords;
         }
         // Check translation languages
@@ -619,14 +625,101 @@ public class RefcoCheckerTest {
             String origTranslationLanguages = rc.getCriteria().translationLanguages.information;
             rc.getCriteria().subjectLanguages = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertNotNull("Report is null for illegal translation languages", report);
-            assertFalse("Report is empty for illegal translation languages", report.getRawStatistics().isEmpty());
-            assertEquals("More than one error for illegal translation languages", 1,
-                    report.getErrorStatistics().size());
+            checkReport("illegal translation languages", report);
             rc.getCriteria().subjectLanguages = origTranslationLanguages;
         }
-    }
+    }*/
 
+    /**
+     *  Test for "private Report refcoSessionCheck()"
+     */
+    @Test
+    public void refcoSessionCheckTest() throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
+        Properties props = new Properties();
+        props.setProperty("refco-file",refcoODS.toString());
+        RefcoChecker rc = new RefcoChecker(props);
+        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
+        setRefcoCorpusMethod.setAccessible(true);
+        // Read corpus
+        CorpusIO cio = new CorpusIO();
+        URL corpusUrl = new File(resourcePath).toURI().toURL();
+        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
+                cio.read(corpusUrl)));
+        Method refcoSessionCheckMethod = rc.getClass().getDeclaredMethod("refcoSessionCheck");
+        refcoSessionCheckMethod.setAccessible(true);
+        // Valid corpus documentation
+        Report report = (Report) refcoSessionCheckMethod.invoke(rc);
+        assertNotNull("Report is null", report);
+        assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
+        // Check for all string fields for errors if null or empty
+        for (RefcoChecker.Session s : rc.getCriteria().sessions) {
+            for (Field f : s.getClass().getDeclaredFields()) {
+                if (f.getType() == String.class) {
+                    String orig = (String) f.get(s);
+                    f.set(s, (String) null);
+                    report = (Report) refcoSessionCheckMethod.invoke(rc);
+                    checkReport("null " + f.getName(), report);
+                    f.set(s, "");
+                    report = (Report) refcoSessionCheckMethod.invoke(rc);
+                    checkReport("empty " + f.getName(), report);
+                    f.set(s, orig);
+                }
+                else if (f.getType() == RefcoChecker.InformationNotes.class) {
+                    RefcoChecker.InformationNotes orig = (RefcoChecker.InformationNotes) f.get(rc.getCriteria());
+                    f.set(rc.getCriteria(), new RefcoChecker.InformationNotes((String) null, orig.notes));
+                    report = (Report) refcoSessionCheckMethod.invoke(rc);
+                    checkReport("null " + f.getName() + " information", report);
+                    f.set(rc.getCriteria(), new RefcoChecker.InformationNotes("", orig.notes));
+                    report = (Report) refcoSessionCheckMethod.invoke(rc);
+                    checkReport("empty " + f.getName() + " information", report);
+                    f.set(rc.getCriteria(), orig);
+                }
+            }
+            // More in-depth tests
+            // Check file name
+            {
+                String origFileName = s.fileName;
+                // Just an invalid file name
+                s.fileName = "foo";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("invalid file name", report);
+                // The invalid file name followed by the original valid one
+                s.fileName = "foo," + origFileName;
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("invalid and valid file name", report);
+                // The original valid file name followed by an invalid one
+                s.fileName = origFileName + ",1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("valid and invalid file name", report);
+                s.fileName = origFileName;
+            }
+            // Check speaker age
+            {
+                String origSpeakerAge = s.speakerAge;
+                s.speakerAge = "foo";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("invalid speaker age", report);
+                s.speakerAge = "123foo";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("partially invalid speaker age", report);
+                s.speakerAge = "1000";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("speaker age out of bounds", report);
+                s.speakerAge = origSpeakerAge;
+            }
+            // Check recording date
+            {
+                String origRecordingDate = s.recordingDate;
+                s.recordingDate = "foo";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("invalid recording date", report);
+                s.recordingDate = "9999-99-99";
+                report = (Report) refcoSessionCheckMethod.invoke(rc);
+                checkReport("recording date out of bounds", report);
+                s.recordingDate = origRecordingDate;
+            }
+        }
+    }
 
     /**
      * Test for "private Report checkMorphologyGloss(CorpusData arg0,java.util.List<Text> arg1,HashSet<String> arg2)"
