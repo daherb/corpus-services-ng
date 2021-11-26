@@ -1094,7 +1094,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *
      * @return the detailed report of all checks performed
      */
-    public Report refcoGenericCheck() {
+    private Report refcoGenericCheck() {
                 Report report = new Report() ;
         if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
@@ -1292,7 +1292,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *
      * @return the detailed report of all checks performed
      */
-    public Report refcoSessionCheck() {
+    private Report refcoSessionCheck() {
         Report report = new Report();
         // Check each of the sessions
         for (Session s : criteria.sessions) {
@@ -1404,7 +1404,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *
      * @return the detailed report of all checks performed
      */
-    public Report refcoTierCheck() {
+    private Report refcoTierCheck() {
         // Check all tiers
         // Get all tiers from the corpus
         Map<String, Set<String>> allTiers;
@@ -1490,7 +1490,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *
      * @return the detailed report of all checks performed
      */
-    public Report refcoTranscriptionCheck() {
+    private Report refcoTranscriptionCheck() {
         Report report = new Report();
         // Check all transcription graphemes
         for (Transcription t : criteria.transcriptions) {
@@ -1518,7 +1518,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *
      * @return the detailed report of all checks performed
      */
-    public Report refcoGlossCheck() {
+    private Report refcoGlossCheck() {
         Report report = new Report();
         // Check all glosses
         for (Gloss g : criteria.glosses) {
@@ -1572,7 +1572,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      *
      * @return the detailed report of all checks performed
      */
-    public Report refcoPunctuationCheck() {
+    private Report refcoPunctuationCheck() {
         Report report = new Report();
         // Check all punctuation
         for (Punctuation p : criteria.punctuations) {
