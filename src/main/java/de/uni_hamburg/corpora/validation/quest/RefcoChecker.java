@@ -1296,7 +1296,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         // Check each of the sessions
         for (Session s : criteria.sessions) {
-            if (s.speakerName == null || s.speakerName.isEmpty())
+            if (s.sessionName == null || s.sessionName.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Session name is empty","Add session name"}));
@@ -1369,7 +1369,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         new Object[]{getFunction(),refcoShortName,
                                 "Corpus composition: Recording location is empty: " + s.speakerName,
                                 "Add recording location"}));
-            if (s.recordingLocation == null || s.recordingDate.isEmpty())
+            if (s.recordingDate == null || s.recordingDate.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
