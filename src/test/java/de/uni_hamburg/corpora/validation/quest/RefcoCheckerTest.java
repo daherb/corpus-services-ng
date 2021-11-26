@@ -519,7 +519,7 @@ public class RefcoCheckerTest {
     /**
      * Test for "private Report refcoGenericCheck()"
      */
-    /*@Test
+    @Test
     public void refcoGenericCheckTest() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
         Properties props = new Properties();
         props.setProperty("refco-file",refcoODS.toString());
@@ -628,7 +628,7 @@ public class RefcoCheckerTest {
             checkReport("illegal translation languages", report);
             rc.getCriteria().subjectLanguages = origTranslationLanguages;
         }
-    }*/
+    }
 
     /**
      *  Test for "private Report refcoSessionCheck()"
