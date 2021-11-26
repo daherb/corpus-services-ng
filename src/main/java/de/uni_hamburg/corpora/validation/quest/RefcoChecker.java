@@ -1379,8 +1379,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Check date by trying to parse it
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 try {
-                    df.parse(s.recordingDate);
-                } catch (ParseException e) {
+                    Date date = df.parse(s.recordingDate);
+                    // Java is very lax when parsing dates, so we have to compare the parsed date to the original one
+                    if (!df.format(date).equals(s.recordingDate))
+                        throw new IllegalArgumentException("Parsed date does not match given date");
+                } catch (ParseException | IllegalArgumentException e) {
                     report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Corpus composition: Recording date in invalid format. Expected yyyy-mm-dd, got: "
