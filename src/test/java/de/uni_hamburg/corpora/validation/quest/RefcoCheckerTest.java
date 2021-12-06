@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -482,8 +483,9 @@ public class RefcoCheckerTest {
     private void checkReport(String item, Report report) {
         assertNotNull("Report is null for " + item, report);
         assertFalse("Report is empty for " + item, report.getRawStatistics().isEmpty());
+        if (report.getErrorStatistics().size() > 1)
+            logger.info(report.getFullReports());
         assertEquals("More than one error for " + item, 1, report.getErrorStatistics().size());
-        logger.info(report.getFullReports());
 
     }
 
@@ -559,16 +561,32 @@ public class RefcoCheckerTest {
                 checkReport("empty "+ f.getName() + "information", report);
                 f.set(rc.getCriteria(),orig);
             }
-            else
-                logger.info("HERE " + f.getName() + ":" + f.getType());
         }
         // More in-depth tests
         // Check subject languages
         {
             String origSubjectLanguages = rc.getCriteria().subjectLanguages;
+            rc.getCriteria().subjectLanguages = "ger";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid iso subject language code",
+                    report.getRawStatistics().isEmpty());
+            rc.getCriteria().subjectLanguages = "nisv1234";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid glottolog subject language code",
+                    report.getRawStatistics().isEmpty());
+            rc.getCriteria().subjectLanguages = "French";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid known subject language",
+                    report.getRawStatistics().isEmpty());
             rc.getCriteria().subjectLanguages = "foo";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            checkReport("illegal subject language", report);
+            checkReport("invalid iso subject language code", report);
+            rc.getCriteria().subjectLanguages = "foob1234";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            checkReport("invalid glottolog subject language code", report);
+            rc.getCriteria().subjectLanguages = "foobar_subject";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            checkReport("invalid subject language", report);
             rc.getCriteria().subjectLanguages = origSubjectLanguages;
         }
         // Check persistent identifier
@@ -623,16 +641,36 @@ public class RefcoCheckerTest {
         // Check translation languages
         {
             String origTranslationLanguages = rc.getCriteria().translationLanguages.information;
-            rc.getCriteria().subjectLanguages = "foo";
+            rc.getCriteria().translationLanguages.information = "ger";
             report = (Report) refcoGenericCheckMethod.invoke(rc);
-            checkReport("illegal translation languages", report);
-            rc.getCriteria().subjectLanguages = origTranslationLanguages;
+            assertTrue("non-empty report for valid iso translation language code",
+                    report.getRawStatistics().isEmpty());
+            rc.getCriteria().translationLanguages.information = "nisv1234";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid glottolog translation language code",
+                    report.getRawStatistics().isEmpty());
+            rc.getCriteria().translationLanguages.information = "French";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid known translation language",
+                    report.getRawStatistics().isEmpty());
+            rc.getCriteria().translationLanguages.information = "foo";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            checkReport("invalid iso translation language code", report);
+            rc.getCriteria().translationLanguages.information = "foob1234";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            checkReport("invalid glottolog translation language code", report);
+            rc.getCriteria().translationLanguages.information = "foobar_translation";
+            report = (Report) refcoGenericCheckMethod.invoke(rc);
+            checkReport("invalid translation language", report);
+            rc.getCriteria().translationLanguages.information = origTranslationLanguages;
         }
     }
 
-    /**
+
+/**
      *  Test for "private Report refcoSessionCheck()"
-     */
+     *//*
+
     @Test
     public void refcoSessionCheckTest() throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
         Properties props = new Properties();
@@ -663,8 +701,7 @@ public class RefcoCheckerTest {
                     report = (Report) refcoSessionCheckMethod.invoke(rc);
                     checkReport("empty " + f.getName(), report);
                     f.set(s, orig);
-                }
-                else if (f.getType() == RefcoChecker.InformationNotes.class) {
+                } else if (f.getType() == RefcoChecker.InformationNotes.class) {
                     RefcoChecker.InformationNotes orig = (RefcoChecker.InformationNotes) f.get(rc.getCriteria());
                     f.set(rc.getCriteria(), new RefcoChecker.InformationNotes((String) null, orig.notes));
                     report = (Report) refcoSessionCheckMethod.invoke(rc);
@@ -675,49 +712,188 @@ public class RefcoCheckerTest {
                     f.set(rc.getCriteria(), orig);
                 }
             }
-            // More in-depth tests
-            // Check file name
-            {
-                String origFileName = s.fileName;
-                // Just an invalid file name
-                s.fileName = "foo";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("invalid file name", report);
-                // The invalid file name followed by the original valid one
-                s.fileName = "foo," + origFileName;
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("invalid and valid file name", report);
-                // The original valid file name followed by an invalid one
-                s.fileName = origFileName + ",1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("valid and invalid file name", report);
-                s.fileName = origFileName;
+        }
+        // More in-depth tests by modifying the first session
+        RefcoChecker.Session s = rc.getCriteria().sessions.get(0);
+        // Check file name
+        {
+            String origFileName = s.fileName;
+            // Just an invalid file name
+            s.fileName = "foo";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("invalid file name", report);
+            // The invalid file name followed by the original valid one
+            s.fileName = "foo," + origFileName;
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("invalid and valid file name", report);
+            // The original valid file name followed by an invalid one
+            s.fileName = origFileName + ",1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("valid and invalid file name", report);
+            s.fileName = origFileName;
+        }
+        // Check speaker age
+        {
+            String origSpeakerAge = s.speakerAge;
+            s.speakerAge = "foo";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("invalid speaker age", report);
+            s.speakerAge = "123foo";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("partially invalid speaker age", report);
+            s.speakerAge = "1000";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("speaker age out of bounds", report);
+            s.speakerAge = origSpeakerAge;
+        }
+        // Check recording date
+        {
+            String origRecordingDate = s.recordingDate;
+            s.recordingDate = "foo";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("invalid recording date", report);
+            s.recordingDate = "9999-99-99";
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            checkReport("recording date out of bounds", report);
+            s.recordingDate = origRecordingDate;
+        }
+    }
+*/
+
+    /**
+     *  Test for "private Report refcoTierCheck()"
+     */
+    @Test
+    public void refcoTierCheckTest() throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
+        Properties props = new Properties();
+        props.setProperty("refco-file",refcoODS.toString());
+        RefcoChecker rc = new RefcoChecker(props);
+        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
+        setRefcoCorpusMethod.setAccessible(true);
+        // Read corpus
+        CorpusIO cio = new CorpusIO();
+        URL corpusUrl = new File(resourcePath).toURI().toURL();
+        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
+                cio.read(corpusUrl)));
+        Method refcoTierCheckMethod = rc.getClass().getDeclaredMethod("refcoTierCheck");
+        refcoTierCheckMethod.setAccessible(true);
+        // Valid corpus documentation
+        Report report = (Report) refcoTierCheckMethod.invoke(rc);
+        assertNotNull("Report is null", report);
+        assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
+        // Check for all string fields for errors if null or empty
+        for (RefcoChecker.Tier t : rc.getCriteria().tiers) {
+            for (Field f : t.getClass().getDeclaredFields()) {
+                if (f.getType() == String.class
+                        // Tier name also triggers not all tiers documented
+                        && !f.getName().equals("tierName")
+                        // Morpheme distinction is optional for non-morphology tiers
+                        && !f.getName().equals("morphemeDistinction")
+                ) {
+                    String orig = (String) f.get(t);
+                    f.set(t, (String) null);
+                    report = (Report) refcoTierCheckMethod.invoke(rc);
+                    checkReport("null " + f.getName(), report);
+                    f.set(t, "");
+                    report = (Report) refcoTierCheckMethod.invoke(rc);
+                    checkReport("empty " + f.getName(), report);
+                    f.set(t, orig);
+                }
             }
-            // Check speaker age
-            {
-                String origSpeakerAge = s.speakerAge;
-                s.speakerAge = "foo";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("invalid speaker age", report);
-                s.speakerAge = "123foo";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("partially invalid speaker age", report);
-                s.speakerAge = "1000";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("speaker age out of bounds", report);
-                s.speakerAge = origSpeakerAge;
-            }
-            // Check recording date
-            {
-                String origRecordingDate = s.recordingDate;
-                s.recordingDate = "foo";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("invalid recording date", report);
-                s.recordingDate = "9999-99-99";
-                report = (Report) refcoSessionCheckMethod.invoke(rc);
-                checkReport("recording date out of bounds", report);
-                s.recordingDate = origRecordingDate;
-            }
+        }
+        // More in-depth tests by modifying the first tier
+        // Check tier function
+        {
+            // Backup original value
+            ArrayList<String> origTierFunction =
+                    (ArrayList<String>) rc.getCriteria().tiers.get(0).tierFunctions.stream().collect(Collectors.toList());
+            // Null tier functions
+            rc.getCriteria().tiers.get(0).tierFunctions = null;
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("null tier functions", report);
+            // Empty tier functions
+            rc.getCriteria().tiers.get(0).tierFunctions = new ArrayList<>();
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("empty tier functions", report);
+            // Invalid tier function
+            rc.getCriteria().tiers.get(0).tierFunctions.add("foobar_tier");
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("invalid tier function", report);
+            // Restore original
+            rc.getCriteria().tiers.get(0).tierFunctions = origTierFunction.stream().collect(Collectors.toList());
+        }
+        // Check languages
+        {
+            // Backup original value
+            String origLanguages = rc.getCriteria().tiers.get(0).languages;
+            // Valid iso code
+            rc.getCriteria().tiers.get(0).languages = "ger";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid iso tier language code",
+                    report.getRawStatistics().isEmpty());
+            // Valid glottolog
+            rc.getCriteria().tiers.get(0).languages = "nisv1234";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid glottolog tier language code",
+                    report.getRawStatistics().isEmpty());
+            // Valid known language
+            rc.getCriteria().tiers.get(0).languages = "French";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            assertTrue("non-empty report for valid known tier language", report.getRawStatistics().isEmpty());
+            // Invalid languages
+            rc.getCriteria().tiers.get(0).languages = "foo";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("invalid iso tier language code", report);
+            rc.getCriteria().tiers.get(0).languages = "foob1234";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("invalid glottolog tier language code", report);
+            rc.getCriteria().tiers.get(0).languages = "foobar";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("invalid tier language", report);
+            // Restore original
+            rc.getCriteria().tiers.get(0).languages = origLanguages;
+
+        }
+        // Check morpheme distinction
+        {
+            // Backup original value
+            ArrayList<String> origTierFunction =
+                    (ArrayList<String>) rc.getCriteria().tiers.get(0).tierFunctions.stream().collect(Collectors.toList());
+            String origMorphemeDistinction = rc.getCriteria().tiers.get(0).morphemeDistinction;
+            // make sure it is a morpheme tier
+            rc.getCriteria().tiers.get(0).tierFunctions = new ArrayList<>(Collections.singleton("morpheme gloss"));
+            // null morpheme distinction
+            rc.getCriteria().tiers.get(0).morphemeDistinction = null;
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("null morpheme distinction", report);
+            // empty morpheme distinction
+            rc.getCriteria().tiers.get(0).morphemeDistinction = "";
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("null morpheme distinction", report);
+            // Restore origingal
+            rc.getCriteria().tiers.get(0).tierFunctions = origTierFunction.stream().collect(Collectors.toList());
+            rc.getCriteria().tiers.get(0).morphemeDistinction = origMorphemeDistinction;
+        }
+        // Check all tiers
+        {
+            ArrayList<RefcoChecker.Tier> origTiers = (ArrayList<RefcoChecker.Tier>)
+                    rc.getCriteria().tiers.stream().collect(Collectors.toList());
+            rc.getCriteria().tiers.get(0).tierName = null ;
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            assertEquals("null tier name does not trigger two errors", 2, report.getRawStatistics().size());
+            assertTrue("errors do not contain empty tier name", report.getFullReports().contains("tier name is empty"));
+            assertTrue("errors do not contain undocumented tier", report.getFullReports()
+                    .contains("Tiers are not documented"));
+            rc.getCriteria().tiers.get(0).tierName = "" ;
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            assertEquals("empty tier name does not trigger two errors", 2, report.getRawStatistics().size());
+            assertTrue("errors do not contain empty tier name for empty tier name", report.getFullReports().contains("tier name is empty"));
+            assertTrue("errors do not contain undocumented tier for empty tier name", report.getFullReports()
+                    .contains("Tiers are not documented"));
+            rc.getCriteria().tiers.remove(0);
+            report = (Report) refcoTierCheckMethod.invoke(rc);
+            checkReport("missing tier",report);
+            assertEquals("", 1, report.getRawStatistics().size());
         }
     }
 
