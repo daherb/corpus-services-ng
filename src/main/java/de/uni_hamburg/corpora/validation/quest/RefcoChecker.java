@@ -1408,6 +1408,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the detailed report of all checks performed
      */
     private Report refcoTierCheck() {
+        Report report = new Report();
         // Check all tiers
         // Get all tiers from the corpus
         Map<String, Set<String>> allTiers;
@@ -1467,7 +1468,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            if (t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
+            // Only check morpheme distinction for morpheme gloss tiers
+            if (t.tierFunctions != null && t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
                 report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName, "Morpheme distinction is empty: " + t.tierName,
@@ -1478,7 +1480,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                             "description", "howtoFix"},
                     new Object[]{getFunction(), refcoShortName, "Tiers are not documented:\n" +
-                            //String.join(", ", allTiers),
                             allTiers.keySet().stream().map((k) ->
                                     finalAllTiers.get(k).stream().map((v) -> v + ":" + k)
                                             .collect(Collectors.joining(",\n"))).collect(Collectors.joining(",\n")),
