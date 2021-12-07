@@ -666,10 +666,9 @@ public class RefcoCheckerTest {
         }
     }
 
-
-/**
+    /**
      *  Test for "private Report refcoSessionCheck()"
-     *//*
+     */
 
     @Test
     public void refcoSessionCheckTest() throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
@@ -758,7 +757,6 @@ public class RefcoCheckerTest {
             s.recordingDate = origRecordingDate;
         }
     }
-*/
 
     /**
      *  Test for "private Report refcoTierCheck()"
