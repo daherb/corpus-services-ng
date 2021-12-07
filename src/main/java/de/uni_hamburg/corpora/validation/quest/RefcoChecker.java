@@ -505,7 +505,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Run the generic tests and merge their reports into the current report
         logger.info("Merge generic");
-        report.merge(refcoGenericCheck());
+        report.merge(refcoDocumentationCheck());
         // Apply function for each of the supported file. Again merge the reports
         for (CorpusData cdata : c.getCorpusData()) {
             report.merge(function(cdata, fix));
