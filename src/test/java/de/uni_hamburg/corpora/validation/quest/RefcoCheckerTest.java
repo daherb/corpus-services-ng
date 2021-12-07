@@ -896,6 +896,180 @@ public class RefcoCheckerTest {
     }
 
     /**
+     *  Test for "private Report refcoTranscriptionCheck()"
+     */
+
+    @Test
+    public void refcoTranscriptionCheckTest() throws NoSuchMethodException, IOException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
+        Properties props = new Properties();
+        props.setProperty("refco-file",refcoODS.toString());
+        RefcoChecker rc = new RefcoChecker(props);
+        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
+        setRefcoCorpusMethod.setAccessible(true);
+        // Read corpus
+        CorpusIO cio = new CorpusIO();
+        URL corpusUrl = new File(resourcePath).toURI().toURL();
+        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
+                cio.read(corpusUrl)));
+        Method refcoTranscriptionCheckMethod = rc.getClass().getDeclaredMethod("refcoTranscriptionCheck");
+        refcoTranscriptionCheckMethod.setAccessible(true);
+        // Valid corpus documentation
+        Report report = (Report) refcoTranscriptionCheckMethod.invoke(rc);
+        assertNotNull("Report is null", report);
+        assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
+        // Check for all string fields for errors if null or empty
+        for (RefcoChecker.Transcription t : rc.getCriteria().transcriptions) {
+            for (Field f : t.getClass().getDeclaredFields()) {
+                if (f.getType() == String.class) {
+                    String orig = (String) f.get(t);
+                    f.set(t, (String) null);
+                    report = (Report) refcoTranscriptionCheckMethod.invoke(rc);
+                    checkReport("null " + f.getName(), report);
+                    f.set(t, "");
+                    report = (Report) refcoTranscriptionCheckMethod.invoke(rc);
+                    checkReport("empty " + f.getName(), report);
+                    f.set(t, orig);
+                }
+            }
+        }
+    }
+
+    /**
+     *  Test for "private Report refcoGlossCheck()"
+     */
+
+    @Test
+    public void refcoGlossCheckTest() throws NoSuchMethodException, IOException, JexmaraldaException,
+            URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
+        Properties props = new Properties();
+        props.setProperty("refco-file",refcoODS.toString());
+        RefcoChecker rc = new RefcoChecker(props);
+        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
+        setRefcoCorpusMethod.setAccessible(true);
+        // Read corpus
+        CorpusIO cio = new CorpusIO();
+        URL corpusUrl = new File(resourcePath).toURI().toURL();
+        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
+                cio.read(corpusUrl)));
+        Method refcoGlossCheckMethod = rc.getClass().getDeclaredMethod("refcoGlossCheck");
+        refcoGlossCheckMethod.setAccessible(true);
+        // Valid corpus documentation
+        Report report = (Report) refcoGlossCheckMethod.invoke(rc);
+        assertNotNull("Report is null", report);
+        assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
+        // Check for all string fields for errors if null or empty
+        for (RefcoChecker.Gloss g : rc.getCriteria().glosses) {
+            for (Field f : g.getClass().getDeclaredFields()) {
+                if (f.getType() == String.class
+                        // Comments are optional
+                        && !f.getName().equals("comments")) {
+                    String orig = (String) f.get(g);
+                    f.set(g, (String) null);
+                    report = (Report) refcoGlossCheckMethod.invoke(rc);
+                    checkReport("null " + f.getName(), report);
+                    f.set(g, "");
+                    report = (Report) refcoGlossCheckMethod.invoke(rc);
+                    checkReport("empty " + f.getName(), report);
+                    f.set(g, orig);
+                }
+            }
+        }
+        // More in-depth tests
+        RefcoChecker.Gloss g = rc.getCriteria().glosses.get(0);
+        // Gloss format
+        {
+            // Backup original
+            String origGloss = rc.getCriteria().glosses.get(0).gloss;
+            g.gloss = "[hors-texte]";
+            report = (Report) refcoGlossCheckMethod.invoke(rc);
+            assertEquals("non-empty report for lower case gloss token", 0,
+                    report.getRawStatistics().size());
+            g.gloss = "FOO-BAR";
+            report = (Report) refcoGlossCheckMethod.invoke(rc);
+            checkReport("invalid gloss containing separator", report);
+            // Restore backup
+            rc.getCriteria().glosses.get(0).gloss = origGloss;
+        }
+        // Valid tiers
+        {
+            // Backup original
+            String origTiers = rc.getCriteria().glosses.get(0).tiers;
+            g.tiers = "Morphologie, Aven";
+            report = (Report) refcoGlossCheckMethod.invoke(rc);
+            assertEquals("non-empty report for valid tiers",0, report.getRawStatistics().size());
+            g.tiers = "all";
+            report = (Report) refcoGlossCheckMethod.invoke(rc);
+            assertEquals("non-empty report for \"all\" tiers",0, report.getRawStatistics().size());
+            g.tiers = "Morphologie, foobar";
+            report = (Report) refcoGlossCheckMethod.invoke(rc);
+            checkReport("invalid tiers for gloss", report);
+            // Restore backup
+            rc.getCriteria().glosses.get(0).tiers = origTiers;
+        }
+    }
+
+
+    /**
+     *  Test for "private Report refcoPunctuationCheck()"
+     */
+    @Test
+    public void refcoPunctuationCheckTest() throws NoSuchMethodException, IOException, JexmaraldaException,
+            URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
+        Properties props = new Properties();
+        props.setProperty("refco-file", refcoODS.toString());
+        RefcoChecker rc = new RefcoChecker(props);
+        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
+        setRefcoCorpusMethod.setAccessible(true);
+        // Read corpus
+        CorpusIO cio = new CorpusIO();
+        URL corpusUrl = new File(resourcePath).toURI().toURL();
+        setRefcoCorpusMethod.invoke(rc, new Corpus("refcoTest", corpusUrl,
+                cio.read(corpusUrl)));
+        Method refcoPunctuationCheckMethod = rc.getClass().getDeclaredMethod("refcoPunctuationCheck");
+        refcoPunctuationCheckMethod.setAccessible(true);
+        // Valid corpus documentation
+        Report report = (Report) refcoPunctuationCheckMethod.invoke(rc);
+        assertNotNull("Report is null", report);
+        logger.info(report.getFullReports());
+        assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
+        // Check for all string fields for errors if null or empty
+        for (RefcoChecker.Punctuation g : rc.getCriteria().punctuations) {
+            for (Field f : g.getClass().getDeclaredFields()) {
+                if (f.getType() == String.class
+                        // Comments are optional
+                        && !f.getName().equals("comments")) {
+                    String orig = (String) f.get(g);
+                    f.set(g, (String) null);
+                    report = (Report) refcoPunctuationCheckMethod.invoke(rc);
+                    checkReport("null " + f.getName(), report);
+                    f.set(g, "");
+                    report = (Report) refcoPunctuationCheckMethod.invoke(rc);
+                    checkReport("empty " + f.getName(), report);
+                    f.set(g, orig);
+                }
+            }
+        }
+        // More in-depth tests
+        RefcoChecker.Punctuation p = rc.getCriteria().punctuations.get(0);
+        // Valid tiers
+        {
+            // Backup original
+            String origTiers = rc.getCriteria().punctuations.get(0).tiers;
+            p.tiers = "Morphologie, Aven";
+            report = (Report) refcoPunctuationCheckMethod.invoke(rc);
+            assertEquals("non-empty report for valid tiers",0, report.getRawStatistics().size());
+            p.tiers = "all";
+            report = (Report) refcoPunctuationCheckMethod.invoke(rc);
+            assertEquals("non-empty report for \"all\" tiers",0, report.getRawStatistics().size());
+            p.tiers = "Morphologie, foobar";
+            report = (Report) refcoPunctuationCheckMethod.invoke(rc);
+            checkReport("invalid tiers for punctuation", report);
+            // Restore backup
+            rc.getCriteria().punctuations.get(0).tiers = origTiers;
+        }
+    }
+
+    /**
      * Test for "private Report checkMorphologyGloss(CorpusData arg0,java.util.List<Text> arg1,HashSet<String> arg2)"
      */
     @Test
