@@ -1533,7 +1533,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add gloss abbreviations"}));
             // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
             // lower-case letters)
-            if (g.gloss.split(glossSeparator).length > 1 && !g.gloss.matches(".*[a-z].*"))
+            else if (g.gloss.split(glossSeparator).length > 1 && !g.gloss.matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
                         ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
                                 new Object[]{getFunction(), refcoShortName,
