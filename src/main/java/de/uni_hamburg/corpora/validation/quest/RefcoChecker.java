@@ -836,7 +836,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (element == null)
             return "";
         else
-            return element.getText();
+            //return element.getText();
+            return showAllText(element).trim();
     }
 
     /**
@@ -1057,16 +1058,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         tableNamespace));
                 for (Element row : rowList) {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
-                    if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
+                    if (columns.size() > 4 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Characters")) {
                         Punctuation punctuation = new Punctuation();
                         punctuation.character = safeGetText(columns.get(0).getChild("p", textNamespace));
                         punctuation.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
                         punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        // TODO Function is optional?
-                        if (columns.size()>4)
-                            punctuation.function = safeGetText(columns.get(4).getChild("p", textNamespace));
+                        punctuation.function = safeGetText(columns.get(4).getChild("p", textNamespace));
                         criteria.punctuations.add(punctuation);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
                             "Characters")) {
@@ -1621,6 +1620,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
+            if (p.function == null || p.function.isEmpty())
+                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                                "description", "howtoFix"},
+                        new Object[]{getFunction(),refcoShortName,
+                                "Punctuation: function is empty for grapheme: " + p.character,
+                                "Add valid function for punctuation"}));
         }
         return report ;
     }
@@ -2155,6 +2160,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return params;
     }
 
+    public static String showAllText(Element e) {
+        return e.getText() + " " + e.getChildren().stream().map((c) ->
+                showAllText((Element) c)).collect(Collectors.joining(" "));
+    }
 
     /**
      * Extracts all tier ids  from the globalcorpus
