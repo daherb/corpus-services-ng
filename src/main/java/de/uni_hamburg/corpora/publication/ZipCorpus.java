@@ -115,7 +115,7 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
         //add file only
         if (node.isFile()) {
             if (AUDIO) {
-                if (node.getName().endsWith(".exb") || node.getName().endsWith(".exs") || node.getName().endsWith(".coma") || node.getName().endsWith(".pdf") || node.getName().endsWith(".mp3")) {
+                if (node.getName().endsWith(".exb") || node.getName().endsWith(".exs") || node.getName().endsWith(".coma") || node.getName().endsWith(".pdf") || node.getName().endsWith(".wav") || node.getName().endsWith("tei.xml") || node.getName().endsWith(".mp3")) {
                     System.out.println(node.getName());
                     fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
                     stats.addCorrect(function, comadata, node.getAbsoluteFile().toString() + " added to filelist");

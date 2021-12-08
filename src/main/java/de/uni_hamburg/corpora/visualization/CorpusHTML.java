@@ -66,7 +66,7 @@ public class CorpusHTML extends Visualizer {
             cod = cd;
             String result = createFromComa(cd.toSaveableString());
             CorpusIO cio = new CorpusIO();
-            targeturl = new URL(cd.getParentURL() + "/resources/" + cd.getFilenameWithoutFileEnding() + ".html");
+            targeturl = new URL(cd.getParentURL() + cd.getFilenameWithoutFileEnding() + ".html");
             cio.write(result, targeturl);
         } catch (MalformedURLException ex) {
             stats.addException(SERVICE_NAME, ex, cd, "Malformed URL used");

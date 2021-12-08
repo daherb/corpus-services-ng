@@ -41,7 +41,9 @@
 	<xsl:template match="Corpus">
 		<xsl:call-template name="MAKE_TITLE"/>
 		<div id="main">
-			<div>[<a><xsl:attribute name="onclick">switchMenu('DIV<xsl:value-of select="@Id"
+			<div>[<a>
+                                <xsl:attribute name="class">commLink</xsl:attribute>
+                                <xsl:attribute name="onclick">switchMenu('DIV<xsl:value-of select="@Id"
 						/>','null','false');</xsl:attribute>DC/OLAC metadata</a>]</div>
 			<div>
 				<xsl:attribute name="id">DIV<xsl:value-of select="@Id"/></xsl:attribute>
@@ -49,7 +51,9 @@
 				<xsl:apply-templates select="Description"/>
 
 			</div>
-			<div>[<a><xsl:attribute name="onclick">switchMenu('DIVfile<xsl:value-of select="@Id"
+			<div>[<a>
+                            <xsl:attribute name="class">commLink</xsl:attribute>
+                            <xsl:attribute name="onclick">switchMenu('DIVfile<xsl:value-of select="@Id"
 			/>','null','false');</xsl:attribute>Corpus materials and files</a>]</div>
 			<div>
 				<xsl:attribute name="id">DIVfile<xsl:value-of select="@Id"/></xsl:attribute>
@@ -91,6 +95,7 @@
 			<xsl:attribute name="class">notab</xsl:attribute>
 			<xsl:attribute name="id">SPAN<xsl:value-of select="@Id"/></xsl:attribute>
 			<a>
+                                <xsl:attribute name="class">commLink</xsl:attribute>
 				<xsl:attribute name="onclick">switchMenu('DIV<xsl:value-of select="@Id"
 						/>','SPAN<xsl:value-of select="@Id"/>','false');</xsl:attribute>
 				<xsl:attribute name="name">
@@ -149,6 +154,7 @@
 			</xsl:for-each>
 			<p><b>Files linked to this communication:</b>
 				<xsl:for-each select="File">
+                                        <xsl:text> 🗎 </xsl:text>
 					<a>
 						<xsl:attribute name="href"><xsl:value-of select="relPath"/></xsl:attribute>
                                                 <xsl:choose>
@@ -156,7 +162,7 @@
                                                         <xsl:value-of select="upper-case(substring-after(filename/text(),'.'))"/>
                                                     </xsl:when> 
                                                     <xsl:otherwise>
-                                                        <xsl:value-of>TEI</xsl:value-of>
+                                                        <xsl:value-of>ISO/TEI</xsl:value-of>
                                                     </xsl:otherwise>
                                                 </xsl:choose>
 					</a>
@@ -312,7 +318,7 @@
 			</b>
 			<br/>
 			<!--<xsl:apply-templates select="Description"/>-->
-			<xsl:text>EXMARaLDA: [</xsl:text>
+			<xsl:text>EXMARaLDA: 🗎 </xsl:text>
 			<a>
 				<xsl:attribute name="href">
 					<xsl:value-of select="$trCode"/>
@@ -324,7 +330,7 @@
 				<xsl:attribute name="title">EXMARaLDA Basic-Transcription</xsl:attribute>
 				<xsl:text>Transcription</xsl:text>
 			</a>
-			<xsl:text>] [</xsl:text>
+			<xsl:text>; 🗎 </xsl:text>
 			<a>
 				<xsl:attribute name="href">
 					<xsl:value-of select="NSLink"/>
@@ -333,7 +339,31 @@
 				<xsl:attribute name="title">EXMARaLDA Segmented-Transcription</xsl:attribute>
 				<xsl:text>Segmented</xsl:text>
 			</a>
-			<xsl:text>] </xsl:text>
+                        <br/>
+			<xsl:text>Visualizations: 🗎 </xsl:text>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:value-of select="$trCode"/>
+                                        <xsl:text>/</xsl:text>
+					<xsl:value-of select="$trCode0"/>
+					<xsl:text>_score.html</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="title">ScoreHTML</xsl:attribute>
+				<xsl:attribute name="target">_self</xsl:attribute>
+				<xsl:text>Score HTML</xsl:text>
+			</a>
+			<xsl:text>; 🗎 </xsl:text>
+			<a>
+				<xsl:attribute name="href">
+					<xsl:value-of select="$trCode"/>
+					<xsl:text>/</xsl:text>
+					<xsl:value-of select="$trCode0"/>
+					<xsl:text>_list.html</xsl:text>
+				</xsl:attribute>
+				<xsl:attribute name="target">_self</xsl:attribute>
+				<xsl:attribute name="title">ListHTML</xsl:attribute>
+				<xsl:text>List HTML</xsl:text>
+			</a>
 		</div>
 	</xsl:template>
 	<!-- RECORDING -->
@@ -400,7 +430,7 @@
 	</xsl:template>
 	<!--MEDIA-->
 	<xsl:template match="Media">
-		<xsl:value-of select="substring-after(NSLink, '.')"/> file: [<a>
+		<xsl:value-of select="substring-after(NSLink, '.')"/> file: ⏵ <a>
 			<xsl:attribute name="href">
 				<xsl:value-of select="NSLink"/>
 			</xsl:attribute>
@@ -409,7 +439,7 @@
 				<xsl:text>.</xsl:text>
 				<xsl:value-of select="substring-after(NSLink, '.')"/>
 			</xsl:if>
-		</a>]<xsl:if test="position() != last()">
+		</a><xsl:if test="position() != last()">
 			<br/>
 		</xsl:if>
 	</xsl:template>
@@ -745,16 +775,7 @@
 	</xsl:template>
 	<xsl:template name="MAKE_TITLE">
 		<div id="head">
-			<a href="http://www.uni-hamburg.de/" title="Universität Hamburg">
-				<img src="resources/uhh.png" alt="Uni Hamburg" border="0px" height="25px"
-					width="25px" style="margin-right:10px;"/>
-			</a>
-			<span id="corpus-title" title="Corpus overview"> EXMARaLDA Demo Korpus </span>
-			<a href="http://www.uni-hamburg.de/fachbereiche-einrichtungen/sfb538/"
-				title="SFB 538 &apos;Mehrsprachigkeit&apos;" style="margin-left:10px">
-				<img src="resources/sfb538.png" alt="SFB 538 'Mehrsprachigkeit" border="0px"
-					height="25px" width="25px"/>
-			</a>
+			<span id="corpus-title" title="Corpus overview">INEL Evenki Corpus</span>
 		</div>
 	</xsl:template>
 
