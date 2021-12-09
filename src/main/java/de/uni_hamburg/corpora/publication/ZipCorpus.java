@@ -80,7 +80,7 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
             for (String file : this.fileList) {
 
                 System.out.println("File Added : " + file);
-                ZipEntry ze = new ZipEntry(file);
+                ZipEntry ze = new ZipEntry(file.substring(SOURCE_FOLDER.length() - 1, file.length()));
                 zos.putNextEntry(ze);
 
                 FileInputStream in
