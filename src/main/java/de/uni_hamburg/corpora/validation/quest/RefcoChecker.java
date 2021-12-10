@@ -507,9 +507,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         logger.info("Merge generic");
         report.merge(refcoDocumentationCheck());
         // Apply function for each of the supported file. Again merge the reports
-        for (CorpusData cdata : c.getCorpusData()) {
-            report.merge(function(cdata, fix));
-        }
         // Check for morpheme glosses that never occurred in the complete corpus
         for (Map.Entry<String,Integer> e : morphemeFreq.entrySet()) {
             if (e.getValue() == 0)
@@ -521,6 +518,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
         // Levenshtein difference 1 with a higher frequency count
+            for (CorpusData cdata : c.getCorpusData()) {
+                //report.merge(function(cdata, fix));
+                function(cdata, fix);
+            }
         /*DictionaryAutomaton glossDictionary =
                 new DictionaryAutomaton(new ArrayList<>(glossFreq.keySet()));
         logger.info("Doing the fancy experiment");
