@@ -2207,20 +2207,42 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the location consisting of a tier and a segment
      */
     private Location getLocation(ELANData cd, String token) throws JDOMException {
-        String tier_id = ((Attribute) XPath.newInstance("//TIER/@TIER_ID[contains(string(..),'" + token + "')]")
-                .selectSingleNode(cd.getJdom()))
-                .getValue();
-        String annotation_segment = ((Attribute) XPath.newInstance("//*[contains(text(),'" + token + "')]/" +
-                "../@ANNOTATION_ID").selectSingleNode(cd.getJdom()))
-                .getValue();
-        int start_time = Integer.parseInt(((Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=" +
-                "//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + annotation_segment + "']/@TIME_SLOT_REF1]/@TIME_VALUE")
-                .selectSingleNode(cd.getJdom())).getValue());
-        int end_time = Integer.parseInt(((Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=" +
-                "//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + annotation_segment + "']/@TIME_SLOT_REF2]/@TIME_VALUE")
-                .selectSingleNode(cd.getJdom())).getValue());
-        return new Location("[Tier:" + tier_id + "]","[Segment:" + annotation_segment + ", Time:" +
-                DurationFormatUtils.formatDuration(start_time,"mm:ss.SSSS") + "-" +
-                DurationFormatUtils.formatDuration(end_time,"mm:ss.SSSS") + "]");
+        String normalizedToken = token.replaceAll("\"", "'");
+        Element tier =
+                (Element) XPath.newInstance("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"" + normalizedToken + "\")]")
+                .selectSingleNode(cd.getJdom());
+        if (tier != null) {
+            Attribute tier_id = (Attribute) XPath.newInstance("//@TIER_ID")
+                .selectSingleNode(tier);
+            assert tier_id != null : "Tier id is null";
+            Attribute annotation_segment =
+                    (Attribute) XPath.newInstance("//*[contains(text(),\"" + normalizedToken + "\")]/../@ANNOTATION_ID")
+                            .selectSingleNode(tier);
+            assert annotation_segment != null : "Annotation segment is null";
+            Element annotation =
+                    (Element) XPath.newInstance("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + annotation_segment.getValue() + "']")
+                    .selectSingleNode(tier);
+            assert annotation != null : "Annotation is null";
+            Attribute start_ref =
+                    (Attribute) XPath.newInstance("//@TIME_SLOT_REF1").selectSingleNode(annotation);
+            assert start_ref != null : "Start ref is null";
+            Attribute end_ref =
+                    (Attribute) XPath.newInstance("//@TIME_SLOT_REF2").selectSingleNode(annotation);
+            assert end_ref != null : "End ref is null";
+            Attribute start_time =
+                    (Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=\"" + start_ref.getValue() + "\"]/@TIME_VALUE")
+                            .selectSingleNode(cd.getJdom());
+            assert start_time != null : "Start time is null" ;
+            Attribute end_time =
+                    (Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=\"" + end_ref.getValue() + "\"]/@TIME_VALUE")
+                            .selectSingleNode(cd.getJdom());
+            assert end_time != null : "End time is null";
+            return new Location("[Tier:" + tier_id.getValue() + "]",
+                    "[Segment:" + annotation_segment.getValue() + ", Time:" +
+                            DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
+                            DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS") + "]");
+        }
+        // Return unkown location if tier is not found
+        return new Location("unknown", "");
     }
 }
