@@ -2045,7 +2045,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (d == null)
             return new ArrayList<>();
         else {
-            String path = String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier);
+            String path = String.format("//TIER[@LINGUISTIC_TYPE_REF=\"%s\"]//ANNOTATION_VALUE/text()", tier);
             List texts = XPath.newInstance(path).selectNodes(d);
             return listToParamList(Text.class, texts);
         }
