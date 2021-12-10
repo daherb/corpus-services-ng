@@ -36,7 +36,7 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
     String SOURCE_FOLDER = "";
     //get path of zip file corpus/resources/corpus.zip
     String OUTPUT_ZIP_FILE = "";
-    Boolean AUDIO = false;
+    String AUDIO = "";
     CorpusData comadata;
 
     public ZipCorpus() {
@@ -57,15 +57,17 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
      *
      * @param zipFile output ZIP file location
      */
-    public Report zipIt(CorpusData comadata, String zipFile, Boolean AUDIO) {
+    public Report zipIt(CorpusData comadata, String zipFile, String AUDIO) {
         Report stats = new Report();
         //get name of folder
         if (zipFile.equals("")) {
             String SOURCE_FOLDER_NAME = comadata.getFilenameWithoutFileEnding();
-            if (AUDIO) {
-                zipFile = SOURCE_FOLDER + "resources" + File.separator + SOURCE_FOLDER_NAME + "WithAudio.zip";
+            if (AUDIO.equals("all")) {
+                zipFile = SOURCE_FOLDER + "resources" + File.separator + SOURCE_FOLDER_NAME + ".zip";
+            } else if (AUDIO.equals("mp3")) {
+                zipFile = SOURCE_FOLDER + "resources" + File.separator + SOURCE_FOLDER_NAME + "-mp3only.zip";
             } else {
-                zipFile = SOURCE_FOLDER + "resources" + File.separator + SOURCE_FOLDER_NAME + "NoAudio.zip";
+                zipFile = SOURCE_FOLDER + "resources" + File.separator + SOURCE_FOLDER_NAME + "-noaudio.zip";
             }
         }
         byte[] buffer = new byte[1024];
@@ -114,16 +116,24 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
         Report stats = new Report();
         //add file only
         if (node.isFile()) {
-            if (AUDIO) {
+            if (AUDIO.equals("all")) {
                 if (node.getName().endsWith(".exb") || node.getName().endsWith(".exs") || node.getName().endsWith(".coma") || node.getName().endsWith(".pdf") || node.getName().endsWith(".wav") || node.getName().endsWith("tei.xml") || node.getName().endsWith(".mp3")) {
                     System.out.println(node.getName());
                     fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
                     stats.addCorrect(function, comadata, node.getAbsoluteFile().toString() + " added to filelist");
                 }
-            } else if (node.getName().endsWith(".exb") || node.getName().endsWith(".exs") || node.getName().endsWith(".coma") || node.getName().endsWith(".pdf")) {
-                System.out.println(node.getName());
-                fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
-                stats.addCorrect(function, comadata, node.getAbsoluteFile().toString() + " added to filelist");
+            } else if (AUDIO.equals("mp3")) {
+                if (node.getName().endsWith(".exb") || node.getName().endsWith(".exs") || node.getName().endsWith(".coma") || node.getName().endsWith(".pdf") || node.getName().endsWith(".mp3") || node.getName().endsWith("tei.xml")) {
+                    System.out.println(node.getName());
+                    fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
+                    stats.addCorrect(function, comadata, node.getAbsoluteFile().toString() + " added to filelist");
+                }
+            } else {
+                if (node.getName().endsWith(".exb") || node.getName().endsWith(".exs") || node.getName().endsWith(".coma") || node.getName().endsWith(".pdf") || node.getName().endsWith("tei.xml")) {
+                    System.out.println(node.getName());
+                    fileList.add(generateZipEntry(node.getAbsoluteFile().toString()));
+                    stats.addCorrect(function, comadata, node.getAbsoluteFile().toString() + " added to filelist");
+               }
             }
         }
         if (node.isDirectory()) {
@@ -190,10 +200,10 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
 
     public void setWithAudio(String s) {
         report = new Report();
-        if (s.equalsIgnoreCase("true") || s.equalsIgnoreCase("wahr") || s.equalsIgnoreCase("ja")) {
-            AUDIO = true;
-        } else if (s.equalsIgnoreCase("false") || s.equalsIgnoreCase("falsch") || s.equalsIgnoreCase("nein")) {
-            AUDIO = false;
+        if (s.equalsIgnoreCase("mp3")) {
+            AUDIO = "mp3";
+        } else if (s.equalsIgnoreCase("all")) {
+            AUDIO = "all";
         } else {
             report.addCritical(function, cd, "Parameter audio not recognized: " + s);
         }
@@ -202,7 +212,7 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
     @Override
     public String getDescription() {
         String description = "This class takes a coma file and creates a zip file containing all important "
-                + "corpus file in the resources folder. It only takes exb, exs, coma, pdf and optionally mp3, "
+                + "corpus file in the resources folder. It only takes exb, exs, coma, pdf, ISO/TEI and optionally mp3 and/or wav, "
                 + "and the folder structure. ";
         return description;
     }
