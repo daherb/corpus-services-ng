@@ -2048,7 +2048,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the number of words encountered in the selected tiers of all documents in the corpus
      * @throws JDOMException on XPath problems
      */
-    private int countWordsInTierByType(String tierFunction) throws JDOMException{
+    private int countWordsInTierByFunction(String tierFunction) throws JDOMException{
         int count = 0 ;
         List<String> tierList =
                 criteria.tiers.stream().filter((t) -> t.tierFunctions
@@ -2078,7 +2078,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @throws JDOMException on XPath problems
      */
     private int countTranscribedWords() throws JDOMException {
-        return countWordsInTierByType("Transcription") ;
+        return countWordsInTierByFunction("Transcription") ;
     }
 
     /**
@@ -2089,7 +2089,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @throws JDOMException on XPath problems
      */
     private int countAnnotatedWords() throws JDOMException {
-        return countWordsInTierByType("Morpheme gloss") ;
+        return countWordsInTierByFunction("Morpheme gloss") ;
     }
 
     /**
