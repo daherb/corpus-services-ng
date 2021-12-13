@@ -2186,18 +2186,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private Location getLocation(ELANData cd, String token) throws JDOMException {
         String normalizedToken = token.replaceAll("\"", "'");
         Element tier =
-                (Element) XPath.newInstance("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"" + normalizedToken + "\")]")
-                .selectSingleNode(cd.getJdom());
+                //(Element) XPath.newInstance("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"" + normalizedToken +"\")]")
+                (Element) XPath.newInstance(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
+                                normalizedToken))
+                        .selectSingleNode(cd.getJdom());
         if (tier != null) {
             Attribute tier_id = (Attribute) XPath.newInstance("//@TIER_ID")
                 .selectSingleNode(tier);
             assert tier_id != null : "Tier id is null";
             Attribute annotation_segment =
-                    (Attribute) XPath.newInstance("//*[contains(text(),\"" + normalizedToken + "\")]/../@ANNOTATION_ID")
+                    (Attribute) XPath.newInstance(String.format("//*[contains(text(),\"%s\")]/../@ANNOTATION_ID",
+                                    normalizedToken))
                             .selectSingleNode(tier);
             assert annotation_segment != null : "Annotation segment is null";
             Element annotation =
-                    (Element) XPath.newInstance("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + annotation_segment.getValue() + "']")
+                    (Element) XPath.newInstance(String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='%s']",
+                            annotation_segment.getValue()))
                     .selectSingleNode(tier);
             assert annotation != null : "Annotation is null";
             Attribute start_ref =
@@ -2207,11 +2211,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     (Attribute) XPath.newInstance("//@TIME_SLOT_REF2").selectSingleNode(annotation);
             assert end_ref != null : "End ref is null";
             Attribute start_time =
-                    (Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=\"" + start_ref.getValue() + "\"]/@TIME_VALUE")
+                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                    start_ref.getValue()))
                             .selectSingleNode(cd.getJdom());
             assert start_time != null : "Start time is null" ;
             Attribute end_time =
-                    (Attribute) XPath.newInstance("//TIME_SLOT[@TIME_SLOT_ID=\"" + end_ref.getValue() + "\"]/@TIME_VALUE")
+                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                    end_ref.getValue()))
                             .selectSingleNode(cd.getJdom());
             assert end_time != null : "End time is null";
             return new Location("[Tier:" + tier_id.getValue() + "]",
