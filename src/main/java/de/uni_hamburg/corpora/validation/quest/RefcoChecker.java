@@ -359,6 +359,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private String refcoFileName;
     private String refcoShortName;
+    private boolean refcoFileLoaded = false;
 
     /**
      * The XML DOM of the RefCo spreadsheet
@@ -432,7 +433,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         if (properties.containsKey("refco-file")) {
             // Load config and add potential problems to log
-            report.merge(setRefcoFile(properties.getProperty("refco-file")));
+            if (new File(properties.getProperty("refco-file")).exists())
+                report.merge(setRefcoFile(properties.getProperty("refco-file")));
+            else {
+                report.addCritical(getFunction(), "Missing corpus documentation file");
+            }
         }
         else {
             report.addCritical(getFunction(),"Missing corpus documentation file property");
@@ -441,7 +446,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
     /**
      * Returns the global report used e.g. for report items in the constructor
-     * @return
+     * @return the global report
      */
     public Report getReport() { return report; }
 
@@ -473,7 +478,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
-        return refcoCorpusCheck(cd);
+        if (refcoFileLoaded)
+            report.merge(refcoCorpusCheck(cd));
+        return report;
     }
 
     /**
@@ -495,33 +502,34 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
-        // Create the current report
-        //Report report = new Report();
-        // Set the RefCo corpus
-        setRefcoCorpus(c);
-        // Initialize frequency list for glosses
-        for (Gloss gloss : criteria.glosses) {
-            morphemeFreq.put(gloss.gloss,0);
-        }
-        // Run the generic tests and merge their reports into the current report
-        logger.info("Merge generic");
-        report.merge(refcoDocumentationCheck());
-        // Apply function for each of the supported file. Again merge the reports
-        // Check for morpheme glosses that never occurred in the complete corpus
-        for (Map.Entry<String,Integer> e : morphemeFreq.entrySet()) {
-            if (e.getValue() == 0)
-                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename","description",
-                                "howtoFix"},
-                        new Object[]{getFunction(), refcoShortName,
-                                "Corpus data: Morpheme gloss never encountered in corpus: " + e.getKey(),
-                                "Check for potential errors or remove gloss from documentation"}));
-        }
-        // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
-        // Levenshtein difference 1 with a higher frequency count
+        if (refcoFileLoaded) {
+            System.out.println("... running the corpus function");
+            // Create the current report
+            //Report report = new Report();
+            // Set the RefCo corpus
+            setRefcoCorpus(c);
+            // Initialize frequency list for glosses
+            for (Gloss gloss : criteria.glosses) {
+                morphemeFreq.put(gloss.gloss, 0);
+            }
+            // Run the generic tests and merge their reports into the current report
+            report.merge(refcoDocumentationCheck());
+            // Apply function for each of the supported file. Again merge the reports
             for (CorpusData cdata : c.getCorpusData()) {
                 //report.merge(function(cdata, fix));
                 function(cdata, fix);
             }
+            // Check for morpheme glosses that never occurred in the complete corpus
+            for (Map.Entry<String, Integer> e : morphemeFreq.entrySet()) {
+                if (e.getValue() == 0)
+                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                    "howtoFix"},
+                            new Object[]{getFunction(), refcoShortName,
+                                    "Corpus data: Morpheme gloss never encountered in corpus: " + e.getKey(),
+                                    "Check for potential errors or remove gloss from documentation"}));
+            }
+            // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
+            // Levenshtein difference 1 with a higher frequency count
         /*DictionaryAutomaton glossDictionary =
                 new DictionaryAutomaton(new ArrayList<>(glossFreq.keySet()));
         logger.info("Doing the fancy experiment");
@@ -556,7 +564,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
         }*/
-        return report;
+        }
+        // In any case, just return the report
+        return report ;
     }
 
     /**
@@ -719,6 +729,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Check that language is valid Glottocode"}));
             }
         }
+        // Mark refco file as loaded
+        refcoFileLoaded = true;
         // Extract the criteria from the XML
         report.merge(readRefcoCriteria(refcoDoc));
         return report;
