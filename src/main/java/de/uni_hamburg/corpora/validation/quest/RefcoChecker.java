@@ -698,21 +698,25 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (!refcoShortName.matches("\\d{8}_\\w+_RefCo-Report.f?ods")) {
+        Pattern filenamePattern = Pattern.compile("CorpusDocumentation_([\\w\\d]+)_(\\w+)_(\\w+).f?ods");
+        logger.info("PATTERN: " + filenamePattern + " NAME: " + refcoShortName);
+        Matcher filenameMatcher = filenamePattern.matcher(refcoShortName);
+        if (!filenameMatcher.matches()) {
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(), refcoShortName, "General: Filename does not match schema " +
-                            "yyyymmdd_CorpusName_RefCo-Report.ods/.fods: " + refcoShortName,
+                            "CorpusDocumentation_<Glottocode>_<Creator-Name>_<Corpus-Name>.ods/.fods: " + refcoShortName,
                             "Rename documentation file"}));
         }
         else {
-            // Check date in file name is valid
-            if (!refcoShortName.substring(0,8).matches("[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])")) {
+            // Check glottocode in file name is valid
+            String langCode = filenameMatcher.group(1);
+            if (!checkLanguage(langCode)) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                                 "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "General: Date given in filename not valid: "+ refcoShortName.substring(0,8),
-                                "Check that date is following format YYYYMMDD (ISO 8601)"}));
+                                "General: Language given in filename not valid Glottocode: "+ langCode,
+                                "Check that language is valid Glottocode"}));
             }
         }
         // Extract the criteria from the XML
