@@ -2059,7 +2059,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (CorpusData cd : refcoCorpus.getCorpusData()) {
                 if (cd instanceof ELANData) {
                     // Get all texts from given annotation tier
-                    List<Text> texts = getTextsInTierByType(((ELANData) cd).getJdom(), tierName);
+                    List<Text> texts = getTextsInTierByID(((ELANData) cd).getJdom(), tierName);
                     for (Text t : texts) {
                         // Word separation simply on spaces
                         count += t.getText().split(tokenSeparator).length;
