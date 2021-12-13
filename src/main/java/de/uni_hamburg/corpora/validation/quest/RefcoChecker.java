@@ -1334,13 +1334,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         if (f.toLowerCase().endsWith("eaf")) {
                             fileExists = fileExists
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists();
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists()
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).exists()
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).exists();
                         }
                         // if it is a wav file, it can should be in the recordings folder
                         else if (f.toLowerCase().endsWith("wav")) {
                             fileExists = fileExists
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists();
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists()
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).exists()
+                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).exists();
 
                         }
                     }
