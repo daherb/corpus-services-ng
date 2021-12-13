@@ -1763,6 +1763,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
+     * find all transcription tier names
+     * @return list of transcription tiers
+     */
+    private ArrayList<String> findTranscriptionTiers() {
+        ArrayList<String> transcriptionTiers = new ArrayList<>();
+        transcriptionTiers.add("transcription") ; // Add default tier function for transcription
+        for (Tier t: criteria.tiers) {
+            // Also add all tiers that contain transcription in the tier function
+            if (t.tierFunctions.contains("transcription")) {
+                transcriptionTiers.add(t.tierName);
+            }
+        }
+        return transcriptionTiers;
+    }
+
+    /**
      * Function that checks all transcription tiers in a corpus document
      *
      * @param cd the corpus document
@@ -1774,14 +1790,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Get the dom
         Document content = ((ELANData) cd).getJdom();
         // Get all transcription tiers
-        ArrayList<String> transcriptionTiers = new ArrayList<>();
-        transcriptionTiers.add("transcription") ; // Add default tier function for transcription
-        for (Tier t: criteria.tiers) {
-            // Also add all tiers that contain transcription in the tier function
-            if (t.tierFunctions.contains("transcription")) {
-                transcriptionTiers.add(t.tierName);
-            }
-        }
+        ArrayList<String> transcriptionTiers = findTranscriptionTiers();
         // Get all transcription graphemes
         // Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
         List<String> validTranscriptionCharacters = new ArrayList<>(criteria.transcriptions.size()) ;
