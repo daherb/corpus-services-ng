@@ -1668,39 +1668,96 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report;
     }
     /**
-     * Function that checks a corpus document based on the RefCo documentation stored in the checker object (using setRefcoFile)
+     * function to check the transcription text based on valid chunks and glosses
      *
-     * @param cd the corpus document
-     * @return the detailed report of the checks
+     * @param cd the corpus document used to correctly assign the log messages
+     * @param text the extracted text from the transcription tiers
+     * @param chunks the valid character sequences (graphemes/punctuations)
+     * @param glosses the documented glosses
+     * @return the check report
      */
-    private Report refcoCorpusCheck(CorpusData cd) {
-        Report report = new Report() ;
-        // Check for ELAN data
-        if (cd instanceof ELANData) {
-            // Check the transcription
-            try {
-                report.merge(checkTranscription(cd));
-            }
-            catch (JDOMException e) {
-                report.addCritical(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
-                        new Object[]{getFunction(), cd.getFilename(), "Exception encountered when reading Transcription " +
-                                "tier", e}));
-            }
-            // Check the morphology
-            try {
-                report.merge(checkMorphology(cd));
-            }
-            catch (JDOMException e) {
-                report.addCritical(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
-                        new Object[]{getFunction(), cd.getFilename(),
-                                "Exception encountered when reading Morphology tier", e}));
+    private Report checkTranscriptionText(CorpusData cd, List<Text> text, List<String> chunks,
+                                          Set<String> glosses) {
+        DictionaryAutomaton dict = new DictionaryAutomaton(chunks);
+        // Create a string for all the characters in the automaton
+        String dictAlphabet = "";
+        if (!dict.getAlphabet().isEmpty()) {
+            dictAlphabet = "[" +
+                    dict.getAlphabet().stream().map(Object::toString).collect(Collectors.joining())
+                            .replace("[", "\\[")
+                            .replace("]", "\\]") +
+                    "]";
+        }
+        Report report = new Report();
+        // All the characters that are valid
+        int matched = 0;
+        // All invalid characters in the text
+        int missing = 0 ;
+        // Indicator if a word contains missing characters
+        boolean mismatch ;
+        for (Text t : text) {
+            // Tokenize text
+            for (String token : t.getText().split(tokenSeparator)) {
+                // Check if token either is a gloss or each character is in the valid characters
+                mismatch = false ;
+                // Update frequency list
+                tokenFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
+                // Token is not one of the glosses
+                if (!glosses.contains(token)) {
+                    // Check if we can segment the token using the chunks
+                    if (dict.checkSegmentableWord(token))
+                        matched += token.length();
+                    else {
+                        missing += token.length();
+                        mismatch = true ;
+                    }
+                }
+                // Only accept non-morpholical glosses, i.e. glosses that are not only uppercase letters
+                else if (token.matches(".*[a-z].*")){
+                    // Add the length of the gloss to matched
+                    matched += token.length() ;
+                }
+                // It is neither recognized by the automaton nor a non-morphological gloss
+                else
+                    mismatch = true ;
+                if (mismatch && !token.isEmpty()) {
+                    try {
+                        Location l = getLocation((ELANData) cd, token);
+                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description", "tier" , "segment", "howtoFix"},
+                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+                                        "invalid character(s):\n" + token + " containing: [" +
+                                        token.replaceAll(dictAlphabet, "") + "]", l.tier, l.segment,
+                                        "Add all transcription characters to the documentation"}));
+                    } catch (Exception e) {
+                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                        "description", "exception"},
+                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
+                                        "locate token " + token,
+                                        e}));
+                    }
+                }
             }
         }
+        float percentValid = (float)matched/(matched+missing) ;
+        if (percentValid < (transcriptionCharactersValid / 100.0)) {
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"
+                            ,"howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(),
+                            "Corpus data: Less than " + transcriptionCharactersValid + " percent of transcription " +
+                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                    "Percentage: " +
+                                    Math.round(percentValid * 1000)/10.0,
+                    "Add documentation for all graphemes and punctuation marks used in transcription"}));
+        }
         else {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
-                    new Object[]{getFunction(), refcoShortName, "Not supported corpus type: " + cd.getClass().getName()}));
+            report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                    new Object[]{getFunction(), cd.getFilename(),
+                            "Corpus data: More than " + transcriptionCharactersValid + " percent of transcription " +
+                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                    "Percentage: " +
+                    Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
         return report ;
     }
@@ -1861,148 +1918,41 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Function that checks the morphology tier for documented glosses
-     * @param cd the corpus document used to correctly assign the log messages
-     * @param text the extracted text from all morphology tiers
-     * @param glosses all documented glosses
+     * Function that checks a corpus document based on the RefCo documentation stored in the checker object (using setRefcoFile)
+     *
+     * @param cd the corpus document
      * @return the detailed report of the checks
      */
-    private Report checkMorphologyGloss(CorpusData cd, List<Text> text, HashSet<String> glosses) {
+    private Report refcoCorpusCheck(CorpusData cd) {
         Report report = new Report() ;
-
-        // All the tokens that are valid
-        int matched = 0;
-        // All invalid tokens in the text
-        int missing = 0 ;
-        // Indicator if a word contains missing characters
-        for (Text t : text) {
-            // Tokenize text
-            for (String token : t.getText().split(tokenSeparator)) {
-                // Check if token is a gloss
-                for (String morpheme : token.split(glossSeparator)) {
-                    // TODO take properly care of morpheme distinction
-                    if (morpheme.matches("[0-9A-Z]+") && !glosses.contains(morpheme)) {
-                        missing += 1;
-                        // <></>his would lead to large amount of warnings
-                        // report.addWarning(getFunction(),cd,"Invalid token: " + token);
-                    } else {
-                        matched += 1;
-                    }
-                    morphemeFreq.compute(morpheme,(k, v) -> (v == null) ? 1 : v + 1);
-                }
-                glossFreq.compute(token,(k, v) -> (v == null) ? 1 : v + 1);
+        // Check for ELAN data
+        if (cd instanceof ELANData) {
+            // Check the transcription
+            try {
+                logger.info("run transcription check on " + cd.getFilename());
+                report.merge(checkTranscription(cd));
             }
-        }
-        float percentValid = (float)matched/(matched+missing) ;
-        if (percentValid < glossMorphemesValid / 100.0)
-            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                            "howtoFix"},
-                            new Object[]{getFunction(), cd.getFilename(),
-                                    "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
-                                            " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
-                                            " Percentage valid: " + Math.round(percentValid*1000)/10.0,
-                                    "Improve the gloss documentation to cover more tokens"}));
-        else
-            report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
-                    new Object[] {getFunction(),cd.getFilename(),
-                            "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
-                                    "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
-                                    " Percentage valid: " + Math.round(percentValid*1000)/10.0,
-                            "Documentation can be improved but no fix necessary"}));
-        return report;
-    }
-
-    /**
-     * function to check the transcription text based on valid chunks and glosses
-     *
-     * @param cd the corpus document used to correctly assign the log messages
-     * @param text the extracted text from the transcription tiers
-     * @param chunks the valid character sequences (graphemes/punctuations)
-     * @param glosses the documented glosses
-     * @return the check report
-     */
-    // private Report checkTranscriptionText(CorpusData cd, List<Text> text, Set<Character> chunks,
-    private Report checkTranscriptionText(CorpusData cd, List<Text> text, List<String> chunks,
-                                          Set<String> glosses) {
-        DictionaryAutomaton dict = new DictionaryAutomaton(chunks);
-        Report report = new Report();
-        // All the characters that are valid
-        int matched = 0;
-        // All invalid characters in the text
-        int missing = 0 ;
-        // Indicator if a word contains missing characters
-        boolean mismatch ;
-        for (Text t : text) {
-            // Tokenize text
-            for (String token : t.getText().split(tokenSeparator)) {
-                // Check if token either is a gloss or each character is in the valid characters
-                mismatch = false ;
-                // Update frequency list
-                tokenFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
-                if (!glosses.contains(token)) {
-                    /*for (char c : token.toCharArray()) {
-                        if (chunks.contains(c))
-                            matched += 1;
-                        else {
-                            missing += 1;
-                            mismatch = true ;
-                        }
-                    }*/
-                    // Check if we can segment the token using the chunks
-                    if (dict.checkSegmentableWord(token))
-                        matched += token.length();
-                    else {
-                        missing += token.length();
-                        mismatch = true ;
-                    }
-                }
-                else {
-                    // Add the length of the gloss to matched
-                    matched += token.length() ;
-                }
-                if (mismatch && !token.isEmpty()) {
-                    String dictAlphabet = "[" +
-                            dict.getAlphabet().stream().map(Object::toString).collect(Collectors.joining())
-                                    .replace("[","\\[")
-                                    .replace("]","\\]") +
-                            "]";
-                    try {
-                        Location l = getLocation((ELANData) cd, token);
-                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                        "description", "tier" , "segment", "howtoFix"},
-                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
-                                        "invalid character(s):\n" + token + " containing: [" +
-                                        token.replaceAll(dictAlphabet, "") + "]", l.tier, l.segment,
-                                        "Add all transcription characters to the documentation"}));
-                    } catch (JDOMException e) {
-                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                        "description", "exception"},
-                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to" +
-                                        "locate token " + token,
-                                        e}));
-                    }
-                }
+            catch (JDOMException e) {
+                report.addCritical(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
+                        new Object[]{getFunction(), cd.getFilename(), "Exception encountered when reading Transcription " +
+                                "tier", e}));
             }
-        }
-        float percentValid = (float)matched/(matched+missing) ;
-        if (percentValid < (transcriptionCharactersValid / 100.0)) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"
-                            ,"howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(),
-                            "Corpus data: Less than " + transcriptionCharactersValid + " percent of transcription " +
-                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
-                                    "Percentage: " +
-                                    Math.round(percentValid * 1000)/10.0,
-                    "Add documentation for all graphemes and punctuation marks used in transcription"}));
+            // Check the morphology
+            try {
+                logger.info("run morphology check on " + cd.getFilename());
+                report.merge(checkMorphology(cd));
+            }
+            catch (JDOMException e) {
+                report.addCritical(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
+                        new Object[]{getFunction(), cd.getFilename(),
+                                "Exception encountered when reading Morphology tier", e}));
+            }
         }
         else {
-            report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                            "howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(),
-                            "Corpus data: More than " + transcriptionCharactersValid + " percent of transcription " +
-                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
-                                    "Percentage: " +
-                    Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
+                    new Object[]{getFunction(), refcoShortName, "Not supported corpus type: " + cd.getClass().getName()}));
         }
         return report ;
     }
