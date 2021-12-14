@@ -38,10 +38,11 @@ public class RefcoCheckerTest {
     Logger logger = Logger.getLogger(this.getClass().getName());
 
     // The refco corpus documentation file in the resources folder
-    String resourcePath = "src/test/java/de/uni_hamburg/corpora/validation/quest/resources/";
-    File refcoODS = new File(resourcePath + "20211116_Nisvai_RefCo-Report.ods");
-    File refcoFODS = new File(resourcePath + "20211116_Nisvai_RefCo-Report.fods");
-    File refcoEAF = new File(resourcePath + "T1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf");
+    private static String resourcePath = "src/test/java/de/uni_hamburg/corpora/validation/quest/resources/";
+    private static File refcoODS = new File(resourcePath + "CorpusDocumentation_nisv1234_JocelynAznar_Nisvai.ods");
+    private static File refcoFODS = new File(resourcePath + "CorpusDocumentation_nisv1234_JocelynAznar_Nisvai.fods");
+    private static File refcoEAF = new File(resourcePath + "T1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf");
+
 
     private Document ODSDOM ;
 
@@ -271,32 +272,32 @@ public class RefcoCheckerTest {
         assertEquals("Unexpected root in refcoDoc", "document-content", refcoDoc.getRootElement().getName());
         // Error if file has wrong extension
         // Copy to new file
-        File wrong_suffix = new File(refcoODS.toString() + ".foo");
-        Files.copy(refcoODS.toPath(),wrong_suffix.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        report = rc.setRefcoFile(wrong_suffix.toString());
+        File wrongSuffixFile = new File(refcoODS.toString() + ".foo");
+        Files.copy(refcoODS.toPath(),wrongSuffixFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        report = rc.setRefcoFile(wrongSuffixFile.toString());
+        // Cleanup
+        assertTrue("Problem removing temp file", wrongSuffixFile.delete());
         assertTrue("Expected critical item about OBS/FOBS missing", report.getErrorReports().contains(
                 "General: Spreadsheet is neither an ODS nor FODS file"));
-        // Cleanup
-        Files.delete(wrong_suffix.toPath());
         // Warning if the file name does not match the schema
         // Copy to new file
-        File no_schema = new File(resourcePath + "foobar.ods");
-        Files.copy(refcoODS.toPath(),no_schema.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        report = rc.setRefcoFile(no_schema.toString());
+        File wrongSchemaFile = new File(resourcePath + "foobar.ods");
+        Files.copy(refcoODS.toPath(),wrongSchemaFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        report = rc.setRefcoFile(wrongSchemaFile.toString());
+        // Cleanup
+        assertTrue("Problem removing temp file", wrongSchemaFile.delete());
         assertTrue("Expected warning item about filename not matching schema missing",
                 report.getWarningReports().contains(
                 "General: Filename does not match schema"));
-        // Cleanup
-        Files.delete(no_schema.toPath());
         // Warning if the file name does not match the schema
         // Copy to new file
-        File wrong_date = new File(resourcePath + "20001535_Nisvai_RefCo-Report.ods");
-        Files.copy(refcoODS.toPath(),wrong_date.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        report = rc.setRefcoFile(wrong_date.toString());
-        assertTrue("Expected warning item about invalid date missing", report.getWarningReports().contains(
-                "General: Date given in filename not valid"));
+        File wrongLangFile = new File(resourcePath + "CorpusDocumentation_foob1234_JocelynAznar_Nisvai.ods");
+        Files.copy(refcoODS.toPath(),wrongLangFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        report = rc.setRefcoFile(wrongLangFile.toString());
         // Cleanup
-        Files.delete(wrong_date.toPath());
+        assertTrue("Problem removing temp file", wrongLangFile.delete());
+        assertTrue("Expected warning item about invalid language missing", report.getWarningReports().contains(
+                "General: Language given in filename not valid Glottocode"));
     }
 
     /**
