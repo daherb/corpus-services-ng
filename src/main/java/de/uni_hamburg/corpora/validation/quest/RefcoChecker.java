@@ -690,10 +690,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     //"does not contain content.xml",
                             "Check spreadsheet file and only use proper ODS files"})) ;
                 }
-                SAXBuilder builder = new SAXBuilder();
-                refcoDoc = builder.build(f.getInputStream(e));
-                // Or we could use the proper API instead but that requires additional dependencies
-                // refcoDoc = builder.build(new StringReader(OdfSpreadsheetDocument.loadDocument(refcoFileName).getContentDom().toString()));
+                else {
+                    SAXBuilder builder = new SAXBuilder();
+                    refcoDoc = builder.build(f.getInputStream(e));
+                    // Or we could use the proper API instead but that requires additional dependencies
+                    // refcoDoc = builder.build(new StringReader(OdfSpreadsheetDocument.loadDocument(refcoFileName).getContentDom().toString()));
+                }
             }
             else {
                  report.addCritical(getFunction(),ReportItem.newParamMap(
