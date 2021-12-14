@@ -1809,7 +1809,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 validTranscriptionCharacters.add(p.character);
             else {
                 for (String t : new ArrayList<>(Arrays.asList(p.tiers.split(valueSeparator)))) {
-                    if (transcriptionTiers.contains(t.toLowerCase())) {
+                    if (transcriptionTiers.contains(t)) {
                         // Add all of the punctuation's characters
                         // validTranscriptionCharacters.addAll(getChars(p.character));
                         validTranscriptionCharacters.add(p.character);
