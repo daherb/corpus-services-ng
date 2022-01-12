@@ -1745,7 +1745,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             dictAlphabet = "[" +
                     dict.getAlphabet().stream().map(Object::toString).collect(Collectors.joining())
                             .replace("[", "\\[")
-                            .replace("]", "\\]") +
+                            .replace("]", "\\]")
+                            .replace("-","\\-") +
                     "]";
         }
         Report report = new Report();
