@@ -2193,6 +2193,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return params;
     }
 
+    /**
+     * Simple function to print an xml element
+     * @param e the element
+     * @return the string representation
+     */
+    public static String showElement(Element e) {
+        return new XMLOutputter().outputString(e);
+    }
 
     /**
      * Returns all text contained in a DOM subtree given by the root element
