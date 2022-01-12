@@ -55,7 +55,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Separator used to separate words/token
     private final String tokenSeparator = "\\s+" ;
     // Separator used to separate morpheme glosses (see https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf)
-    private final String glossSeparator = "[-=]"; // "[-=;:\\\\>()<~\\[\\]]+" ;
+    private final Set glossSeparator = new HashSet(); //new HashSet(Arrays.asList("-", "=")); // "[-=;:\\\\>()
+    // <~\\[\\]]+"
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
@@ -1084,6 +1085,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
                         punctuation.function = safeGetText(columns.get(4).getChild("p", textNamespace));
+                        // Add gloss separator
+                        if (punctuation.function.equalsIgnoreCase("morpheme break"))
+                            glossSeparator.add(punctuation.character);
                         criteria.punctuations.add(punctuation);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
                             "Characters")) {
