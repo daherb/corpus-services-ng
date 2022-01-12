@@ -1311,6 +1311,27 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private Report refcoSessionCheck() {
         Report report = new Report();
+        // First get all files included in the corpus
+        HashSet<URI> allFiles = new HashSet<>();
+        try {
+            allFiles.addAll(listFiles(Paths.get(refcoCorpus.getBaseDirectory().toURI())));
+            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI())));
+            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI())));
+            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI())));
+            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI())));
+        }
+        catch (Exception e) {
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
+                            , "exception"},
+                    new Object[]{getFunction(), refcoShortName, "Corpus composition: exception when listing all " +
+                            "files",
+                            e}));
+        }
+        // Remove curation files and the documentation itself
+        allFiles = (HashSet<URI>) allFiles.stream().filter((f) ->
+                        !f.toString().contains("/curation/") && !f.toString().contains("CorpusDocumentation") &&
+                                !new File(f).isDirectory()
+        ).collect(Collectors.toSet());
         // Check each of the sessions
         for (Session s : criteria.sessions) {
             if (s.sessionName == null || s.sessionName.isEmpty())
@@ -1331,6 +1352,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     try {
                         File file = new File(new URI(refcoCorpus.getBaseDirectory() + f));
                         fileExists = file.exists();
+                        allFiles.remove(file.toURI().normalize());
                         // If it is an ELAN file, it can/should be in the annotation folder
                         if (f.toLowerCase().endsWith("eaf")) {
                             fileExists = fileExists
@@ -1338,6 +1360,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists()
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).exists()
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).exists();
+                            allFiles.removeAll(Arrays.asList(
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).normalize().toUri(),
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).normalize().toUri(),
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).normalize().toUri(),
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).normalize().toUri()
+                                    ));
+
                         }
                         // if it is a wav file, it can should be in the recordings folder
                         else if (f.toLowerCase().endsWith("wav")) {
@@ -1346,7 +1375,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists()
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).exists()
                                     || new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).exists();
-
+                            allFiles.removeAll(Arrays.asList(
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).normalize().toUri(),
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).normalize().toUri(),
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).normalize().toUri(),
+                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).normalize().toUri()
+                                    ));
                         }
                     }
                     catch (MalformedURLException | URISyntaxException e) {
@@ -1419,6 +1453,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //            if (s.ageGroup == null || s.ageGroup.isEmpty())
 //                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
 //                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
+        }
+        if (!allFiles.isEmpty()) {
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                            "description", "howtoFix"},
+                    new Object[]{getFunction(), refcoShortName, "Corpus composition: Files are not " +
+                            "documented:\n" +
+                            allFiles.stream().map(Object::toString).collect(Collectors.joining("\n")),
+                            "Check the file reference in the documentation and add the references to " +
+                                    "the files if they should be included or delete unused files"}));
         }
         return report;
     }
@@ -2464,5 +2507,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return Collections.singletonList(new Location("Unknown", ""));
         else
             return locations;
+    }
+
+    /**
+     * List all files given a path
+     * @param path the path all files are listed in
+     * @return the set of all files in path
+     */
+    public static Set<URI> listFiles(Path path) {
+        // The set of all files
+        Set<URI> files = new HashSet<>();
+        // Add all files
+        for (File f : path.toFile().listFiles()) {
+            files.add(f.toURI().normalize());
+            // Recurse into directory
+            if (f.isDirectory()) {
+                files.addAll(listFiles(f.toPath()));
+            }
+        }
+        return files;
     }
 }
