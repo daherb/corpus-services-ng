@@ -2532,4 +2532,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         return files;
     }
+
+    /**
+     * Checks if a tier exists in a corpus file
+     * @param cd the corpus data of an elan file
+     * @param tierId the tier
+     * @return true if tier exists and false otherwise
+     */
+    public boolean containsTier(ELANData cd, String tierId) {
+        // Check if node list for tier is empty
+        try {
+            return !XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]", tierId))
+                    .selectNodes(cd.getJdom()).isEmpty();
+        }
+        // Exception also means that tier does not exist
+        catch (Exception e) {
+            return false;
+        }
+    }
 }
