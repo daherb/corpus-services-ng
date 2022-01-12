@@ -710,8 +710,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Pattern filenamePattern = Pattern.compile("CorpusDocumentation_([\\w\\d]+)_(\\w+)_(\\w+).f?ods");
-        logger.info("PATTERN: " + filenamePattern + " NAME: " + refcoShortName);
+        Pattern filenamePattern = Pattern.compile("CorpusDocumentation_([\\w\\d]{8})_(\\w+)_(\\w+).f?ods");
         Matcher filenameMatcher = filenamePattern.matcher(refcoShortName);
         if (!filenameMatcher.matches()) {
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
