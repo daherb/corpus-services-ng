@@ -2521,16 +2521,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     public static Set<URI> listFiles(Path path) {
         // The set of all files
-        Set<URI> files = new HashSet<>();
-        // Add all files
-        for (File f : path.toFile().listFiles()) {
-            files.add(f.toURI().normalize());
-            // Recurse into directory
-            if (f.isDirectory()) {
-                files.addAll(listFiles(f.toPath()));
+        Set<URI> allFiles = new HashSet<>();
+        // Add all files in directory
+        File[] dirFiles = path.toFile().listFiles();
+        if (dirFiles != null)
+            for (File f : dirFiles) {
+                allFiles.add(f.toURI().normalize());
+                // Recurse into directory
+                if (f.isDirectory()) {
+                    allFiles.addAll(listFiles(f.toPath()));
             }
         }
-        return files;
+        return allFiles;
     }
 
     /**
