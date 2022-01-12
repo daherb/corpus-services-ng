@@ -16,7 +16,6 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -43,6 +42,7 @@ public class RefcoCheckerTest {
     private static File refcoFODS = new File(resourcePath + "CorpusDocumentation_nisv1234_JocelynAznar_Nisvai.fods");
     private static File refcoEAF = new File(resourcePath + "T1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf");
 
+    private static RefcoChecker rc;
 
     private Document ODSDOM ;
 
@@ -51,14 +51,23 @@ public class RefcoCheckerTest {
     private final String cellXPath =
             "//table:table-row[table:table-cell[text:p=\"%s\"]]/table:table-cell[position()=%d]/text:p";
 
-    private Properties props;
 
     public RefcoCheckerTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws NoSuchMethodException, IOException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
         //ClassInfo.printMethods(RefcoChecker.class);
+        Properties props = new Properties();
+        props.setProperty("refco-file", refcoODS.toString());
+        rc = new RefcoChecker(props);
+        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
+        setRefcoCorpusMethod.setAccessible(true);
+        // Read corpus
+        CorpusIO cio = new CorpusIO();
+        URL corpusUrl = new File(resourcePath).toURI().toURL();
+        setRefcoCorpusMethod.invoke(rc, new Corpus("refcoTest", corpusUrl,
+                cio.read(corpusUrl)));
     }
 
     @AfterClass
@@ -304,7 +313,8 @@ public class RefcoCheckerTest {
      * Test for "private void expandTableCells(Document arg0)"
      */
     @Test
-    public void expandTableCellsTest() throws NoSuchMethodException, IOException, JDOMException, InvocationTargetException, IllegalAccessException {
+    public void expandTableCellsTest() throws NoSuchMethodException, IOException, JDOMException,
+            InvocationTargetException, IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -330,7 +340,8 @@ public class RefcoCheckerTest {
      * Test for "private void removeEmptyCells(Document arg0)"
      */
     @Test
-    public void removeEmptyCellsTest() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void removeEmptyCellsTest() throws IOException, JDOMException, NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -352,7 +363,8 @@ public class RefcoCheckerTest {
      * Test for "private String getCellText(String arg0,Element arg1,String arg2)"
      */
     @Test
-    public void getCellTextTest() throws NoSuchMethodException, IOException, JDOMException, InvocationTargetException, IllegalAccessException {
+    public void getCellTextTest() throws NoSuchMethodException, IOException, JDOMException, InvocationTargetException
+            , IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -376,7 +388,8 @@ public class RefcoCheckerTest {
      * Test for "private String safeGetText(Element arg0)"
      */
     @Test
-    public void safeGetTextTest() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void safeGetTextTest() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException
+            , IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -413,7 +426,8 @@ public class RefcoCheckerTest {
      * Test for "private String getTextInRow(String arg0,Element arg1,String arg2,int arg3)"
      */
     @Test
-    public void getTextInRowTest() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void getTextInRowTest() throws IOException, JDOMException, NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -446,7 +460,8 @@ public class RefcoCheckerTest {
      * Test for "private RefcoChecker$InformationNotes getInformationNotes(String arg0,Element arg1,String arg2)"
      */
     @Test
-    public void checkGetInformationNotes() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void checkGetInformationNotes() throws IOException, JDOMException, NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -484,9 +499,10 @@ public class RefcoCheckerTest {
     private void checkReport(String item, Report report) {
         assertNotNull("Report is null for " + item, report);
         assertFalse("Report is empty for " + item, report.getRawStatistics().isEmpty());
-        if (report.getErrorStatistics().size() > 1)
+        if (report.getRawStatistics().size() > 1)
             logger.info(report.getFullReports());
-        assertEquals("More than one error for " + item, 1, report.getErrorStatistics().size());
+        assertEquals("Unexpected number of report items for " + item, 1,
+                report.getRawStatistics().size());
 
     }
 
@@ -494,7 +510,8 @@ public class RefcoCheckerTest {
      * Test for "private Report readRefcoCriteria(Document arg0)"
      */
     @Test
-    public void readRefcoCriteriaTest() throws IOException, JDOMException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void readRefcoCriteriaTest() throws IOException, JDOMException, NoSuchMethodException,
+            InvocationTargetException, IllegalAccessException {
         RefcoChecker rc = new RefcoChecker(new Properties());
         SAXBuilder saxBuilder = new SAXBuilder();
         Document spreadsheet = saxBuilder.build(refcoFODS);
@@ -523,17 +540,8 @@ public class RefcoCheckerTest {
      * Test for "private Report refcoGenericCheck()"
      */
     @Test
-    public void refcoGenericCheckTest() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
-        Properties props = new Properties();
-        props.setProperty("refco-file",refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
-        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
-        setRefcoCorpusMethod.setAccessible(true);
-        // Read corpus
-        CorpusIO cio = new CorpusIO();
-        URL corpusUrl = new File(resourcePath).toURI().toURL();
-        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
-                cio.read(corpusUrl)));
+    public void refcoGenericCheckTest() throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
         Method refcoGenericCheckMethod = rc.getClass().getDeclaredMethod("refcoGenericCheck");
         refcoGenericCheckMethod.setAccessible(true);
         // Valid corpus documentation
@@ -670,19 +678,9 @@ public class RefcoCheckerTest {
     /**
      *  Test for "private Report refcoSessionCheck()"
      */
-
     @Test
-    public void refcoSessionCheckTest() throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
-        Properties props = new Properties();
-        props.setProperty("refco-file",refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
-        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
-        setRefcoCorpusMethod.setAccessible(true);
-        // Read corpus
-        CorpusIO cio = new CorpusIO();
-        URL corpusUrl = new File(resourcePath).toURI().toURL();
-        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
-                cio.read(corpusUrl)));
+    public void refcoSessionCheckTest() throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
         Method refcoSessionCheckMethod = rc.getClass().getDeclaredMethod("refcoSessionCheck");
         refcoSessionCheckMethod.setAccessible(true);
         // Valid corpus documentation
@@ -692,7 +690,7 @@ public class RefcoCheckerTest {
         // Check for all string fields for errors if null or empty
         for (RefcoChecker.Session s : rc.getCriteria().sessions) {
             for (Field f : s.getClass().getDeclaredFields()) {
-                if (f.getType() == String.class) {
+                if (f.getType() == String.class && f.getName() != "fileName") {
                     String orig = (String) f.get(s);
                     f.set(s, (String) null);
                     report = (Report) refcoSessionCheckMethod.invoke(rc);
@@ -718,10 +716,27 @@ public class RefcoCheckerTest {
         // Check file name
         {
             String origFileName = s.fileName;
+            // Null file name
+            s.fileName = null;
+            report = (Report) refcoSessionCheckMethod.invoke(rc);
+            assertEquals("Report does not contain the expected number of elements for null filename", 2,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain the expected item for null filename",
+                    report.getFullReports().contains("Session file names are empty: T1"));
+            // Empty file name
+            s.fileName = "";
+            assertEquals("Report does not contain the expected number of elements for empty filename", 2,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain the expected item for empty filename",
+                    report.getFullReports().contains("Session file names are empty: T1"));
             // Just an invalid file name
             s.fileName = "foo";
             report = (Report) refcoSessionCheckMethod.invoke(rc);
-            checkReport("invalid file name", report);
+            assertEquals("Report does not contain the expected number of elements for invalid filename", 2,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain the expected item for invalid filename",
+                    report.getFullReports().contains("File does not exist"));
+            //checkReport("invalid file name", report);
             // The invalid file name followed by the original valid one
             s.fileName = "foo," + origFileName;
             report = (Report) refcoSessionCheckMethod.invoke(rc);
@@ -763,17 +778,7 @@ public class RefcoCheckerTest {
      *  Test for "private Report refcoTierCheck()"
      */
     @Test
-    public void refcoTierCheckTest() throws NoSuchMethodException, IOException, InvocationTargetException, IllegalAccessException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException {
-        Properties props = new Properties();
-        props.setProperty("refco-file",refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
-        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
-        setRefcoCorpusMethod.setAccessible(true);
-        // Read corpus
-        CorpusIO cio = new CorpusIO();
-        URL corpusUrl = new File(resourcePath).toURI().toURL();
-        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
-                cio.read(corpusUrl)));
+    public void refcoTierCheckTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method refcoTierCheckMethod = rc.getClass().getDeclaredMethod("refcoTierCheck");
         refcoTierCheckMethod.setAccessible(true);
         // Valid corpus documentation
@@ -899,19 +904,9 @@ public class RefcoCheckerTest {
     /**
      *  Test for "private Report refcoTranscriptionCheck()"
      */
-
     @Test
-    public void refcoTranscriptionCheckTest() throws NoSuchMethodException, IOException, JexmaraldaException, URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
-        Properties props = new Properties();
-        props.setProperty("refco-file",refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
-        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
-        setRefcoCorpusMethod.setAccessible(true);
-        // Read corpus
-        CorpusIO cio = new CorpusIO();
-        URL corpusUrl = new File(resourcePath).toURI().toURL();
-        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
-                cio.read(corpusUrl)));
+    public void refcoTranscriptionCheckTest() throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
         Method refcoTranscriptionCheckMethod = rc.getClass().getDeclaredMethod("refcoTranscriptionCheck");
         refcoTranscriptionCheckMethod.setAccessible(true);
         // Valid corpus documentation
@@ -938,20 +933,8 @@ public class RefcoCheckerTest {
     /**
      *  Test for "private Report refcoGlossCheck()"
      */
-
     @Test
-    public void refcoGlossCheckTest() throws NoSuchMethodException, IOException, JexmaraldaException,
-            URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
-        Properties props = new Properties();
-        props.setProperty("refco-file",refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
-        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
-        setRefcoCorpusMethod.setAccessible(true);
-        // Read corpus
-        CorpusIO cio = new CorpusIO();
-        URL corpusUrl = new File(resourcePath).toURI().toURL();
-        setRefcoCorpusMethod.invoke(rc,new Corpus("refcoTest",corpusUrl,
-                cio.read(corpusUrl)));
+    public void refcoGlossCheckTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method refcoGlossCheckMethod = rc.getClass().getDeclaredMethod("refcoGlossCheck");
         refcoGlossCheckMethod.setAccessible(true);
         // Valid corpus documentation
@@ -1009,29 +992,17 @@ public class RefcoCheckerTest {
         }
     }
 
-
     /**
      *  Test for "private Report refcoPunctuationCheck()"
      */
     @Test
-    public void refcoPunctuationCheckTest() throws NoSuchMethodException, IOException, JexmaraldaException,
-            URISyntaxException, ClassNotFoundException, SAXException, InvocationTargetException, IllegalAccessException {
-        Properties props = new Properties();
-        props.setProperty("refco-file", refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
-        Method setRefcoCorpusMethod = rc.getClass().getDeclaredMethod("setRefcoCorpus", Corpus.class);
-        setRefcoCorpusMethod.setAccessible(true);
-        // Read corpus
-        CorpusIO cio = new CorpusIO();
-        URL corpusUrl = new File(resourcePath).toURI().toURL();
-        setRefcoCorpusMethod.invoke(rc, new Corpus("refcoTest", corpusUrl,
-                cio.read(corpusUrl)));
+    public void refcoPunctuationCheckTest() throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
         Method refcoPunctuationCheckMethod = rc.getClass().getDeclaredMethod("refcoPunctuationCheck");
         refcoPunctuationCheckMethod.setAccessible(true);
         // Valid corpus documentation
         Report report = (Report) refcoPunctuationCheckMethod.invoke(rc);
         assertNotNull("Report is null", report);
-        logger.info(report.getFullReports());
         assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
         // Check for all string fields for errors if null or empty
         for (RefcoChecker.Punctuation g : rc.getCriteria().punctuations) {
@@ -1071,20 +1042,240 @@ public class RefcoCheckerTest {
     }
 
     /**
-     * Test for "private Report checkMorphologyGloss(CorpusData arg0,java.util.List<Text> arg1,HashSet<String> arg2)"
+     *  Test for "private Report refcoDocumentationCheck()"
+     *
+     *  Only check for no errors in the report because all other corner cases are already tested above
      */
     @Test
-    public void checkMorphologyGlossTest() {
-        Properties props = new Properties();
-        props.setProperty("refco-file",refcoODS.toString());
-        RefcoChecker rc = new RefcoChecker(props);
+    public void refcoDocumentationCheckTest() throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
+        Method refcoDocumentationCheckMethod = rc.getClass().getDeclaredMethod("refcoDocumentationCheck");
+        refcoDocumentationCheckMethod.setAccessible(true);
+        // Valid corpus documentation
+        Report report = (Report) refcoDocumentationCheckMethod.invoke(rc);
+        assertNotNull("Report is null", report);
+        assertTrue("Report is not empty", report.getRawStatistics().isEmpty());
+    }
+
+    /**
+     * Test for "private ArrayList<String> findTranscriptionTiers()"
+     */
+    @Test
+    public void findTranscriptionTiersTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method findTranscriptionTiersMethod = rc.getClass().getDeclaredMethod("findTranscriptionTiers");
+        findTranscriptionTiersMethod.setAccessible(true);
+        ArrayList<String> tiers = (ArrayList<String>) findTranscriptionTiersMethod.invoke(rc);
+        assertFalse("Tier list is empty", tiers.isEmpty());
+        assertArrayEquals("Unexpected transcription tiers", new Object[] {"Aven"},
+                tiers.toArray());
     }
 
     /**
      * Test for "private Report checkTranscriptionText(CorpusData arg0,List<Text> arg1,List<String> arg2,Set<String> arg3)"
      */
     @Test
-    public void checkTranscriptionTextTest() {}
+    public void checkTranscriptionTextTest() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, JDOMException {
+        Method checkTranscriptionTextMethod = rc.getClass().getDeclaredMethod("checkTranscriptionText",
+                CorpusData.class, String.class, List.class, List.class, Set.class);
+        checkTranscriptionTextMethod.setAccessible(true);
+        Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
+        refcoCorpusField.setAccessible(true);
+        Corpus refcoCorpus = (Corpus) refcoCorpusField.get(rc);
+        // Collect valid data
+        // Get the first corpus data file from the corpus
+        CorpusData cd = refcoCorpus.getCorpusData().stream().collect(Collectors.toList()).get(0);
+        // Get some transcription text and add some test tokens
+        List<Text> text = Collections.singletonList(new Text(
+                    rc.getTextsInTierByType(((ELANData) cd).getJdom(), "Transcription").get(0).getText()
+                            + " BAR [hors-texte]"));
+        List<String> chunks = Arrays.asList(new String[]{"Ga", "=", "v", "u", "moq", "?", "B", "AR"});
+        Set<String> glosses = new HashSet<>(Arrays.asList(new String[]{"[hors-texte]"}));
+        Report report;
+        // a working example
+        {
+            report = (Report) checkTranscriptionTextMethod.invoke(rc, cd, "Transcription", text, chunks, glosses);
+            assertEquals("Report does not contain exactly one item", 1,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain the positive notice",
+                    report.getFullReports().contains("More than 99 percent of transcription characters are valid"));
+        }
+        // Warning about non-matched word because all-caps glosses are ignored
+        {
+            chunks = Arrays.asList(new String[]{"Ga", "=", "v", "u", "moq", "?"});
+            glosses = new HashSet<>(Arrays.asList(new String[]{"BAR", "[hors-texte]"}));
+            report = (Report) checkTranscriptionTextMethod.invoke(rc, cd, "Transcription", text, chunks, glosses);
+            // Only keep warnings in report
+            List<ReportItem> warningStatistics =
+                    report.getRawStatistics().stream().filter((i) -> (i.getSeverity() == ReportItem.Severity.WARNING))
+                            .collect(Collectors.toList());
+            String warningReport = warningStatistics.stream().map((i) -> i.toString())
+                    .collect(Collectors.joining("\n"));
+            assertEquals("Report does not contain one warning", 1, warningStatistics.size());
+            assertEquals("Report contains errors", 0, report.getErrorStatistics().size());
+            assertTrue("Report does not contain the expected message",
+                    warningReport.contains("Transcription token contains invalid character(s)")
+                            && warningReport.contains("BAR containing: [BAR]"));
+        }
+        // Trigger an exception with a broken DOM
+        {
+            Document origJdom = ((ELANData) cd).getJdom();
+            ((ELANData) cd).setJdom(new Document());
+            report = (Report) checkTranscriptionTextMethod.invoke(rc, cd, "Transcription", text, chunks, glosses);
+            assertEquals("Report contains errors", 1, report.getErrorStatistics().size());
+            assertTrue("Report does not contain the expected message", report.getErrorReports()
+                    .contains("Exception when trying"));
+            ((ELANData) cd).setJdom(origJdom);
+        }
+        // Valid characters above threshold
+        {
+         text = Collections.singletonList(new Text(
+                    "a"));
+            chunks = Arrays.asList(new String[]{"a"});
+            glosses = new HashSet<>();
+            report = (Report) checkTranscriptionTextMethod.invoke(rc, cd, "Transcription", text, chunks, glosses);
+            assertNotEquals("Report is empty for all valid characters", 0,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain expected item for all valid characters",
+                    report.getRawStatistics().get(0).toString().contains("More than 99 percent of transcription " +
+                            "characters are valid"));
+        }
+        // Valid characters below threshold
+        {
+            text = Collections.singletonList(new Text(
+                    "a b"));
+            chunks = Arrays.asList(new String[]{"a"});
+            glosses = new HashSet<>();
+            report = (Report) checkTranscriptionTextMethod.invoke(rc, cd, "Transcription", text, chunks, glosses);
+            assertNotEquals("Report is empty for too many invalid characters", 0,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain expected item for too many invalid characters",
+                    report.getRawStatistics().get(1).toString().contains("Less than 99 percent of transcription " +
+                            "characters are valid"));
+        }
+    }
+
+    /**
+     * Test for "private Report checkTranscription(CorpusData arg0)"
+     */
+    @Test
+    public void checkTranscriptionTest() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, JDOMException {
+        Method checkTranscriptionMethod = rc.getClass().getDeclaredMethod("checkTranscription", CorpusData.class);
+        checkTranscriptionMethod.setAccessible(true);
+        Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
+        refcoCorpusField.setAccessible(true);
+        Corpus refcoCorpus = (Corpus) refcoCorpusField.get(rc);
+        CorpusData cd = refcoCorpus.getCorpusData().stream().collect(Collectors.toList()).get(0);
+        // Get all transcription tiers from the documentation
+        Method  findTranscriptionTiersMethod = rc.getClass().getDeclaredMethod("findTranscriptionTiers");
+        findTranscriptionTiersMethod.setAccessible(true);
+        ArrayList<String> transcriptionTiers = (ArrayList<String>) findTranscriptionTiersMethod.invoke(rc);
+        Report report;
+        // Success case
+        {
+            report = (Report) checkTranscriptionMethod.invoke(rc, cd);
+            assertEquals("Report not only contains one item for success", 1,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain the expected item",
+                    report.getRawStatistics().stream().collect(Collectors.toList()).get(0).toString()
+                            .contains("More than 99 percent of transcription characters are valid"));
+        }
+        // No documented transcription tier
+        {
+            // Backup tiers
+            ArrayList<RefcoChecker.Tier> origTiers = (ArrayList<RefcoChecker.Tier>)
+                    rc.getCriteria().tiers.stream().collect(Collectors.toList());
+            rc.getCriteria().tiers =
+                    (ArrayList<RefcoChecker.Tier>) rc.getCriteria().tiers.stream().filter((t) ->
+                                    !transcriptionTiers.contains(t.tierName))
+                            .collect(Collectors.toList());
+            report = (Report) checkTranscriptionMethod.invoke(rc, cd);
+            assertEquals("Report is empty for no documented transcription tiers", 1,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain expected item for no documented transcription tiers",
+                    report.getRawStatistics().get(0).toString().contains("No transcription tiers found"));
+            // Restore original
+            rc.getCriteria().tiers = origTiers;
+        }
+        // No defined transcription characters
+        {
+            ArrayList<RefcoChecker.Transcription> origTranscription =
+                    (ArrayList<RefcoChecker.Transcription>) rc.getCriteria().transcriptions.stream().collect(Collectors.toList());
+            ArrayList<RefcoChecker.Punctuation> origPunctuation =
+                    (ArrayList<RefcoChecker.Punctuation>) rc.getCriteria().punctuations.stream().collect(Collectors.toList());
+            rc.getCriteria().transcriptions = new ArrayList<>();
+            rc.getCriteria().punctuations = (ArrayList<RefcoChecker.Punctuation>) rc.getCriteria().punctuations.stream()
+                    .filter((p) -> Arrays.stream(p.tiers.split(",\\s+"))
+                            .filter((t) -> !transcriptionTiers.contains(t)).collect(Collectors.toList()).isEmpty())
+                    .collect(Collectors.toList());
+            report = (Report) checkTranscriptionMethod.invoke(rc, cd);
+            assertEquals("Report is empty for no documented transcription characters", 1,
+                    report.getRawStatistics().size());
+            assertTrue("Report does not contain expected item for no documented transcription characters",
+                    report.getRawStatistics().get(0).toString().contains("No valid transcription " +
+                            "characters (graphemes/punctuation) defined"));
+            // Restore original
+            rc.getCriteria().transcriptions = origTranscription ;
+            rc.getCriteria().punctuations = origPunctuation ;
+        }
+        // TODO
+//        // Missing transcription tier
+//        {
+//            Document origJdom = (Document) ((ELANData) cd).getJdom().clone();
+//            // Remove transcription tier
+//            for (Element e :
+//                    (List<Element>) XPath.newInstance("//TIER[@TIER_ID='Aven']").selectNodes(((ELANData) cd).getJdom())) {
+//                e.getParent().removeContent(e);
+//            }
+//            assertTrue(XPath.newInstance("//TIER[@TIER_ID='Aven']").selectNodes(((ELANData) cd).getJdom()).isEmpty());
+//            assertFalse(XPath.newInstance("//TIER[@TIER_ID='Aven']").selectNodes(origJdom).isEmpty());
+//            report = (Report) checkTranscriptionMethod.invoke(rc, cd);
+//            assertEquals("Rerport is empty for missing transcription tier", 1,
+//                    report.getRawStatistics().size());
+//            assertTrue("Report does not contain the expected message for missing transcription tier",
+//                    report.getRawStatistics().get(0).toString()
+//                            .contains("Missing transcription tier: Aven."));
+//            ((ELANData) cd).setJdom(origJdom);
+//        }
+    }
+
+    /**
+     * Test for "private Report checkMorphologyGloss(CorpusData arg0,java.util.List<Text> arg1,HashSet<String> arg2)"
+     */
+    @Test
+    public void checkMorphologyGlossTest() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, JDOMException, InvocationTargetException {
+        Method checkMorphologyGlossMethod = rc.getClass().getDeclaredMethod("checkMorphologyGloss", CorpusData.class, String.class, List.class, HashSet.class);
+        checkMorphologyGlossMethod.setAccessible(true);
+        Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
+        refcoCorpusField.setAccessible(true);
+        Corpus refcoCorpus = (Corpus) refcoCorpusField.get(rc);
+        CorpusData cd = refcoCorpus.getCorpusData().stream().collect(Collectors.toList()).get(0);
+        // Get some gloss text and add some test tokens
+        List<Text> text = Collections.singletonList(new Text(
+                    rc.getTextsInTierByType(((ELANData) cd).getJdom(), "Morphologie").get(0).getText()
+                            + " BAR [hors-texte]"));
+        Report report = (Report) checkMorphologyGlossMethod.invoke(rc,cd,"Morphologie", text,new HashSet<>());
+        //assertTrue(report.getRawStatistics().isEmpty());
+        //logger.info(report.getFullReports());
+        // TODO ???
+    }
+
+    // [...]
+
+
+    /**
+     * Test for "private Report refcoCorpusCheck(CorpusData arg0)"
+     */
+    @Test
+    public void refcoCorpusCheckTest() throws NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException {
+        Method refcoCorpusCheckMethod = rc.getClass().getDeclaredMethod("refcoCorpusCheck", CorpusData.class);
+        refcoCorpusCheckMethod.setAccessible(true);
+        Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
+        refcoCorpusField.setAccessible(true);
+        Corpus refcoCorpus = (Corpus) refcoCorpusField.get(rc);
+        //refcoCorpusCheckMethod.invoke(rc,refcoCorpus.getCorpusData());
+        // TODO
+    }
+
 
     /**
      * Test for "public boolean checkLanguage(String arg0)"
@@ -1169,18 +1360,6 @@ public class RefcoCheckerTest {
 
 
     /**
-     * Test for "private Report refcoCorpusCheck(CorpusData arg0)"
-     */
-    @Test
-    public void refcoCorpusCheckTest() {}
-
-    /**
-     * Test for "private Report checkTranscription(CorpusData arg0)"
-     */
-    @Test
-    public void checkTranscriptionTest() {}
-
-    /**
      * Test for "private Report checkMorphology(CorpusData arg0)"
      */
     @Test
@@ -1199,13 +1378,139 @@ public class RefcoCheckerTest {
     @Test
     public void getCharsTest() {}
 
-//private RefcoChecker$Location getLocation(ELANData arg0,String arg1)
+//    /**
+//     * Test for "RefcoChecker$Location getLocation(ELANData arg0,String arg1)"
+//     */
+//    @Test
+//    public void getLocationTest() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+//        Method getLocationMethod = rc.getClass().getDeclaredMethod("getLocation", ELANData.class, String.class);
+//        getLocationMethod.setAccessible(true);
+//        Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
+//        refcoCorpusField.setAccessible(true);
+//        Corpus refcoCorpus = (Corpus) refcoCorpusField.get(rc);
+//        ELANData cd = (ELANData) refcoCorpus.getCorpusData().stream().collect(Collectors.toList()).get(0);
+//        // Null token
+//        {
+//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, (String) null);
+//            assertEquals("Location for empty token is unknown",
+//                    new RefcoChecker.Location("unknown",""), location);
+//        }
+//        // Empty token
+//        {
+//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "");
+//            assertEquals("Location for empty token is unknown",
+//                    new RefcoChecker.Location("unknown",""), location);
+//        }
+//        // Invalid token
+//        {
+//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "foobar");
+//            assertEquals("Location for invalid token is unknown",
+//                    new RefcoChecker.Location("unknown",""), location);
+//        }
+//        // Token in first tier
+//        {
+//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "Ga=vu");
+//            assertEquals("Unexpected location for token in first tier",
+//                    new RefcoChecker.Location("Tier:Aven","Segment:a1, Time:00:01.738-00:02.300"), location);
+//        }
+//        // Token in morphology tier
+//        {
+//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "ARBRE=DEI.P");
+//            assertEquals("Unexpected location for token in third tier",
+//                    new RefcoChecker.Location("Tier:Aven","Segment:a226, Time:00:11.800-00:12.695"), location);
+//        }
+//    }
+
+     /**
+     * Test for "List<RefcoChecker$Location> getLocations(ELANData arg0,String arg1)"
+     */
+    @Test
+    public void getLocationsTest() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException,
+            InvocationTargetException {
+        // TODO still work in progress
+        Method getLocationsMethod = rc.getClass().getDeclaredMethod("getLocations", ELANData.class, List.class, String.class);
+        getLocationsMethod.setAccessible(true);
+        Field refcoCorpusField = rc.getClass().getDeclaredField("refcoCorpus");
+        refcoCorpusField.setAccessible(true);
+        Corpus refcoCorpus = (Corpus) refcoCorpusField.get(rc);
+        ELANData cd = (ELANData) refcoCorpus.getCorpusData().stream().collect(Collectors.toList()).get(0);
+        List<String> tierList = new ArrayList<>(Arrays.asList(new String[]{"Aven"}));
+        // Null token
+        {
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc,cd,tierList,(String) null);
+            assertTrue("Locations not empty for null token", locations.isEmpty());
+        }
+        // Empty token
+        {
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc,cd,tierList,"");
+            assertTrue("Locations not empty for empty token", locations.isEmpty());
+        }
+        // Null tier list
+        {
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, null, "Ga=vu");
+            assertTrue("Locations not empty for null tier list", locations.isEmpty());
+        }
+        // Empty tier list
+        {
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, new ArrayList<>(), "Ga=vu");
+            assertTrue("Locations not empty for empty tier list", locations.isEmpty());
+        }
+        // Invalid token in a valid tier
+        {
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, tierList, "foobar");
+            assertEquals("Locations not empty for invalid token in valid tier",
+                    Collections.singletonList(new RefcoChecker.Location("Unknown", "")), locations);
+        }
+        // [hors-texte] in Transcription tier
+        {
+            List<RefcoChecker.Location> expectedLocations = Collections.singletonList(
+                            new RefcoChecker.Location("Tier:Aven", "Segment:a1, Time:00:01.738-00:02.300"));
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, tierList, "[hors-texte]");
+            assertEquals("Unexpected locations for [hors-texte] in Transcription tier", expectedLocations, locations);
+        }
+        // [hors-texte] in Morphology tier
+        {
+            List<RefcoChecker.Location> expectedLocations = Collections.singletonList(
+                    new RefcoChecker.Location("Tier:Morphologie", "Segment:a225, Time:00:10.361-00:11.607"));
+            tierList = new ArrayList<>(Arrays.asList(new String[]{"Morphologie"}));
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, tierList, "[hors-texte]");
+            assertEquals("Unexpected locations for [hors-texte] in Morphology tier", expectedLocations, locations);
+        }
+        // [hors-texte] in both tiers
+        {
+             List<RefcoChecker.Location> expectedLocations = Arrays.asList(new RefcoChecker.Location[]{
+                             new RefcoChecker.Location("Tier:Aven", "Segment:a1, Time:00:01.738-00:02.300"),
+                             new RefcoChecker.Location("Tier:Morphologie", "Segment:a225, Time:00:10.361-00:11.607")
+                     });
+            tierList.add("Aven");
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, tierList, "[hors-texte]");
+            assertEquals("Unexpected locations for [hors-texte] in both tier", expectedLocations, locations);
+        }
+        // Legal token with several occurrences
+        {
+            List<RefcoChecker.Location> expectedLocations = new ArrayList<>(Arrays.asList(new RefcoChecker.Location[]{
+                    new RefcoChecker.Location("Tier:Aven","Segment:a1, Time:00:01.738-00:02.300"),
+                    new RefcoChecker.Location("Tier:Aven","Segment:a125, Time:06:22.285-06:25.179")
+            }));
+            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+                    getLocationsMethod.invoke(rc, cd, tierList, "Ga=vu");
+            assertEquals("Unexpected locations for legal token with several occurrences", expectedLocations, locations);
+        }
+    }
 
     /**
      * Test for "public Map<String, String> getParameters()"
      */
     @Test
-    public void getParameters() {}
+    public void getParametersTest() {}
 
 
     /*@Test
