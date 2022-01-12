@@ -1711,6 +1711,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         report.merge(refcoPunctuationCheck());
         return report;
     }
+
+    /**
+     * function to find all transcription tier names
+     * @return list of transcription tiers
+     */
+    private ArrayList<String> findTranscriptionTiers() {
+        ArrayList<String> transcriptionTiers = new ArrayList<>();
+        //transcriptionTiers.add("transcription") ; // Add default tier function for transcription
+        for (Tier t: criteria.tiers) {
+            // Also add all tiers that contain transcription in the tier function
+            if (t.tierFunctions.contains("transcription")) {
+                transcriptionTiers.add(t.tierName);
+            }
+        }
+        return transcriptionTiers;
+    }
     /**
      * function to check the transcription text based on valid chunks and glosses
      *
@@ -1804,22 +1820,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
         return report ;
-    }
-
-    /**
-     * find all transcription tier names
-     * @return list of transcription tiers
-     */
-    private ArrayList<String> findTranscriptionTiers() {
-        ArrayList<String> transcriptionTiers = new ArrayList<>();
-        transcriptionTiers.add("transcription") ; // Add default tier function for transcription
-        for (Tier t: criteria.tiers) {
-            // Also add all tiers that contain transcription in the tier function
-            if (t.tierFunctions.contains("transcription")) {
-                transcriptionTiers.add(t.tierName);
-            }
-        }
-        return transcriptionTiers;
     }
 
     /**
