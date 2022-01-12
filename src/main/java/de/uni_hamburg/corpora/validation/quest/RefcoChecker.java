@@ -7,14 +7,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
-import de.uni_hamburg.corpora.utilities.quest.UniversalLevenshteinAutomatonK1;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.ini4j.InvalidFileFormatException;
 import org.jdom.*;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.xml.sax.SAXException;
 
@@ -23,15 +22,17 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.*;
 import java.net.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -55,7 +56,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Separator used to separate words/token
     private final String tokenSeparator = "\\s+" ;
     // Separator used to separate morpheme glosses (see https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf)
-    private final Set glossSeparator = new HashSet(); //new HashSet(Arrays.asList("-", "=")); // "[-=;:\\\\>()
+    private final Set<String> glossSeparator = new HashSet(); //new HashSet(Arrays.asList("-", "=")); // "[-=;:\\\\>()
     // <~\\[\\]]+"
 
     // The XML namespace for table elements in ODS files
@@ -567,6 +568,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }*/
         }
         // In any case, just return the report
+        logger.info("Corpus checks done");
         return report ;
     }
 
@@ -603,10 +605,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Create the checker. This also triggers the parser for the spreadsheet
             // and initializes the criteria field
             RefcoChecker rc = new RefcoChecker(props);
+            try {
+                new XMLOutputter().output(rc.refcoDoc, new FileWriter("/tmp/newdoc.xml"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             // Safe the Refco criteria to file
             // Generate pretty-printed json using an object mapper
             // DEBUG write criteria to json file
-            /*ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             // Allows serialization even when getters are missing
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
@@ -617,7 +625,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             catch (Exception e) {
                 e.printStackTrace();
-            }*/
+            }
             try {
                 Report report = new Report();
                 // Read the corpus
@@ -637,7 +645,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 fw.write(html) ;
                 fw.close() ;
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Done") ;
-                ObjectMapper mapper = new ObjectMapper();
+                //ObjectMapper mapper = new ObjectMapper();
                 // Allows serialization even when getters are missing
                 mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
                 mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
@@ -649,7 +657,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     fw.write(mapper.writeValueAsString(rc.morphemeFreq));
                     fw.close();
                 }
-
                 catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -677,7 +684,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (refcoFileName.toLowerCase().endsWith("fods")) {
                 SAXBuilder builder = new SAXBuilder();
                 refcoDoc = builder.build(Paths.get(refcoFileName).toAbsolutePath().normalize().toUri().toURL()) ;
-
             }
             // ODS file is basically a ZIP file containing XMLs but we use a proper API to access it
             else if (refcoFileName.toLowerCase().endsWith("ods")) {
@@ -1116,7 +1122,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the detailed report of all checks performed
      */
     private Report refcoGenericCheck() {
-                Report report = new Report() ;
+        Report report = new Report() ;
         if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
@@ -1142,7 +1148,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         if (criteria.archive == null || criteria.archive.isEmpty())
-            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Archive name is empty", "Add an archive name"}));
         if (criteria.persistentId == null || criteria.persistentId.isEmpty())
@@ -1157,7 +1163,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             "Use a valid URL as the persistent identifier"}));
         }
         if (criteria.annotationLicense == null || criteria.annotationLicense.isEmpty())
-            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Annotation license is empty",
                             "Add annotation license"}));
@@ -1487,7 +1493,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             , "exception"},
                     new Object[]{getFunction(), refcoShortName, "Corpus data: exception when extracting all tiers",
                             e}));
-            e.printStackTrace();
             allTiers = new HashMap<>();
         }
         for (Tier t : criteria.tiers) {
@@ -1601,7 +1606,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add gloss abbreviations"}));
             // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
             // lower-case letters)
-            else if (g.gloss.split(glossSeparator).length > 1 && !g.gloss.matches(".*[a-z].*"))
+            else if (g.gloss.split("[" + String.join("", glossSeparator) + "]").length > 1
+                    && !g.gloss.matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
                         ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
                                 new Object[]{getFunction(), refcoShortName,
@@ -1689,12 +1695,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            if (p.function == null || p.function.isEmpty())
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+            if (p.function == null || p.function.isEmpty()) {
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,
+                        new Object[]{getFunction(), refcoShortName,
                                 "Punctuation: function is empty for grapheme: " + p.character,
                                 "Add valid function for punctuation"}));
+            }
+            else {
+                if (p.function.equalsIgnoreCase("morpheme break ")) {
+                    glossSeparator.add(p.character);
+                }
+            }
+
         }
         return report ;
     }
@@ -1705,13 +1718,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the detailed report of all checks performed
      */
     private Report refcoDocumentationCheck() {
-        logger.info("Generic checks");
         Report report = new Report();
+        logger.info("Generic checks");
         report.merge(refcoGenericCheck());
+        logger.info("Session checks");
         report.merge(refcoSessionCheck());
+        logger.info("Tier checks");
         report.merge(refcoTierCheck());
+        logger.info("Transcription checks");
         report.merge(refcoTranscriptionCheck());
+        logger.info("Gloss checks");
         report.merge(refcoGlossCheck());
+        logger.info("Punctuation checks");
         report.merge(refcoPunctuationCheck());
         return report;
     }
@@ -1735,12 +1753,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * function to check the transcription text based on valid chunks and glosses
      *
      * @param cd the corpus document used to correctly assign the log messages
+     * @param tier the relevant tier
      * @param text the extracted text from the transcription tiers
      * @param chunks the valid character sequences (graphemes/punctuations)
      * @param glosses the documented glosses
      * @return the check report
      */
-    private Report checkTranscriptionText(CorpusData cd, List<Text> text, List<String> chunks,
+    private Report checkTranscriptionText(CorpusData cd, String tier, List<Text> text, List<String> chunks,
                                           Set<String> glosses) {
         DictionaryAutomaton dict = new DictionaryAutomaton(chunks);
         // Create a string for all the characters in the automaton
@@ -1770,8 +1789,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Token is not one of the glosses
                 if (!glosses.contains(token)) {
                     // Check if we can segment the token using the chunks
-                    if (dict.checkSegmentableWord(token))
+                    if (dict.checkSegmentableWord(token)) {
                         matched += token.length();
+                    }
                     else {
                         missing += token.length();
                         mismatch = true ;
@@ -1783,23 +1803,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     matched += token.length() ;
                 }
                 // It is neither recognized by the automaton nor a non-morphological gloss
-                else
-                    mismatch = true ;
+                else {
+                    mismatch = true;
+                }
                 if (mismatch && !token.isEmpty()) {
                     try {
-                        Location l = getLocation((ELANData) cd, token);
-                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                        "description", "tier" , "segment", "howtoFix"},
-                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
-                                        "invalid character(s):\n" + token + " containing: [" +
-                                        token.replaceAll(dictAlphabet, "") + "]", l.tier, l.segment,
-                                        "Add all transcription characters to the documentation"}));
+                        // Location l = getLocation((ELANData) cd, token);
+                        List<Location> locations = getLocations((ELANData) cd, Collections.singletonList(tier), token);
+                        for (Location l : locations) {
+                            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                            "description", "tier", "segment", "howtoFix"},
+                                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+                                            "invalid character(s):\n" + token + " containing: [" +
+                                            token.replaceAll(dictAlphabet, "") + "]",
+                                            l.tier, l.segment, "Add all transcription characters to the documentation"}));
+                        }
                     } catch (Exception e) {
                         report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                         "description", "exception"},
                                 new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
-                                        "locate token " + token,
-                                        e}));
+                                        "locate token " + token, e}));
                     }
                 }
             }
@@ -1840,88 +1863,90 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Document content = ((ELANData) cd).getJdom();
         // Get all transcription tiers
         ArrayList<String> transcriptionTiers = findTranscriptionTiers();
-        // Get all transcription graphemes
-        // Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
-        List<String> validTranscriptionCharacters = new ArrayList<>(criteria.transcriptions.size()) ;
-        for (Transcription t : criteria.transcriptions) {
-            // Add all of the grapheme's characters
-            // validTranscriptionCharacters.addAll(getChars(t.grapheme));
-            validTranscriptionCharacters.add(t.grapheme);
-        }
-        // and punctuation characters
-        for (Punctuation p : criteria.punctuations) {
-            if (p.tiers.equals("all"))
-                // Add all of the punctuation's characters
-                // validTranscriptionCharacters.addAll(getChars(p.character));
-                validTranscriptionCharacters.add(p.character);
-            else {
-                for (String t : new ArrayList<>(Arrays.asList(p.tiers.split(valueSeparator)))) {
-                    if (transcriptionTiers.contains(t)) {
-                        // Add all of the punctuation's characters
-                        // validTranscriptionCharacters.addAll(getChars(p.character));
-                        validTranscriptionCharacters.add(p.character);
-                        break;
-                    }
-                }
-            }
-        }
-        // Also get all glosses valid for the transcription tiers
-        Set<String> validGlosses = new HashSet<>();
-        for (Gloss g : criteria.glosses) {
-            if (g.tiers.equals("all"))
-                validGlosses.add(g.gloss);
-            else {
-                for (String t : new ArrayList<>(Arrays.asList(g.tiers.split(valueSeparator)))) {
-                    if (transcriptionTiers.contains(t)) {
-                        validGlosses.add(g.gloss);
-                        break;
-                    }
-                }
-            }
-        }
-        // Get the text from all transcription tiers
-        List<Text> transcriptionText = new ArrayList<>();
-        for (String t : transcriptionTiers) {
-            transcriptionText.addAll(getTextsInTierByID(content, t));
-        }
-        // Check if one of the relevant variables is empty and, if yes, skip the transcription test
+        // Check if we actually have relevant tiers
         if (transcriptionTiers.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                             "howtoFix"},
-                            new Object[]{getFunction(), cd.getFilename(), "Corpus data: No transcription tiers found",
-                                    "Check that all transcription tiers are documented"}));
+                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: No transcription tiers found",
+                            "Check that all transcription tiers are documented"}));
             return report;
         }
-        if (validTranscriptionCharacters.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                            "howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(), "Transcription/Punctuation: No valid transcription " +
-                            "characters " +
-                            "(graphemes/punctuation) defined",
-                            "Define all graphemes and punctuation characters used in the corpus"}));
-            return report;
+        // Check each transcription separately
+        for (String tierId : transcriptionTiers) {
+            // Get all transcription graphemes
+            // Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
+            List<String> validTranscriptionCharacters = new ArrayList<>(criteria.transcriptions.size());
+            for (Transcription t : criteria.transcriptions) {
+                // Add all of the grapheme's characters
+                // validTranscriptionCharacters.addAll(getChars(t.grapheme));
+                validTranscriptionCharacters.add(t.grapheme);
+            }
+            // and punctuation characters
+            for (Punctuation p : criteria.punctuations) {
+                if (p.tiers.equals("all"))
+                    // Add all of the punctuation's characters
+                    // validTranscriptionCharacters.addAll(getChars(p.character));
+                    validTranscriptionCharacters.add(p.character);
+                else if (Arrays.asList(p.tiers.split(valueSeparator)).contains(tierId)) {
+                    // Add all of the punctuation's characters
+                    validTranscriptionCharacters.add(p.character);
+                }
+            }
+            // Also get all glosses valid for the transcription tiers
+            Set<String> validGlosses = new HashSet<>();
+            for (Gloss g : criteria.glosses) {
+                if (g.tiers.equals("all"))
+                    validGlosses.add(g.gloss);
+                else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
+                    validGlosses.add(g.gloss);
+                }
+            }
+            // Get the text from all transcription tiers
+            List<Text> transcriptionText = getTextsInTierByID(content, tierId);
+            // Check if one of the relevant variables is empty and, if yes, skip the transcription test
+            if (validTranscriptionCharacters.isEmpty()) {
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(), "Transcription/Punctuation: No valid transcription " +
+                                "characters (graphemes/punctuation) defined for tier: " + tierId,
+                                "Define all graphemes and punctuation characters used in the corpus"}));
+                return report;
+            }
+            if (containsTier((ELANData) cd,tierId)) {
+                if (transcriptionText.isEmpty()) {
+                    report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                    "howtoFix"},
+                            new Object[]{getFunction(), cd.getFilename(), "Corpus data: No transcribed text found in " +
+                                    "tier: " + tierId,
+                                    "Check that all documented transcription tiers exist in the corpus"}));
+                    return report;
+                }
+                report.merge(checkTranscriptionText(cd, tierId, transcriptionText, validTranscriptionCharacters,
+                        validGlosses));
+            }
+            // Problematic
+//            else {
+//                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+//                                "howtoFix"},
+//                        new Object[]{getFunction(), cd.getFilename(), "Corpus data: Missing transcription tier: " +
+//                                tierId, "Check that all documented transcription tiers exist in the corpus"}));
+//            }
         }
-        if (transcriptionText.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                            "howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: No transcribed text found in one of the " +
-                            "expected tiers: " +
-                            String.join(", ", transcriptionTiers),
-                            "Check that all documented transcription tiers exist in the corpus"}));
-            return report;
-        }
-        report.merge(checkTranscriptionText(cd,transcriptionText,validTranscriptionCharacters,validGlosses));
         return report;
     }
 
     /**
      * Function that checks the morphology tier for documented glosses
      * @param cd the corpus document used to correctly assign the log messages
+     * @param tier the relevant tier
      * @param text the extracted text from all morphology tiers
      * @param glosses all documented glosses
+//     * @param morphemeRegex a regex matching the gloss part
      * @return the detailed report of the checks
      */
-    private Report checkMorphologyGloss(CorpusData cd, List<Text> text, HashSet<String> glosses) {
+    //private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses,
+    //                                    String morphemeRegex) {
+    private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses) {
         Report report = new Report() ;
 
         // All the tokens that are valid
@@ -1933,16 +1958,36 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Tokenize text
             for (String token : t.getText().split(tokenSeparator)) {
                 // Check if token is a gloss
-                for (String morpheme : token.split(glossSeparator)) {
+                for (String morpheme : token.split("[" + String.join("", glossSeparator) + "]")) {
+                    // Remove numbers e.g. in 3PL or 1INCL
+                    String normalizedMorpheme = morpheme.replaceAll("^[0-9]","");
                     // TODO take properly care of morpheme distinction
-                    if (morpheme.matches("[0-9A-Z]+") && !glosses.contains(morpheme)) {
+                    String morphemeRegex = "[0-9A-Z.]+";
+                    if (morpheme.matches(morphemeRegex) && !glosses.contains(normalizedMorpheme)) {
                         missing += 1;
-                        // <></>his would lead to large amount of warnings
-                        // report.addWarning(getFunction(),cd,"Invalid token: " + token);
+                        // his would lead to large amount of warnings
+                        try {
+                            // Location l = getLocation((ELANData) cd, morpheme);
+                            for (Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
+                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                                "howtoFix", "tier", "segment"},
+                                        new Object[]{getFunction(), cd.getFilename(),
+                                                "Invalid morpheme in token: " + normalizedMorpheme + " in " + token,
+                                                "Add gloss to documentation or check for typo",
+                                                l.tier, l.segment
+                                        }));
+                            }
+                        } catch (Exception e) {
+                            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                            "description", "exception"},
+                                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
+                                            "locate token " + morpheme,
+                                            e}));
+                        }
                     } else {
                         matched += 1;
                     }
-                    morphemeFreq.compute(morpheme,(k, v) -> (v == null) ? 1 : v + 1);
+                    morphemeFreq.compute(normalizedMorpheme,(k, v) -> (v == null) ? 1 : v + 1);
                 }
                 glossFreq.compute(token,(k, v) -> (v == null) ? 1 : v + 1);
             }
@@ -1979,51 +2024,56 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Get morphology tiers
         List<String> morphologyTiers = criteria.tiers.stream()
                 .filter((t) ->
-                        t.tierFunctions.contains("morpheme gloss")
+                        t.tierFunctions.contains("morpheme gloss") || t.tierFunctions.contains("morpheme glossing")
                 )
                 .map((t) -> t.tierName).collect(Collectors.toList()) ;
-        // Get all valid Glosses
-        HashSet<String> validGlosses = new HashSet<>() ;
-        for (Gloss g : criteria.glosses) {
-            if (g.tiers.equals("all"))
-                validGlosses.add(g.gloss) ;
-            else {
-                for (String t : new ArrayList<>(Arrays.asList(g.tiers.split(valueSeparator)))) {
-                    if (morphologyTiers.contains(t)) {
-                        validGlosses.add(g.gloss);
-                        break;
-                    }
+        // Chekc if we actually have tiers
+        if (morphologyTiers.isEmpty()) {
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
+                                , "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(), "Corpus composition: No morphology tiers found",
+                                "Add documentation for tiers of type morphology gloss"}));
+                return report;
+            }
+        // For each morphology tier
+        for (String tierId : morphologyTiers) {
+            // Get all valid Glosses
+            HashSet<String> validGlosses = new HashSet<>();
+            for (Gloss g : criteria.glosses) {
+                if (g.tiers.equals("all"))
+                    validGlosses.add(g.gloss);
+                else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
+                    validGlosses.add(g.gloss);
                 }
             }
+            // Get the text from all morphology tiers
+            List<Text> glossText = getTextsInTierByID(content, tierId);
+            // Check if one of the relevant variables is empty and, if yes, skip the transcription test
+            if (validGlosses.isEmpty()) {
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(), "No valid glosses defined in tier " + tierId,
+                                "Add documentation for all gloss morphemes"}));
+                return report;
+            }
+            if (glossText.isEmpty()) {
+                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(), "No annotated text found in one of the expected tiers: " +
+                                String.join(", ", morphologyTiers),
+                                "Check the tier documentation to make sure that your morphology tiers are covered"}));
+                return report;
+            }
+//            // Get morpheme distinction for current tier and use it in checkMorphologyGloss
+//            String glossRegex = "";
+//            for (Tier t : criteria.tiers) {
+//                if (t.tierName.equals(tierId)) {
+//                    if (t.morphemeDistinction.equalsIgnoreCase("UpperGramLowerLex"))
+//                        glossRegex = "[0-9A-Z.]+"; // allow digits, uppercase letters and . as a separator
+//                }
+//            }
+            //report.merge(checkMorphologyGloss(cd,tierId,glossText,validGlosses,glossRegex));
+            report.merge(checkMorphologyGloss(cd,tierId,glossText,validGlosses));
         }
-        // Get the text from all morphology tiers
-        List<Text> glossText = new ArrayList<>();
-        for (String t : morphologyTiers) {
-            glossText.addAll(getTextsInTierByID(content, t));
-        }
-        // Check if one of the relevant variables is empty and, if yes, skip the transcription test
-        if (morphologyTiers.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"
-                    ,"howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(), "Corpus composition: No morphology tiers found",
-                            "Add documentation for tiers of type morphology gloss"}));
-            return report;
-        }
-        if (validGlosses.isEmpty()) {
-            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description", "howtoFix"},
-                            new Object[]{getFunction(), cd.getFilename(), "No valid glosses defined",
-                                    "Add documentation for all gloss morphemes"}));
-            return report;
-        }
-        if (glossText.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                    "howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(), "No annotated text found in one of the expected tiers: " +
-                    String.join(", ", morphologyTiers),
-                            "Check the tier documentation to make sure that your morphology tiers are covered"}));
-            return report;
-        }
-        report.merge(checkMorphologyGloss(cd,glossText,validGlosses));
         return report ;
     }
 
@@ -2034,12 +2084,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the detailed report of the checks
      */
     private Report refcoCorpusCheck(CorpusData cd) {
+        logger.info("Corpus check for file: " + cd.getFilename());
         Report report = new Report() ;
         // Check for ELAN data
         if (cd instanceof ELANData) {
             // Check the transcription
             try {
-                logger.info("run transcription check on " + cd.getFilename());
                 report.merge(checkTranscription(cd));
             }
             catch (JDOMException e) {
@@ -2050,7 +2100,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             // Check the morphology
             try {
-                logger.info("run morphology check on " + cd.getFilename());
                 report.merge(checkMorphology(cd));
             }
             catch (JDOMException e) {
