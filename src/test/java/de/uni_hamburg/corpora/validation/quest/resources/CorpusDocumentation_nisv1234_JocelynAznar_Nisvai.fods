@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2021-01-04T11:07:53</meta:creation-date><dc:language>fr-FR</dc:language><dc:date>2021-11-24T17:18:41.796010305</dc:date><meta:editing-cycles>227</meta:editing-cycles><meta:editing-duration>P3DT17H50M25S</meta:editing-duration><meta:generator>LibreOffice/7.1.5.2$Linux_X86_64 LibreOffice_project/10$Build-2</meta:generator><meta:document-statistic meta:table-count="9" meta:cell-count="655" meta:object-count="0"/><meta:user-defined meta:name="AppVersion">15.0000</meta:user-defined></office:meta>
+ <office:meta><meta:creation-date>2021-01-04T11:07:53</meta:creation-date><dc:language>fr-FR</dc:language><dc:date>2022-01-12T15:58:55.203457723</dc:date><meta:editing-cycles>251</meta:editing-cycles><meta:editing-duration>P4DT10M30S</meta:editing-duration><meta:generator>LibreOffice/7.1.5.2$Linux_X86_64 LibreOffice_project/10$Build-2</meta:generator><meta:document-statistic meta:table-count="9" meta:cell-count="815" meta:object-count="0"/><meta:user-defined meta:name="AppVersion">15.0000</meta:user-defined></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">35605</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">3175</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">49785</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">10583</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="AnnotationTiers">
-       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">4</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">1</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">5</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -104,7 +104,7 @@
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Glosses">
        <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">2</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">1</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -139,8 +139,8 @@
        <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
       <config:config-item-map-entry config:name="Punctuations">
-       <config:config-item config:name="CursorPositionX" config:type="int">4</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">1</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">3</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">19</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -175,7 +175,7 @@
        <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
       </config:config-item-map-entry>
      </config:config-item-map-named>
-     <config:config-item config:name="ActiveTable" config:type="string">AnnotationTiers</config:config-item>
+     <config:config-item config:name="ActiveTable" config:type="string">Glosses</config:config-item>
      <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1461</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ZoomValue" config:type="int">75</config:config-item>
@@ -248,10 +248,10 @@
    <config:config-item config:name="AllowPrintJobCancel" config:type="boolean">true</config:config-item>
    <config:config-item-map-named config:name="ScriptConfiguration">
     <config:config-item-map-entry config:name="Foobar">
-     <config:config-item config:name="CodeName" config:type="string">Glosses_2</config:config-item>
+     <config:config-item config:name="CodeName" config:type="string">Sheet1</config:config-item>
     </config:config-item-map-entry>
     <config:config-item-map-entry config:name="Overview">
-     <config:config-item config:name="CodeName" config:type="string">Feuille1</config:config-item>
+     <config:config-item config:name="CodeName" config:type="string">Overview</config:config-item>
     </config:config-item-map-entry>
     <config:config-item-map-entry config:name="CorpusComposition">
      <config:config-item config:name="CodeName" config:type="string">CorpusComposition</config:config-item>
@@ -263,7 +263,7 @@
      <config:config-item config:name="CodeName" config:type="string">Transcription</config:config-item>
     </config:config-item-map-entry>
     <config:config-item-map-entry config:name="Glosses">
-     <config:config-item config:name="CodeName" config:type="string">Gloss-Abbrev_</config:config-item>
+     <config:config-item config:name="CodeName" config:type="string">Glosses</config:config-item>
     </config:config-item-map-entry>
     <config:config-item-map-entry config:name="Punctuations">
      <config:config-item config:name="CodeName" config:type="string">Punctuations</config:config-item>
@@ -279,15 +279,17 @@
  </office:settings>
  <office:scripts>
   <office:script script:language="ooo:Basic">
-   <ooo:libraries xmlns:ooo="http://openoffice.org/2004/office" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+   <ooo:libraries xmlns:ooo="http://openoffice.org/2004/office" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <ooo:library-embedded ooo:name="Standard"/>
+   </ooo:libraries>
   </office:script>
  </office:scripts>
  <office:font-face-decls>
   <style:font-face style:name="*" svg:font-family="*"/>
-  <style:font-face style:name="Liberation Sans1" svg:font-family="&apos;Liberation Sans1&apos;"/>
+  <style:font-face style:name="Liberation Sans12" svg:font-family="&apos;Liberation Sans1&apos;"/>
   <style:font-face style:name="Liberation Sans11" svg:font-family="&apos;Liberation Sans11&apos;"/>
   <style:font-face style:name="Times New Roman" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman"/>
-  <style:font-face style:name="Liberation Sans12" svg:font-family="&apos;Liberation Sans1&apos;" style:font-family-generic="swiss"/>
+  <style:font-face style:name="Liberation Sans1" svg:font-family="&apos;Liberation Sans1&apos;" style:font-family-generic="swiss"/>
   <style:font-face style:name="Liberation Sans13" svg:font-family="&apos;Liberation Sans1&apos;" style:font-pitch="variable"/>
   <style:font-face style:name="Noto Sans CJK SC1" svg:font-family="&apos;Noto Sans CJK SC&apos;" style:font-pitch="variable"/>
   <style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;, &apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
@@ -560,7 +562,7 @@
   </number:text-style>
   <style:style style:name="Default" style:family="table-cell">
    <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
-   <style:text-properties fo:color="#000000" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="12pt" style:font-size-asian="12pt" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="12pt"/>
+   <style:text-properties fo:color="#000000" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="12pt" style:font-size-asian="12pt" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="12pt"/>
   </style:style>
   <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default"/>
   <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="table-cell" style:parent-style-name="Default">
@@ -618,62 +620,62 @@
   <style:style style:name="Accent_20_1_20_5" style:display-name="Accent 1 5" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties fo:background-color="#000000" style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Accent_20_2_20_6" style:display-name="Accent 2 6" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties fo:background-color="#808080" style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Accent_20_3_20_7" style:display-name="Accent 3 7" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties fo:background-color="#dddddd" style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="Accent_20_4" style:display-name="Accent 4" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="Error_20_8" style:display-name="Error 8" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties fo:background-color="#cc0000" style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#ffffff" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="Footnote_20_9" style:display-name="Footnote 9" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#808080" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="italic" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="italic" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#808080" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="italic" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="italic" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Heading_20__28_user_29__20_10" style:display-name="Heading (user) 10" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="Hyperlink_20_11" style:display-name="Hyperlink 11" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#0000ee" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#0000ee" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Result_20__28_user_29__20_12" style:display-name="Result (user) 12" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="italic" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold" style:font-size-asian="10pt" style:font-style-asian="italic" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="italic" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="Status_20_13" style:display-name="Status 13" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Text_20_14" style:display-name="Text 14" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Warning_20_15" style:display-name="Warning 15" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:table-cell-properties style:cell-protect="protected" style:print-content="true" style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="value-type" style:repeat-content="false" fo:background-color="transparent" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#cc0000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#cc0000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-family="&apos;Liberation Sans1&apos;" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-family-complex="&apos;Liberation Sans1&apos;" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
  </office:styles>
  <office:automatic-styles>
@@ -688,6 +690,9 @@
   </style:style>
   <style:style style:name="co4" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="1.1543in"/>
+  </style:style>
+  <style:style style:name="co5" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="0.889in"/>
   </style:style>
   <style:style style:name="co6" style:family="table-column">
    <style:table-column-properties fo:break-before="auto" style:column-width="5.1374in"/>
@@ -780,10 +785,7 @@
    <style:table-row-properties style:row-height="0.2083in" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ro2" style:family="table-row">
-   <style:table-row-properties style:row-height="0.2083in" fo:break-before="auto" style:use-optimal-row-height="true"/>
-  </style:style>
-  <style:style style:name="ro3" style:family="table-row">
-   <style:table-row-properties style:row-height="0.2083in" fo:break-before="auto" style:use-optimal-row-height="true"/>
+   <style:table-row-properties style:row-height="0.2209in" fo:break-before="auto" style:use-optimal-row-height="true"/>
   </style:style>
   <style:style style:name="ta1" style:family="table" style:master-page-name="PageStyle_5f_Gloss-Abbrev_5f_">
    <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
@@ -815,133 +817,13 @@
   <number:text-style style:name="N100">
    <number:text-content/>
   </number:text-style>
-  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties fo:wrap-option="wrap"/>
-   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="DejaVu Sans" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="DejaVu Sans" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties style:font-name="Liberation Sans1" style:font-name-complex="Liberation Sans1"/>
-  </style:style>
-  <style:style style:name="ce65" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce66" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-  </style:style>
-  <style:style style:name="ce70" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
-  </style:style>
-  <style:style style:name="ce81" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce59" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce61" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
-   <style:text-properties style:font-name="Liberation Sans12" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce62" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
-   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce63" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="*" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce64" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans11" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans11" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce67" style:family="table-cell" style:parent-style-name="Hyperlink_20_11">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#0000ee" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
-  </style:style>
-  <style:style style:name="ce68" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce69" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
-  </style:style>
-  <style:style style:name="ce71" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
-  </style:style>
-  <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
-   <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce72" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N100">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce73" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N158">
-   <style:table-cell-properties style:rotation-align="none"/>
-  </style:style>
-  <style:style style:name="ce74" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N100">
-   <style:table-cell-properties style:rotation-align="none"/>
-  </style:style>
-  <style:style style:name="ce75" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Times New Roman" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Times New Roman" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
-  </style:style>
-  <style:style style:name="ce76" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="justify"/>
-   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC1" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce77" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
-   <style:table-cell-properties fo:background-color="transparent"/>
-   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="ce78" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="justify"/>
-   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC1" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce79" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties style:font-name="Liberation Sans1" style:font-name-complex="Liberation Sans1"/>
-  </style:style>
-  <style:style style:name="ce80" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce85" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties style:font-name="Liberation Sans" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
-  </style:style>
-  <style:style style:name="ce86" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties style:font-name="Liberation Sans"/>
-  </style:style>
-  <style:style style:name="ce87" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
-   <style:paragraph-properties fo:text-align="justify"/>
-   <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC1" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="ce88" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="Noto Sans CJK SC1" style:font-name-complex="Liberation Serif"/>
-  </style:style>
-  <style:style style:name="ce34" style:family="table-cell" style:parent-style-name="Default">
-   <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" fo:border="none" style:rotation-align="none"/>
-  </style:style>
   <style:style style:name="ce35" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce36" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce37" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties fo:wrap-option="wrap"/>
@@ -952,26 +834,26 @@
   </style:style>
   <style:style style:name="ce39" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="DejaVu Sans" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="DejaVu Sans" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="ce40" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties style:font-name="Liberation Sans1" style:font-name-complex="Liberation Sans1"/>
+   <style:text-properties style:font-name="Liberation Sans12" style:font-name-complex="Liberation Sans12"/>
   </style:style>
   <style:style style:name="ce41" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="ce42" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" fo:border="none" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce43" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce44" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
-   <style:text-properties style:font-name="Liberation Sans12" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+   <style:text-properties style:font-name="Liberation Sans1" fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce45" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N0">
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
@@ -987,26 +869,26 @@
   </style:style>
   <style:style style:name="ce48" style:family="table-cell" style:parent-style-name="Hyperlink_20_11">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#0000ee" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#0000ee" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="10pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="normal" style:font-size-asian="10pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="10pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce49" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce50" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties fo:text-align="center" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce51" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" fo:wrap-option="no-wrap" style:direction="ltr" style:rotation-angle="0" style:rotation-align="none" style:shrink-to-fit="false" style:vertical-align="bottom" loext:vertical-justify="auto"/>
    <style:paragraph-properties fo:text-align="start" css3t:text-justify="auto" fo:margin-left="0in" style:writing-mode="page"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="ce52" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N100">
    <style:table-cell-properties style:rotation-align="none"/>
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
   </style:style>
   <style:style style:name="ce53" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N158">
    <style:table-cell-properties style:rotation-align="none"/>
@@ -1033,10 +915,10 @@
    <style:text-properties style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:language="en" fo:country="US" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC1" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="ce60" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties style:font-name="Liberation Sans1" style:font-name-complex="Liberation Sans1"/>
+   <style:text-properties style:font-name="Liberation Sans12" style:font-name-complex="Liberation Sans12"/>
   </style:style>
   <style:style style:name="ce82" style:family="table-cell" style:parent-style-name="Default">
-   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans1" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#000000" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="ce83" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:font-name="Liberation Sans" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
@@ -1052,7 +934,7 @@
   <style:style style:name="ce90" style:family="table-cell" style:parent-style-name="Default">
    <style:text-properties style:use-window-font-color="true" style:font-name="Liberation Sans" fo:language="en" fo:country="US" style:font-name-asian="Noto Sans CJK SC1" style:font-name-complex="Liberation Serif"/>
   </style:style>
-  <style:style style:name="ce91" style:family="table-cell" style:parent-style-name="Default">
+  <style:style style:name="ce31" style:family="table-cell" style:parent-style-name="Default">
    <style:table-cell-properties style:diagonal-bl-tr="none" style:diagonal-tl-br="none" fo:border="none" style:rotation-align="none"/>
   </style:style>
   <style:page-layout style:name="pm1">
@@ -1087,30 +969,18 @@
    </style:footer-style>
   </style:page-layout>
   <style:style style:name="T1" style:family="text">
-   <style:text-properties fo:color="#000000" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Liberation Sans" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="T2" style:family="text">
-   <style:text-properties fo:color="#000000" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Sans12" fo:font-size="12pt" fo:language="fr" fo:country="FR" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:text-underline-mode="continuous" style:text-overline-mode="continuous" style:text-line-through-mode="continuous" style:font-name-asian="Liberation Sans12" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans12" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
-  </style:style>
-  <style:style style:name="T3" style:family="text">
-   <style:text-properties fo:color="#000000" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" style:font-name-asian="Liberation Sans" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-name-complex="Liberation Sans" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="bold"/>
-  </style:style>
-  <style:style style:name="T4" style:family="text">
-   <style:text-properties fo:font-size="12pt" fo:language="en" fo:country="US" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:language-asian="zh" style:country-asian="CN" style:font-size-complex="12pt" style:language-complex="hi" style:country-complex="IN"/>
-  </style:style>
-  <style:style style:name="T5" style:family="text">
    <style:text-properties fo:color="#000000" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-weight="bold" style:text-underline-style="none" style:text-underline-color="font-color" style:text-line-through-type="none" fo:font-style="normal" style:text-outline="false" fo:text-shadow="none" style:text-line-through-mode="continuous" fo:language="fr" fo:country="FR" style:language-asian="zh" style:country-asian="CN" style:language-complex="hi" style:country-complex="IN" style:font-name-asian="Liberation Sans" style:font-name-complex="Liberation Sans" style:font-size-asian="12pt" style:font-size-complex="12pt" style:font-weight-asian="bold" style:font-weight-complex="bold" style:font-style-asian="normal" style:font-style-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
   </style:style>
-  <style:style style:name="T6" style:family="text">
+  <style:style style:name="T2" style:family="text">
    <style:text-properties fo:color="#000000" style:font-name="Liberation Sans1" fo:font-size="12pt" fo:font-weight="bold" style:text-underline-style="none" style:text-underline-color="font-color" style:text-line-through-type="none" fo:font-style="normal" style:text-outline="false" fo:text-shadow="none" style:text-line-through-mode="continuous" fo:language="fr" fo:country="FR" style:language-asian="zh" style:country-asian="CN" style:language-complex="hi" style:country-complex="IN" style:font-size-asian="12pt" style:font-size-complex="12pt" style:font-weight-asian="bold" style:font-weight-complex="bold" style:font-style-asian="normal" style:font-style-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color" style:font-name-asian="Liberation Sans1" style:font-name-complex="Liberation Sans1"/>
   </style:style>
-  <style:style style:name="T7" style:family="text">
+  <style:style style:name="T3" style:family="text">
    <style:text-properties fo:color="#000000" fo:font-size="12pt" style:text-underline-style="none" style:text-underline-color="font-color" style:text-line-through-type="none" fo:font-style="normal" style:text-outline="false" fo:text-shadow="none" style:font-size-asian="12pt" style:font-size-complex="12pt" style:font-weight-asian="bold" style:font-weight-complex="bold" style:font-style-asian="normal" style:font-style-complex="normal" style:font-name-asian="Liberation Sans" style:font-name-complex="Liberation Sans"/>
   </style:style>
-  <style:style style:name="T8" style:family="text">
+  <style:style style:name="T4" style:family="text">
    <style:text-properties fo:font-size="12pt" style:letter-kerning="true" fo:language="en" fo:country="US" style:language-asian="zh" style:country-asian="CN" style:language-complex="hi" style:country-complex="IN" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
   </style:style>
-  <style:style style:name="T9" style:family="text">
+  <style:style style:name="T5" style:family="text">
    <style:text-properties fo:color="#000000" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:text-position="0% 100%" style:font-name="Liberation Sans13" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Liberation Sans13" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
   </style:style>
  </office:automatic-styles>
@@ -1131,7 +1001,7 @@
      <text:p><text:sheet-name>???</text:sheet-name><text:s/>(<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2021-12-14">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="11:41:46.114183293">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2022-01-12">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="15:19:45.493405173">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -1142,81 +1012,81 @@
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_Gloss-Abbrev_5f_" style:display-name="PageStyle_Gloss-Abbrev_" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_Punctuations" style:display-name="PageStyle_Punctuations" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_AnnotationTiers" style:display-name="PageStyle_AnnotationTiers" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_Transcription" style:display-name="PageStyle_Transcription" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_CorpusComposition" style:display-name="PageStyle_CorpusComposition" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_Overview" style:display-name="PageStyle_Overview" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_CorpusOpenDescription" style:display-name="PageStyle_CorpusOpenDescription" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
   <style:master-page style:name="PageStyle_5f_Glossary" style:display-name="PageStyle_Glossary" style:page-layout-name="pm3">
    <style:header>
-    <text:p><text:span text:style-name="T9"><text:sheet-name>???</text:sheet-name></text:span></text:p>
+    <text:p><text:span text:style-name="T5"><text:sheet-name>???</text:sheet-name></text:span></text:p>
    </style:header>
    <style:header-left style:display="false"/>
    <style:footer>
-    <text:p><text:span text:style-name="T9">Page </text:span><text:span text:style-name="T9"><text:page-number>1</text:page-number></text:span></text:p>
+    <text:p><text:span text:style-name="T5">Page </text:span><text:span text:style-name="T5"><text:page-number>1</text:page-number></text:span></text:p>
    </style:footer>
    <style:footer-left style:display="false"/>
   </style:master-page>
@@ -2712,10 +2582,10 @@
     <table:table-column table:style-name="co8" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co4" table:number-columns-repeated="61" table:default-cell-style-name="Default"/>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce42" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+     <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
       <text:p>Corpus Information</text:p>
      </table:table-cell>
-     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce42"/>
+     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce8"/>
      <table:table-cell table:number-columns-repeated="61"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
@@ -2782,7 +2652,7 @@
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T5">Corpus </text:span><text:span text:style-name="T6">Creator</text:span><text:span text:style-name="T7"> </text:span>Contact</text:p>
+     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T1">Corpus </text:span><text:span text:style-name="T2">Creator</text:span><text:span text:style-name="T3"> </text:span>Contact</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce48" office:value-type="string" calcext:value-type="string">
       <text:p>contact@jocelynaznar.eu</text:p>
@@ -2790,7 +2660,7 @@
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T5">Corpus </text:span><text:span text:style-name="T6">Creator</text:span><text:span text:style-name="T7"> </text:span>Institution</text:p>
+     <table:table-cell table:style-name="ce44" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T1">Corpus </text:span><text:span text:style-name="T2">Creator</text:span><text:span text:style-name="T3"> </text:span>Institution</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>ZAS</text:p>
@@ -2798,10 +2668,10 @@
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce42" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+     <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
       <text:p>Certification</text:p>
      </table:table-cell>
-     <table:covered-table-cell table:style-name="ce42"/>
+     <table:covered-table-cell table:style-name="ce8"/>
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
@@ -2827,10 +2697,10 @@
      <table:table-cell table:number-columns-repeated="61"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce42" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
+     <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
       <text:p>Quantiative Summary</text:p>
      </table:table-cell>
-     <table:covered-table-cell table:style-name="ce42"/>
+     <table:covered-table-cell table:style-name="ce8"/>
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
@@ -2861,10 +2731,10 @@
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce42" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
+     <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="3" table:number-rows-spanned="1">
       <text:p>Annotation Strategies</text:p>
      </table:table-cell>
-     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce42"/>
+     <table:covered-table-cell table:number-columns-repeated="2" table:style-name="ce8"/>
      <table:table-cell table:number-columns-repeated="61"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
@@ -3023,7 +2893,6 @@
     </table:table-row>
    </table:table>
    <table:table table:name="AnnotationTiers" table:style-name="ta4">
-    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co18" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co19" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co20" table:default-cell-style-name="ce38"/>
@@ -3699,6 +3568,7 @@
     </table:table-row>
    </table:table>
    <table:table table:name="Glosses" table:style-name="ta1">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co1" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co2" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co3" table:default-cell-style-name="ce38"/>
@@ -3731,126 +3601,683 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:number-columns-repeated="62"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="62"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
     <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>SG</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" office:value-type="string" calcext:value-type="string">
+      <text:p>Singular</text:p>
+     </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="62"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="62"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>ASP</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" office:value-type="string" calcext:value-type="string">
+      <text:p>Aspect</text:p>
+     </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:number-columns-repeated="62"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>F</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce39" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce41"/>
-     <table:table-cell table:number-columns-repeated="62"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>PL</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Plural</text:p>
+     </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:style-name="ce40"/>
-     <table:table-cell table:number-columns-repeated="62"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>DEF</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>INTR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>OBJ</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:number-columns-repeated="64"/>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>PI</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="3">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>COO</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:style-name="ce39"/>
-     <table:table-cell table:number-columns-repeated="62"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>INCL</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>T</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="62"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>ARBRE</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:number-columns-repeated="64"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>P</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>DEI</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>ART</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Article</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>NARR</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Narrative</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>HESI</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>PA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>NOM</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>R</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>A</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>CSQ</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>INT</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>VB</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>DIR</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>INST</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>OP</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>DET</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>C</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>TMP</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>INTER</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>IRR</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>NM</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>PRO</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>E</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>LOC</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>FUT</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>DESI</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>MUL</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>RED</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>PRE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>NEG</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>EXCL</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>EC</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>D</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>NOMI</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>I</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>PN</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce37" office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>COP</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>SP</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>CO</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>REL</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Unknown</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Morphologie</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="60"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="64"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="62"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:number-columns-repeated="64"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="64"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="64"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="64"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="2">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="62"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="3">
-     <table:table-cell table:number-columns-repeated="64"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce37"/>
-     <table:table-cell table:number-columns-repeated="63"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="9">
      <table:table-cell table:number-columns-repeated="64"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
@@ -3965,6 +4392,7 @@
     </table:table-row>
    </table:table>
    <table:table table:name="Punctuations" table:style-name="ta6">
+    <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
     <table:table-column table:style-name="co26" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co27" table:default-cell-style-name="ce38"/>
     <table:table-column table:style-name="co28" table:default-cell-style-name="ce38"/>
@@ -3998,7 +4426,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Morphologie,Transcription</text:p>
+      <text:p>Morphologie,Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" office:value-type="string" calcext:value-type="string">
       <text:p>morpheme break</text:p>
@@ -4032,7 +4460,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>prosodic cue</text:p>
@@ -4050,7 +4478,7 @@
       <text:p>This was created for when a multi-word expressions in Nisvai was corresponding to a single word in French, or when annotating the morphology, multiple French words were required for describing a Nisvai morpheme</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Morphologie,Transcription</text:p>
+      <text:p>Morphologie,Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce84" office:value-type="string" calcext:value-type="string">
       <text:p>annotation convention</text:p>
@@ -4066,7 +4494,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>prosodic cue</text:p>
@@ -4100,7 +4528,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce84" office:value-type="string" calcext:value-type="string">
       <text:p>semantic symbol</text:p>
@@ -4116,7 +4544,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>prosodic cue</text:p>
@@ -4132,7 +4560,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>prosodic cue</text:p>
@@ -4148,7 +4576,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Morphologie, Transcription</text:p>
+      <text:p>Morphologie, Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" office:value-type="string" calcext:value-type="string">
       <text:p>morpheme break</text:p>
@@ -4164,7 +4592,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription, Morphologie</text:p>
+      <text:p>Transcription, Morphologie, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>prosodic cue</text:p>
@@ -4182,7 +4610,7 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Morphologie</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce90" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T8">unsolved interpretation</text:span></text:p>
+     <table:table-cell table:style-name="ce90" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T4">unsolved interpretation</text:span></text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="59"/>
     </table:table-row>
@@ -4197,9 +4625,9 @@
       <text:p>Redundant with the previous usage</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Morphologie</text:p>
+      <text:p>Morphologie, Transcription, Aven</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce90" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T8">unsolved interpretation</text:span></text:p>
+     <table:table-cell table:style-name="ce90" office:value-type="string" calcext:value-type="string"><text:p><text:span text:style-name="T4">unsolved interpretation</text:span></text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="59"/>
     </table:table-row>
@@ -4212,7 +4640,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>notes</text:p>
@@ -4228,7 +4656,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>notes</text:p>
@@ -4244,7 +4672,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce83" office:value-type="string" calcext:value-type="string">
       <text:p>morpheme break</text:p>
@@ -4260,7 +4688,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>external events</text:p>
@@ -4276,7 +4704,7 @@
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Transcription</text:p>
+      <text:p>Transcription, Aven</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce89" office:value-type="string" calcext:value-type="string">
       <text:p>external events</text:p>
@@ -4284,8 +4712,19 @@
      <table:table-cell table:number-columns-repeated="59"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce84"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>!</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>no idea</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Transcription, Aven</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce84" office:value-type="string" calcext:value-type="string">
+      <text:p>no idea</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="59"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:number-rows-repeated="1048555">
@@ -4321,8 +4760,8 @@
      <table:table-cell table:number-columns-repeated="64"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce91" table:number-columns-spanned="2" table:number-rows-spanned="1"/>
-     <table:covered-table-cell table:style-name="ce91"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-spanned="2" table:number-rows-spanned="1"/>
+     <table:covered-table-cell table:style-name="ce31"/>
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:number-rows-repeated="1048568">
@@ -4346,8 +4785,8 @@
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
-     <table:table-cell table:style-name="ce91" table:number-columns-spanned="2" table:number-rows-spanned="1"/>
-     <table:covered-table-cell table:style-name="ce91"/>
+     <table:table-cell table:style-name="ce31" table:number-columns-spanned="2" table:number-rows-spanned="1"/>
+     <table:covered-table-cell table:style-name="ce31"/>
      <table:table-cell table:number-columns-repeated="62"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:number-rows-repeated="1048573">
