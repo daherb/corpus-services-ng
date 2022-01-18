@@ -1399,7 +1399,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
                     }
                     if (!fileExists) {
-                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                         "description", "howtoFix"},
                                 new Object[]{getFunction(), refcoShortName, "Corpus composition: File does not " +
                                         "exist:\n" + f,
@@ -1465,7 +1465,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
         }
         if (!allFiles.isEmpty()) {
-            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                             "description", "howtoFix"},
                     new Object[]{getFunction(), refcoShortName, "Corpus composition: Files are not " +
                             "documented:\n" +
