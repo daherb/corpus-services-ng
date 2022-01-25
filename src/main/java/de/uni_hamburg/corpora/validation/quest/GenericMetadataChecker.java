@@ -81,7 +81,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
         if (setUp && shouldBeChecked(cd.getURL())) {
             for (GenericMetadataCriterion c : criteria) {
                 // Collect all values of properties that match one of the locators
-                 ArrayList<String> values = new ArrayList<>();
+                ArrayList<String> values = new ArrayList<>();
                 for (String locator : c.locator) {
                     // Ignore any property without locator
                     if (!locator.equals("N/A")) {
