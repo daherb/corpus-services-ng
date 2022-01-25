@@ -94,11 +94,14 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.lower) < 0)
                     report.addCritical(getFunction(), cd, "Less than " + GenericMetadataCriterion
                             .Bounds.toString(c.bounds.lower) + " occurrences of " + c.name + " found: " + values.size());
-                // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
-                if (c.bounds.upper != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
+                    // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
+                else if (c.bounds.upper != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
                         GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0)
                     report.addCritical(getFunction(), cd, "More than " + GenericMetadataCriterion
                             .Bounds.toString(c.bounds.upper) + " occurrences of " + c.name + " found: " + values.size());
+//                else {
+//                    report.addCorrect(getFunction(), "Correctly matched " + c.name);
+//                }
                 // Store all values that have a reasonable type for potential statistics
                 if (!c.type.contains(Optional.empty())) {
                     if (allValues.containsKey(c.name)) {
@@ -134,12 +137,13 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                     new URI(value);
                                     parsable = true;
                                 } catch (URISyntaxException e) {
-                                    // We only want to create a log item if there is no fallback to string
-                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
-                                            .collect(Collectors.toSet()).contains("string"))
-                                        report.addCritical(getFunction(), cd, "Invalid URI syntax " + e);
-                                    // But we skip the rest of this iteration
-                                    continue ;
+//                                    // We only want to create a log item if there is no fallback to string
+//                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
+//                                            .collect(Collectors.toSet()).contains("string"))
+//                                        report.addWarning(getFunction(), cd, c.name + ": Invalid URI syntax " + e);
+//                                    // But we skip the rest of this iteration
+//                                    continue ;
+                                    parsable = false;
                                 }
                                 // Also try it as a URL
                                 URL url = null;
@@ -158,12 +162,13 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         url = new URL(value);
                                     }
                                 } catch (MalformedURLException e) {
-                                    // We only want to create a log item if there is no fallback to string
-                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
-                                            .collect(Collectors.toSet()).contains("string"))
-                                        report.addWarning(getFunction(), cd, "Malformed URL " + e);
-                                    // But we skip the rest of this iteration
-                                    continue ;
+//                                    // We only want to create a log item if there is no fallback to string
+//                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
+//                                            .collect(Collectors.toSet()).contains("string"))
+//                                        report.addWarning(getFunction(), cd, c.name + ": Malformed URL " + e);
+//                                    // But we skip the rest of this iteration
+//                                    continue ;
+                                    parsable = false;
                                 }
                                 // If we succeed in creating a URL object we can try to connect
                                 /*if (url != null) {
@@ -185,7 +190,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                             else if (t.get().equalsIgnoreCase("date")) {
                                 // Try various date formats
                                 try {
-                                    new SimpleDateFormat("yyyy-MM-dd").parse(value);
+                                    Date sd = new SimpleDateFormat("yyyy-MM-dd").parse(value);
                                     parsable = true;
                                 } catch (ParseException e) {
                                     parsable = false;
@@ -216,11 +221,11 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         c.type.stream().map((s) -> s.orElse("n/a")).collect(Collectors.toSet()));
                         // Create error message for problematic value. Only warn if it is unknown but create error if unspecified
                         if (value.equals("Unknown"))
-                            report.addWarning(getFunction(), cd, "Unexpected value " + value +
-                                    " for " + c.name + ". Expected type: " + attemptedTypes);
+                            report.addWarning(getFunction(), cd, c.name + ": Unexpected value " + value +
+                                    ". Expected type: " + attemptedTypes);
                         else
-                            report.addCritical(getFunction(), cd, "Unexpected value " + value +
-                                    " for " + c.name + ". Expected type: " + attemptedTypes);
+                            report.addWarning(getFunction(), cd, c.name + ": Unexpected value " + value +
+                                    ". Expected type: " + attemptedTypes);
                     }
                 }
             }
