@@ -1,6 +1,7 @@
 package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
+import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -68,8 +69,9 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
             // Convert nodes to string values
             for (Object o : nodes) {
                 // Get the value of the node, either from an element or an attribute
-                if (o instanceof Element)
-                    values.add(((Element) o).getValue());
+                if (o instanceof Element) {
+                    values.add(XMLTools.showAllText((Element) o));
+                }
                 else if (o instanceof Attribute)
                     values.add(((Attribute) o).getValue());
                 // Result of a XPath predicate -> only keep if the result is true
