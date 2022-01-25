@@ -7,6 +7,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
+
+import java.net.URL;
 import java.util.*;
 
 /**
