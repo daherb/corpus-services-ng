@@ -275,33 +275,12 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
      */
     public void setCriteriaFile(String filename) {
         try {
-            // DEBUG
-            //logger.log(Level.INFO, "Filename: " + filename);
-            //logger.log(Level.INFO, "Reading CSV " + filename);
             // Read CSV file
             criteria = new CsvToBeanBuilder<GenericMetadataCriterion>(new FileReader(filename))
                     .withType(GenericMetadataCriterion.class)
                     .withSkipLines(1) // skip header
                     .build()
                     .parse();
-            // DEBUG write criteria to log
-            /*for (GenericMetadataCriterion c : criteria) {
-                logger.log(Level.INFO,"Name: " + c.name + ", Bounds: " + c.bounds.lower + " - " + c.bounds.upper +
-                        ", Type: " + c.type + ", XPath: " + c.locator);
-            }*/
-            // DEBUG Write criteria to json file
-            /*ObjectMapper mapper = new ObjectMapper();
-            // Allows serialization even when getters are missing
-            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-            mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-            try {
-                FileWriter fw = new FileWriter("/tmp/imdi.json");
-                fw.write(mapper.writeValueAsString(criteria));
-                fw.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-            // Checker is properly set up
             setUp = true;
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
