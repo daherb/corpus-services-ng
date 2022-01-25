@@ -18,10 +18,15 @@ import java.util.*;
 public class IMDIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
     /**
-     * Default constructor without parameter, not providing fixing options
+     * Default constructor not providing fixing options
      */
     public IMDIGenericMetadataChecker(Properties properties) {
         super(properties);
+        logger.info(properties.toString());
+        if (properties != null && !properties.isEmpty() && properties.containsKey("imdi-criteria-file"))
+            setCriteriaFile(properties.getProperty("imdi-criteria-file"));
+    }
+
     /**
      * Skip files in corpus structure
      */
