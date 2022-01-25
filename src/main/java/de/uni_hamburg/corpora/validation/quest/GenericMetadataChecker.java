@@ -54,6 +54,9 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     // Data structure representing all metadata criteria
     List<GenericMetadataCriterion> criteria;
 
+    // Data structure to keep track of all the values in a corpus
+    HashMap<String,Set<String>> allValues = new HashMap<>();
+
     /**
      * Checker function for a single document in a corpus
      * @param cd the corpus file
@@ -96,6 +99,15 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0)
                     report.addCritical(getFunction(), cd, "More than " + GenericMetadataCriterion
                             .Bounds.toString(c.bounds.upper) + " occurrences of " + c.name + " found: " + values.size());
+                // Store all values that have a reasonable type for potential statistics
+                if (!c.type.contains(Optional.empty())) {
+                    if (allValues.containsKey(c.name)) {
+                        allValues.get(c.name).addAll(values);
+                    }
+                    else {
+                        allValues.put(c.name, new HashSet<>(values));
+                    }
+                }
                 // Now check all the results
                 for (String value : values) {
                     // Get the value of the node, either from an element or an attribute
@@ -255,6 +267,24 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 if (usable.contains(cdata.getClass())) {
                     report.merge(function(cdata, fix));
                 }
+            }
+            // Add statistocs of the parameter is set
+            if (props.containsKey("metadata-stats") && props.getProperty("metadata-stats").equalsIgnoreCase("true")) {
+                StringBuilder stats = new StringBuilder();
+                for (String cat : allValues.keySet()) {
+                    Set<String> vals = allValues.get(cat).stream().filter((v) -> !v.isEmpty() && !v.matches("[\\s\\n]*"))
+                            .collect(Collectors.toSet());
+                    logger.info(cat + " - " + vals.size());
+                    if (!vals.isEmpty()) {
+                        stats.append("\n");
+                        stats.append(cat);
+                        stats.append(":\n - ");
+                        stats.append(String.join("\n - ", vals));
+//                        vals.stream().filter((v) -> !v.isEmpty() || !v.matches("[\\s\\n]+"))
+//                                .collect(Collectors.joining("\n - "))));
+                    }
+                }
+                report.addNote(getFunction(), getFunction() + " summary\n" + stats);
             }
         } else
             report.addCritical(getFunction(), "No criteria file loaded");
