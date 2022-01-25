@@ -272,7 +272,7 @@ public class Report {
      */
     public void addNote(String statId, String description) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.NOTE,
+        stat.add(new ReportItem(ReportItem.Severity.NOTE, statId,
                 description));
     }
 
