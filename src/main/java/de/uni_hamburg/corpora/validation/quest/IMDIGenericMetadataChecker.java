@@ -107,4 +107,13 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
         Optional<String> optPath = path.stream().reduce((s1, s2) -> s1 + "/" + s2);
         return optPath.orElse("") ;
     }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> p = super.getParameters();
+        p.put("imdi-criteria-file", "The file for IMDI generic metadata criteria");
+        p.put("skip-corpus-structure", "Flag determining if all files in corpus structure folders should be skipped");
+        return p;
+    }
+
 }
