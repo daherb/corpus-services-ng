@@ -21,7 +21,15 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      */
     public IMDIGenericMetadataChecker(Properties properties) {
         super(properties);
+    /**
+     * Skip files in corpus structure
+     */
+    @Override
+    protected boolean shouldBeChecked(URL filename) {
+        return  !props.getProperty("skip-corpus-structure").equalsIgnoreCase("true") ||
+                !filename.toString().toLowerCase().matches(".*corpus\\s*structure.*");
     }
+
     /**
      * Function providing a description of a checker
      * @return the checker description

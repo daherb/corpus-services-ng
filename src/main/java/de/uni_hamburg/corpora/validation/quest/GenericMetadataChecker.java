@@ -75,7 +75,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Only work if properly set up
-        if (setUp) {
+        if (setUp && shouldBeChecked(cd.getURL())) {
             for (GenericMetadataCriterion c : criteria) {
                 // Collect all values of properties that match one of the locators
                  ArrayList<String> values = new ArrayList<>();
@@ -212,9 +212,19 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     }
                 }
             }
-        } else
+        }
+        else if (!setUp)
             report.addCritical(getFunction(), cd, "No criteria file loaded");
         return report;
+    }
+
+    /**
+     * Determines if a file should be checked depending on the filename
+     * @param filename the filename
+     * @return if the file should be checked
+     */
+    protected boolean shouldBeChecked(URL filename) {
+        return true;
     }
 
 
