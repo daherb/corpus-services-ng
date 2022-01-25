@@ -43,7 +43,9 @@ public abstract class Checker implements CorpusFunction {
     // Report report = new Report();
     final String function;
     Boolean canfix;
-    Properties props;
+    protected Properties props;
+
+
     public Checker(boolean hasfixingoption, Properties properties) {
         function = this.getClass().getSimpleName();
         canfix = hasfixingoption;
@@ -159,6 +161,10 @@ public abstract class Checker implements CorpusFunction {
         return canfix;
     }
 
+    /**
+     * Lists all supported parameter for the checker
+     * @return The map of all parameters and their description
+     */
     public Map<String, String> getParameters() {
         return Collections.EMPTY_MAP;
     }
