@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
+import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
@@ -862,7 +863,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return "";
         else
             //return element.getText();
-            return showAllText(element).trim();
+            return XMLTools.showAllText(element).trim();
     }
 
     /**
@@ -2300,16 +2301,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Returns all text contained in a DOM subtree given by the root element
-     * @param e the root of the subtree
-     * @return all text contained in the subtree
-     */
-    public static String showAllText(Element e) {
-        return e.getText() + " " + e.getChildren().stream().map((c) ->
-                showAllText((Element) c)).collect(Collectors.joining(" "));
-    }
-
-    /**
      * Extracts all tier ids  from the globalcorpus
      * @return A map from tier id to files in which it is defined
      * @throws JDOMException on problems with the xpath expressions
@@ -2448,7 +2439,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             Element annotation_segment = null ;
             for (Element e : (List<Element>) tier.getChildren()) {
                 for (Element ee : (List<Element>) e.getChildren()) {
-                    if (showAllText(e).contains(normalizedToken)) {
+                    if (XMLTools.showAllText(e).contains(normalizedToken)) {
                         annotation_segment = ee;
                         break;
                     }
@@ -2521,7 +2512,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 else if (e.getChild("REF_ANNOTATION") != null)
                     annotation_segment = e.getChild("REF_ANNOTATION");
                 assert annotation_segment != null : "Annotation segment is null";
-                if (showAllText(annotation_segment).contains(normalizedToken)) {
+                if (XMLTools.showAllText(annotation_segment).contains(normalizedToken)) {
                     String annotation_id = annotation_segment.getAttributeValue("ANNOTATION_ID");
                     if (annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
                         // do nothing
