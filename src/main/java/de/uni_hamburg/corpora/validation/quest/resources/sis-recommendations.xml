@@ -1,0 +1,3935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<formats>
+  <format>
+    <formatInfo>
+      <abbr>AG XML</abbr>
+      <name>Annotation Graphs XML Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>AIFF</abbr>
+      <name>Audio Interchange File Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/x-aiff</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/aiff</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.aif</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.aiff</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>ALTO</abbr>
+      <name>Analyzed Layout and Text Object</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>AVI</abbr>
+      <name>Audio Video Interleaved</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/avi</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.avi</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>ANVIL</abbr>
+      <name>Anvil annotation file</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.anvil</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>ASCII Grid</abbr>
+      <name>ArcGIS ASCII grid format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.asc</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.txt</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>ArcGIS.gdb</abbr>
+      <name>Esri File Geodatabase</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-filegdb</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.gdb</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>ArcGIS.mxd</abbr>
+      <name>ArcGIS project file format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/octet-stream</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mxd</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>BMP</abbr>
+      <name>Device-independent bitmap</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/bmp</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.bmp</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dib</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>CHAT</abbr>
+      <name>Codes for the Human Analysis of Transcripts</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">text/plain;format-variant=clan-cha</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/x-chat</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.cha</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CMU</id>
+        <name>CMU-TalkBank</name>
+        <url>https://centres.clarin.eu/centre/18</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>CHAT-XML</abbr>
+      <name>XML serialization of CHAT</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">application/xml;format-variant=x-chat</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CMU</id>
+        <name>CMU-TalkBank</name>
+        <url>https://centres.clarin.eu/centre/18</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>CMDI</abbr>
+      <name>Component Metadata</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-cmdi+xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.cmdi</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Contextual Information</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLST</id>
+        <name>Centre for Language and Speech Technology</name>
+        <url>https://centres.clarin.eu/centre/40</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>CSV</abbr>
+      <name>Comma-separated values</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/csv</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.csv</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Coma</abbr>
+      <name>EXMARaLDA Corpus Manager</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.coma</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Contextual Information</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>DC XML</abbr>
+      <name>Dublin Core XML Metadata</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>DGD-XML</abbr>
+      <name>DGD XML Metadata</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>DICOM</abbr>
+      <name>Digital Imaging and Communications in Medicine</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/dicom</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.dcm</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dic</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dicom</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>DOCX</abbr>
+      <name>Microsoft Word/Office Open XML</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/vnd.openxmlformats-officedocument.wordprocessingml.document</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.docx</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>DTABf</abbr>
+      <name>Deutsches Textarchiv Basisformat</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/tei+xml;format-variant=dta</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/tei+xml;format-variant=dta;tokenized=[0,1]</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>DXF</abbr>
+      <name>AutoCAD Drawing Interchange Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/vnd.dxf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dxf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>AutoCAD DXF-R12</abbr>
+      <name>AutoCAD Drawing Interchange Format, v. R12 (ASCII)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/vnd.dxf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dxf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>EAF</abbr>
+      <name>ELAN EAF</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/x-eaf+xml</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.eaf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Erdas.img</abbr>
+      <name>ERDAS IMAGINE File Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/octet-stream</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.img</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.ige</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>EXB</abbr>
+      <name>EXMARaLDA Basic Transcription Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.exb</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>EXS</abbr>
+      <name>EXMARaLDA Segmented Transcription Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.exs</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>EMU</abbr>
+      <name>Emu Speech Database</name>
+      <mimeTypes/>
+      <fileExts/>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>F4</abbr>
+      <name>f4transkript file format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.txt</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>FLAC</abbr>
+      <name>Free Lossless Audio Codec</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/flac</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.flac</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>FLEx</abbr>
+      <name>SIL FieldWorks Language Explorer (FLEx)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>FLN</abbr>
+      <name>FOLKER</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.fln</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>GIF</abbr>
+      <name>Graphics Interchange Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/gif</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.gif</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>GML</abbr>
+      <name>Geography Markup Language</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/gml+xml</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-gmz</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.gml</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>GeoJSON</abbr>
+      <name>Geographic JSON</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/geo+json</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.geojson</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.json</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>GeoTIFF</abbr>
+      <name>Geographic Tagged Image File Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/tiff</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tiff</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tif</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.gtif</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>GrAF</abbr>
+      <name>Graph  Annotation  Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>HDF5</abbr>
+      <name>Hierarchical Data Format, Version 5</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-hdf5</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.h5</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>HTML</abbr>
+      <name>Hypertext Markup Language</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/html</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.html</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.htm</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CMU</id>
+        <name>CMU-TalkBank</name>
+        <url>https://centres.clarin.eu/centre/18</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>I5</abbr>
+      <name>DeReKo archiving format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/tei+xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.i5</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>JP2</abbr>
+      <name>Joint Photographic Experts Group 2000</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/jp2</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/jpx</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.jp2</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.jpx</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>JPEG</abbr>
+      <name>Joint Photographic Experts Group</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/jpeg</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.jpg</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.jpeg</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>KML</abbr>
+      <name>Keyhole Markup Language</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/vnd.google-earth.kml+xml</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/vnd.google-earth.kmz</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.kml</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.kmz</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>QuickTime</abbr>
+      <name>QuickTime File Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/quicktime</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/x-quicktime</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mov</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.qt</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MP3</abbr>
+      <name>MPEG Audio Layer III</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/mpeg</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mp3</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MP4</abbr>
+      <name>MPEG 4 video</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/mp4</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mp4</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CMU</id>
+        <name>CMU-TalkBank</name>
+        <url>https://centres.clarin.eu/centre/18</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MPEG-4 AVC</abbr>
+      <name>MPEG-4, Advanced Video Coding (Part 10) (H.264)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/mp4</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mp4</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MPEG-1</abbr>
+      <name>MPEG-1 Video Coding (H.261)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/mpeg</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mpg</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mpeg</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Tool Support</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MPEG-2</abbr>
+      <name>MPEG-2 Video Encoding (H.262)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">video/mpeg</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mpg</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mpeg</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MapInfo.mif</abbr>
+      <name>MapInfo interchange format</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mif</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mid</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MapInfo.tab</abbr>
+      <name>MapInfo native format</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tab</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>MapInfo.wor</abbr>
+      <name>MapInfo workspace file</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.wor</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Markdown</abbr>
+      <name>Markdown</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/markdown</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.md</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.markdown</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mdown</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.mkd</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>NIST SPHERE</abbr>
+      <name>NIST SPHERE</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/x-nist</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.nist</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PAULA</abbr>
+      <name>Potsdamer AUstauschformat Linguistischer Annotationen</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PDF</abbr>
+      <name>Portable Document Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/pdf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.pdf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PDF/A</abbr>
+      <name>PDF for archival preservation</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/pdf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.pdf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>LAC</id>
+        <name>Language Archive Cologne</name>
+        <url>https://centres.clarin.eu/centre/47</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PDF/A-1</abbr>
+      <name>PDF for archival preservation, 2005</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/pdf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.pdf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PDF/A-2</abbr>
+      <name>PDF for archival preservation, 2011</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/pdf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.pdf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PDF/A-3</abbr>
+      <name>PDF for archival preservation with support for embedded files, 2012</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/pdf</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.pdf</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PNG</abbr>
+      <name>Portable Network Graphics</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/png</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.png</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>BPF</abbr>
+      <name>BAS Partitur Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain-bas</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.par</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PhonDat1</abbr>
+      <name>PhonDat Data Format #1</name>
+      <mimeTypes/>
+      <fileExts/>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>PhonDat2</abbr>
+      <name>PhonDat Data Format #2</name>
+      <mimeTypes/>
+      <fileExts/>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Praat</abbr>
+      <name>Praat TextGrid</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/praat-textgrid</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.TextGrid</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>QGIS.qgs</abbr>
+      <name>QGIS project file format</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.qgs</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>RAW</abbr>
+      <name>Raw Audio Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/raw</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.raw</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SAM</abbr>
+      <name>SAM Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.txt</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SAS.sas</abbr>
+      <name>Statistical Analysis System (SAS) standard save file</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-sas</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sas</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SAS.sd2</abbr>
+      <name>Statistical Analysis System (SAS) Dataset File Format</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sd2</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sas7bdat</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SPSS</abbr>
+      <name>Statistical Product and Service Solutions - uncategorized formats</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.spv</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sps</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dat</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sav</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.por</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SPSS.data+setup</abbr>
+      <name>Statistical Product and Service Solutions (data and setup)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sps</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dat</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SPSS.por</abbr>
+      <name>Statistical Product and Service Solutions (portable format)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-spss-por</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.por</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SPSS.sav</abbr>
+      <name>Statistical Product and Service Solutions (standard dataset save format)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/x-spss-sav</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.sav</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.spv</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.zsav</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SPSS.spv</abbr>
+      <name>Statistical Product and Service Solutions (statistics output files)</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.spv</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.spo</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>STATA</abbr>
+      <name>STATA - uncategorized formats</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dat</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.DO</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dta</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>STATA.data+setup</abbr>
+      <name>STATA (data and setup)</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.DO</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dat</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>STATA.dta</abbr>
+      <name>STATA (standard save format)</name>
+      <mimeTypes/>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.dta</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Statistical Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>SVG</abbr>
+      <name>Scalable Vector Graphics</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/svg+xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.svg</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.svgz</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Shapefile</abbr>
+      <name>ESRI Arc/View ShapeFile</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">x-gis/x-shapefile</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">application/vnd.shp</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.shp</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>TEI</abbr>
+      <name>Text Encoding Initiative</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/tei+xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tei</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>TEISpoken</abbr>
+      <name>ISO/TEI Transcriptions of Spoken Language</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/tei+xml;format-variant=tei-iso-spoken</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/tei+xml;format-variant=tei-iso-spoken;tokenized=[0,1]</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tei</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>TIFF</abbr>
+      <name>Tagged Image File Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">image/tiff</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.tiff</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tif</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>TRS</abbr>
+      <name>Transcriber</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.trs</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>plainText</abbr>
+      <name>Plain text</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.txt</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLST</id>
+        <name>Centre for Language and Speech Technology</name>
+        <url>https://centres.clarin.eu/centre/40</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>LAC</id>
+        <name>Language Archive Cologne</name>
+        <url>https://centres.clarin.eu/centre/47</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Transana</abbr>
+      <name>Transana XML format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">deprecated</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>WAVE</abbr>
+      <name>Waveform Audio File Format</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">audio/x-wav</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/wave</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/wav</mimeType>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">audio/vnd.wave</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" recommended="yes">.wav</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.wave</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BAS</id>
+        <name>Bayerisches Archiv für Sprachsignale</name>
+        <url>https://centres.clarin.eu/centre/5</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CMU</id>
+        <name>CMU-TalkBank</name>
+        <url>https://centres.clarin.eu/centre/18</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLST</id>
+        <name>Centre for Language and Speech Technology</name>
+        <url>https://centres.clarin.eu/centre/40</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>COCOON</id>
+        <name>Collections de corpus oraux numeriques </name>
+        <url>https://centres.clarin.eu/centre/33</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>HZSK</id>
+        <name>Hamburger Zentrum für Sprachkorpora</name>
+        <url>https://centres.clarin.eu/centre/9</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>LAC</id>
+        <name>Language Archive Cologne</name>
+        <url>https://centres.clarin.eu/centre/47</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ORTOLANG</id>
+        <name>Open Resources and TOols for LANGuage</name>
+        <url>https://centres.clarin.eu/centre/73</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>UdS</id>
+        <name>Universität des Saarlandes</name>
+        <url>Universität des Saarlandes</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Worldfile.jpgw</abbr>
+      <name>JPEG World File</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.jpgw</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.jgw</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>Worldfile.tifw</abbr>
+      <name>TIFF World File</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">text/plain</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tifw</fileExt>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.tfw</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>XLSX</abbr>
+      <name>Microsoft Excel/Office Open XML</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xlsx</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Other</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+    </centreInfo>
+  </format>
+  <format>
+    <formatInfo>
+      <abbr>XML</abbr>
+      <name>eXtensible Markup Language</name>
+      <mimeTypes>
+        <mimeType xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">application/xml</mimeType>
+      </mimeTypes>
+      <fileExts>
+        <fileExt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">.xml</fileExt>
+      </fileExts>
+    </formatInfo>
+    <centreInfo>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ACDH-ARCHE</id>
+        <name>Austrian Centre for Digital Humanities and Cultural Heritage - A Resource Centre for the Humanities</name>
+        <url>https://centres.clarin.eu/centre/45</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>BBAW</id>
+        <name>Berlin-Brandenburg Academy of Sciences and Humanities</name>
+        <url>https://centres.clarin.eu/centre/6</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN.SI</id>
+        <name>CLARIN.SI Language Technology Centre</name>
+        <url>https://centres.clarin.eu/centre/30</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Audiovisual Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Catalogue Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Contextual Information</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Geodata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Image Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Language Description</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Lexical Resource</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Textual Source Language Data</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>DANS</id>
+        <name>Data Archiving and Networked Services</name>
+        <url>https://centres.clarin.eu/centre/20</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Tool Support</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>EKUT</id>
+        <name>Eberhard Karls Universität Tübingen</name>
+        <url>https://centres.clarin.eu/centre/1</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>IDS</id>
+        <name>Leibniz-Institut für Deutsche Sprache</name>
+        <url>https://centres.clarin.eu/centre/11</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Metadata</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">acceptable</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MI</id>
+        <name>Meertens Instituut/HuC</name>
+        <url>https://centres.clarin.eu/centre/23</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>MPI-PL</id>
+        <name>MPI for Psycholinguistics</name>
+        <url>https://centres.clarin.eu/centre/24</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>CLARIN-DK-UCPH</id>
+        <name>The CLARIN Centre at the University of Copenhagen</name>
+        <url>https://centres.clarin.eu/centre/14</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ILC4CLARIN</id>
+        <name>The ILC4CLARIN Centre at the Institute for Computational Linguistics</name>
+        <url>https://centres.clarin.eu/centre/34</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>FIN-CLARIN</id>
+        <name>The Language Bank of Finland</name>
+        <url>https://centres.clarin.eu/centre/17</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Documentation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+      <centre>
+        <id>ZIM</id>
+        <name>ZIM Centre for Information Modelling</name>
+        <url>https://centres.clarin.eu/centre/65</url>
+        <domain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">Text Annotation</domain>
+        <level xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">recommended</level>
+      </centre>
+    </centreInfo>
+  </format>
+</formats>
