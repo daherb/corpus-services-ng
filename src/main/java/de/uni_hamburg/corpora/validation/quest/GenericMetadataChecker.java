@@ -274,19 +274,26 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 }
             }
             // Add statistocs of the parameter is set
-            if (props.containsKey("metadata-summary") && props.getProperty("metadata-summary").equalsIgnoreCase("true")) {
+            if (props.containsKey("metadata-summary") && !props.getProperty("metadata-summary")
+                    .equalsIgnoreCase("false")) {
+                Set<String> includedCats = new HashSet<>();
+                // If parameter contains list of categories, split the values on commas and add as lower-case
+                if (!props.getProperty("metadata-summary").equalsIgnoreCase("true"))
+                    includedCats.addAll(
+                            Arrays.asList(props.getProperty("metadata-summary").split(","))
+                                    .stream().map(String::toLowerCase).collect(Collectors.toSet()));
                 StringBuilder stats = new StringBuilder();
                 for (String cat : allValues.keySet()) {
-                    Set<String> vals = allValues.get(cat).stream().filter((v) -> !v.isEmpty() && !v.matches("[\\s\\n]*"))
-                            .collect(Collectors.toSet());
-                    logger.info(cat + " - " + vals.size());
-                    if (!vals.isEmpty()) {
-                        stats.append("\n");
-                        stats.append(cat);
-                        stats.append(":\n - ");
-                        stats.append(String.join("\n - ", vals));
-//                        vals.stream().filter((v) -> !v.isEmpty() || !v.matches("[\\s\\n]+"))
-//                                .collect(Collectors.joining("\n - "))));
+                    if (includedCats.contains(cat.toLowerCase()) || includedCats.isEmpty()) {
+                        Set<String> vals = allValues.get(cat).stream().filter((v) -> !v.isEmpty() && !v.matches("[\\s\\n]*"))
+                                .collect(Collectors.toSet());
+                        logger.info(cat + " - " + vals.size());
+                        if (!vals.isEmpty()) {
+                            stats.append("\n");
+                            stats.append(cat);
+                            stats.append(":\n - ");
+                            stats.append(String.join("\n - ", vals));
+                        }
                     }
                 }
                 report.addNote(getFunction(), getFunction() + " summary\n" + stats);
@@ -325,7 +332,8 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     @Override
     public Map<String, String> getParameters() {
         Map<String, String> params = super.getParameters();
-        params.put("metadata-summary","Flag determining if a summary should be generated");
+        params.put("metadata-summary","Flag determining if a summary should be generated. Alternatively, list of " +
+                "fields to be included in the summary");
         return params;
     }
 }
