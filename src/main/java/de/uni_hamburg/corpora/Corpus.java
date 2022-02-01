@@ -48,7 +48,8 @@ public class Corpus {
     }
 
     public Corpus(URL url) throws JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException {
-        this(new CorpusIO().read(url));
+        // TODO this could be problematic
+        this(new CorpusIO().read(url, new Report()));
     }
 
     //only read in the files we need!

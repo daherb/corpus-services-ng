@@ -118,9 +118,11 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
         else {
             CorpusIO cio = new CorpusIO();
             try {
-                Corpus corpus = new Corpus(cio.read(Paths.get(args[0]).toAbsolutePath().normalize().toUri().toURL()));
+                Report report = new Report();
+                Corpus corpus = new Corpus(cio.read(Paths.get(args[0]).toAbsolutePath().normalize().toUri().toURL(),
+                        report));
                 ELANValidatorChecker eav = new ELANValidatorChecker(new Properties());
-                Report report = eav.function(corpus,false);
+                report.merge(eav.function(corpus,false));
                 BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
                 bw.write(ReportItem.generateHTML(report.getRawStatistics()));
                 bw.close();

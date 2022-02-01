@@ -140,9 +140,11 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         else {
             CorpusIO cio = new CorpusIO();
             try {
-                Corpus corpus = new Corpus(cio.read(Paths.get(args[0]).toAbsolutePath().normalize().toUri().toURL()));
+                Report report = new Report();
+                Corpus corpus = new Corpus(cio.read(Paths.get(args[0]).toAbsolutePath().normalize().toUri().toURL(),
+                        report));
                 EXMARaLDAValidatorChecker exv = new EXMARaLDAValidatorChecker(new Properties());
-                Report report = exv.function(corpus,false);
+                report.merge(exv.function(corpus,false));
                 BufferedWriter bw = new BufferedWriter(new FileWriter(args[1]));
                 bw.write(ReportItem.generateHTML(report.getRawStatistics()));
                 bw.close();

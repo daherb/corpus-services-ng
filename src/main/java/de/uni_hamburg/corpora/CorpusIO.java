@@ -169,17 +169,17 @@ public class CorpusIO {
     }
 
     //read all the files as corpus data objects from a directory url
-    public Collection<CorpusData> read(URL url) throws URISyntaxException, IOException, SAXException,
+    public Collection<CorpusData> read(URL url, Report report) throws URISyntaxException, IOException, SAXException,
             JexmaraldaException,
             ClassNotFoundException {
-        return read(url,allCorpusDataTypes);
+        return read(url,allCorpusDataTypes, report);
     }
 
     //read only the files as corpus data objects from a directory url that are specified in the Collection
-    public Collection<CorpusData> read(URL url, Collection<Class<? extends CorpusData>> chosencdc) throws URISyntaxException,
+    public Collection<CorpusData> read(URL url, Collection<Class<? extends CorpusData>> chosencdc, Report report) throws URISyntaxException,
             IOException, SAXException, JexmaraldaException, ClassNotFoundException {
         //To do
-        alldata = URLtoList(url);
+        alldata = URLtoList(url, report);
         for (URL readurl : alldata) {
             CorpusData cdread = readFileURL(readurl,chosencdc);
             if (cdread != null) {
@@ -205,14 +205,14 @@ public class CorpusIO {
         return xslstring;
     }
 
-    public Collection<URL> URLtoList(URL url) throws URISyntaxException, IOException {
+    public Collection<URL> URLtoList(URL url, Report report) throws URISyntaxException, IOException {
         if (isLocalFile(url)) {
             //if the url points to a directory
             if (isDirectory(url)) {
                 //we need to iterate    
                 //and add everything to the list
                 Path path = Paths.get(url.toURI());
-                for (URL urlread : listFiles(path)) {
+                for (URL urlread : listFiles(path, report)) {
                     if (!isDirectory(urlread)) {
                         alldata.add(urlread);
                     }
@@ -265,23 +265,28 @@ public class CorpusIO {
         // TODO show some error
     }
 
-    Collection<URL> listFiles(Path path) throws IOException {
+    Collection<URL> listFiles(Path path, Report report) throws IOException {
         Collection<URL> recursed = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
             for (Path entry : stream) {
-                // If we are in a directory we call ourself recursively
-                if (Files.isDirectory(entry)) {
-                    recursed.addAll(listFiles(entry));
+                try {
+                    // If we are in a directory we call ourself recursively
+                    if (Files.isDirectory(entry)) {
+                        recursed.addAll(listFiles(entry, report));
+                    }
+                    // Othwereise we check the file extension if we know it
+                    // First getting the file name
+                    String sentry = entry.getFileName().toString().toLowerCase();
+                    // Getting all known extensions
+                    Collection<String> allExts = getAllExtensions();
+                    // Check if eny of these extensions happens to be the final part of sentry
+                    // if yes we add the file to the list
+                    if (allExts.stream().map(sentry::endsWith).reduce(Boolean::logicalOr).orElse(false)) {
+                        recursed.add(entry.toUri().toURL());
+                    }
                 }
-                // Othwereise we check the file extension if we know it
-                // First getting the file name
-                String sentry = entry.getFileName().toString().toLowerCase();
-                // Getting all known extensions
-                Collection<String> allExts = getAllExtensions();
-                // Check if eny of these extensions happens to be the final part of sentry
-                // if yes we add the file to the list
-                if (allExts.stream().map(sentry::endsWith).reduce(Boolean::logicalOr).orElse(false)) {
-                    recursed.add(entry.toUri().toURL());
+                catch (IOException e) {
+                    report.addException("CorpusIO", e, "Exception when reading file " + entry);
                 }
             }
         }

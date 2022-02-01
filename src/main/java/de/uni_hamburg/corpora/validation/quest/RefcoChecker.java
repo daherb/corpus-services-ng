@@ -635,7 +635,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Handle relative paths
                 URL url = Paths.get(args[1]).toAbsolutePath().normalize().toUri().toURL();
                 // Create the corpus
-                Corpus corpus = new Corpus(rc.criteria.corpusTitle, url, cio.read(url));
+                Corpus corpus = new Corpus(rc.criteria.corpusTitle, url, cio.read(url, report));
                 // Run the tests on the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Running tests");
                 report.merge(rc.function(corpus,false));

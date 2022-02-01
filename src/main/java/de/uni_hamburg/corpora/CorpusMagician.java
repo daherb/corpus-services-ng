@@ -183,11 +183,12 @@ public class CorpusMagician {
 
     //creates a corpus object from an URL (filepath or "real" url)
     //we need to make a difference between an unsorted folder, a miscellaneous file or a Coma file which represents a complete folder structure of the corpus
-    public void initDataWithURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
+    public void initDataWithURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException,
+            JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
         if (CorpusIO.isDirectory(url)) {
             //TODO
             //only read the filetypes from clcds!
-            cdc = cio.read(url, clcds);
+            cdc = cio.read(url, clcds, report);
             basedirectory = url;
             if (isCorpus) {
                 corpus = new Corpus(corpusname, url, cdc);
