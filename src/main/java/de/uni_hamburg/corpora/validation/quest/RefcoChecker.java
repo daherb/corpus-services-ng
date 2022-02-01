@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
+import de.uni_hamburg.corpora.utilities.quest.FileTools;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -23,7 +24,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.*;
 import java.net.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -1325,11 +1325,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // First get all files included in the corpus
         HashSet<URI> allFiles = new HashSet<>();
         try {
-            allFiles.addAll(listFiles(Paths.get(refcoCorpus.getBaseDirectory().toURI())));
-            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI())));
-            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI())));
-            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI())));
-            allFiles.addAll(listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI())));
+            allFiles.addAll(FileTools.listFiles(Paths.get(refcoCorpus.getBaseDirectory().toURI())));
+            allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI())));
+            allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI())));
+            allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI())));
+            allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI())));
         }
         catch (Exception e) {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
@@ -2554,26 +2554,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return locations;
     }
 
-    /**
-     * List all files given a path
-     * @param path the path all files are listed in
-     * @return the set of all files in path
-     */
-    public static Set<URI> listFiles(Path path) {
-        // The set of all files
-        Set<URI> allFiles = new HashSet<>();
-        // Add all files in directory
-        File[] dirFiles = path.toFile().listFiles();
-        if (dirFiles != null)
-            for (File f : dirFiles) {
-                allFiles.add(f.toURI().normalize());
-                // Recurse into directory
-                if (f.isDirectory()) {
-                    allFiles.addAll(listFiles(f.toPath()));
-            }
-        }
-        return allFiles;
-    }
+//    /**
+//     * List all files given a path
+//     * @param path the path all files are listed in
+//     * @return the set of all files in path
+//     */
+//    public static Set<URI> listFiles(Path path) {
+//        // The set of all files
+//        Set<URI> allFiles = new HashSet<>();
+//        // Add all files in directory
+//        File[] dirFiles = path.toFile().listFiles();
+//        if (dirFiles != null)
+//            for (File f : dirFiles) {
+//                allFiles.add(f.toURI().normalize());
+//                // Recurse into directory
+//                if (f.isDirectory()) {
+//                    allFiles.addAll(listFiles(f.toPath()));
+//            }
+//        }
+//        return allFiles;
+//    }
 
     /**
      * Checks if a tier exists in a corpus file
