@@ -650,16 +650,16 @@ public class CorpusMagician {
                         }
                     }
                     break;
-                case "imdigenericmetadatachecker":
-                    IMDIGenericMetadataChecker imdi = new IMDIGenericMetadataChecker(cfProperties);
-                    cf2strcorpusfunctions.add(imdi);
-                    if (cfProperties != null) {
-                        if (cfProperties.containsKey("imdi-criteria-file")) {
-                            imdi.setCriteriaFile(cfProperties.getProperty("imdi-criteria-file"));
-
-                        }
-                    }
-                    break;
+//                case "imdigenericmetadatachecker":
+//                    IMDIGenericMetadataChecker imdi = new IMDIGenericMetadataChecker(cfProperties);
+//                    cf2strcorpusfunctions.add(imdi);
+//                    if (cfProperties != null) {
+//                        if (cfProperties.containsKey("imdi-criteria-file")) {
+//                            imdi.setCriteriaFile(cfProperties.getProperty("imdi-criteria-file"));
+//
+//                        }
+//                    }
+//                    break;
                 case "comagenericmetadatachecker":
                     ComaGenericMetadataChecker coma = new ComaGenericMetadataChecker(cfProperties);
                     cf2strcorpusfunctions.add(coma);
