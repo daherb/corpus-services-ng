@@ -30,7 +30,10 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class FileFormatChecker extends Checker implements CorpusFunction {
+/**
+ * Checks files linked in a corpus to adhere to some criteria
+ */
+public class LinkedFileChecker extends Checker implements CorpusFunction {
 
     public static class FileInfo {
         String name ;
@@ -70,10 +73,10 @@ public class FileFormatChecker extends Checker implements CorpusFunction {
     }
     Logger logger = Logger.getLogger(this.getClass().getName());
     List<FileInfo> corpusFiles;
-    public FileFormatChecker(Properties properties) {
+    public LinkedFileChecker(Properties properties) {
         this(false,properties);
     }
-    public FileFormatChecker(boolean hasfixingoption, Properties properties) {
+    public LinkedFileChecker(boolean hasfixingoption, Properties properties) {
         super(hasfixingoption, properties);
     }
 
