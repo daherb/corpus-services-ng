@@ -274,7 +274,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 }
             }
             // Add statistocs of the parameter is set
-            if (props.containsKey("metadata-stats") && props.getProperty("metadata-stats").equalsIgnoreCase("true")) {
+            if (props.containsKey("metadata-summary") && props.getProperty("metadata-summary").equalsIgnoreCase("true")) {
                 StringBuilder stats = new StringBuilder();
                 for (String cat : allValues.keySet()) {
                     Set<String> vals = allValues.get(cat).stream().filter((v) -> !v.isEmpty() && !v.matches("[\\s\\n]*"))
@@ -320,5 +320,12 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
         }
+    }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String, String> params = super.getParameters();
+        params.put("metadata-summary","Flag determining if a summary should be generated");
+        return params;
     }
 }
