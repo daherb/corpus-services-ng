@@ -125,29 +125,42 @@ public class CorpusMagician {
             //if we have the coma file, we just give Coma as Input and the Functions need to take care of using the
             //iterating function
             report = corpuma.runChosencorpusfunctions();
-            createReports();
         } catch (MalformedURLException ex) {
             report.addException(ex, "The given URL was incorrect");
         } catch (IOException ex) {
             report.addException(ex, "A file could not be read");
-        } catch (ParserConfigurationException ex) {
-            report.addException(ex, "A file could not be parsed");
-        } catch (TransformerException ex) {
-            report.addException(ex, "A transformation error occured");
         } catch (SAXException ex) {
             report.addException(ex, "An XSLT error occured");
         } catch (JexmaraldaException ex) {
             report.addException(ex, "An Exmaralda file reading error occured");
         } catch (URISyntaxException ex) {
             report.addException(ex, "A URI was incorrect");
-        } catch (XPathExpressionException ex) {
-            report.addException(ex, "An Xpath expression was incorrect");
         } catch (ClassNotFoundException ex) {
             report.addException(ex, "Class not found");
         } catch (JDOMException ex) {
             report.addException(ex, "JDOM error");
         }
-
+        try {
+            createReports();
+        }
+        catch (XPathExpressionException ex) {
+            System.err.println("An Xpath expression was incorrect: " + ex);
+        }
+        catch (ParserConfigurationException ex) {
+            System.err.println("A file could not be parsed: " + ex);
+        }
+        catch (TransformerException ex) {
+            System.err.println("A transformation error occured: " + ex);
+        }
+        catch (JDOMException ex) {
+            System.err.println("JDOM error: " + ex);
+        }
+        catch (IOException ex) {
+            System.err.println("A file could not be read" + ex);
+        }
+        catch (SAXException ex) {
+            System.err.println("An XSLT error occured: " + ex);
+        }
     }
 
 ////Give it a path to a parameters file that tells you
