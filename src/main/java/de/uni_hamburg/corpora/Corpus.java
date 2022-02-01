@@ -77,13 +77,13 @@ public class Corpus {
         cdc.add(coma);
     }
 
-    public Corpus(String corpusName, URL baseDir, Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
+    public Corpus(String corpusName, URL baseDir, Collection<CorpusData> cdc) throws MalformedURLException, SAXException, JexmaraldaException {
         this(cdc);
         basedirectory = baseDir ;
         corpusname = corpusName ;
     }
 
-    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, MalformedURLException, MalformedURLException, SAXException, JexmaraldaException {
+    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, SAXException, JexmaraldaException {
         this.cdc = cdc ;
         // Now sort the corpus data files into categories
         addCorpusDataCollection(cdc);
