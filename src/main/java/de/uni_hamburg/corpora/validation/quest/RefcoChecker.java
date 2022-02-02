@@ -1343,6 +1343,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         !f.toString().contains("/curation/") && !f.toString().contains("CorpusDocumentation") &&
                                 !new File(f).isDirectory()
         ).collect(Collectors.toSet());
+        Set<URI> documentedFiles = new HashSet<>();
         // Check each of the sessions
         for (Session s : criteria.sessions) {
             if (s.sessionName == null || s.sessionName.isEmpty())
@@ -1359,54 +1360,98 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 ArrayList<String> filenames = new ArrayList<>(
                     Arrays.asList(s.fileName.split(valueSeparator)));
                 for (String f : filenames) {
-                    boolean fileExists = false;
                     try {
-                        File file = new File(new URI(refcoCorpus.getBaseDirectory() + f));
-                        fileExists = file.exists();
-                        allFiles.remove(file.toURI().normalize());
-                        // If it is an ELAN file, it can/should be in the annotation folder
+                        // Collect all candidate URIs, even for files in other directories
+                        List<URI> uris = new ArrayList<>();
+                        // Corpus files are in the annotation folders
                         if (f.toLowerCase().endsWith("eaf")) {
-                            fileExists = fileExists
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).exists();
-                            allFiles.removeAll(Arrays.asList(
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).normalize().toUri(),
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).normalize().toUri(),
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).normalize().toUri(),
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).normalize().toUri()
-                                    ));
-
+                            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI().normalize());
                         }
-                        // if it is a wav file, it can should be in the recordings folder
-                        else if (f.toLowerCase().endsWith("wav")) {
-                            fileExists = fileExists
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).exists()
-                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).exists();
-                            allFiles.removeAll(Arrays.asList(
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).normalize().toUri(),
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).normalize().toUri(),
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).normalize().toUri(),
-                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).normalize().toUri()
-                                    ));
+                        // Audio recordings are in the Recordings folder
+                        else if (f.toLowerCase().endsWith("wav") || f.toLowerCase().endsWith("mp3")) {
+                            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI().normalize());
                         }
+                        // All other files are metadata
+                        else {
+                            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Metadata/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Metadata/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/metadata/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/metadata/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/" + f).toURI().normalize());
+                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/").toURI()).exists())
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/" + f).toURI().normalize());
+                        }
+                        // Copy all file URIs of files in respective folders
+                        documentedFiles.addAll(uris);
                     }
                     catch (MalformedURLException | URISyntaxException e) {
                         report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
                                         "description","exception"},
                                 new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
                     }
-                    if (!fileExists) {
-                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                        "description", "howtoFix"},
-                                new Object[]{getFunction(), refcoShortName, "Corpus composition: File does not " +
-                                        "exist:\n" + f,
-                                        "Check the file reference in the documentation and remove the reference to " +
-                                                "the file if it is removed intentionally"}));
-                    }
+//                    boolean fileExists = false;
+//                    try {
+//                        File file = new File(new URI(refcoCorpus.getBaseDirectory() + f));
+//                        fileExists = file.exists();
+//                        allFiles.remove(file.toURI().normalize());
+//                        // If it is an ELAN file, it can/should be in the annotation folder
+//                        if (f.toLowerCase().endsWith("eaf")) {
+//                            fileExists = fileExists
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).exists()
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists()
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).exists()
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).exists();
+//                            allFiles.removeAll(Arrays.asList(
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).normalize().toUri(),
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).normalize().toUri(),
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).normalize().toUri(),
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).normalize().toUri()
+//                                    ));
+//
+//                        }
+//                        // if it is a wav file, it can should be in the recordings folder
+//                        else if (f.toLowerCase().endsWith("wav")) {
+//                            fileExists = fileExists
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).exists()
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists()
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).exists()
+//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).exists();
+//                            allFiles.removeAll(Arrays.asList(
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).normalize().toUri(),
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).normalize().toUri(),
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).normalize().toUri(),
+//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).normalize().toUri()
+//                                    ));
+//                        }
+//                    }
+//                    catch (MalformedURLException | URISyntaxException e) {
+//                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
+//                                        "description","exception"},
+//                                new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
+//                    }
+//                    if (!fileExists) {
+//                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                        "description", "howtoFix"},
+//                                new Object[]{getFunction(), refcoShortName, "Corpus composition: File does not " +
+//                                        "exist:\n" + f,
+//                                        "Check the file reference in the documentation and remove the reference to " +
+//                                                "the file if it is removed intentionally"}));
+//                    }
                 }
             }
             if (s.speakerName == null || s.speakerName.isEmpty())
@@ -1465,14 +1510,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
 //                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
         }
-        if (!allFiles.isEmpty()) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                            "description", "howtoFix"},
-                    new Object[]{getFunction(), refcoShortName, "Corpus composition: Files are not " +
-                            "documented:\n" +
-                            allFiles.stream().map(Object::toString).collect(Collectors.joining("\n")),
-                            "Check the file reference in the documentation and add the references to " +
-                                    "the files if they should be included or delete unused files"}));
+//        if (!allFiles.isEmpty()) {
+//            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                            "description", "howtoFix"},
+//                    new Object[]{getFunction(), refcoShortName, "Corpus composition: Files are not " +
+//                            "documented:\n" +
+//                            allFiles.stream().map(Object::toString).collect(Collectors.joining("\n")),
+//                            "Check the file reference in the documentation and add the references to " +
+//                                    "the files if they should be included or delete unused files"}));
+//        }
+        // Check the documented files against the files found
+        FileListChecker fileListChecker = new FileListChecker(documentedFiles,allFiles);
+        try {
+            report.merge(fileListChecker.function((Corpus) null, false));
+        }
+        catch (JexmaraldaException | XPathExpressionException | SAXException | TransformerException | FSMException | JDOMException | ClassNotFoundException | ParserConfigurationException | IOException | URISyntaxException | NoSuchAlgorithmException e) {
+            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
+                            "description","exception"},
+                    new Object[]{getFunction(),refcoShortName,
+                            "Exception encountered when checking file documentation",
+                            e}));
         }
         return report;
     }
