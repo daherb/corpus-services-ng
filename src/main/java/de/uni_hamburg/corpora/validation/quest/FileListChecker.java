@@ -64,8 +64,8 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * @param expectedFiles the list of files that should be present
      * @param presentFiles the list of files actually present
      */
-    public FileListChecker(Set<URI> expectedFiles, Set<URI> presentFiles) {
-        super(false,new Properties());
+    public FileListChecker(Set<URI> expectedFiles, Set<URI> presentFiles, Properties properties) {
+        super(false, properties);
         this.presentFiles = presentFiles;
         this.expectedFiles = expectedFiles;
     }
@@ -75,8 +75,8 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * @param expectedFiles the list of files that should be present
      * @param path the path to the actual files
      */
-    public FileListChecker(Set<URI> expectedFiles, URI path) {
-        this(expectedFiles, FileTools.listFiles(Paths.get(path)));
+    public FileListChecker(Set<URI> expectedFiles, URI path, Properties properties) {
+        this(expectedFiles, FileTools.listFiles(Paths.get(path)),properties);
     }
 
 
