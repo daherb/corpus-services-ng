@@ -137,4 +137,9 @@ public class ChildesMetadata implements Metadata, CorpusData {
     public Object clone() {
         return new ChildesMetadata(this.url);
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

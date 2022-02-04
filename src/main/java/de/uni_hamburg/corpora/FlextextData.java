@@ -136,4 +136,8 @@ public class FlextextData implements CorpusData, ContentData, XMLData {
         return new FlextextData(this.url);
     }
 
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

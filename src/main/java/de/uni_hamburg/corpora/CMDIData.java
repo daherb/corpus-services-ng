@@ -25,4 +25,9 @@ public class CMDIData extends UnspecifiedXMLData implements XMLData, CorpusData 
     public Object clone() {
         return new CMDIData(this.url);
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

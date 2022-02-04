@@ -118,4 +118,9 @@ public class AnnotationSpecification implements CorpusData, XMLData {
             return new AnnotationSpecification(this.url);
         }
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

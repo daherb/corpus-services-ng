@@ -128,4 +128,9 @@ public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData,
     public Object clone() {
         return new SegmentedEXMARaLDATranscription(this.url);
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

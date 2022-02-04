@@ -282,4 +282,9 @@ public class ComaData implements Metadata, CorpusData, XMLData {
             return null;
         }
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

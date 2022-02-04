@@ -127,4 +127,9 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
     public Object clone() {
         return new CmdiData(this.url);
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

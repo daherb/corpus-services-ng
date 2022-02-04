@@ -248,4 +248,9 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     public Object clone() {
         return new EXMARaLDACorpusData(this.url);
     }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

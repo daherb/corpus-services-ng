@@ -136,4 +136,8 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
         return new UnspecifiedXMLData(this.url);
     }
 
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }
