@@ -288,7 +288,7 @@ public class DictionaryAutomaton {
         //logger.log(Level.INFO,"Segments: \n"+ segmentStates.stream().map(State::toString).reduce((s1,s2) -> s1 + "\n" + s2));
         LinkedList<String> strings = new LinkedList<>() ;
         if (segmentStates.isEmpty())
-            return Collections.EMPTY_LIST ;
+            return Collections.emptyList() ;
         State  s = segmentStates.pop();
         // Try to find the last segment
         while (s.endIndex != word.length() && !segmentStates.isEmpty()) {
@@ -316,6 +316,6 @@ public class DictionaryAutomaton {
         if (currentStart == 0)
             return strings ;
         else
-            return Collections.EMPTY_LIST ;
+            return Collections.emptyList() ;
     }
 }
