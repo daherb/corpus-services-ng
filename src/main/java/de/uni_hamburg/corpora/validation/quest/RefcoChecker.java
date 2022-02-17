@@ -1798,10 +1798,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private ArrayList<String> findTranscriptionTiers() {
         ArrayList<String> transcriptionTiers = new ArrayList<>();
-        //transcriptionTiers.add("transcription") ; // Add default tier function for transcription
         for (Tier t: criteria.tiers) {
-            // Also add all tiers that contain transcription in the tier function
-            if (t.tierFunctions.contains("transcription")) {
+            // Add tiers containing transcription in the tier function
+            if (t.tierFunctions.contains("transcription") ||
+            // as well as the ones with morpheme segmentation
+                    (t.tierFunctions.contains("morpheme segmentation"))) {
                 transcriptionTiers.add(t.tierName);
             }
         }
