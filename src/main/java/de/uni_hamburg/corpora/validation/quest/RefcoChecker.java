@@ -1600,11 +1600,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
             // Only check morpheme distinction for morpheme gloss tiers
-            if (t.tierFunctions != null && t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
-                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                "description", "howtoFix"},
-                        new Object[]{getFunction(), refcoShortName, "Morpheme distinction is empty: " + t.tierName,
-                                "Add morpheme distinction"}));
+//            if (t.tierFunctions != null && t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
+//                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                "description", "howtoFix"},
+//                        new Object[]{getFunction(), refcoShortName, "Morpheme distinction is empty: " + t.tierName,
+//                                "Add morpheme distinction"}));
         }
         if (allTiers.size() > 0) {
             Map<String, Set<String>> finalAllTiers = allTiers;
