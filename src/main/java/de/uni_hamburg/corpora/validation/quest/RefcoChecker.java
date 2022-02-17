@@ -1678,7 +1678,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add gloss abbreviations"}));
             // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
             // lower-case letters)
-            else if (g.gloss.split("[" + String.join("", glossSeparator) + "]").length > 1
+//            else if (g.gloss.split("[" + String.join("", glossSeparator) + "]").length > 1
+            else if (Arrays.stream(g.gloss.split("")).map((c) ->glossSeparator.contains(c)).reduce(Boolean::logicalOr).orElse(false)
                     && !g.gloss.matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
                         ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
@@ -1774,12 +1775,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Punctuation: function is empty for grapheme: " + p.character,
                                 "Add valid function for punctuation"}));
             }
-            else {
-                if (p.function.equalsIgnoreCase("morpheme break ")) {
-                    glossSeparator.add(p.character);
-                }
-            }
-
         }
         return report ;
     }
