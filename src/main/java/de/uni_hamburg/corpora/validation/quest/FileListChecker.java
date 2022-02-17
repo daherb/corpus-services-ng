@@ -93,8 +93,6 @@ public class FileListChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        logger.info("EXPECTED:\n" + expectedFiles.stream().map(URI::toString).collect(Collectors.joining("\n")));
-        logger.info("PRESENT:\n" + presentFiles.stream().map(URI::toString).collect(Collectors.joining("\n")));
         Set<URI> unexpectedFiles =
                 presentFiles.stream().filter((f) -> !expectedFiles.contains(f)).collect(Collectors.toSet());
         Set<URI> missingFiles =
