@@ -522,7 +522,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 morphemeFreq.put(gloss.gloss, 0);
             }
             // Run the generic tests and merge their reports into the current report
-            report.merge(refcoDocumentationCheck());
+            // but flag allows skipping it
+            if (!props.containsKey("skip-documentation-check")
+                    || !props.getProperty("skip-documentation-check").equalsIgnoreCase("true"))
+                report.merge(refcoDocumentationCheck());
             // Apply function for each of the supported file. Again merge the reports
             for (CorpusData cdata : c.getCorpusData()) {
                 //report.merge(function(cdata, fix));
@@ -537,6 +540,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     "Corpus data: Morpheme gloss never encountered in corpus: " + e.getKey(),
                                     "Check for potential errors or remove gloss from documentation"}));
             }
+            if (!missingGlossFreq.isEmpty() && props.containsKey("missing-gloss-stats") &&
+                    props.getProperty("missing-gloss-stats").equalsIgnoreCase("true"))
+                report.addNote(getFunction(),"Corpus data: Morpheme glosses missing from documentations:\n" +
+                                            missingGlossFreq.keySet().stream().map((k) -> k + ":" + missingGlossFreq.get(k))
+                                                    .collect(Collectors.joining("\n")));
             // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
             // Levenshtein difference 1 with a higher frequency count
         /*DictionaryAutomaton glossDictionary =
@@ -2182,25 +2190,33 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Check for ELAN data
         if (cd instanceof ELANData) {
             // Check the transcription
-            try {
-                report.merge(checkTranscription(cd));
-            }
-            catch (JDOMException e) {
-                report.addCritical(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
-                        new Object[]{getFunction(), cd.getFilename(), "Exception encountered when reading Transcription " +
-                                "tier", e}));
-            }
-            // Check the morphology
-            try {
-                report.merge(checkMorphology(cd));
-            }
-            catch (JDOMException e) {
-                report.addCritical(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
-                        new Object[]{getFunction(), cd.getFilename(),
-                                "Exception encountered when reading Morphology tier", e}));
-            }
+            // but parameter allows skipping
+            if (!props.containsKey("skip-transcription-check") ||
+                    !((String) props.get("skip-transcription-check")).equalsIgnoreCase("true"))
+                try {
+                    logger.info("Transcription check");
+                    report.merge(checkTranscription(cd));
+                }
+                catch (JDOMException e) {
+                    report.addCritical(getFunction(),
+                            ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
+                                    new Object[]{getFunction(), cd.getFilename(), "Exception encountered when reading Transcription " +
+                                            "tier", e}));
+                }
+            // Check the morphology gloss
+            // but parameter allows skipping
+            if (!props.containsKey("skip-gloss-check") ||
+                    !((String) props.get("skip-gloss-check")).equalsIgnoreCase("true"))
+                try {
+                    logger.info("Gloss check");
+                    report.merge(checkGloss(cd));
+                }
+                catch (JDOMException e) {
+                    report.addCritical(getFunction(),
+                            ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
+                                    new Object[]{getFunction(), cd.getFilename(),
+                                            "Exception encountered when reading Morphology tier", e}));
+                }
         }
         else {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description"},
@@ -2380,6 +2396,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public Map<String, String> getParameters() {
         Map<String,String> params = new HashMap<>();
         params.put("refco-file","The corpus documentation file as a ODS of FODS spreadsheet");
+        params.put("skip-documentation-check", "Flag to skip the documentation check");
+        params.put("skip-transcription-check", "Flag to skip the transcription check");
+        params.put("skip-gloss-check", "Flag to skip the gloss check");
         return params;
     }
 
