@@ -44,7 +44,7 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Valid for CMDI format
-        return Collections.singleton(CMDIData.class);
+        return Collections.singleton(CmdiData.class);
     }
 
     /**
