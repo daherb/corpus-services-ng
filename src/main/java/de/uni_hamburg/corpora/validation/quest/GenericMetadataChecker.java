@@ -1,10 +1,5 @@
 package de.uni_hamburg.corpora.validation.quest;
 
-//import com.fasterxml.jackson.annotation.JsonAutoDetect;
-//import com.fasterxml.jackson.annotation.PropertyAccessor;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.databind.SerializationFeature;
-
 import com.opencsv.bean.CsvToBeanBuilder;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.validation.Checker;
@@ -29,6 +24,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author bba1792 Dr. Herbert Lange
@@ -38,12 +34,8 @@ import java.util.stream.Collectors;
  */
 abstract class GenericMetadataChecker extends Checker implements CorpusFunction {
 
-    /**
-     * Default constructor without parameter, not providing fixing options
-     */
-    public GenericMetadataChecker(Properties properties) {
-        super(false, properties);
-    }
+    // Regex to match for an empty string
+    private final String emptyString = "[\\s\\n]+";
 
     // The local logger that can be used for debugging
     final Logger logger = Logger.getLogger(this.getClass().toString());
@@ -51,11 +43,40 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     // Flag to see if the checker is properly set up
     boolean setUp = false;
 
+    // Flag to see if we should show full summary
+    boolean showFullSummary = false;
+
     // Data structure representing all metadata criteria
     List<GenericMetadataCriterion> criteria;
 
+    // Set of criteria names to be ignored, can be set via a parameter
+    Set<String> ignoredCriteria = new HashSet<>();
+
+    // Set of criteria names to be included in the summary
+    Set<String> summaryCriteria = new HashSet<>();
+
     // Data structure to keep track of all the values in a corpus
-    HashMap<String,Set<String>> allValues = new HashMap<>();
+    HashMap<String,List<String>> allValues = new HashMap<>();
+
+    /**
+     * Default constructor without parameter, not providing fixing options
+     */
+    public GenericMetadataChecker(Properties properties) {
+        super(false, properties);
+        // If parameters contain list of criteria, split the values on commas and add as lower-case
+        if (properties.containsKey("ignore-criteria")) {
+            ignoredCriteria.addAll(Stream.of(properties.getProperty("ignore-criteria").split(","))
+                    .map(String::toLowerCase).collect(Collectors.toList()));
+        }
+        if (properties.containsKey("metadata-summary") && !properties.getProperty("metadata-summary").equalsIgnoreCase(
+                "true"))
+            summaryCriteria.addAll(
+                    Stream.of(props.getProperty("metadata-summary").split(","))
+                            .map(String::toLowerCase).collect(Collectors.toSet()));
+        if (properties.containsKey("full-summary") && properties.getProperty("full-summary").equalsIgnoreCase(
+                "true"))
+            showFullSummary = true;
+    }
 
     /**
      * Checker function for a single document in a corpus
@@ -80,98 +101,106 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
         // Only work if properly set up
         if (setUp && shouldBeChecked(cd.getURL())) {
             for (GenericMetadataCriterion c : criteria) {
-                // Collect all values of properties that match one of the locators
-                ArrayList<String> values = new ArrayList<>();
-                for (String locator : c.locator) {
-                    // Ignore any property without locator
-                    if (!locator.equals("N/A")) {
-                        // get the values based on the locator
-                        report.merge(getValuesForLocator(cd, locator, values));
+                if (!ignoredCriteria.contains(c.name.toLowerCase())) {
+                    // Collect all values of properties that match one of the locators
+                    ArrayList<String> values = new ArrayList<>();
+                    for (String locator : c.locator) {
+                        // Ignore any property without locator
+                        if (!locator.equals("N/A")) {
+                            // get the values based on the locator
+                            report.merge(getValuesForLocator(cd, locator, values));
+                        }
                     }
-                }
-                // Check if we have at least lower bound elements (if lower bounds are defined, i.e. not N/A)
-                if (c.bounds.lower != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
-                        GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.lower) < 0)
-                    report.addCritical(getFunction(), cd, "Less than " + GenericMetadataCriterion
-                            .Bounds.toString(c.bounds.lower) + " occurrences of " + c.name + " found: " + values.size());
-                    // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
-                else if (c.bounds.upper != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
-                        GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0)
-                    report.addCritical(getFunction(), cd, "More than " + GenericMetadataCriterion
-                            .Bounds.toString(c.bounds.upper) + " occurrences of " + c.name + " found: " + values.size());
+                    // Check if we have at least lower bound elements (if lower bounds are defined, i.e. not N/A)
+                    if (c.bounds.lower != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
+                            GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.lower) < 0)
+                        report.addCritical(getFunction(), cd, "Less than " + GenericMetadataCriterion
+                                .Bounds.toString(c.bounds.lower) + " occurrences of " + c.name + " found: " + values.size());
+                        // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
+                    else if (c.bounds.upper != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
+                            GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0)
+                        report.addCritical(getFunction(), cd, "More than " + GenericMetadataCriterion
+                                .Bounds.toString(c.bounds.upper) + " occurrences of " + c.name + " found: " + values.size());
 //                else {
 //                    report.addCorrect(getFunction(), "Correctly matched " + c.name);
 //                }
-                // Store all values that have a reasonable type for potential statistics
-                if (!c.type.contains(Optional.empty())) {
-                    if (allValues.containsKey(c.name)) {
-                        allValues.get(c.name).addAll(values);
+                    // Store all values that have a reasonable type for potential statistics
+                    // (Ab)use sets to remove duplicates
+                    if (!c.type.contains(Optional.empty())) {
+                        if (allValues.containsKey(c.name)) {
+                            allValues.get(c.name).addAll(new HashSet<>(values));
+                        } else {
+                            allValues.put(c.name, new ArrayList<>(new HashSet<>(values)));
+                        }
                     }
-                    else {
-                        allValues.put(c.name, new HashSet<>(values));
-                    }
-                }
-                // Now check all the results
-                for (String value : values) {
-                    // Get the value of the node, either from an element or an attribute
-                    // DEBUG check the path for a property
+                    // Now check all the results
+                    if (//(value.isEmpty() || value.matches(emptyString)) &&
+                            values.stream().map((v) -> v.isEmpty() || v.matches(emptyString))
+                                    .reduce(Boolean::logicalAnd).orElse(false) &&
+                                c.type.stream().map(Optional::isPresent).reduce(Boolean::logicalOr).orElse(false)) {
+                            report.addCritical(getFunction(),cd,
+                                    "Only empty values encountered for criterion " + c.name);
+                        }
+                    for (String value : values) {
+                        // Get the value of the node, either from an element or an attribute
+                        // DEBUG check the path for a property
 //                    if (c.name.equalsIgnoreCase("PublicationYear")) {
 //                        String path = getPathForElement((Element) o);
 //                        logger.log(Level.INFO, "PublicationYear: " + path);
 //                    }
-                    // Check if we can parse the value as one of the valid types
-                    boolean parsable = false;
-                    for (Optional<String> t : c.type) {
-                        // No type, we don't have to parse it
-                        if (!t.isPresent())
-                            parsable = true;
-                        else {
-                            // String is always valid
-                            if (t.get().equalsIgnoreCase("string")) {
+                        // Check if we can parse the value as one of the valid types
+                        boolean parsable = false;
+                        for (Optional<String> t : c.type) {
+                            // No type, we don't have to parse it
+                            if (!t.isPresent())
                                 parsable = true;
-                            }
-                            // Testing an URI/URL
-                            else if (t.get().equalsIgnoreCase("uri")) {
-                                try {
-                                    // Just check if it is a uri
-                                    new URI(value);
+                            else {
+                                // String is always valid
+                                if (t.get().equalsIgnoreCase("string")) {
                                     parsable = true;
-                                } catch (URISyntaxException e) {
+                                }
+                                // Testing an URI/URL
+                                else if (t.get().equalsIgnoreCase("uri")) {
+                                    try {
+                                        // Just check if it is a uri
+                                        new URI(value);
+                                        parsable = true;
+                                    } catch (URISyntaxException e) {
 //                                    // We only want to create a log item if there is no fallback to string
 //                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
 //                                            .collect(Collectors.toSet()).contains("string"))
 //                                        report.addWarning(getFunction(), cd, c.name + ": Invalid URI syntax " + e);
 //                                    // But we skip the rest of this iteration
 //                                    continue ;
-                                    parsable = false;
-                                }
-                                // Also try it as a URL
-                                URL url = null;
-                                try {
-                                    // Handle URIs can start with hdl: and can be resolved using a proxy
-                                    if (value.startsWith("hdl:")) {
-                                        url = new URL(value.replace("hdl:", "https://hdl.handle.net/"));
+                                        parsable = false;
+                                    }
+                                    // Also try it as a URL
+                                    URL url = null;
+                                    try {
+                                        // Handle URIs can start with hdl: and can be resolved using a proxy
+                                        if (value.startsWith("hdl:")) {
+                                            url = new URL(value.replace("hdl:", "https://hdl.handle.net/"));
 
-                                    }
-                                    // DOI URIs can start with hdl: and can be resolved using a proxy
-                                    else if (value.startsWith("doi:")) {
-                                        url = new URL(value.replace("doi:", "https://doi.org/"));
-                                    }
-                                    // HTTP URIs are URLs
-                                    else if (value.startsWith("http")) {
-                                        url = new URL(value);
-                                    }
-                                } catch (MalformedURLException e) {
+                                        }
+                                        // DOI URIs can start with hdl: and can be resolved using a proxy
+                                        else if (value.startsWith("doi:")) {
+                                            url = new URL(value.replace("doi:", "https://doi.org/"));
+                                        }
+                                        // HTTP URIs are URLs
+                                        else if (value.startsWith("http")) {
+                                            url = new URL(value);
+                                        }
+                                    } catch (MalformedURLException e) {
 //                                    // We only want to create a log item if there is no fallback to string
 //                                    if (!c.type.stream().map((o) -> o.orElse("").toLowerCase(Locale.ROOT))
 //                                            .collect(Collectors.toSet()).contains("string"))
 //                                        report.addWarning(getFunction(), cd, c.name + ": Malformed URL " + e);
 //                                    // But we skip the rest of this iteration
 //                                    continue ;
-                                    parsable = false;
-                                }
-                                // If we succeed in creating a URL object we can try to connect
-                                /*if (url != null) {
+                                        parsable = false;
+                                    }
+                                    // If we succeed in creating a URL object we can try to connect
+                                    /*if (url != null) {
                                     try {
                                         TimeUnit.MILLISECONDS.sleep(500);
                                         HttpURLConnection con = ((HttpURLConnection) url.openConnection());
@@ -185,47 +214,48 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
 
                                 }*/
 
-                            }
-                            // Check date
-                            else if (t.get().equalsIgnoreCase("date")) {
-                                // Try various date formats
-                                try {
-                                    Date sd = new SimpleDateFormat("yyyy-MM-dd").parse(value);
-                                    parsable = true;
-                                } catch (ParseException e) {
-                                    parsable = false;
                                 }
-                                if (!parsable)
+                                // Check date
+                                else if (t.get().equalsIgnoreCase("date")) {
+                                    // Try various date formats
                                     try {
-                                        new SimpleDateFormat("yyyy-MM").parse(value);
+                                        Date sd = new SimpleDateFormat("yyyy-MM-dd").parse(value);
                                         parsable = true;
                                     } catch (ParseException e) {
                                         parsable = false;
                                     }
-                                if (!parsable)
-                                    try {
-                                        new SimpleDateFormat("yyyy").parse(value);
-                                        parsable = true;
-                                    } catch (ParseException e) {
-                                        parsable = false;
-                                    }
+                                    if (!parsable)
+                                        try {
+                                            new SimpleDateFormat("yyyy-MM").parse(value);
+                                            parsable = true;
+                                        } catch (ParseException e) {
+                                            parsable = false;
+                                        }
+                                    if (!parsable)
+                                        try {
+                                            new SimpleDateFormat("yyyy").parse(value);
+                                            parsable = true;
+                                        } catch (ParseException e) {
+                                            parsable = false;
+                                        }
+                                }
                             }
                         }
-                    }
-                    // Error if everything failed
-                    if (!parsable) {
-                        // Get all the types we attempted, if they don't exist replace them by n/a and join them
-                        // using commas
-                        String attemptedTypes =
-                                String.join(",",
-                                        c.type.stream().map((s) -> s.orElse("n/a")).collect(Collectors.toSet()));
-                        // Create error message for problematic value. Only warn if it is unknown but create error if unspecified
-                        if (value.equals("Unknown"))
-                            report.addWarning(getFunction(), cd, c.name + ": Unexpected value " + value +
-                                    ". Expected type: " + attemptedTypes);
-                        else
-                            report.addWarning(getFunction(), cd, c.name + ": Unexpected value " + value +
-                                    ". Expected type: " + attemptedTypes);
+                        // Error if everything failed
+                        if (!parsable) {
+                            // Get all the types we attempted, if they don't exist replace them by n/a and join them
+                            // using commas
+                            String attemptedTypes =
+                                    String.join(",",
+                                            c.type.stream().map((s) -> s.orElse("n/a")).collect(Collectors.toSet()));
+                            // Create error message for problematic value. Only warn if it is unknown but create error if unspecified
+                            if (value.equals("Unknown"))
+                                report.addWarning(getFunction(), cd, c.name + ": Unexpected value " + value +
+                                        ". Expected type: " + attemptedTypes);
+                            else
+                                report.addWarning(getFunction(), cd, c.name + ": Unexpected value " + value +
+                                        ". Expected type: " + attemptedTypes);
+                        }
                     }
                 }
             }
@@ -276,27 +306,30 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
             // Add statistocs of the parameter is set
             if (props.containsKey("metadata-summary") && !props.getProperty("metadata-summary")
                     .equalsIgnoreCase("false")) {
-                Set<String> includedCats = new HashSet<>();
-                // If parameter contains list of categories, split the values on commas and add as lower-case
-                if (!props.getProperty("metadata-summary").equalsIgnoreCase("true"))
-                    includedCats.addAll(
-                            Arrays.asList(props.getProperty("metadata-summary").split(","))
-                                    .stream().map(String::toLowerCase).collect(Collectors.toSet()));
                 StringBuilder stats = new StringBuilder();
-                for (String cat : allValues.keySet()) {
-                    if (includedCats.contains(cat.toLowerCase()) || includedCats.isEmpty()) {
-                        Set<String> vals = allValues.get(cat).stream().filter((v) -> !v.isEmpty() && !v.matches("[\\s\\n]*"))
+                for (String critName : allValues.keySet()) {
+                    if (summaryCriteria.contains(critName.toLowerCase()) || summaryCriteria.isEmpty()){
+                        // All values that are not empty
+                        Set<String> vals =
+                                allValues.get(critName).stream().filter((v) ->
+                                                !v.isEmpty() && !v.matches(emptyString))
                                 .collect(Collectors.toSet());
-                        logger.info(cat + " - " + vals.size());
-                        if (!vals.isEmpty()) {
-                            stats.append("\n");
-                            stats.append(cat);
+                        stats.append("\n");
+                        stats.append(critName);
+                        stats.append(" (");
+                        stats.append(vals.size());
+                        stats.append(" distinct and ");
+                        // Count of all empty values
+                        stats.append((int) allValues.get(critName).stream().filter((v) -> v.isEmpty() || v.matches(emptyString)).count());
+                        stats.append(" empty values)");
+                        if (!vals.isEmpty() && showFullSummary) {
                             stats.append(":\n - ");
                             stats.append(String.join("\n - ", vals));
                         }
                     }
                 }
-                report.addNote(getFunction(), getFunction() + " summary\n" + stats);
+                report.addNote(getFunction(), getFunction() + " summary\n" +
+                        c.getCorpusData().size() + " files checked\n" + stats);
             }
         } else
             report.addCritical(getFunction(), "No criteria file loaded");
@@ -332,8 +365,11 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     @Override
     public Map<String, String> getParameters() {
         Map<String, String> params = super.getParameters();
-        params.put("metadata-summary","Flag determining if a summary should be generated. Alternatively, list of " +
-                "fields to be included in the summary");
+        params.put("ignore-criteria", "Comma-separated list of criteria to be ignored by the checker");
+        params.put("metadata-summary","Flag determining if a summary should be generated. Alternatively, " +
+                "comma-separated list of fields to be included in the summary");
+        params.put("full-summary", "Flag determining if the full summary, i.e. the list of all distinct values" +
+                "should be included");
         return params;
     }
 }
