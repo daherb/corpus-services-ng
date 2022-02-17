@@ -1534,7 +1534,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //                                    "the files if they should be included or delete unused files"}));
 //        }
         // Check the documented files against the files found
-        FileListChecker fileListChecker = new FileListChecker(documentedFiles,allFiles);
+        FileListChecker fileListChecker = new FileListChecker(documentedFiles,allFiles,new Properties());
         try {
             report.merge(fileListChecker.function((Corpus) null, false));
         }
@@ -2113,7 +2113,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the detailed report of the checks
      * @throws JDOMException on XPath problems
      */
-    private Report checkMorphology(CorpusData cd) throws JDOMException {
+    private Report checkGloss(CorpusData cd) throws JDOMException {
         Report report = new Report();
         // Get the dom
         Document content = ((ELANData) cd).getJdom();
