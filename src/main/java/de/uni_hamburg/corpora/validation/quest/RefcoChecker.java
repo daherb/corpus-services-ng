@@ -1383,6 +1383,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI().normalize());
                             else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI()).exists())
                                 uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI().normalize());
+                            else
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
                         }
                         // Audio recordings are in the Recordings folder
                         else if (f.toLowerCase().endsWith("wav") || f.toLowerCase().endsWith("mp3")) {
@@ -1394,6 +1396,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI().normalize());
                             else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI()).exists())
                                 uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI().normalize());
+                            else
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
                         }
                         // All other files are metadata
                         else {
@@ -1405,6 +1409,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/" + f).toURI().normalize());
                             else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/").toURI()).exists())
                                 uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/" + f).toURI().normalize());
+                            else
+                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
                         }
                         // Copy all file URIs of files in respective folders
                         documentedFiles.addAll(uris);
