@@ -55,8 +55,11 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     // Set of criteria names to be included in the summary
     Set<String> summaryCriteria = new HashSet<>();
 
-    // Data structure to keep track of all the values in a corpus
-    HashMap<String,List<String>> allValues = new HashMap<>();
+    // Data structure to keep track of all the values in a corpus, mapping from criterion to value to count
+    HashMap<String,HashMap<String,Integer>> allValues = new HashMap<>();
+
+    // Data structure to keep track of errors in a corpus, mapping from criterion to count
+    HashMap<String,Integer> errorCount = new HashMap<>();
 
     /**
      * Default constructor without parameter, not providing fixing options
@@ -113,28 +116,31 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     }
                     // Check if we have at least lower bound elements (if lower bounds are defined, i.e. not N/A)
                     if (c.bounds.lower != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
-                            GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.lower) < 0)
+                            GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.lower) < 0) {
                         report.addCritical(getFunction(), cd, "Less than " + GenericMetadataCriterion
                                 .Bounds.toString(c.bounds.lower) + " occurrences of " + c.name + " found: " + values.size());
-                        // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
+                        errorCount.compute(c.name,(k,v) -> (v == null) ? 1 : v + 1);
+                    }
+                    // Check if we have at most upper bound elements (if upper bounds are defined, i.e. not N/A)
                     else if (c.bounds.upper != GenericMetadataCriterion.Bounds.EBounds.NA && !c.locator.contains("N/A") &&
-                            GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0)
+                            GenericMetadataCriterion.compareToBounds(values.size(), c.bounds.upper) > 0) {
                         report.addCritical(getFunction(), cd, "More than " + GenericMetadataCriterion
                                 .Bounds.toString(c.bounds.upper) + " occurrences of " + c.name + " found: " + values.size());
-//                else {
-//                    report.addCorrect(getFunction(), "Correctly matched " + c.name);
-//                }
+                    errorCount.compute(c.name,(k,v) -> (v == null) ? 1 : v + 1);
+                    }
                     // Store all values that have a reasonable type for potential statistics
                     // (Ab)use sets to remove duplicates
                     if (!c.type.contains(Optional.empty())) {
-                        if (allValues.containsKey(c.name)) {
-                            allValues.get(c.name).addAll(new HashSet<>(values));
-                        } else {
-                            allValues.put(c.name, new ArrayList<>(new HashSet<>(values)));
-                        }
+                        if (!allValues.containsKey(c.name))
+                            allValues.put(c.name,new HashMap<>());
+                        for (String val : values)
+                            if (val.isEmpty() || val.matches(emptyString))
+                                allValues.get(c.name).compute("#EMPTY#", (k,v) -> (v == null) ? 1 : v + 1);
+                            else
+                                allValues.get(c.name).compute(val, (k,v) -> (v == null) ? 1 : v + 1);
                     }
-                    // Now check all the results
-                    if (//(value.isEmpty() || value.matches(emptyString)) &&
+                    // Now check all the results but ignore problems with optional fields
+                    if (!c.bounds.lower.equals(GenericMetadataCriterion.Bounds.EBounds.B0) &&
                             values.stream().map((v) -> v.isEmpty() || v.matches(emptyString))
                                     .reduce(Boolean::logicalAnd).orElse(false) &&
                                 c.type.stream().map(Optional::isPresent).reduce(Boolean::logicalOr).orElse(false)) {
@@ -143,11 +149,6 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         }
                     for (String value : values) {
                         // Get the value of the node, either from an element or an attribute
-                        // DEBUG check the path for a property
-//                    if (c.name.equalsIgnoreCase("PublicationYear")) {
-//                        String path = getPathForElement((Element) o);
-//                        logger.log(Level.INFO, "PublicationYear: " + path);
-//                    }
                         // Check if we can parse the value as one of the valid types
                         boolean parsable = false;
                         for (Optional<String> t : c.type) {
@@ -309,27 +310,35 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 StringBuilder stats = new StringBuilder();
                 for (String critName : allValues.keySet()) {
                     if (summaryCriteria.contains(critName.toLowerCase()) || summaryCriteria.isEmpty()){
-                        // All values that are not empty
-                        Set<String> vals =
-                                allValues.get(critName).stream().filter((v) ->
-                                                !v.isEmpty() && !v.matches(emptyString))
-                                .collect(Collectors.toSet());
+                        // Copy the map for the current criterion
+                        HashMap<String,Integer> vals = new HashMap<>(allValues.get(critName));
+                        // Remove the placeholder for empty values
+                        vals.remove("#EMPTY#");
                         stats.append("\n");
                         stats.append(critName);
                         stats.append(" (");
+                        stats.append(errorCount.getOrDefault(critName,0));
+                        stats.append(" errors, ");
                         stats.append(vals.size());
                         stats.append(" distinct and ");
-                        // Count of all empty values
-                        stats.append((int) allValues.get(critName).stream().filter((v) -> v.isEmpty() || v.matches(emptyString)).count());
+                        // Get the count of empty values
+                        stats.append(
+                                allValues.get(critName).getOrDefault("#EMPTY#",0));
                         stats.append(" empty values)");
-                        if (!vals.isEmpty() && showFullSummary) {
-                            stats.append(":\n - ");
-                            stats.append(String.join("\n - ", vals));
+                        stats.append(":\n");
+                        for (String val : vals.keySet()) {
+                            stats.append(" - ");
+                            stats.append(val);
+                            stats.append(" (");
+                            stats.append(vals.get(val));
+                            stats.append(")\n");
+
                         }
                     }
                 }
                 report.addNote(getFunction(), getFunction() + " summary\n" +
-                        c.getCorpusData().size() + " files checked\n" + stats);
+                        c.getCorpusData().stream().map((cd) -> cd.getURL()).filter(this::shouldBeChecked).count() +
+                        " files checked\n" + stats);
             }
         } else
             report.addCritical(getFunction(), "No criteria file loaded");
