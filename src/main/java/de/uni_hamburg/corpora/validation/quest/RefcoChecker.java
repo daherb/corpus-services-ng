@@ -1897,13 +1897,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     "Add documentation for all graphemes and punctuation marks used in transcription"}));
         }
         else {
-            report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                            "howtoFix"},
-                    new Object[]{getFunction(), cd.getFilename(),
-                            "Corpus data: More than " + transcriptionCharactersValid + " percent of transcription " +
-                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
-                                    "Percentage: " +
-                    Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
+            if (Math.round(percentValid * 1000)/10.0 == 100)
+                report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                                "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(),
+                                "Corpus data: All characters are valid" ,"Documentation cannot be improved"}));
+            else
+                report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                                "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(),
+                                "Corpus data: More than " + transcriptionCharactersValid + " percent of transcription " +
+                                        "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                        "Percentage: " +
+                                        Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
         return report ;
     }
@@ -2088,12 +2094,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                             " Percentage valid: " + Math.round(percentValid*1000)/10.0,
                                     "Improve the gloss documentation to cover more tokens"}));
         else
-            report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
-                    new Object[] {getFunction(),cd.getFilename(),
-                            "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
-                                    "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
-                                    " Percentage valid: " + Math.round(percentValid*1000)/10.0,
-                            "Documentation can be improved but no fix necessary"}));
+            if (Math.round(percentValid*1000)/10.0 == 100)
+                report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[] {getFunction(),cd.getFilename(),
+                                "Corpus data: All tokens valid glosses",
+                                "Documentation cannot be improved"}));
+            else
+                report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[] {getFunction(),cd.getFilename(),
+                                "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
+                                        "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                        " Percentage valid: " + Math.round(percentValid*1000)/10.0,
+                                "Documentation can be improved but no fix necessary"}));
         return report;
     }
 
