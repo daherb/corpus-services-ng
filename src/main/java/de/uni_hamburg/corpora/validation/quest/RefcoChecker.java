@@ -145,19 +145,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         List<String> tierFunctions;
         String segmentationStrategy ;
         String languages ;
-        String morphemeDistinction;
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Tier tier = (Tier) o;
-            return Objects.equals(tierName, tier.tierName) && Objects.equals(tierFunctions, tier.tierFunctions) && Objects.equals(segmentationStrategy, tier.segmentationStrategy) && Objects.equals(languages, tier.languages) && Objects.equals(morphemeDistinction, tier.morphemeDistinction);
+            return Objects.equals(tierName, tier.tierName) && Objects.equals(tierFunctions, tier.tierFunctions) && Objects.equals(segmentationStrategy, tier.segmentationStrategy) && Objects.equals(languages, tier.languages);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(tierName, tierFunctions, segmentationStrategy, languages, morphemeDistinction);
+            return Objects.hash(tierName, tierFunctions, segmentationStrategy, languages);
         }
     }
 
@@ -1003,9 +1002,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 .split(valueSeparator)).map(String::toLowerCase).collect(Collectors.toList());
                         tier.segmentationStrategy = safeGetText(columns.get(2).getChild("p", textNamespace));
                         tier.languages = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        // Morpheme distinction is optional
-                        if (columns.size() > 4)
-                            tier.morphemeDistinction = safeGetText(columns.get(4).getChild("p", textNamespace));
                         criteria.tiers.add(tier);
                     }  else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
                             "Names")) {
@@ -1613,12 +1609,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            // Only check morpheme distinction for morpheme gloss tiers
-//            if (t.tierFunctions != null && t.tierFunctions.contains("morpheme gloss") && (t.morphemeDistinction == null || t.morphemeDistinction.isEmpty()))
-//                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-//                                "description", "howtoFix"},
-//                        new Object[]{getFunction(), refcoShortName, "Morpheme distinction is empty: " + t.tierName,
-//                                "Add morpheme distinction"}));
         }
         if (allTiers.size() > 0) {
             Map<String, Set<String>> finalAllTiers = allTiers;
@@ -2159,15 +2149,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Check the tier documentation to make sure that your morphology tiers are covered"}));
                 return report;
             }
-//            // Get morpheme distinction for current tier and use it in checkMorphologyGloss
-//            String glossRegex = "";
-//            for (Tier t : criteria.tiers) {
-//                if (t.tierName.equals(tierId)) {
-//                    if (t.morphemeDistinction.equalsIgnoreCase("UpperGramLowerLex"))
-//                        glossRegex = "[0-9A-Z.]+"; // allow digits, uppercase letters and . as a separator
-//                }
-//            }
-            //report.merge(checkMorphologyGloss(cd,tierId,glossText,validGlosses,glossRegex));
             report.merge(checkMorphologyGloss(cd,tierId,glossText,validGlosses));
         }
         return report ;
