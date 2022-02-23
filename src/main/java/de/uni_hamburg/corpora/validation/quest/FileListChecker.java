@@ -109,7 +109,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function",
                             "description", "howtoFix"},
                     new Object[]{getFunction(),
-                            "Files doe not exist:\n" +
+                            "Files does not exist:\n" +
                                     missingFiles.stream().map(URI::toString).collect(Collectors.joining("\n")),
                             "Check the file references in the documentation and remove the reference to " +
                                     "the files if they have been removed intentionally"}));
