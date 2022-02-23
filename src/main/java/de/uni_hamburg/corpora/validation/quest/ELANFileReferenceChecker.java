@@ -25,6 +25,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 
+/**
+ * Deprecated in favor of LinkedFileChecker
+ *
+ * @author bba1792, Dr. Herbert Lange
+ */
 public class ELANFileReferenceChecker extends Checker implements CorpusFunction {
 
     public ELANFileReferenceChecker(Properties properties) {

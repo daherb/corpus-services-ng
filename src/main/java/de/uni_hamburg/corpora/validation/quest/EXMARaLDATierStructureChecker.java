@@ -11,6 +11,7 @@ import java.util.*;
 
 /**
  * Tier structure checker for EXMARaLDA corpora
+ *
  * @author bba1792, Dr. Herbert Lange
  * @version 20220211
  */
