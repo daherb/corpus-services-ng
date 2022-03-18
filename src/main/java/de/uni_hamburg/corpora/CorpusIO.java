@@ -117,9 +117,18 @@ public class CorpusIO {
     //only read it if it is needed
     public CorpusData readFileURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, ClassNotFoundException, UnsupportedEncodingException {
         if (new File(URLDecoder.decode(url.getFile(),"UTF-8")).isFile()) {
+            if (url.getPath().toLowerCase().contains("corpusservices_errors")) {
+                // Ignore
+            }
             if (url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("annotation") && clcds.contains(AnnotationSpecification.class)) {
                 return new AnnotationSpecification(url);
-            } else if ((url.getPath().toLowerCase().endsWith("xml") && url.getPath().toLowerCase().contains("cmdi")) && clcds.contains(CmdiData.class)) {
+            }
+            // An xml file is a CMDI file if it is:
+            // - an xml file
+            // - in a path containing cmdi
+            // - we expect CMDI files in one of the checkers
+            else if (url.getPath().toLowerCase().endsWith("xml")
+                    && url.getPath().toLowerCase().contains("cmdi") && clcds.contains(CmdiData.class)) {
                 return new CmdiData(url);
             } else {
                 for (Class<? extends CorpusData> c : clcds) {
