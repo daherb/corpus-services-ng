@@ -27,16 +27,16 @@ import java.util.stream.Collectors;
  * Extracts a list of referenced files from a corpus
  *
  * @author bba1792, Dr. Herbert Lange
+ * @version 20220318
  */
 public class LinkedFileChecker extends Checker implements CorpusFunction {
 
     Logger logger = Logger.getLogger(this.getClass().getName());
+
+    // List of URIs for all linked files
     List<URI> corpusFiles = new ArrayList<>();
     public LinkedFileChecker(Properties properties) {
-        this(false,properties);
-    }
-    public LinkedFileChecker(boolean hasfixingoption, Properties properties) {
-        super(hasfixingoption, properties);
+        super(false,properties);
     }
 
 //    public List<FileInfo> getReferencedFiles(Report report, CorpusData cd) {
@@ -193,15 +193,15 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
      */
     private List<URI> getReferencedFiles(Report report, ComaData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
-        Set<String> part1 = new HashSet<>(Arrays.asList(new String[] {"Transcription", "transcription", "Media",
-                "media"}));
-        Set<String> part2 = new HashSet<>(Arrays.asList(new String[] {"NSLink", "nslink"}));
+        Set<String> part1 = new HashSet<>(Arrays.asList("Transcription", "transcription", "Media",
+                "media"));
+        Set<String> part2 = new HashSet<>(Arrays.asList("NSLink", "nslink"));
         List<Element> fileRefs =
                     XPath.newInstance(Sets.cartesianProduct(part1,part2)
                 .stream().map((l) -> "//" + String.join("/",l))
                 .collect(Collectors.joining("|"))).selectNodes(cd.getJdom());
-        part1 = new HashSet<>(Arrays.asList(new String[]{"File", "file"}));
-        part2 = new HashSet<>(Arrays.asList(new String[]{"RelPath", "Relpath", "relPath","relpath"}));
+        part1 = new HashSet<>(Arrays.asList("File", "file"));
+        part2 = new HashSet<>(Arrays.asList("RelPath", "Relpath", "relPath","relpath"));
         fileRefs.addAll(XPath.newInstance(Sets.cartesianProduct(part1,part2)
                 .stream().map((l) -> "//" + String.join("/",l))
                 .collect(Collectors.joining("|"))).selectNodes(cd.getJdom()));
