@@ -44,6 +44,4 @@ public class NullChecker extends Checker implements CorpusFunction {
         // Get all classes derived from CorpusData
         return reflections.getSubTypesOf(CorpusData.class).stream().filter((c) -> !Modifier.isAbstract(c.getModifiers())).collect(Collectors.toSet());
     }
-
-
 }
