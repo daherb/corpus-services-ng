@@ -285,4 +285,13 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         return "Extracts all files referenced in corpus files";
     }
 
+    /**
+     * Returns all files referenced in the corpus after reading it
+     *
+     * @return the list of all referenced files
+     */
+    public List<URI> getFileList() {
+        return corpusFiles;
+    }
+
 }
