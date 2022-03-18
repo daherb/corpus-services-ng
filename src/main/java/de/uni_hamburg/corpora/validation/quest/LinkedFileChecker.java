@@ -181,6 +181,16 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         return usableFor;
     }
 
+    /**
+     * Gets the list of files from an Coma corpus file
+     *
+     * @param report the report to store potential problems
+     * @param cd the corpus file
+     * @return the list of URIs for all referenced files
+     * @throws JDOMException on problems accessing information using xpath
+     * @throws MalformedURLException on problems creating URIs
+     * @throws URISyntaxException on problems creating URIs
+     */
     private List<URI> getReferencedFiles(Report report, ComaData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
         Set<String> part1 = new HashSet<>(Arrays.asList(new String[] {"Transcription", "transcription", "Media",
@@ -204,6 +214,16 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         return files;
     }
 
+    /**
+     * Gets the list of files from an EXMARaLDA corpus file
+     * 
+     * @param report the report to store potential problems
+     * @param cd the corpus file
+     * @return the list of URIs for all referenced files
+     * @throws JDOMException on problems accessing information using xpath
+     * @throws MalformedURLException on problems creating URIs
+     * @throws URISyntaxException on problems creating URIs
+     */
     private List<URI> getReferencedFiles(Report report, EXMARaLDACorpusData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
         List<Element> referencedFiles = XPath.newInstance("//referenced-file").selectNodes(cd.getJdom());
@@ -216,6 +236,16 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         return files;
     }
 
+    /**
+     * Gets the list of files from an ELAN corpus file
+     *
+     * @param report the report to store potential problems
+     * @param cd the corpus file
+     * @return the list of URIs for all referenced files
+     * @throws JDOMException on problems accessing information using xpath
+     * @throws MalformedURLException on problems creating URIs
+     * @throws URISyntaxException on problems creating URIs
+     */
     private List<URI> getReferencedFiles(Report report, ELANData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
         List<Element> referencedFiles = XPath.newInstance("//MEDIA_DESCRIPTOR").selectNodes(cd.getJdom());
@@ -228,6 +258,16 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         return files;
     }
 
+    /**
+     * Gets the list of files from an IMDI corpus file
+     *
+     * @param report the report to store potential problems
+     * @param cd the corpus file
+     * @return the list of URIs for all referenced files
+     * @throws JDOMException on problems accessing information using xpath
+     * @throws MalformedURLException on problems creating URIs
+     * @throws URISyntaxException on problems creating URIs
+     */
     private List<URI> getReferencedFiles(Report report, IMDIData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
         List<Element> referencedFiles = XPath.newInstance("//MEDIA_DESCRIPTOR").selectNodes(cd.getJdom());
