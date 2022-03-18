@@ -5,6 +5,7 @@ import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 
 import java.util.*;
@@ -60,8 +61,8 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
         // http://www.edankert.com/defaultnamespaces.html
         try {
             XPath xpath = XPath.newInstance(locator);
-            //xpath.addNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
-            List<Object> nodes = xpath.selectNodes(((CMDIData) cd).getJdom());
+            xpath.addNamespace(Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/"));
+            List<Object> nodes = xpath.selectNodes(((CmdiData) cd).getJdom());
             // Convert nodes to string values
             for (Object o : nodes) {
                 // Get the value of the node, either from an element or an attribute
