@@ -142,76 +142,67 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         // Keep track if we ever encountered acceptable file formats
         boolean acceptableFiles = false;
         for (URI fileUri : corpusFiles) {
-            try {
-                File tmpFile = new File(fileUri);
-                if (!tmpFile.isDirectory()) {
-                    String ext = "." + FilenameUtils.getExtension(tmpFile.getName());
-                    for (Format format: formats) {
-                        // Find the correct format
-                        if (format.formatInfo.fileExt.stream().map((f) -> f.equalsIgnoreCase(ext))
-                                .reduce(Boolean::logicalOr).orElse(false))  {
-                            // Try to find centres where the format is recommended
-                            if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("recommended"))
-                                    .reduce(Boolean::logicalOr).orElse(false)) {
-                                report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                                                new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
-                                                        "File format " + format.formatInfo.name + " recommended by " +
-                                                                "the archives " +
-                                                                format.centerInfo.stream().filter((c) ->
-                                                                        c.level.equalsIgnoreCase("recommended"))
-                                                                        .map((c) -> c.name)
-                                                                        .collect(Collectors.joining(", "))
-                                        }));
-                                acceptableFiles = true;
-                            }
-                            // Otherwise try to find at least to find where it is acceptable
-                            else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("acceptable"))
-                                    .reduce(Boolean::logicalOr).orElse(false)) {
-                                report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                                                new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
-                                                        "File format " + format.formatInfo.name + " is acceptable for" +
-                                                                " the archives " +
-                                                                format.centerInfo.stream().filter((c) ->
-                                                                        c.level.equalsIgnoreCase("acceptable"))
-                                                                        .map((c) -> c.name)
-                                                                        .collect(Collectors.joining(", "))
-                                        }));
-                                acceptableFiles = true;
-                            }
-                            // Finally, check centers that declare the format as deprecated
-                            else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("deprecated"))
-                                    .reduce(Boolean::logicalOr).orElse(false)) {
-                                report.addWarning(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                                                new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
-                                                        "File format " + format.formatInfo.name + " is considered " +
-                                                                "deprecated at the archives " +
-                                                                format.centerInfo.stream().filter((c) ->
-                                                                        c.level.equalsIgnoreCase("deprecated"))
-                                                                        .map((c) -> c.name)
-                                                                        .collect(Collectors.joining(", "))
-                                        }));
-                                acceptableFiles = true;
-                            }
-                            // No center found at all
-                            else {
-                                report.addCritical(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                                                new Object[]{getFunction(), new File(fileUri).getName(),
-                                                        "File format is not recognized for any archive"}));
-                            }
+            File tmpFile = new File(fileUri);
+            if (!tmpFile.isDirectory()) {
+                String ext = "." + FilenameUtils.getExtension(tmpFile.getName());
+                for (Format format: formats) {
+                    // Find the correct format
+                    if (format.formatInfo.fileExt.stream().map((f) -> f.equalsIgnoreCase(ext))
+                            .reduce(Boolean::logicalOr).orElse(false))  {
+                        // Try to find centres where the format is recommended
+                        if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("recommended"))
+                                .reduce(Boolean::logicalOr).orElse(false)) {
+                            report.addCorrect(getFunction(),
+                                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                            new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
+                                                    "File format " + format.formatInfo.name + " recommended by " +
+                                                            "the archives " +
+                                                            format.centerInfo.stream().filter((c) ->
+                                                                            c.level.equalsIgnoreCase("recommended"))
+                                                                    .map((c) -> c.name)
+                                                                    .collect(Collectors.joining(", "))
+                                            }));
+                            acceptableFiles = true;
                         }
-
+                        // Otherwise try to find at least to find where it is acceptable
+                        else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("acceptable"))
+                                .reduce(Boolean::logicalOr).orElse(false)) {
+                            report.addCorrect(getFunction(),
+                                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                            new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
+                                                    "File format " + format.formatInfo.name + " is acceptable for" +
+                                                            " the archives " +
+                                                            format.centerInfo.stream().filter((c) ->
+                                                                            c.level.equalsIgnoreCase("acceptable"))
+                                                                    .map((c) -> c.name)
+                                                                    .collect(Collectors.joining(", "))
+                                            }));
+                            acceptableFiles = true;
+                        }
+                        // Finally, check centers that declare the format as deprecated
+                        else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("deprecated"))
+                                .reduce(Boolean::logicalOr).orElse(false)) {
+                            report.addWarning(getFunction(),
+                                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                            new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
+                                                    "File format " + format.formatInfo.name + " is considered " +
+                                                            "deprecated at the archives " +
+                                                            format.centerInfo.stream().filter((c) ->
+                                                                            c.level.equalsIgnoreCase("deprecated"))
+                                                                    .map((c) -> c.name)
+                                                                    .collect(Collectors.joining(", "))
+                                            }));
+                            acceptableFiles = true;
+                        }
+                        // No center found at all
+                        else {
+                            report.addCritical(getFunction(),
+                                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                            new Object[]{getFunction(), new File(fileUri).getName(),
+                                                    "File format is not recognized for any archive"}));
+                        }
                     }
                 }
-            }
-            catch (Exception e) {
-                report.addCritical(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function", "filename", "description","exception"},
-                                new Object[]{getFunction(), new File(fileUri).getName(), "Exception while getting " +
-                                        "MIME type for file", e}));
             }
         }
         if (!acceptableFiles) {
