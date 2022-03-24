@@ -95,6 +95,10 @@ public class FileListChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
+        // Try to read corpus directory instead
+        if (presentFiles.isEmpty()){
+            presentFiles.addAll(FileTools.listFiles(Paths.get(c.getBaseDirectory().toURI())));
+        }
         Set<URI> unexpectedFiles =
                 presentFiles.stream().filter((f) -> !expectedFiles.contains(f)).collect(Collectors.toSet());
         Set<URI> missingFiles =
