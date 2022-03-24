@@ -41,7 +41,7 @@ import java.util.zip.ZipFile;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20210929
+ * @version 20220324
  * The checker for Refco set of criteria.
  */
 public class RefcoChecker extends Checker implements CorpusFunction {

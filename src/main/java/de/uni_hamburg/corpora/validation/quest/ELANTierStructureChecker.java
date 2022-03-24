@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Tier structure checker for ELAN corpora
  * @author bba1792, Dr. Herbert Lange
- * @version 20220210
+ * @version 20220324
  */
 public class ELANTierStructureChecker extends TierStructureChecker {
 

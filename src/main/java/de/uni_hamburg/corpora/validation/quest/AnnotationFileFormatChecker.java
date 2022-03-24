@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * format for several archives based on the data provided by CLARIN SIS (https://standards.clarin.eu/sis/)
  *
  * @author bba1792, Dr. Herbert Lange
- * @version 20220223
+ * @version 20220324
  */
 public class AnnotationFileFormatChecker extends Checker implements CorpusFunction {
 

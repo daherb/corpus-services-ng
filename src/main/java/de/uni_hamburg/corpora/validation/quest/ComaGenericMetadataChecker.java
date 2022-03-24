@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20211007
+ * @version 20220324
  *
  * Checker for the generic metadata within a Coma corpus
  */

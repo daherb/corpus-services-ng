@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Checker for speaker consistency in an EXMARaLDA corpus
  * @author bba1792, Dr. Herbert Lange
- * @version 20220314
+ * @version 20220324
  */
 public class EXMARaLDASpeakerChecker extends SpeakerChecker {
 

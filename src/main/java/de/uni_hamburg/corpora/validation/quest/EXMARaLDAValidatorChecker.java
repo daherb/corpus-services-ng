@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * Using the built-in EXMARaLDA file checker in corpus services
  *
  * @author bba1792 Dr. Herbert Lange
- * @version 20211019
+ * @version 20220324
  */
 public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction {
 
