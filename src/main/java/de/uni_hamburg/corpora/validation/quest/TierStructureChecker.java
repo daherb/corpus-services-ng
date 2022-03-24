@@ -92,5 +92,12 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
 
     abstract Set<Map<String,String>> getTierStructure(Report report, CorpusData cd);
 
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> params = super.getParameters();
+        params.put("show-individual-structure", "Shows the tier structure for each corpus file");
+        params.put("show-structure", "Show the tier structure shared between all corpus files");
+        return params;
 
+    }
 }
