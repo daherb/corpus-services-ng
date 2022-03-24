@@ -84,8 +84,9 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
             ));
 
         }
-        report.addNote(getFunction(),commonTiers.stream().map((o) -> o.toString())
-                            .collect(Collectors.joining("\n")));
+        if (sharedStructure)
+            report.addNote(getFunction(),commonTiers.stream().map((o) -> o.toString())
+                    .collect(Collectors.joining("\n")));
         return report;
     }
 
