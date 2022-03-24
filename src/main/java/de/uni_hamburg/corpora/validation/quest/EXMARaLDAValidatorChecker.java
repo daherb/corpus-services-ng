@@ -40,7 +40,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
 
     @Override
     public String getDescription() {
-        return "Checker that runs the ELAN validator on an EAF file";
+        return "Checker that runs the EXMARaLDA validator on an EXB file";
     }
 
     @Override
