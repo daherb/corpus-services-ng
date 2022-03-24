@@ -59,12 +59,6 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
 
     @Override
     String getTranscriptionText(Element tier) {
-//        List<String> text = new ArrayList<>();
-//        for (Element annotation : (List<Element>) Collections.checkedList(tier.getChildren("ANNOTATION"),
-//                Element.class)) {
-//            text.add(annotation.getChild("ALIGNABLE_ANNOTATION").getText());
-//        }
-//        return String.join(" ", text);
         return XMLTools.showAllText(tier);
     }
 
