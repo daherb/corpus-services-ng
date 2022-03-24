@@ -99,4 +99,11 @@ public class ELANTierStructureChecker extends TierStructureChecker {
                     new Object[]{getFunction(),"Not an ELAN file: " + cd.getFilename()}));
         return tiers;
     }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> params = super.getParameters();
+        params.put("elan-speakers","List of speakers used in the ELAN corpus, separated by comma");
+        return params;
+    }
 }
