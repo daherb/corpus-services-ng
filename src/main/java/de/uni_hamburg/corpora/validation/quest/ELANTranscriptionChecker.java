@@ -11,6 +11,11 @@ import org.jdom.xpath.XPath;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * Checker for transcription alphabets
+ * @author bba1792, Dr. Herbert Lange
+ * @version 20220324
+ */
 public class ELANTranscriptionChecker extends TranscriptionChecker {
 
     private final Logger logger = Logger.getLogger(getFunction());
