@@ -464,7 +464,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     @Override
     public String getDescription() {
-        return "checks the RefCo criteria for a corpus. Requires a RefCo corpus documentation spreadsheet.";
+        return "Checks the RefCo criteria for a corpus. Requires a RefCo corpus documentation spreadsheet.";
     }
 
     /**
