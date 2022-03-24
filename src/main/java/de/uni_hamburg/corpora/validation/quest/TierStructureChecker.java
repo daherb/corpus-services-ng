@@ -56,7 +56,6 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
         Set<Map<String,String>> tiers = getTierStructure(report, cd);
         tierStructure.put(cd.getURL().toURI(),tiers);
         if (individualStructure)
-//            report.addNote(getFunction(),cd,tiers.toString());
             report.addNote(getFunction(),cd,"All tiers:\n" + tiers.stream().map((o) -> o.toString())
                     .collect(Collectors.joining("\n")));
         return report;
