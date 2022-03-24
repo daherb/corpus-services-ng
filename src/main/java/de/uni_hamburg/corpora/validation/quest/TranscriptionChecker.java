@@ -154,7 +154,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
         params.put("transcription-graphemes","List of transcription graphemes, separated by commas");
-        params.put("transcription-method", "Standard transcription method used, if any");
+        params.put("transcription-method", "Standard transcription method used, if any. Currently only HIAT");
         return params;
     }
 }
