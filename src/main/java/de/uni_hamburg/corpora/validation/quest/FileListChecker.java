@@ -89,6 +89,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        // We don't care about the individual files in the corpus
         return new Report();
     }
 
