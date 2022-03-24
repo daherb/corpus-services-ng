@@ -111,7 +111,8 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
     }
 
     Logger logger = Logger.getLogger(this.toString());
-    
+
+    // List of all known formats
     List<Format> formats = new ArrayList<>();
 
     public AnnotationFileFormatChecker(Properties properties) throws JAXBException {
