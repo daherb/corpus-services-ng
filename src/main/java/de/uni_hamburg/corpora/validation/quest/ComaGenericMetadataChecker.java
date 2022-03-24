@@ -15,7 +15,7 @@ import java.util.*;
  *
  * Checker for the generic metadata within a Coma corpus
  */
-public class ComaGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
+public class ComaGenericMetadataChecker extends GenericMetadataChecker {
 
     /**
      * Default constructor without parameter, not providing fixing options
