@@ -50,7 +50,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         if (properties.containsKey("annotation-specification")) {
             tags.addAll(loadAnnotationSpecification(properties.getProperty("annotation-specification")));
         }
-        if (properties.containsKey("tags-summary") && properties.getProperty("tag-summary").equalsIgnoreCase("true")) {
+        if (properties.containsKey("tag-summary") && properties.getProperty("tag-summary").equalsIgnoreCase("true")) {
             showTagStats = true;
         }
     }
