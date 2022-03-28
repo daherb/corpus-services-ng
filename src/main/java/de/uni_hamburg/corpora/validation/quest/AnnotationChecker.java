@@ -5,7 +5,11 @@ import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+import org.jdom.Attribute;
+import org.jdom.Document;
 import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.xpath.XPath;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,9 +46,34 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         if (properties.containsKey("annotation-tags")) {
             tags.addAll(Arrays.asList(properties.getProperty("annotation-tags").split(",")));
         }
+        // Tags as specification file
+        if (properties.containsKey("annotation-specification")) {
+            tags.addAll(loadAnnotationSpecification(properties.getProperty("annotation-specification")));
+        }
         if (properties.containsKey("tags-summary") && properties.getProperty("tag-summary").equalsIgnoreCase("true")) {
             showTagStats = true;
         }
+    }
+
+    /**
+     * Loads the tags from an annotation specification file
+     * see https://exmaralda.org/en/utilities/ Templates for working with the Annotation Panel
+     * @param fileName the name of the annotation specification file
+     * @return the list of tags specified
+     */
+    private Collection<String> loadAnnotationSpecification(String fileName) {
+        SAXBuilder sb = new SAXBuilder();
+        List<String> tags = new ArrayList<>();
+        try {
+            Document dom = sb.build(new File(fileName));
+            List<Attribute> names = Collections.checkedList(XPath.newInstance("//tag/@name").selectNodes(dom),
+                    Attribute.class);
+            // Extract attribute values and add them to the tags list
+            tags.addAll(names.stream().map(Attribute::getValue).collect(Collectors.toList()));
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+        }
+        return tags;
     }
 
     @Override
@@ -106,6 +135,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         Map<String,String> params = super.getParameters();
         params.put("tier-ids","Mandatory identificator(s) for the tiers to be checked, separated by commas");
         params.put("annotation-tags", "Optional list of expected annotation tags, separated by comma");
+        params.put("annotation-specification", "Optional list of expected annotation tags, in the EXMARaLDA " +
+                "Annotation Panel compatible format");
         params.put("tag-summary","Optional flag if the summary of all encountered tags should be included in the " +
                 "report");
 
