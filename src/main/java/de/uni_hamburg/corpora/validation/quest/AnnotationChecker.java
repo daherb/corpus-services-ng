@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
  */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
+    private final Logger logger = Logger.getLogger(getFunction());
+
     // Set of all expected tags
     private final Set<String> tags = new HashSet<>();
     // Statistics about the tags used
