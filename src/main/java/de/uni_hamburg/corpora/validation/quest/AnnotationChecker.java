@@ -87,20 +87,26 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         if (setUp) {
             for (String tier : tierIds) {
                 String text = getTierText(cd, tier);
-                List<String> tokens = Arrays.asList(text.split(tokenSeparator));
-                // Put all tokens into the summary
-                tagStats.putAll(tokens);
-                for (String token : tokens) {
-                    // Check if the token is in the tag list
-                    if (!tags.isEmpty() && !tags.contains(token)) {
-                        report.addWarning(getFunction(), ReportItem.newParamMap(
-                                new String[]{"function", "filename", "description", "howtoFix"},
-                                new Object[]{getFunction(), cd.getFilename(),
-                                        "Unexpected tag " + token + " in tier " + tier,
-                                        "Check for typo in the tag or add it to the list of expected tags"
-                                }
-                        ));
+                if (!text.isEmpty()) {
+                    List<String> tokens = Arrays.asList(text.split(tokenSeparator));
+                    if (tokens.size() == 1)
+
+                        // Put all tokens into the summary
+                        tagStats.putAll(tokens);
+                    for (String token : tokens) {
+                        // Check if the token is in the tag list
+                        if (!tags.isEmpty() && !tags.contains(token)) {
                             missingStats.put(token);
+                            report.addWarning(getFunction(), ReportItem.newParamMap(
+                                    new String[]{"function", "filename", "description", "howtoFix"},
+                                    new Object[]{getFunction(), cd.getFilename(),
+                                            "Unexpected tag " + token + " in tier " + tier
+                                            //        + ", context: " + tokens + " " +  "pos: " + tokens.indexOf(token)
+                                            ,
+                                            "Check for typo in the tag or add it to the list of expected tags"
+                                    }
+                            ));
+                        }
                     }
                 }
             }
