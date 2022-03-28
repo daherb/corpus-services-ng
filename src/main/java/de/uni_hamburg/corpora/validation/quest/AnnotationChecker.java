@@ -26,6 +26,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     private final Set<String> tags = new HashSet<>();
     // Statistics about the tags used
     private final FrequencyList tagStats = new FrequencyList();
+    // Statistics about the missing tags
+    private final FrequencyList missingStats = new FrequencyList();
     // Flag if tag stats should be included in the report
     private boolean showTagStats = false;
 
@@ -95,6 +97,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                                         "Check for typo in the tag or add it to the list of expected tags"
                                 }
                         ));
+                            missingStats.put(token);
                     }
                 }
             }
@@ -119,6 +122,12 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
             }
             if (showTagStats) {
                 report.addNote(getFunction(), "Tag summary:\n" + tagStats);
+            }
+            if (!missingStats.isEmpty()) {
+                report.addCritical(getFunction(),ReportItem.newParamMap(
+                        new String[]{"function","description"},
+                        new Object[]{getFunction(),"Missing tags:\n" + missingStats}
+                ));
             }
         }
         else
