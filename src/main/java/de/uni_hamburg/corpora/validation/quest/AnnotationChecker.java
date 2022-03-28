@@ -23,6 +23,11 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Abstract annotation checker class
+ * @author bba1792, Dr. Herbert Lange
+ * @version 20220328
+ */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
     // Set of all expected tags
@@ -31,6 +36,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     private final FrequencyList tagStats = new FrequencyList();
     // Statistics about the missing tags
     private final FrequencyList missingStats = new FrequencyList();
+
     // Flag if tag stats should be included in the report
     private boolean showTagStats = false;
 
@@ -48,6 +54,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
             tierIds.addAll(Arrays.asList(properties.getProperty("tier-ids").split(",")));
             setUp = true;
         }
+        // Tags as list in parameter
         if (properties.containsKey("annotation-tags")) {
             tags.addAll(Arrays.asList(properties.getProperty("annotation-tags").split(",")));
         }
@@ -55,6 +62,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         if (properties.containsKey("annotation-specification")) {
             tags.addAll(loadAnnotationSpecification(properties.getProperty("annotation-specification")));
         }
+        // Flag if summary should be included
         if (properties.containsKey("tag-summary") && properties.getProperty("tag-summary").equalsIgnoreCase("true")) {
             showTagStats = true;
         }
