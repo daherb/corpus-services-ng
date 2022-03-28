@@ -10,7 +10,7 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
@@ -47,7 +47,7 @@ public class ExbSegmentationChecker extends Checker implements CorpusFunction {
 
     static String filename;
     static BasicTranscription bt;
-    static EXMARaLDACorpusData btd;
+    static EXMARaLDATranscriptionData btd;
     static File exbfile;
     AbstractSegmentation segmentation;
     static ValidatorSettings settings;
@@ -63,7 +63,7 @@ public class ExbSegmentationChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws SAXException, JDOMException, IOException, JexmaraldaException, FSMException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, XPathExpressionException, URISyntaxException {
         Report stats = new Report();
 
-        btd = new EXMARaLDACorpusData(cd.getURL());
+        btd = new EXMARaLDATranscriptionData(cd.getURL());
         if (segmentationName.equals("HIAT")) {
             segmentation = new org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation();
         } else if (segmentationName.equals("GAT")) {
@@ -119,7 +119,7 @@ public class ExbSegmentationChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     public void setSegmentation(String s) {

@@ -56,7 +56,7 @@ public class ExbLangCodes extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report stats = new Report();
         // Get the xml data
-        EXMARaLDACorpusData btd = (EXMARaLDACorpusData) cd;
+        EXMARaLDATranscriptionData btd = (EXMARaLDATranscriptionData) cd;
         BasicTranscription bt = btd.getEXMARaLDAbt();
         Document doc = bt.toJDOMDocument();
         // find all language tags
@@ -83,6 +83,6 @@ public class ExbLangCodes extends Checker implements CorpusFunction {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 }

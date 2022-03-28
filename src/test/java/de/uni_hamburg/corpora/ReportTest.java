@@ -38,29 +38,29 @@ public class ReportTest {
         comprehensiveReport = new Report();
         comprehensiveReport.addCorrect("Correct","First correct");
         comprehensiveReport.addCorrect("Correct","some_file.txt","Second correct with description");
-        comprehensiveReport.addCorrect("Correct", new EXMARaLDACorpusData(), "Third correct with corpus data");
+        comprehensiveReport.addCorrect("Correct", new EXMARaLDATranscriptionData(), "Third correct with corpus data");
         comprehensiveReport.addMissing("Missing","First missing");
-        comprehensiveReport.addMissing("Missing", new EXMARaLDACorpusData(), "Second missing with corpus data");
+        comprehensiveReport.addMissing("Missing", new EXMARaLDATranscriptionData(), "Second missing with corpus data");
         comprehensiveReport.addNote("Note","First note");
         comprehensiveReport.addNote("Note", new RuntimeException("Some runtime error"),"Second note with exception");
         comprehensiveReport.addNote("Note", new RuntimeException("Some other runtime error"),"Third note with exception and extrablah","More blah");
-        comprehensiveReport.addNote("Note", new EXMARaLDACorpusData(), "Fourth note with corpus data");
+        comprehensiveReport.addNote("Note", new EXMARaLDATranscriptionData(), "Fourth note with corpus data");
         comprehensiveReport.addNote("Note","Fifth note with extrablah", "Even more blah");
         comprehensiveReport.addCritical("Critical","First critical");
         comprehensiveReport.addCritical("Critical","Second critical with extrablah", "And more blah");
         comprehensiveReport.addCritical("Critical", new RuntimeException("Some more runtime error"), "Third critical with exception");
         comprehensiveReport.addCritical("Critical", new RuntimeException("And some more runtime error"), "Fourth critical with exception and extra blah", "And even more blah");
-        comprehensiveReport.addCritical("Critical",new EXMARaLDACorpusData(), "Fifth critical with corpus data");
+        comprehensiveReport.addCritical("Critical",new EXMARaLDATranscriptionData(), "Fifth critical with corpus data");
         comprehensiveReport.addCritical("Critical at the root");
         comprehensiveReport.addWarning("Warning", "First warning");
-        comprehensiveReport.addWarning("Warning", new EXMARaLDACorpusData(), "Second warning with corpus data");
+        comprehensiveReport.addWarning("Warning", new EXMARaLDATranscriptionData(), "Second warning with corpus data");
         comprehensiveReport.addWarning("Warning", "Third warning with extrablah", "Blahblah");
         comprehensiveReport.addWarning("Warning", new RuntimeException("Something else went wrong"), "Fourth warning with exception and extrablah", "Blahblablah");
         comprehensiveReport.addException("Exception",new RuntimeException("Some runtime exception here"), "First exception");
         comprehensiveReport.addException("Exception",new RuntimeException("Some runtime exception here too"), "Second exception with extrablah", "Blahblahblarg");
-        comprehensiveReport.addException("Exception", new RuntimeException("Somet exception here again"), new EXMARaLDACorpusData(), "Third exception with corpus data");
+        comprehensiveReport.addException("Exception", new RuntimeException("Somet exception here again"), new EXMARaLDATranscriptionData(), "Third exception with corpus data");
         comprehensiveReport.addException(new RuntimeException("Something went wrong at the root"), "Exception at the root");
-        comprehensiveReport.addFix("Fix",new EXMARaLDACorpusData(), "Only fix");
+        comprehensiveReport.addFix("Fix",new EXMARaLDATranscriptionData(), "Only fix");
         comprehensiveReport.addReportItem("Random",new ReportItem());
     }
 

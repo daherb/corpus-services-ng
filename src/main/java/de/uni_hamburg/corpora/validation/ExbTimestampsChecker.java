@@ -106,7 +106,7 @@ public class ExbTimestampsChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(SegmentedEXMARaLDATranscription.class);
+        return Collections.singleton(EXMARaLDASegmentedTranscriptionData.class);
     }
 
     /**

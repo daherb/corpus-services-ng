@@ -64,7 +64,7 @@ public class ExbMP3Next2WavAdder extends Checker implements CorpusFunction {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class) ;
+        return Collections.singleton(EXMARaLDATranscriptionData.class) ;
     }
 
     /**

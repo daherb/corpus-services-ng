@@ -1,7 +1,7 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.SegmentedEXMARaLDATranscription;
+import de.uni_hamburg.corpora.EXMARaLDASegmentedTranscriptionData;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import static de.uni_hamburg.corpora.utilities.TypeConverter.JdomDocument2W3cDocument;
 
@@ -47,7 +47,7 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
         NodeList communications = doc.getElementsByTagName("Communication"); // divide by Communication tags
         ArrayList<String> algorithmNames = new ArrayList<>(); // array for holding algorithm names
         CorpusIO cio = new CorpusIO();
-        SegmentedEXMARaLDATranscription exs;
+        EXMARaLDASegmentedTranscriptionData exs;
         if (fix) {
             List<org.jdom.Element> toRemove = new ArrayList<org.jdom.Element>();
             XPath context;
@@ -75,7 +75,7 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
                         String s = e.getChildText("NSLink");
                         //System.out.println("NSLink:" + s);
                         url = new URL(cd.getParentURL() + s);
-                        exs = (SegmentedEXMARaLDATranscription) cio.readFileURL(url);
+                        exs = (EXMARaLDASegmentedTranscriptionData) cio.readFileURL(url);
                         List segmentCounts = exs.getSegmentCounts();
                         for (Object segmentCount : segmentCounts) {
                             if (segmentCount instanceof org.jdom.Element) {

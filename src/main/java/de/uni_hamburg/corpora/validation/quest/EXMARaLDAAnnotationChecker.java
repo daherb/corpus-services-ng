@@ -1,8 +1,8 @@
 package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
-import de.uni_hamburg.corpora.SegmentedEXMARaLDATranscription;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
+import de.uni_hamburg.corpora.EXMARaLDASegmentedTranscriptionData;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -27,24 +27,24 @@ public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         HashSet<Class<? extends CorpusData>> classes = new HashSet<>();
-        classes.add(EXMARaLDACorpusData.class);
-        classes.add(SegmentedEXMARaLDATranscription.class);
+        classes.add(EXMARaLDATranscriptionData.class);
+        classes.add(EXMARaLDASegmentedTranscriptionData.class);
         return classes;
     }
 
     @Override
     public String getTierText(CorpusData cd, String tierId) throws JDOMException {
         List<Element> tiers = new ArrayList<>();
-        if (cd instanceof EXMARaLDACorpusData) {
+        if (cd instanceof EXMARaLDATranscriptionData) {
             // Get the XML document
-            Document dom = ((EXMARaLDACorpusData) cd).getJdom();
+            Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
             // Get all matching tier elements
             tiers.addAll(Collections.checkedList(XPath.newInstance(String.format("//tier[@id=\"%s\"]", tierId)).selectNodes(dom),
                         Element.class));
         }
-        else if (cd instanceof SegmentedEXMARaLDATranscription) {
+        else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
             // Get the XML document
-            Document dom = ((SegmentedEXMARaLDATranscription) cd).getJdom();
+            Document dom = ((EXMARaLDASegmentedTranscriptionData) cd).getJdom();
             // Get all matching tier elements
             tiers.addAll(Collections.checkedList(XPath.newInstance(String.format("//segmented-tier[@id=\"%s\"]",
                             tierId)).selectNodes(dom),

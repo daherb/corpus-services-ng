@@ -47,7 +47,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         try {
-            report.merge(checkTranscriptionConvention((EXMARaLDACorpusData) cd));
+            report.merge(checkTranscriptionConvention((EXMARaLDATranscriptionData) cd));
         }
         catch (JDOMException e) {
             report.addCritical(getFunction(),ReportItem.newParamMap(
@@ -56,7 +56,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
             ));
         }
         try {
-            report.merge(checkLanguagesUsed((EXMARaLDACorpusData) cd));
+            report.merge(checkLanguagesUsed((EXMARaLDATranscriptionData) cd));
         }
         catch (JDOMException e) {
              report.addCritical(getFunction(),ReportItem.newParamMap(
@@ -66,7 +66,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         // Check the language annotations
         try {
-            report.merge(checkAnnotation((EXMARaLDACorpusData) cd, "lang", "language"));
+            report.merge(checkAnnotation((EXMARaLDATranscriptionData) cd, "lang", "language"));
         }
         catch (JDOMException e) {
             report.addCritical(getFunction(),ReportItem.newParamMap(
@@ -76,8 +76,8 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         // Check the translations
         try {
-            report.merge(checkAnnotation((EXMARaLDACorpusData) cd, "trans", "translation"));
-            report.merge(checkAnnotation((EXMARaLDACorpusData) cd,"eng", "English"));
+            report.merge(checkAnnotation((EXMARaLDATranscriptionData) cd, "trans", "translation"));
+            report.merge(checkAnnotation((EXMARaLDATranscriptionData) cd,"eng", "English"));
         }
         catch (JDOMException e) {
             report.addCritical(getFunction(),ReportItem.newParamMap(
@@ -88,7 +88,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         return report;
     }
 
-    private Report checkTranscriptionConvention(EXMARaLDACorpusData cd) throws JDOMException {
+    private Report checkTranscriptionConvention(EXMARaLDATranscriptionData cd) throws JDOMException {
         Report report = new Report();
         String convention = ((Element) XPath.newInstance("//transcription-convention").selectSingleNode(cd.getJdom()))
                 .getText();
@@ -103,7 +103,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         return report;
     }
 
-    private Report checkLanguagesUsed(EXMARaLDACorpusData cd) throws JDOMException {
+    private Report checkLanguagesUsed(EXMARaLDATranscriptionData cd) throws JDOMException {
         Report report = new Report();
         List<Element> langsUsed =
                 Collections.checkedList(XPath.newInstance("//languages-used").selectNodes(cd.getJdom()),
@@ -132,7 +132,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         return report;
     }
 
-    private Report checkAnnotation(EXMARaLDACorpusData cd, String category, String longcat) throws JDOMException {
+    private Report checkAnnotation(EXMARaLDATranscriptionData cd, String category, String longcat) throws JDOMException {
         Report report = new Report();
         // Get all time slots
         List<String> slots =
@@ -201,6 +201,6 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 }

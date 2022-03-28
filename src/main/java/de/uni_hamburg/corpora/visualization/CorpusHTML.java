@@ -6,7 +6,7 @@
 package de.uni_hamburg.corpora.visualization;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import java.io.IOException;
@@ -87,8 +87,8 @@ public class CorpusHTML extends Visualizer {
     @Override
     public Report function(Corpus co) throws TransformerException, TransformerConfigurationException, IOException, SAXException {
         Report stats = new Report();
-        Collection<EXMARaLDACorpusData> btc = co.getBasicTranscriptionData();
-        for (EXMARaLDACorpusData bt : btc) {
+        Collection<EXMARaLDATranscriptionData> btc = co.getBasicTranscriptionData();
+        for (EXMARaLDATranscriptionData bt : btc) {
             stats.merge(function(bt));
         }
         return stats;

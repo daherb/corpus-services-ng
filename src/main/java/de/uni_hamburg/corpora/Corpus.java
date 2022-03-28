@@ -34,8 +34,8 @@ public class Corpus {
     Collection<AnnotationSpecification> annotationspecification = new ArrayList<>();
     Collection<ConfigParameters> configparameters = new ArrayList<>();
     private Collection<CmdiData> cmdidata = new ArrayList<>();
-    Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList<>();
-    Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptiondata = new ArrayList<>();
+    Collection<EXMARaLDATranscriptionData> basictranscriptiondata = new ArrayList<>();
+    Collection<EXMARaLDASegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList<>();
     Collection<ELANData> elandata = new ArrayList<>();
     Collection<FlextextData> flextextdata = new ArrayList<>();
     ComaData comadata;
@@ -102,10 +102,10 @@ public class Corpus {
         for (CorpusData cd : cdc) {
             if (cd instanceof ContentData) {
                 contentdata.add((ContentData) cd);
-                if (cd instanceof EXMARaLDACorpusData) {
-                    basictranscriptiondata.add((EXMARaLDACorpusData) cd);
-                } else if (cd instanceof SegmentedEXMARaLDATranscription) {
-                    segmentedtranscriptiondata.add((SegmentedEXMARaLDATranscription) cd);
+                if (cd instanceof EXMARaLDATranscriptionData) {
+                    basictranscriptiondata.add((EXMARaLDATranscriptionData) cd);
+                } else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
+                    segmentedtranscriptiondata.add((EXMARaLDASegmentedTranscriptionData) cd);
                 } else if (cd instanceof ELANData) {
                     elandata.add((ELANData) cd);
                 } else if (cd instanceof FlextextData) {
@@ -161,11 +161,11 @@ public class Corpus {
         return cmdidata;
     }
 
-    public Collection<EXMARaLDACorpusData> getBasicTranscriptionData() {
+    public Collection<EXMARaLDATranscriptionData> getBasicTranscriptionData() {
         return basictranscriptiondata;
     }
 
-    public Collection<SegmentedEXMARaLDATranscription> getSegmentedTranscriptionData() {
+    public Collection<EXMARaLDASegmentedTranscriptionData> getSegmentedTranscriptionData() {
         return segmentedtranscriptiondata;
     }
     
@@ -213,11 +213,11 @@ public class Corpus {
         this.cmdidata = cmdidata;
     }
 
-    public void setBasicTranscriptionData(Collection<EXMARaLDACorpusData> basictranscriptions) {
+    public void setBasicTranscriptionData(Collection<EXMARaLDATranscriptionData> basictranscriptions) {
         this.basictranscriptiondata = basictranscriptions;
     }
 
-    public void setSegmentedTranscriptionData(Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptions) {
+    public void setSegmentedTranscriptionData(Collection<EXMARaLDASegmentedTranscriptionData> segmentedtranscriptions) {
         this.segmentedtranscriptiondata = segmentedtranscriptions;
     }
     

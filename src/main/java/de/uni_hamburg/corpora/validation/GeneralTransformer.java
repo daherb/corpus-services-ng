@@ -76,7 +76,7 @@ public class GeneralTransformer extends Checker {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         if (exb) {
-            IsUsableFor.add(EXMARaLDACorpusData.class);
+            IsUsableFor.add(EXMARaLDATranscriptionData.class);
         }
         if (exs) {
             IsUsableFor.add(UnspecifiedXMLData.class);

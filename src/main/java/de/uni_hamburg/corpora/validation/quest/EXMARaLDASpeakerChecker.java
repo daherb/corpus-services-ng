@@ -23,7 +23,7 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
     @Override
     protected Report checkSpeakers(CorpusData cd) throws JDOMException {
         Report report = new Report();
-        Document dom = ((EXMARaLDACorpusData) cd).getJdom();
+        Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
         // All speaker codes, i.e. the speaker code for each tier
         Set<String> tierSpeakerCodes =
                 ((List<Attribute>) Collections.checkedList(XPath.newInstance("//tier/@speaker").selectNodes(dom),

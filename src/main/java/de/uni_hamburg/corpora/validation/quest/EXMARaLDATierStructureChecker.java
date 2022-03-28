@@ -23,16 +23,16 @@ public class EXMARaLDATierStructureChecker extends TierStructureChecker {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     @Override
     Set<Map<String, String>> getTierStructure(Report report, CorpusData cd) {
         Set<Map<String,String>> tiers = new HashSet<>();
-        if (cd instanceof EXMARaLDACorpusData) {
+        if (cd instanceof EXMARaLDATranscriptionData) {
             try {
                 List<Element> tierElements =
-                        Lists.newArrayList(XPath.newInstance("//tier").selectNodes(((EXMARaLDACorpusData) cd).getJdom()));
+                        Lists.newArrayList(XPath.newInstance("//tier").selectNodes(((EXMARaLDATranscriptionData) cd).getJdom()));
                 for (Element e : tierElements) {
                     Map<String,String> tierAttribs = new HashMap<>();
                     {

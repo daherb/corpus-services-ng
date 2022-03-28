@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
  *
  * @author fsnv625
  */
-public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData, XMLData {
+public class EXMARaLDASegmentedTranscriptionData implements CorpusData, ContentData, XMLData {
 
     Document jdom;
     URL url;
@@ -42,11 +42,11 @@ public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData,
     String filenamewithoutending;
     List segmentCounts;
 
-    public SegmentedEXMARaLDATranscription() {
+    public EXMARaLDASegmentedTranscriptionData() {
 
     }
 
-    public SegmentedEXMARaLDATranscription(URL url) {
+    public EXMARaLDASegmentedTranscriptionData(URL url) {
         try {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
@@ -58,7 +58,7 @@ public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData,
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
         } catch (JDOMException | IOException | URISyntaxException ex) {
-            Logger.getLogger(SegmentedEXMARaLDATranscription.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDASegmentedTranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -126,7 +126,7 @@ public class SegmentedEXMARaLDATranscription implements CorpusData, ContentData,
 
     @Override
     public Object clone() {
-        return new SegmentedEXMARaLDATranscription(this.url);
+        return new EXMARaLDASegmentedTranscriptionData(this.url);
     }
 
     @Override

@@ -166,7 +166,7 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         IsUsableFor.add(AnnotationSpecification.class);
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         return IsUsableFor;
     }
 

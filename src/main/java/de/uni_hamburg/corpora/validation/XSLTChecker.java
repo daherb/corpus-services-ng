@@ -128,7 +128,7 @@ public class XSLTChecker extends Checker implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         IsUsableFor.add(ComaData.class);
         //cl = Class.forName("de.uni_hamburg.corpora.UnspecifiedXMLData");
         //IsUsableFor.add(cl);

@@ -44,8 +44,8 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
     @Override
     public Report function(CorpusData cd, Boolean fix) throws SAXException, JexmaraldaException, ClassNotFoundException, JDOMException, URISyntaxException, TransformerException, ParserConfigurationException, IOException, MalformedURLException, XPathExpressionException {
         Report report = new Report();
-        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
-        Class cl3 = Class.forName("de.uni_hamburg.corpora.SegmentedEXMARaLDATranscription");
+        Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDATranscriptionData");
+        Class cl3 = Class.forName("de.uni_hamburg.corpora.EXMARaLDASegmentedTranscriptionData");
         Class cl2 = Class.forName("de.uni_hamburg.corpora.ComaData");
         if (cl.isInstance(cd) || cl3.isInstance(cd)) {
             List al = findAllAbsolutePathsExbAttribute(cd);
@@ -174,8 +174,8 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add(EXMARaLDACorpusData.class);
-        IsUsableFor.add(SegmentedEXMARaLDATranscription.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
+        IsUsableFor.add(EXMARaLDASegmentedTranscriptionData.class);
         IsUsableFor.add(ComaData.class);
         return IsUsableFor;
     }

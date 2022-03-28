@@ -39,7 +39,7 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  * written HZSK corpus services. Naming might change, depending on what it ends
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
  */
-public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
+public class EXMARaLDATranscriptionData implements CorpusData, ContentData, XMLData {
 
     private BasicTranscription bt;
     URL url ;
@@ -51,7 +51,7 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
 
     // This constructor does not really make sense
     // At the moment at least creates placeholder URL objects
-    public EXMARaLDACorpusData() {
+    public EXMARaLDATranscriptionData() {
         try {
             this.url = new URL("file:///tmp");
             this.parenturl = new URL("file:///");
@@ -60,7 +60,7 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
         }
     }
 
-    public EXMARaLDACorpusData(URL url) {
+    public EXMARaLDATranscriptionData(URL url) {
         try {
             this.url = url;
             //SAXBuilder builder = new SAXBuilder();
@@ -74,7 +74,7 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
         } catch (IOException | URISyntaxException ex) {
-            Logger.getLogger(EXMARaLDACorpusData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EXMARaLDATranscriptionData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -134,12 +134,12 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
     public static void main(String[] args) {
         if ((args.length != 2) && (args.length != 1)) {
             System.out.println("Usage: "
-                    + EXMARaLDACorpusData.class.getName()
+                    + EXMARaLDATranscriptionData.class.getName()
                     + " INPUT [OUTPUT]");
             System.exit(1);
         }
         try {
-            EXMARaLDACorpusData btd = new EXMARaLDACorpusData();
+            EXMARaLDATranscriptionData btd = new EXMARaLDATranscriptionData();
             btd.loadFile(new File(args[0]));
             String prettyXML = btd.toSaveableString();
             boolean emplace = false;
@@ -246,7 +246,7 @@ public class EXMARaLDACorpusData implements CorpusData, ContentData, XMLData {
 
     @Override
     public Object clone() {
-        return new EXMARaLDACorpusData(this.url);
+        return new EXMARaLDATranscriptionData(this.url);
     }
 
     @Override

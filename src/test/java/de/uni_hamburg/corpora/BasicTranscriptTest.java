@@ -39,7 +39,7 @@ public class BasicTranscriptTest {
                 String(Files.readAllBytes(Paths.get(exbFilename)), "UTF-8");
             File exbFile = new File(exbFilename);
             URL url = exbFile.toURI().toURL();
-            EXMARaLDACorpusData btd = new EXMARaLDACorpusData(url);
+            EXMARaLDATranscriptionData btd = new EXMARaLDATranscriptionData(url);
             //btd.loadFile(exbFile);
             String unprettyXML = btd.toUnformattedString();
             assertNotNull(unprettyXML);

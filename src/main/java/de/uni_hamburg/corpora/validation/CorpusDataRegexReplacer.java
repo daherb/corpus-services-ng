@@ -107,7 +107,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
         if (coma) {
             IsUsableFor.add(ComaData.class);
         } else {
-            IsUsableFor.add(EXMARaLDACorpusData.class);
+            IsUsableFor.add(EXMARaLDATranscriptionData.class);
         }
         return IsUsableFor;
     }
@@ -152,7 +152,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
             stats = function(cd, fix);
 
         } else {
-            for (EXMARaLDACorpusData btd : c.getBasicTranscriptionData()) {
+            for (EXMARaLDATranscriptionData btd : c.getBasicTranscriptionData()) {
                 stats.merge(function(btd, fix));
             }
         }

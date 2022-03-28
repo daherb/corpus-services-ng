@@ -162,7 +162,7 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class) ;
+        return Collections.singleton(EXMARaLDATranscriptionData.class) ;
     }
 
     /**

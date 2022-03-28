@@ -101,7 +101,7 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         IsUsableFor.add(AnnotationSpecification.class);
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         return IsUsableFor;
     }
 

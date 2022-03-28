@@ -99,7 +99,7 @@ public class ExbForbiddenSymbolsChecker extends Checker implements CorpusFunctio
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
     
     @Override

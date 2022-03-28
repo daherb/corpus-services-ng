@@ -10,7 +10,7 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import java.io.IOException;
 import java.io.File;
@@ -52,7 +52,7 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, JDOMException, IOException, JexmaraldaException {
         Report stats = new Report();
-        EXMARaLDACorpusData btd = (EXMARaLDACorpusData) cd;
+        EXMARaLDATranscriptionData btd = (EXMARaLDATranscriptionData) cd;
         filename = cd.getFilename();
         bt = btd.getEXMARaLDAbt();
 
@@ -118,7 +118,7 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     /**

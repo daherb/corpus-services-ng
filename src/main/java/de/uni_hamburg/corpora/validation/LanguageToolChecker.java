@@ -10,7 +10,7 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
@@ -43,7 +43,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
 
     static String filename;
     BasicTranscription bt;
-    static EXMARaLDACorpusData btd;
+    static EXMARaLDATranscriptionData btd;
     ValidatorSettings settings;
     List<String> conventions = new ArrayList<String>();
     List<String> problems = new ArrayList<String>();
@@ -64,7 +64,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, JDOMException, XPathExpressionException, TransformerException {
         Report stats = new Report();
-        btd = new EXMARaLDACorpusData(cd.getURL());
+        btd = new EXMARaLDATranscriptionData(cd.getURL());
         if (language.equals("de")) {
             langTool = new JLanguageTool(new GermanyGerman());
             System.out.println("Language set to German");
@@ -151,7 +151,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     @Override

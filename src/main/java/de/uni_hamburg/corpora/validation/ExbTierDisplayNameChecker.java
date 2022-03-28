@@ -124,7 +124,7 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
 //        IsUsableFor.add(UnspecifiedXMLData.class)
         return IsUsableFor ;
     }

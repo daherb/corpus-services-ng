@@ -50,7 +50,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         URL fileUri = Paths.get(cd.getURL().toURI()).toAbsolutePath().toUri().toURL();
         BasicTranscription bt = new BasicTranscription();
         CorpusIO cio = new CorpusIO();
-        bt.BasicTranscriptionFromJDOMDocument(((EXMARaLDACorpusData) cio.readFileURL(fileUri)).getJdom());
+        bt.BasicTranscriptionFromJDOMDocument(((EXMARaLDATranscriptionData) cio.readFileURL(fileUri)).getJdom());
         String[] duplicateTranscriptionTiers = bt.getDuplicateTranscriptionTiers();
         if (duplicateTranscriptionTiers.length > 0) {
             report.addCritical(getFunction(),
@@ -129,7 +129,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Only works for EXB data
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
@@ -41,7 +41,7 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     //testRefIds
@@ -49,8 +49,8 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws IOException, SAXException, TransformerException, ParserConfigurationException, XPathExpressionException {
         Report stats = new Report(); // create a new report for the transcript
         Document doc = null;
-        EXMARaLDACorpusData bcd = new EXMARaLDACorpusData();
-        bcd = (EXMARaLDACorpusData) cd;
+        EXMARaLDATranscriptionData bcd = new EXMARaLDATranscriptionData();
+        bcd = (EXMARaLDATranscriptionData) cd;
         doc = TypeConverter.JdomDocument2W3cDocument(bcd.getJdom()); // get the file as a document      
         String transcriptName;
         if (doc.getElementsByTagName("transcription-name").getLength() > 0) {   // check if transcript name exists for the exb file

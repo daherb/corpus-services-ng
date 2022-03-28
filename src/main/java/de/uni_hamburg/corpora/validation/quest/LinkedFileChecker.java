@@ -139,8 +139,8 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         try {
             if (cd instanceof ComaData)
                 refFiles.addAll(getReferencedFiles(report, (ComaData) cd));
-            else if (cd instanceof EXMARaLDACorpusData)
-                refFiles.addAll(getReferencedFiles(report, (EXMARaLDACorpusData) cd));
+            else if (cd instanceof EXMARaLDATranscriptionData)
+                refFiles.addAll(getReferencedFiles(report, (EXMARaLDATranscriptionData) cd));
             else if (cd instanceof ELANData)
                 refFiles.addAll(getReferencedFiles(report, (ELANData) cd));
             else if (cd instanceof IMDIData)
@@ -171,7 +171,7 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> usableFor = new HashSet<>();
         usableFor.add(ComaData.class);
-        usableFor.add(EXMARaLDACorpusData.class);
+        usableFor.add(EXMARaLDATranscriptionData.class);
         usableFor.add(ELANData.class);
         usableFor.add(IMDIData.class);
 //        usableFor.add(TEIData.class);
@@ -224,7 +224,7 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
      * @throws MalformedURLException on problems creating URIs
      * @throws URISyntaxException on problems creating URIs
      */
-    private List<URI> getReferencedFiles(Report report, EXMARaLDACorpusData cd) throws JDOMException, MalformedURLException, URISyntaxException {
+    private List<URI> getReferencedFiles(Report report, EXMARaLDATranscriptionData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
         List<Element> referencedFiles = XPath.newInstance("//referenced-file").selectNodes(cd.getJdom());
         for (Element file : referencedFiles) {

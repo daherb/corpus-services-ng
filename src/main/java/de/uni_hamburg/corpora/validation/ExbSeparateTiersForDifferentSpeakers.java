@@ -286,7 +286,7 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     /**
