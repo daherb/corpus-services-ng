@@ -32,16 +32,13 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
     // Regex to split tokens
     private final String tokenSeparator = " ";
 
-    // Set of all known characters
-    private final Set<String> allChars = new HashSet<>();
-
     // All known graphemes
-    private final Set<String> graphemes = new HashSet<>();
+    private final Set<String> knownGraphemes = new HashSet<>();
 
     // Maps to keep track of encountered chars
-    private final FrequencyList allCharsFreq = new FrequencyList();
-    private final FrequencyList knownCharsFreq = new FrequencyList();
-    private final FrequencyList unknownCharsFreq = new FrequencyList();
+    private final FrequencyList allGraphemeFreq = new FrequencyList();
+    private final FrequencyList knownGraphemeFreq = new FrequencyList();
+    private final FrequencyList unknownGraphemeFreq = new FrequencyList();
 
     // Define character groups
     private final Set<String> alphaChars = getAlphaChars();
@@ -78,6 +75,11 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                     // "))"  // doppelte runde schließende Klammer
             }).map((c) -> String.valueOf(Character.toChars(Integer.decode(c.replace("U+","0x")))))
                     .collect(Collectors.toList()));
+
+    /**
+     * Function to enumerate all alphabetic characters
+     * @return all alphabetic characters in the unicode standard
+     */
     private Set<String> getAlphaChars() {
         Set<String> cs = new HashSet<>();
         for (int i = Character.MIN_CODE_POINT; i < Character.MAX_CODE_POINT; i ++ ) {
@@ -90,13 +92,13 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
     public TranscriptionChecker(Properties properties) {
         super(false, properties);
         if (properties.containsKey("transcription-graphemes")) {
-            graphemes.addAll(Arrays.asList(properties.getProperty("transcription-graphemes").split(",")));
+            knownGraphemes.addAll(Arrays.asList(properties.getProperty("transcription-graphemes").split(",")));
         }
         if (properties.containsKey("transcription-method")) {
             if (properties.getProperty("transcription-method").equalsIgnoreCase("hiat")) {
-                allChars.addAll(alphaChars);
-                allChars.addAll(digitChars);
-                allChars.addAll(hiatSpecial);
+                knownGraphemes.addAll(alphaChars);
+                knownGraphemes.addAll(digitChars);
+                knownGraphemes.addAll(hiatSpecial);
             }
         }
     }
@@ -116,10 +118,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
             // Do the analysis
             for (String text : transcriptionText) {
                 for (String token : text.split(tokenSeparator)) {
-                    Set<String> chars = new HashSet<>(Arrays.asList(token.split("")));
-                    allCharsFreq.putAll(chars);
-                    knownCharsFreq.putAll(Sets.intersection(chars, allChars).stream().map((s) -> " " + s).collect(Collectors.toSet()));
-                    unknownCharsFreq.putAll(Sets.difference(chars, allChars).stream().map((s) -> " " + s).collect(Collectors.toSet()));
+                    // Split the word into graphemes
+                    Set<String> graphemes = new HashSet<>(Arrays.asList(token.split("")));
+                    updateSimpleStats(graphemes);
                 }
             }
         }
@@ -147,13 +148,28 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         }
         if (props.containsKey("transcription-statistics") && props.getProperty("transcription-statistics").equalsIgnoreCase("true"))
         report.addNote(getFunction(),"Statistics:\n" +
-                "All characters encountered: \n" + allCharsFreq + "\n" +
-                "of which known: \n" + knownCharsFreq + "\n" +
-                "and unknown: \n" + unknownCharsFreq
+                "All characters encountered: \n" + allGraphemeFreq + "\n" +
+                "of which known: \n" + knownGraphemeFreq + "\n" +
+                "and unknown: \n" + unknownGraphemeFreq
         );
 
         return report;
     }
+
+    public void updateSimpleStats(Set<String> chars) {
+        // Keep track of all characters we have seen in transcription tokens
+        allGraphemeFreq.putAll(chars);
+        // Count chars we know
+        knownGraphemeFreq.putAll(Sets.intersection(chars, knownGraphemes).stream().map((s) -> " " + s).collect(Collectors.toSet()));
+        // Count chars we don't know
+        unknownGraphemeFreq.putAll(Sets.difference(chars, knownGraphemes).stream().map((s) -> " " + s).collect(Collectors.toSet()));
+    }
+
+    public void setKnownGraphemes(Collection<String> graphemes) {
+        knownGraphemes.clear();
+        knownGraphemes.addAll(graphemes);
+    }
+
 
     @Override
     public Map<String, String> getParameters() {
