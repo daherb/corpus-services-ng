@@ -66,8 +66,10 @@ public class RefcoCheckerTest {
         // Read corpus
         CorpusIO cio = new CorpusIO();
         URL corpusUrl = new File(resourcePath).toURI().toURL();
+        Report report = new Report();
         setRefcoCorpusMethod.invoke(rc, new Corpus("refcoTest", corpusUrl,
-                cio.read(corpusUrl)));
+                cio.read(corpusUrl,report)));
+        assertTrue(report.getRawStatistics().isEmpty());
     }
 
     @AfterClass
@@ -227,7 +229,7 @@ public class RefcoCheckerTest {
         assertNotNull("Description is null", description);
         assertFalse("Description is empty", description.isEmpty());
         assertEquals("Unexpected description",
-                "checks the RefCo criteria for a corpus. Requires a RefCo corpus documentation spreadsheet.",
+                "Checks the RefCo criteria for a corpus. Requires a RefCo corpus documentation spreadsheet.",
                 description);
     }
 
@@ -447,10 +449,10 @@ public class RefcoCheckerTest {
         text = (String) getTextInRowMethod.invoke(rc,cellXPath, table, "Morphologie",-1);
         assertNotNull("Text is null for negative index", text);
         assertTrue("Text is not empty for negative index", text.isEmpty());
-        text = (String) getTextInRowMethod.invoke(rc,cellXPath, table, "Morphologie",5);
-        assertNotNull("Text is null for valid index", text);
-        assertFalse("Text is empty for valid index", text.isEmpty());
-        assertEquals("Unexpected text for valid index", "UpperGramLowerLex", text);
+//        text = (String) getTextInRowMethod.invoke(rc,cellXPath, table, "Morphologie",5);
+//        assertNotNull("Text is null for valid index", text);
+//        assertFalse("Text is empty for valid index", text.isEmpty());
+//        assertEquals("Unexpected text for valid index", "UpperGramLowerLex", text);
         text = (String) getTextInRowMethod.invoke(rc,cellXPath, table, "Morphologie",20);
         assertNotNull("Text is null for index out of bounds", text);
         assertTrue("Text is empty for valid bounds", text.isEmpty());
@@ -537,7 +539,7 @@ public class RefcoCheckerTest {
     }
 
     /**
-     * Test for "private Report refcoGenericCheck()"
+     * Test for "private Report refcoGenericCheck()" NOTE: Takes 2 minutes
      */
     @Test
     public void refcoGenericCheckTest() throws NoSuchMethodException, InvocationTargetException,
@@ -735,7 +737,7 @@ public class RefcoCheckerTest {
             assertEquals("Report does not contain the expected number of elements for invalid filename", 2,
                     report.getRawStatistics().size());
             assertTrue("Report does not contain the expected item for invalid filename",
-                    report.getFullReports().contains("File does not exist"));
+                    report.getFullReports().contains("Check the file references in the documentation and remove the reference to the files if they have been removed intentionally"));
             //checkReport("invalid file name", report);
             // The invalid file name followed by the original valid one
             s.fileName = "foo," + origFileName;
@@ -775,7 +777,7 @@ public class RefcoCheckerTest {
     }
 
     /**
-     *  Test for "private Report refcoTierCheck()"
+     *  Test for "private Report refcoTierCheck()" NOTE: Takes ca 1:35 min
      */
     @Test
     public void refcoTierCheckTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
@@ -791,8 +793,6 @@ public class RefcoCheckerTest {
                 if (f.getType() == String.class
                         // Tier name also triggers not all tiers documented
                         && !f.getName().equals("tierName")
-                        // Morpheme distinction is optional for non-morphology tiers
-                        && !f.getName().equals("morphemeDistinction")
                 ) {
                     String orig = (String) f.get(t);
                     f.set(t, (String) null);
@@ -857,26 +857,6 @@ public class RefcoCheckerTest {
             // Restore original
             rc.getCriteria().tiers.get(0).languages = origLanguages;
 
-        }
-        // Check morpheme distinction
-        {
-            // Backup original value
-            ArrayList<String> origTierFunction =
-                    (ArrayList<String>) rc.getCriteria().tiers.get(0).tierFunctions.stream().collect(Collectors.toList());
-            String origMorphemeDistinction = rc.getCriteria().tiers.get(0).morphemeDistinction;
-            // make sure it is a morpheme tier
-            rc.getCriteria().tiers.get(0).tierFunctions = new ArrayList<>(Collections.singleton("morpheme gloss"));
-            // null morpheme distinction
-            rc.getCriteria().tiers.get(0).morphemeDistinction = null;
-            report = (Report) refcoTierCheckMethod.invoke(rc);
-            checkReport("null morpheme distinction", report);
-            // empty morpheme distinction
-            rc.getCriteria().tiers.get(0).morphemeDistinction = "";
-            report = (Report) refcoTierCheckMethod.invoke(rc);
-            checkReport("null morpheme distinction", report);
-            // Restore origingal
-            rc.getCriteria().tiers.get(0).tierFunctions = origTierFunction.stream().collect(Collectors.toList());
-            rc.getCriteria().tiers.get(0).morphemeDistinction = origMorphemeDistinction;
         }
         // Check all tiers
         {
@@ -1097,7 +1077,7 @@ public class RefcoCheckerTest {
             assertEquals("Report does not contain exactly one item", 1,
                     report.getRawStatistics().size());
             assertTrue("Report does not contain the positive notice",
-                    report.getFullReports().contains("More than 99 percent of transcription characters are valid"));
+                    report.getFullReports().contains("All characters are valid"));
         }
         // Warning about non-matched word because all-caps glosses are ignored
         {
@@ -1136,8 +1116,7 @@ public class RefcoCheckerTest {
             assertNotEquals("Report is empty for all valid characters", 0,
                     report.getRawStatistics().size());
             assertTrue("Report does not contain expected item for all valid characters",
-                    report.getRawStatistics().get(0).toString().contains("More than 99 percent of transcription " +
-                            "characters are valid"));
+                    report.getRawStatistics().get(0).toString().contains("All characters are valid"));
         }
         // Valid characters below threshold
         {
@@ -1177,7 +1156,7 @@ public class RefcoCheckerTest {
                     report.getRawStatistics().size());
             assertTrue("Report does not contain the expected item",
                     report.getRawStatistics().stream().collect(Collectors.toList()).get(0).toString()
-                            .contains("More than 99 percent of transcription characters are valid"));
+                            .contains("All characters are valid"));
         }
         // No documented transcription tier
         {
@@ -1391,33 +1370,33 @@ public class RefcoCheckerTest {
 //        ELANData cd = (ELANData) refcoCorpus.getCorpusData().stream().collect(Collectors.toList()).get(0);
 //        // Null token
 //        {
-//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, (String) null);
+//            CorpusData.Location location = (CorpusData.Location) getLocationMethod.invoke(rc, cd, (String) null);
 //            assertEquals("Location for empty token is unknown",
-//                    new RefcoChecker.Location("unknown",""), location);
+//                    new CorpusData.Location("unknown",""), location);
 //        }
 //        // Empty token
 //        {
-//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "");
+//            CorpusData.Location location = (CorpusData.Location) getLocationMethod.invoke(rc, cd, "");
 //            assertEquals("Location for empty token is unknown",
-//                    new RefcoChecker.Location("unknown",""), location);
+//                    new CorpusData.Location("unknown",""), location);
 //        }
 //        // Invalid token
 //        {
-//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "foobar");
+//            CorpusData.Location location = (CorpusData.Location) getLocationMethod.invoke(rc, cd, "foobar");
 //            assertEquals("Location for invalid token is unknown",
-//                    new RefcoChecker.Location("unknown",""), location);
+//                    new CorpusData.Location("unknown",""), location);
 //        }
 //        // Token in first tier
 //        {
-//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "Ga=vu");
+//            CorpusData.Location location = (CorpusData.Location) getLocationMethod.invoke(rc, cd, "Ga=vu");
 //            assertEquals("Unexpected location for token in first tier",
-//                    new RefcoChecker.Location("Tier:Aven","Segment:a1, Time:00:01.738-00:02.300"), location);
+//                    new CorpusData.Location("Tier:Aven","Segment:a1, Time:00:01.738-00:02.300"), location);
 //        }
 //        // Token in morphology tier
 //        {
-//            RefcoChecker.Location location = (RefcoChecker.Location) getLocationMethod.invoke(rc, cd, "ARBRE=DEI.P");
+//            CorpusData.Location location = (CorpusData.Location) getLocationMethod.invoke(rc, cd, "ARBRE=DEI.P");
 //            assertEquals("Unexpected location for token in third tier",
-//                    new RefcoChecker.Location("Tier:Aven","Segment:a226, Time:00:11.800-00:12.695"), location);
+//                    new CorpusData.Location("Tier:Aven","Segment:a226, Time:00:11.800-00:12.695"), location);
 //        }
 //    }
 
@@ -1437,70 +1416,70 @@ public class RefcoCheckerTest {
         List<String> tierList = new ArrayList<>(Arrays.asList(new String[]{"Aven"}));
         // Null token
         {
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc,cd,tierList,(String) null);
             assertTrue("Locations not empty for null token", locations.isEmpty());
         }
         // Empty token
         {
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc,cd,tierList,"");
             assertTrue("Locations not empty for empty token", locations.isEmpty());
         }
         // Null tier list
         {
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, null, "Ga=vu");
             assertTrue("Locations not empty for null tier list", locations.isEmpty());
         }
         // Empty tier list
         {
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, new ArrayList<>(), "Ga=vu");
             assertTrue("Locations not empty for empty tier list", locations.isEmpty());
         }
         // Invalid token in a valid tier
         {
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, tierList, "foobar");
             assertEquals("Locations not empty for invalid token in valid tier",
-                    Collections.singletonList(new RefcoChecker.Location("Unknown", "")), locations);
+                    Collections.singletonList(new CorpusData.Location("Unknown", "")), locations);
         }
         // [hors-texte] in Transcription tier
         {
-            List<RefcoChecker.Location> expectedLocations = Collections.singletonList(
-                            new RefcoChecker.Location("Tier:Aven", "Segment:a1, Time:00:01.738-00:02.300"));
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> expectedLocations = Collections.singletonList(
+                            new CorpusData.Location("Tier:Aven", "Segment:a1, Time:00:01.738-00:02.300"));
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, tierList, "[hors-texte]");
             assertEquals("Unexpected locations for [hors-texte] in Transcription tier", expectedLocations, locations);
         }
         // [hors-texte] in Morphology tier
         {
-            List<RefcoChecker.Location> expectedLocations = Collections.singletonList(
-                    new RefcoChecker.Location("Tier:Morphologie", "Segment:a225, Time:00:10.361-00:11.607"));
+            List<CorpusData.Location> expectedLocations = Collections.singletonList(
+                    new CorpusData.Location("Tier:Morphologie", "Segment:a225, Time:00:10.361-00:11.607"));
             tierList = new ArrayList<>(Arrays.asList(new String[]{"Morphologie"}));
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, tierList, "[hors-texte]");
             assertEquals("Unexpected locations for [hors-texte] in Morphology tier", expectedLocations, locations);
         }
         // [hors-texte] in both tiers
         {
-             List<RefcoChecker.Location> expectedLocations = Arrays.asList(new RefcoChecker.Location[]{
-                             new RefcoChecker.Location("Tier:Aven", "Segment:a1, Time:00:01.738-00:02.300"),
-                             new RefcoChecker.Location("Tier:Morphologie", "Segment:a225, Time:00:10.361-00:11.607")
+             List<CorpusData.Location> expectedLocations = Arrays.asList(new CorpusData.Location[]{
+                             new CorpusData.Location("Tier:Aven", "Segment:a1, Time:00:01.738-00:02.300"),
+                             new CorpusData.Location("Tier:Morphologie", "Segment:a225, Time:00:10.361-00:11.607")
                      });
             tierList.add("Aven");
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, tierList, "[hors-texte]");
             assertEquals("Unexpected locations for [hors-texte] in both tier", expectedLocations, locations);
         }
         // Legal token with several occurrences
         {
-            List<RefcoChecker.Location> expectedLocations = new ArrayList<>(Arrays.asList(new RefcoChecker.Location[]{
-                    new RefcoChecker.Location("Tier:Aven","Segment:a1, Time:00:01.738-00:02.300"),
-                    new RefcoChecker.Location("Tier:Aven","Segment:a125, Time:06:22.285-06:25.179")
+            List<CorpusData.Location> expectedLocations = new ArrayList<>(Arrays.asList(new CorpusData.Location[]{
+                    new CorpusData.Location("Tier:Aven","Segment:a1, Time:00:01.738-00:02.300"),
+                    new CorpusData.Location("Tier:Aven","Segment:a125, Time:06:22.285-06:25.179")
             }));
-            List<RefcoChecker.Location> locations = (List<RefcoChecker.Location>)
+            List<CorpusData.Location> locations = (List<CorpusData.Location>)
                     getLocationsMethod.invoke(rc, cd, tierList, "Ga=vu");
             assertEquals("Unexpected locations for legal token with several occurrences", expectedLocations, locations);
         }
