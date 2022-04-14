@@ -75,7 +75,38 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                     // "))"  // doppelte runde schließende Klammer
             }).map((c) -> String.valueOf(Character.toChars(Integer.decode(c.replace("U+","0x")))))
                     .collect(Collectors.toList()));
+    private final Set<String> didaSpecial = new HashSet<>(
+            Arrays.asList("←", "→", "*")
+    );
 
+    private final Set<String> gatSpecial = new HashSet<>(
+            Arrays.asList(
+                    "(", ".", ")",
+                    "(","-",")",
+                    "(","-","-",")",
+                    "(","-","-","-",")",
+                    "'",
+                    "?",
+                    ",",
+                    "-",
+                    ";",
+                    ".",
+                    "↑",
+                    "↓",
+                    "ˋ",
+                    "ˊ",
+                    "ˉ",
+                    "ˆ",
+                    "ˇ",
+                    "<", ">")
+    );
+
+    private final Set<String> ipaSpecial = new HashSet<>(
+            Arrays.asList("ɐ", "ɑ", "ɒ", "ɓ", "ɔ", "ɕ", "ɖ", "ɗ", "ɘ", "ə", "ɚ", "ɛ", "ɜ", "ɝ", "ɞ", "ɟ", "ɠ", "ɡ",
+                    "ɢ", "ɣ", "ɤ", "ɥ", "ɦ", "ɧ", "ɨ", "ɩ", "ɪ", "ɫ", "ɬ", "ɭ", "ɮ", "ɯ", "ɰ", "ɱ", "ɲ", "ɳ", "ɴ", "ɵ",
+                    "ɶ", "ɷ", "ɸ", "ɹ", "ɺ", "ɻ", "ɼ", "ɽ", "ɾ", "ɿ", "ʀ", "ʁ", "ʂ", "ʃ", "ʄ", "ʅ", "ʆ", "ʇ", "ʈ", "ʉ",
+                    "ʊ", "ʋ", "ʌ", "ʍ", "ʎ", "ʏ", "ʐ", "ʑ", "ʒ", "ʓ", "ʔ", "ʕ", "ʖ", "ʗ", "ʘ", "ʙ", "ʚ", "ʛ", "ʜ", "ʝ",
+                    "ʞ", "ʟ", "ʠ", "ʡ", "ʢ", "ʣ", "ʤ", "ʥ", "ʦ", "ʧ", "ʨ"));
     /**
      * Function to enumerate all alphabetic characters
      * @return all alphabetic characters in the unicode standard
@@ -100,13 +131,33 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 knownGraphemes.addAll(digitChars);
                 knownGraphemes.addAll(hiatSpecial);
             }
+            else if (properties.getProperty("transcription-method").equalsIgnoreCase("dida")) {
+                knownGraphemes.addAll(alphaChars);
+                knownGraphemes.addAll(digitChars);
+                knownGraphemes.addAll(didaSpecial);
+            }
+            else if (properties.getProperty("transcription-method").equalsIgnoreCase("gat")) {
+                knownGraphemes.addAll(alphaChars);
+                knownGraphemes.addAll(digitChars);
+                knownGraphemes.addAll(gatSpecial);
+            }
+            else if (properties.getProperty("transcription-method").equalsIgnoreCase("ipa")) {
+                knownGraphemes.addAll(ipaSpecial);
+                knownGraphemes.addAll(
+                        Arrays.asList("abcdefghijklmnopqrstuvwzyz".split(""))
+                );
+                knownGraphemes.addAll(
+                        Arrays.asList("abcdefghijklmnopqrstuvwzyz".toUpperCase().split(""))
+                );
+            }
+
+
         }
     }
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        logger.info("Checking: " + cd.getURL());
         try {
             // Find transcription tiers
             List<Element> transcriptionTiers = getTranscriptionTiers(cd);
@@ -175,7 +226,8 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
         params.put("transcription-graphemes","List of transcription graphemes, separated by commas");
-        params.put("transcription-method", "Standard transcription method used, if any. Currently only HIAT");
+        params.put("transcription-method", "Standard transcription method used, if any. Currently HIAT, DIDA, GAT and" +
+                " IPA");
         return params;
     }
 }
