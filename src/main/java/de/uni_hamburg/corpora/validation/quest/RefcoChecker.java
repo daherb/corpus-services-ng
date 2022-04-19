@@ -57,6 +57,8 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 
+    private final String REFCO_CHECKER_VERSION="20220324";
+
     // The local logger that can be used for debugging
     private final Logger logger = Logger.getLogger(this.getClass().toString());
 
@@ -686,6 +688,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         if (refcoFileLoaded) {
+            report.addNote(getFunction(),"Report created by RefCo checker version " + REFCO_CHECKER_VERSION +
+                    " based on documentation following RefCo " + criteria.refcoVersion +
+                    " specification version");
             System.out.println("... running the corpus function");
             // Create the current report
             //Report report = new Report();
