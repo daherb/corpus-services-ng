@@ -20,4 +20,4 @@ To run the RefCo checks use the command `java -jar corpus-services-1.0.jar -c Re
 ## Resources:
 
 - The souce file for the RefCoChecker: [../src/main/java/de/uni_hamburg/corpora/validation/quest/RefcoChecker.java](../src/main/java/de/uni_hamburg/corpora/validation/quest/RefcoChecker.java)
-- The RefCo documentation is available on Zenodo: [https://zenodo.org/record/5825304](https://zenodo.org/record/5825304)
+- The RefCo documentation is available on Zenodo: [https://zenodo.org/record/6242355](https://zenodo.org/record/6242355)
