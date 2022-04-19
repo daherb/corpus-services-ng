@@ -40,19 +40,22 @@ public class EXMARaLDATierFinder extends TierFinder {
 
     @Override
     void findTiers(CorpusData cd, String pattern) throws JDOMException {
-        Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
         // Get all id attributes for tiers matching the pattern, get the values and add them to a new list
         List<String> tierIds = new ArrayList<>();
-        if (cd instanceof EXMARaLDATranscriptionData)
+        if (cd instanceof EXMARaLDATranscriptionData) {
+            Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
             tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
                     String.format("//tier[contains(@%s,\"%s\")]/@id",
                             attribute, pattern)).selectNodes(dom), Attribute.class))
                     .stream().map(Attribute::getValue).collect(Collectors.toList()));
-        else if (cd instanceof EXMARaLDASegmentedTranscriptionData)
+        }
+        else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
+            Document dom = ((EXMARaLDASegmentedTranscriptionData) cd).getJdom();
             tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
                     String.format("//segmented-tier[contains(@%s,\"%s\")]/@id",
                             attribute, pattern)).selectNodes(dom), Attribute.class))
                     .stream().map(Attribute::getValue).collect(Collectors.toList()));
+        }
         // Add found tiers to frequency list
         tiers.putAll(tierIds);
     }

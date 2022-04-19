@@ -1,6 +1,0 @@
-The Refco Checker
-
-How to use:
-...
-Source:
-...
