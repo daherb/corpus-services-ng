@@ -2,6 +2,7 @@ package de.uni_hamburg.corpora.validation.quest;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
@@ -19,8 +20,15 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.xml.sax.SAXException;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.SchemaOutputResolver;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.*;
 import java.net.*;
@@ -38,6 +46,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 
 /**
  * @author bba1792 Dr. Herbert Lange
@@ -87,8 +98,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             this.information = information;
             this.notes = notes;
         }
-
+        @XmlElement(required=true)
         String information ;
+        @XmlElement(required=true)
         String notes;
 
         @Override
@@ -103,6 +115,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         public int hashCode() {
             return Objects.hash(information, notes);
         }
+
+        public String getInformation() {
+            return information;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
     }
 
     /**
@@ -110,13 +130,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * speaker information, location and date
      */
     static class Session {
+        @XmlElement(required=true)
         String sessionName ;
+        @XmlElement(required=true)
         String fileName ;
+        @XmlElement(required=true)
         String speakerName ;
+        @XmlElement(required=true)
         String speakerAge ;
+        @XmlElement(required=true)
         String speakerGender ;
+        @XmlElement(required=true)
         String recordingLocation ;
+        @XmlElement(required=true)
         String recordingDate ;
+        @XmlElement(required=true)
         String genre ; // is this a controlled vocabulary?
 //        String ageGroup ; // is this a controlled vocabulary?
 
@@ -133,6 +161,38 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         public int hashCode() {
             return Objects.hash(sessionName, fileName, speakerName, speakerAge, speakerGender, recordingLocation, recordingDate, genre);
         }
+
+        public String getSessionName() {
+            return sessionName;
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
+
+        public String getSpeakerName() {
+            return speakerName;
+        }
+
+        public String getSpeakerAge() {
+            return speakerAge;
+        }
+
+        public String getSpeakerGender() {
+            return speakerGender;
+        }
+
+        public String getRecordingLocation() {
+            return recordingLocation;
+        }
+
+        public String getRecordingDate() {
+            return recordingDate;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
     }
 
 
@@ -141,9 +201,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * tier functions and languages
      */
     static class Tier {
+        @XmlElement(required=true)
         String tierName ;
+        @XmlElement(required=true)
         List<String> tierFunctions;
+        @XmlElement(required=true)
         String segmentationStrategy ;
+        @XmlElement(required=true)
         String languages ;
 
         @Override
@@ -158,6 +222,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         public int hashCode() {
             return Objects.hash(tierName, tierFunctions, segmentationStrategy, languages);
         }
+
+        public String getTierName() {
+            return tierName;
+        }
+
+        public List<String> getTierFunctions() {
+            return tierFunctions;
+        }
+
+        public String getSegmentationStrategy() {
+            return segmentationStrategy;
+        }
+
+        public String getLanguages() {
+            return languages;
+        }
     }
 
     /**
@@ -165,8 +245,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * the list of valid graphemes used in transcription tiers
      */
     static class Transcription {
+        @XmlElement(required=true)
         String grapheme ;
+        @XmlElement(required=true)
         String linguisticValue ;
+        @XmlElement(required=true)
         String linguisticConvention ;
 
         @Override
@@ -181,6 +264,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         public int hashCode() {
             return Objects.hash(grapheme, linguisticValue, linguisticConvention);
         }
+
+        public String getGrapheme() {
+            return grapheme;
+        }
+
+        public String getLinguisticValue() {
+            return linguisticValue;
+        }
+
+        public String getLinguisticConvention() {
+            return linguisticConvention;
+        }
     }
 
     /**
@@ -188,9 +283,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * list of expected glosses and the tiers they are valid in
      */
     static class Gloss {
+        @XmlElement(required=true)
         String gloss ;
+        @XmlElement(required=true)
         String meaning ;
+        @XmlElement
         String comments ;
+        @XmlElement(required=true)
         String tiers ;
 
         @Override
@@ -205,6 +304,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         public int hashCode() {
             return Objects.hash(gloss, meaning, comments, tiers);
         }
+
+        public String getGloss() {
+            return gloss;
+        }
+
+        public String getMeaning() {
+            return meaning;
+        }
+
+        public String getComments() {
+            return comments;
+        }
+
+        public String getTiers() {
+            return tiers;
+        }
     }
 
     /**
@@ -212,10 +327,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * valid punctuation characters and the tiers they are valid in
      */
     static class Punctuation {
+        @XmlElement(required=true)
         String character ;
+        @XmlElement(required=true)
         String meaning ;
+        @XmlElement
         String comments ;
+        @XmlElement(required=true)
         String tiers ;
+        @XmlElement(required=true)
         String function;
 
         @Override
@@ -230,6 +350,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         public int hashCode() {
             return Objects.hash(character, meaning, comments, tiers, function);
         }
+
+        public String getCharacter() {
+            return character;
+        }
+
+        public String getMeaning() {
+            return meaning;
+        }
+
+        public String getComments() {
+            return comments;
+        }
+
+        public String getTiers() {
+            return tiers;
+        }
+
+        public String getFunction() {
+            return function;
+        }
     }
 
     /**
@@ -238,33 +378,57 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public static class RefcoCriteria {
         // Tab: Overview
         // Corpus information
+        @XmlElement(required=true)
         String corpusTitle ;
+        @XmlElement(required=true)
         String subjectLanguages ;
+        @XmlElement(required=true)
         String archive ;
+        @XmlElement(required=true)
         String persistentId ; // should be an url to either a doi or handle
+        @XmlElement(required=true)
         String annotationLicense ;
+        @XmlElement(required=true)
         String recordingLicense ;
+        @XmlElement(required=true)
         String creatorName ;
+        @XmlElement(required=true)
         String creatorContact ; // usually mail address
+        @XmlElement(required=true)
         String creatorInstitution ;
         // Certification information
+        @XmlElement(required=true)
         InformationNotes refcoVersion ;
         // Quantitative Summary
+        @XmlElement(required=true)
         InformationNotes numberSessions ;
+        @XmlElement(required=true)
         InformationNotes numberTranscribedWords ;
+        @XmlElement(required=true)
         InformationNotes numberAnnotatedWords ;
         // Annotation Strategies
         // All languages are in a single cell
+        @XmlElement(required=true)
         InformationNotes translationLanguages ;
         // Tab: Corpus Compositions
+        @XmlElementWrapper(name="sessions")
+        @XmlElement(required=true,name="session")
         ArrayList<Session> sessions = new ArrayList<>() ;
         // Tab: Annotation Tiers
+        @XmlElementWrapper(name="tiers")
+        @XmlElement(required = true,name="tier")
         ArrayList<Tier> tiers = new ArrayList<>() ;
         // Tab: Transcriptions
+        @XmlElementWrapper(name="transcriptions")
+        @XmlElement(required = true, name="transcription")
         ArrayList<Transcription> transcriptions = new ArrayList<>() ;
         // Tab: Glosses
+        @XmlElementWrapper(name="glosses")
+        @XmlElement(required = true, name="gloss")
         ArrayList<Gloss> glosses = new ArrayList<>() ;
         // Tab: Punctuation
+        @XmlElementWrapper(name="punctuations")
+        @XmlElement(required = true, name="punctuation")
         ArrayList<Punctuation> punctuations = new ArrayList<>() ;
 
         public String getCorpusTitle() {
@@ -449,6 +613,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         else {
             report.addCritical(getFunction(),"Missing corpus documentation file property");
+        }
+        if (properties.containsKey("get-schema")) {
+
+            try {
+                System.out.println(deriveXMLSpecification());
+                System.out.println();
+                System.out.println(deriveJSONSpecification());
+                System.exit(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -2635,5 +2810,27 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         catch (Exception e) {
             return false;
         }
+    }
+
+    public String deriveXMLSpecification() throws JAXBException, IOException {
+        JAXBContext ctx = JAXBContext.newInstance(RefcoCriteria.class);
+        StringWriter sw = new StringWriter();
+        ctx.generateSchema(new SchemaOutputResolver() {
+            @Override
+            public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+                StreamResult result = new StreamResult(sw);
+                result.setSystemId("StringWriter");
+                return result;
+            }
+        });
+        return sw.toString();
+    }
+
+    private String deriveJSONSpecification() throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+        HyperSchemaFactoryWrapper schemaVisitor = new HyperSchemaFactoryWrapper();
+        om.acceptJsonFormatVisitor(RefcoCriteria.class, schemaVisitor);
+        JsonSchema jsonSchema = schemaVisitor.finalSchema();
+        return om.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema);
     }
 }
