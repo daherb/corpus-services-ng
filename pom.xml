@@ -103,12 +103,20 @@
                 <directory>src/main/java/de/uni_hamburg/corpora/utilities/resources</directory>
             </resource>
             <resource>
-                <directory>src/test/java/de/uni_hamburg/corpora/utilities/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/test/java/de/uni_hamburg/corpora/resources</directory>
+                <directory>src/main/java/de/uni_hamburg/corpora/validation/quest/resources</directory>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/java/de/uni_hamburg/corpora/utilities/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/java/de/uni_hamburg/corpora/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/java/de/uni_hamburg/corpora/validation/quest/resources</directory>
+            </testResource>
+        </testResources> 
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
