@@ -688,16 +688,23 @@ public class CorpusMagician {
                     try {
                         // Use reflections to get all corpus data classes
                         Reflections reflections = new Reflections("de.uni_hamburg.corpora");
+                        boolean checkFunctionName = false;
                         // Get all classes derived from CorpusData
                         for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
                             if (cf.getName().toLowerCase().endsWith(function.toLowerCase())) {
                                 cf2strcorpusfunctions.add((CorpusFunction) cf.getDeclaredConstructor().newInstance());
+                                checkFunctionName = true;
+                                break;
                             }
+                        }
+                        if (!checkFunctionName) {
+                            System.out.println(function + " was not recognized and will be skipped");
+                            report.addCritical("CommandlineFunctionality", "Function String \"" + function + "\" is not recognized");
                         }
                     }
                     catch (Exception e) {
                         report.addCritical("CommandlineFunctionality", "Function String \"" + function + "\" is not recognized");
-                    }
+                    }  
             }
         }
         return cf2strcorpusfunctions;
