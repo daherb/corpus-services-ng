@@ -108,26 +108,31 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
 
                         // get the number in question
                         String no = wholeRef.substring(start, end);
-                        int numbering = Integer.parseInt(no);
+                        try 
+                        {                          
+                            int numbering = Integer.parseInt(no);
+                            // test for correct numbering
+                            if (order != numbering) {
 
-                        // test for correct numbering
-                        if (order != numbering) {
+                                // if to be fixed
+                                if (fix) {
+                                    String correctNo = String.format("%0" + no.length() + "d", order);
+                                    String correctRef = wholeRef.substring(0, start) + correctNo + wholeRef.substring(end);
+                                    event.setTextContent(correctRef);
 
-                            // if to be fixed
-                            if (fix) {
-                                String correctNo = String.format("%0" + no.length() + "d", order);
-                                String correctRef = wholeRef.substring(0, start) + correctNo + wholeRef.substring(end);
-                                event.setTextContent(correctRef);
+                                    String message = "Fixed: False numbering in ref ID '" + wholeRef + "' to '" + correctNo + "' (" + eventReference + ")";
+                                    stats.addFix(function, cd, message);
+                                } // if only to be tested
+                                else {
+                                    String message = "False numbering in ref ID '" + wholeRef + "' (" + eventReference + ")";
+                                    stats.addCritical(function, cd, message);
+                                    exmaError.addError(function, cd.getURL().getFile(), tierId, eventStart, false, message);
+                                }
 
-                                String message = "Fixed: False numbering in ref ID '" + wholeRef + "' to '" + correctNo + "' (" + eventReference + ")";
-                                stats.addFix(function, cd, message);
-                            } // if only to be tested
-                            else {
-                                String message = "False numbering in ref ID '" + wholeRef + "' (" + eventReference + ")";
-                                stats.addCritical(function, cd, message);
-                                exmaError.addError(function, cd.getURL().getFile(), tierId, eventStart, false, message);
                             }
-
+                        } catch(NumberFormatException nfe) {
+                            String message = "Ref ID doesn't end with a number: '" + wholeRef + "' (" + eventReference + ")";
+                            stats.addCritical(function, cd, message);
                         }
                         order++;
 
