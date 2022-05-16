@@ -1,14 +1,21 @@
 package de.uni_hamburg.corpora.validation.quest;
 
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
-import de.uni_hamburg.corpora.EXMARaLDASegmentedTranscriptionData;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
+import org.exmaralda.partitureditor.fsm.FSMException;
+import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +23,26 @@ public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
 
     public EXMARaLDAAnnotationChecker(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        Report report = new Report();
+        // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
+        if (props.containsKey("annotation-tier-pattern")) {
+            // Copy old properties
+            Properties newProperties = new Properties();
+            newProperties.putAll(props);
+            // convert tier pattern
+            newProperties.put("tier-pattern", props.getProperty("annotation-tier-pattern"));
+            // run tier finder
+            EXMARaLDATierFinder etf = new EXMARaLDATierFinder(newProperties);
+            report.merge(etf.function(c, fix));
+            tierIds.addAll(etf.getTierList());
+            setUp = true;
+        }
+        report.merge(super.function(c, fix));
+        return report;
     }
 
     @Override
