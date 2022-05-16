@@ -13,6 +13,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -372,6 +374,27 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     .parse();
             setUp = true;
         } catch (IOException e) {
+            logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
+        }
+    }
+
+    /**
+     * Loads the criteria as a resource
+     * @param name the name of the resource
+     */
+    public void loadCriteriaResource(String name) {
+        try {
+            InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream("metadata/"+name);
+            if (resourceStream != null) {
+                // Read CSV file
+                criteria = new CsvToBeanBuilder<GenericMetadataCriterion>(new InputStreamReader(resourceStream))
+                        .withType(GenericMetadataCriterion.class)
+                        .withSkipLines(1) // skip header
+                        .build()
+                        .parse();
+                setUp = true;
+            }
+        } catch (Exception e) {
             logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
         }
     }

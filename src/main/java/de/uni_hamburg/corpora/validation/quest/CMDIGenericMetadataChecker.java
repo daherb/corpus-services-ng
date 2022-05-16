@@ -25,6 +25,9 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("cmdi-criteria-file"))
             setCriteriaFile(properties.getProperty("cmdi-criteria-file"));
+        else {
+            loadCriteriaResource("cmdi-generic.csv");
+        }
     }
 
 
