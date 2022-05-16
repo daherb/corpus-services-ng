@@ -709,6 +709,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (!props.containsKey("skip-documentation-check")
                     || !props.getProperty("skip-documentation-check").equalsIgnoreCase("true"))
                 report.merge(refcoDocumentationCheck());
+            // Generic tier test
+            props.put("elan-speakers",
+                    criteria.sessions.stream().map((s) ->
+                            s.speakerName).collect(Collectors.joining(",")));
+            ELANTierStructureChecker etsc = new ELANTierStructureChecker(props);
+            report.merge(etsc.function(c,false));
             // Apply function for each of the supported file. Again merge the reports
             for (CorpusData cdata : c.getCorpusData()) {
                 //report.merge(function(cdata, fix));
@@ -2379,6 +2385,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Report report = new Report() ;
         // Check for ELAN data
         if (cd instanceof ELANData) {
+            // Generic checks
+            try {
+                // Part of ELANValidatorCheckes
+                // XsdChecker xc = new XsdChecker(props);
+                // report.merge(xc.function(cd, false));
+                ELANValidatorChecker evc = new ELANValidatorChecker(props);
+                report.merge(evc.function(cd,false));
+            }
+            catch (Exception e){
+                report.addCritical(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
+                                new Object[]{getFunction(), cd.getFilename(), "Exception encountered when calling " +
+                                        "validation checker ", e}));
+            }
+
             // Check the transcription
             // but parameter allows skipping
             if (!props.containsKey("skip-transcription-check") ||
