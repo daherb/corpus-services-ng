@@ -13,10 +13,7 @@ import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -166,6 +163,6 @@ public abstract class Checker implements CorpusFunction {
      * @return The map of all parameters and their description
      */
     public Map<String, String> getParameters() {
-        return Collections.EMPTY_MAP;
+        return new HashMap<>();
     }
 }
