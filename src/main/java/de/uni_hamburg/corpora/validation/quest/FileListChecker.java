@@ -132,7 +132,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
         Set<URI> missingFiles =
                 expectedFiles.stream().filter((f) -> !presentFiles.contains(f)).collect(Collectors.toSet());
         if (!unexpectedFiles.isEmpty())
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function",
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function",
                             "description", "howtoFix"},
                     new Object[]{getFunction(),
                             "Unexpected files encountered:\n" +
@@ -143,7 +143,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function",
                             "description", "howtoFix"},
                     new Object[]{getFunction(),
-                            "Files does not exist:\n" +
+                            "Files do not exist:\n" +
                                     missingFiles.stream().map(URI::toString).collect(Collectors.joining("\n")),
                             "Check the file references in the documentation and remove the reference to " +
                                     "the files if they have been removed intentionally"}));
