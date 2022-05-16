@@ -32,7 +32,8 @@ public class NullChecker extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) {
         Report stats = new Report();
         for (CorpusData cdata : c.getCorpusData()) {
-            stats.merge(execute(cdata));
+            if (getIsUsableFor().contains(cdata.getClass()))
+                stats.merge(execute(cdata));
         }
         return stats;
     }

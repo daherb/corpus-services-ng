@@ -76,7 +76,8 @@ public class ExbLangCodes extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report stats = new Report();
         for (CorpusData cdata : c.getBasicTranscriptionData()) {
-            stats.merge(function(cdata, fix));
+            if (getIsUsableFor().contains(cdata.getClass()))
+                stats.merge(function(cdata, fix));
         }
         return stats;
     }

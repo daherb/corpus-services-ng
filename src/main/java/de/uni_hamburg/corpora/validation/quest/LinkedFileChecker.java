@@ -163,7 +163,8 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         for (CorpusData cd : c.getCorpusData())
-            report.merge(function(cd, fix));
+            if (getIsUsableFor().contains(cd.getClass()))
+                report.merge(function(cd, fix));
         return report;
     }
 
