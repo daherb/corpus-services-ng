@@ -100,10 +100,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                 String text = getTierText(cd, tier);
                 if (!text.isEmpty()) {
                     List<String> tokens = Arrays.asList(text.split(tokenSeparator));
-                    if (tokens.size() == 1)
-
-                        // Put all tokens into the summary
-                        tagStats.putAll(tokens);
+                    // Put all tokens into the summary
+                    tagStats.putAll(tokens);
                     for (String token : tokens) {
                         // Check if the token is in the tag list
                         if (!tags.isEmpty() && !tags.contains(token)) {
