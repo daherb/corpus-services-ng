@@ -11,13 +11,15 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -29,6 +31,8 @@ public class XsdChecker  extends Checker implements CorpusFunction {
 
     private final Logger logger = Logger.getLogger(getFunction());
 
+    private Map<String,String> schemas = new HashMap<>();
+
     static final String JAXP_SCHEMA_LANGUAGE =
             "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
     static final String W3C_XML_SCHEMA =
@@ -36,6 +40,10 @@ public class XsdChecker  extends Checker implements CorpusFunction {
 
     public XsdChecker(Properties properties) {
         super(false, properties);
+        // Map for external schema files needed if the schema is not linked in the file format
+        schemas.put(ELANData.class.getSimpleName(),"xsd/eaf.xsd");
+        schemas.put(EXMARaLDATranscriptionData.class.getSimpleName(),"xsd/exmaralda_exb.xsd");
+        schemas.put(EXMARaLDASegmentedTranscriptionData.class.getSimpleName(),"xsd/exmaralda_exs.xsd");
     }
 
     @Override
@@ -48,9 +56,20 @@ public class XsdChecker  extends Checker implements CorpusFunction {
         Report report = new Report();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
-        dbf.setValidating(true);
         try {
-            dbf.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+            // Add external schema if necessary
+            if (schemas.containsKey(cd.getClass().getSimpleName())) {
+                logger.info(schemas.get(cd.getClass().getSimpleName()));
+                InputStream is =
+                        this.getClass().getClassLoader().getResourceAsStream(schemas.get(cd.getClass().getSimpleName()));
+                dbf.setSchema(SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
+                        .newSchema(new StreamSource(is)));
+            }
+            else {
+                // Otherwise set the schema language
+                dbf.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
+                dbf.setValidating(true);
+            }
             DocumentBuilder db = dbf.newDocumentBuilder();
             db.setErrorHandler(new ErrorHandler() {
                 @Override
