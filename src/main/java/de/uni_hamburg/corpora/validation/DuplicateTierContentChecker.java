@@ -45,9 +45,9 @@ public class DuplicateTierContentChecker extends Checker implements CorpusFuncti
     Pattern rxApostrophe = Pattern.compile("[`‘’′́̀ʼ]", Pattern.UNICODE_CHARACTER_CLASS);
     MessageDigest md = null;
 
-    public DuplicateTierContentChecker() {
+    public DuplicateTierContentChecker(Properties properties) {
         //no fixing option available
-        super(false);
+        super(false, properties);
     }
 
     public void setTierNames(String sTiers) {

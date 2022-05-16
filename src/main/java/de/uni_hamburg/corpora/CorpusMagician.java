@@ -3,35 +3,25 @@ package de.uni_hamburg.corpora;
 import de.uni_hamburg.corpora.publication.ZipCorpus;
 import de.uni_hamburg.corpora.conversion.EXB2HIATISOTEI;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
-import de.uni_hamburg.corpora.validation.ComaOverviewGeneration;
-import de.uni_hamburg.corpora.validation.ComaFileCoverageChecker;
-import de.uni_hamburg.corpora.validation.ExbNormalize;
-import de.uni_hamburg.corpora.validation.XSLTChecker;
-import de.uni_hamburg.corpora.validation.CorpusDataRegexReplacer;
-import de.uni_hamburg.corpora.validation.ExbMakeTimelineConsistent;
+import de.uni_hamburg.corpora.validation.*;
+import de.uni_hamburg.corpora.validation.quest.*;
 import de.uni_hamburg.corpora.visualization.ListHTML;
 import de.uni_hamburg.corpora.visualization.ScoreHTML;
-import de.uni_hamburg.corpora.validation.ComaKmlForLocations;
 import de.uni_hamburg.corpora.conversion.AddCSVMetadataToComa;
 import de.uni_hamburg.corpora.publication.HandlePidRegistration;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
-import de.uni_hamburg.corpora.validation.ComaChartsGeneration;
-import de.uni_hamburg.corpora.validation.GeneralTransformer;
-import de.uni_hamburg.corpora.validation.DuplicateTierContentChecker;
-import de.uni_hamburg.corpora.validation.ExbSegmentationChecker;
-import de.uni_hamburg.corpora.validation.LanguageToolChecker;
-import de.uni_hamburg.corpora.validation.ExbEventTokenizationChecker;
-import de.uni_hamburg.corpora.validation.ExbForbiddenSymbolsChecker;
-import de.uni_hamburg.corpora.validation.ExbReplaceGlosses;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -135,29 +125,42 @@ public class CorpusMagician {
             //if we have the coma file, we just give Coma as Input and the Functions need to take care of using the
             //iterating function
             report = corpuma.runChosencorpusfunctions();
-            createReports();
         } catch (MalformedURLException ex) {
             report.addException(ex, "The given URL was incorrect");
         } catch (IOException ex) {
             report.addException(ex, "A file could not be read");
-        } catch (ParserConfigurationException ex) {
-            report.addException(ex, "A file could not be parsed");
-        } catch (TransformerException ex) {
-            report.addException(ex, "A transformation error occured");
         } catch (SAXException ex) {
             report.addException(ex, "An XSLT error occured");
         } catch (JexmaraldaException ex) {
             report.addException(ex, "An Exmaralda file reading error occured");
         } catch (URISyntaxException ex) {
             report.addException(ex, "A URI was incorrect");
-        } catch (XPathExpressionException ex) {
-            report.addException(ex, "An Xpath expression was incorrect");
         } catch (ClassNotFoundException ex) {
             report.addException(ex, "Class not found");
         } catch (JDOMException ex) {
             report.addException(ex, "JDOM error");
         }
-
+        try {
+            createReports();
+        }
+        catch (XPathExpressionException ex) {
+            System.err.println("An Xpath expression was incorrect: " + ex);
+        }
+        catch (ParserConfigurationException ex) {
+            System.err.println("A file could not be parsed: " + ex);
+        }
+        catch (TransformerException ex) {
+            System.err.println("A transformation error occured: " + ex);
+        }
+        catch (JDOMException ex) {
+            System.err.println("JDOM error: " + ex);
+        }
+        catch (IOException ex) {
+            System.err.println("A file could not be read" + ex);
+        }
+        catch (SAXException ex) {
+            System.err.println("An XSLT error occured: " + ex);
+        }
     }
 
 ////Give it a path to a parameters file that tells you
@@ -180,13 +183,19 @@ public class CorpusMagician {
 
     //creates a corpus object from an URL (filepath or "real" url)
     //we need to make a difference between an unsorted folder, a miscellaneous file or a Coma file which represents a complete folder structure of the corpus
-    public void initDataWithURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
+    public void initDataWithURL(URL url, Collection<Class<? extends CorpusData>> clcds) throws SAXException,
+            JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, JDOMException {
         if (CorpusIO.isDirectory(url)) {
             //TODO
             //only read the filetypes from clcds!
-            cdc = cio.read(url, clcds);
+            cdc = cio.read(url, clcds, report);
             basedirectory = url;
-            isCollection = true;
+            if (isCorpus) {
+                corpus = new Corpus(corpusname, url, cdc);
+            }
+            else {
+                isCollection = true;
+            }
         } else {
             CorpusData cdata = cio.readFileURL(url);
             //get the basedirectory
@@ -200,7 +209,8 @@ public class CorpusMagician {
                 //only read the filetypes from clcds!
                 corpus = new Corpus((ComaData) cdata, clcds);
                 //otherwise it is a single file I want to check
-            } else {
+            }
+            else {
                 corpusData = cdata;
             }
         }
@@ -271,7 +281,7 @@ public class CorpusMagician {
         for (String function : corpusfunctionstrings) {
             switch (function.toLowerCase()) {
                 case "comaoverviewgeneration":
-                    ComaOverviewGeneration cog = new ComaOverviewGeneration();
+                    ComaOverviewGeneration cog = new ComaOverviewGeneration(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
@@ -282,7 +292,8 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(cog);
                     break;
                 case "comachartsgeneration":
-                    ComaChartsGeneration coc = new ComaChartsGeneration();if (cfProperties != null) {
+                    ComaChartsGeneration coc = new ComaChartsGeneration(cfProperties);
+                    if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
                             coc.setInel();
@@ -292,7 +303,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(coc);
                     break;
                 case "comafilecoveragechecker":
-                    ComaFileCoverageChecker fcc = new ComaFileCoverageChecker();
+                    ComaFileCoverageChecker fcc = new ComaFileCoverageChecker(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
@@ -306,7 +317,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(fcc);
                     break;
                 case "xsltchecker":
-                    XSLTChecker xc = new XSLTChecker();
+                    XSLTChecker xc = new XSLTChecker(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(mode) && cfProperties.getProperty(mode).equalsIgnoreCase("inel")) {
@@ -392,7 +403,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(ehit);
                     break;
                 case "normalizeexb":
-                    ExbNormalize ne = new ExbNormalize();
+                    ExbNormalize ne = new ExbNormalize(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey("whitespace")) {
@@ -403,7 +414,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(ne);
                     break;
                 case "comakmlforlocations":
-                    ComaKmlForLocations ckml = new ComaKmlForLocations();
+                    ComaKmlForLocations ckml = new ComaKmlForLocations(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(kml)) {
@@ -415,7 +426,7 @@ public class CorpusMagician {
                     break;
                 case "corpusdataregexreplacer":
                     //ToDo                   
-                    CorpusDataRegexReplacer cdrr = new CorpusDataRegexReplacer();
+                    CorpusDataRegexReplacer cdrr = new CorpusDataRegexReplacer(cfProperties);
                     //try custom properties for the different corpusfunctions
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
@@ -507,7 +518,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(lhtml);
                     break;
                 case "maketimelineconsistent":
-                    ExbMakeTimelineConsistent emtc = new ExbMakeTimelineConsistent();
+                    ExbMakeTimelineConsistent emtc = new ExbMakeTimelineConsistent(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey("interpolate")) {
@@ -518,7 +529,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(emtc);
                     break;
                 case "exbsegmentationchecker":
-                    ExbSegmentationChecker eseg = new ExbSegmentationChecker();
+                    ExbSegmentationChecker eseg = new ExbSegmentationChecker(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(segmentation)) {
@@ -533,7 +544,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(eseg);
                     break;
                 case "exbsegmenter":
-                    ExbSegmentationChecker esegr = new ExbSegmentationChecker();
+                    ExbSegmentationChecker esegr = new ExbSegmentationChecker(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(segmentation)) {
@@ -563,7 +574,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(acmtc);
                     break;
                 case "generaltransformer":
-                    GeneralTransformer gt = new GeneralTransformer();
+                    GeneralTransformer gt = new GeneralTransformer(cfProperties);
                     if (cfProperties != null) {
                         if (cfProperties.containsKey("coma")) {
                             gt.setComa(cfProperties.getProperty("coma"));
@@ -589,7 +600,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(gt);
                     break;
                 case "duplicatetiercontentchecker":
-                    DuplicateTierContentChecker duplc = new DuplicateTierContentChecker();
+                    DuplicateTierContentChecker duplc = new DuplicateTierContentChecker(cfProperties);
                     cf2strcorpusfunctions.add(duplc);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
@@ -600,7 +611,7 @@ public class CorpusMagician {
                     }
                     break;
                 case "languagetoolchecker":
-                    LanguageToolChecker ltc = new LanguageToolChecker();
+                    LanguageToolChecker ltc = new LanguageToolChecker(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(spelllang)) {
@@ -615,7 +626,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(ltc);
                     break;
                 case "exbeventtokenizationchecker":
-                    ExbEventTokenizationChecker eetc = new ExbEventTokenizationChecker();
+                    ExbEventTokenizationChecker eetc = new ExbEventTokenizationChecker(cfProperties);
                     cf2strcorpusfunctions.add(eetc);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
@@ -630,7 +641,7 @@ public class CorpusMagician {
                     }
                     break;
                 case "exbforbiddensymbolschecker":
-                    ExbForbiddenSymbolsChecker efsc = new ExbForbiddenSymbolsChecker();
+                    ExbForbiddenSymbolsChecker efsc = new ExbForbiddenSymbolsChecker(cfProperties);
                     cf2strcorpusfunctions.add(efsc);
                     if (cfProperties != null) {
                         if (cfProperties.containsKey("tiers")) {
@@ -691,10 +702,18 @@ public class CorpusMagician {
                         boolean checkFunctionName = false;
                         // Get all classes derived from CorpusData
                         for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
-                            if (cf.getName().toLowerCase().endsWith(function.toLowerCase())) {
-                                cf2strcorpusfunctions.add((CorpusFunction) cf.getDeclaredConstructor().newInstance());
-                                checkFunctionName = true;
-                                break;
+                            // Here we can control which packages we want to include
+                            String[] validPackages = {"de.uni_hamburg.corpora.validation.quest"};
+                            if (cf.getName().toLowerCase().endsWith(function.toLowerCase()) &&
+                                    Arrays.asList(validPackages).contains(cf.getPackage().getName())) {
+                                try {
+                                    cf2strcorpusfunctions.add((CorpusFunction) cf.getDeclaredConstructor(Properties.class).newInstance(cfProperties));
+				    checkFunctionName = true;
+                                    break;
+                                } catch (NoSuchMethodException | SecurityException | InstantiationException |
+                                        IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                         if (!checkFunctionName) {
@@ -770,7 +789,7 @@ public class CorpusMagician {
     //run one function on a corpus, that means all the files in the corpus
     //the funciton can run on
     public Report runCorpusFunction(Corpus c, CorpusFunction cf, boolean fix) {
-        return runCorpusFunction(c.getCorpusData(),cf,fix);
+        return cf.execute(c,fix);
     }
 
     //run one function on a corpus, that means all the files in the corpus
@@ -789,11 +808,22 @@ public class CorpusMagician {
         Collection<Class<? extends CorpusData>> usableTypes = cf.getIsUsableFor();
         //if the corpus files are an instance
         //of the class cl, run the function
-        for (CorpusData cd : cdc) {
+//        for (CorpusData cd : cdc) {
+//            if (usableTypes.contains(cd.getClass())) {
+//                Report newReport = runCorpusFunction(cd, cf, fix);
+//                report.merge(newReport);
+//            }
+//        }
+        // Create a deep copy of the corpus documents
+        Collection<Object> tmpCdc = cdc.stream().map((cd) -> cd.clone()).collect(Collectors.toSet());
+        Iterator<Object> it = tmpCdc.iterator();
+        while (it.hasNext()) {
+            CorpusData cd = (CorpusData) it.next();
             if (usableTypes.contains(cd.getClass())) {
-                Report newReport = runCorpusFunction(cd, cf, fix);
-                report.merge(newReport);
+                report.merge(runCorpusFunction(cd, cf, fix)) ;
             }
+            // Remove the corpus data after running the function
+            it.remove();
         }
 
         return report;
@@ -950,6 +980,11 @@ public class CorpusMagician {
                 reportlocations.add(s);
             }
         }
+        if (cmd.hasOption("corpus")) {
+            isCorpus = true;
+            corpusname = cmd.getOptionValue("corpus");
+        }
+
         //now add the functionsstrings to array
         String[] corpusfunctionarray = cmd.getOptionValues("c");
         CorpusMagician.chosencorpusfunctions.addAll(Arrays.asList(corpusfunctionarray));
@@ -1021,6 +1056,11 @@ public class CorpusMagician {
         fix.setRequired(false);
         options.addOption(nocuration);
 
+        Option corpus = new Option("cn", "corpus", true, "corpus name (if the data should be treated as a corpus)");
+        corpus.setRequired(false);
+        corpus.setArgName("CORPUS NAME");
+        options.addOption(corpus);
+
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         formatter.setOptionComparator(null);
@@ -1032,6 +1072,7 @@ public class CorpusMagician {
         String desc;
         String hasfix;
         StringBuilder usable ;
+        String params;
         for (CorpusFunction cf : getAllExistingCFsAsCFs()) {
             desc = cf.getFunction() + ":   " + cf.getDescription();
             usable = new StringBuilder("\nThe function can be used on:\n");
@@ -1039,7 +1080,16 @@ public class CorpusMagician {
                 usable.append(cl.getSimpleName() + " ");
             }
             hasfix = "\nThe function has a fixing option: " + cf.getCanFix().toString();
-            footerverbose.append(desc + hasfix + usable + "\n\n");
+            if (cf.getParameters().isEmpty()) {
+                params = "";
+            }
+            else {
+                params =
+                        "\nThe function accepts the following parameters:\n" + cf.getParameters().keySet()
+                                .stream().map((k) -> k + ": " + cf.getParameters().get(k))
+                                .collect(Collectors.joining("\n"));
+            }
+            footerverbose.append(desc + hasfix + usable + params + "\n\n");
         }
         footerverbose.append("\n\nPlease report issues at https://lab.multilingua.uni-hamburg" +
             ".de/redmine/projects/corpus-services/issues");

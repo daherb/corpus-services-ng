@@ -12,6 +12,8 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -54,7 +56,7 @@ public class ComaXsdCheckerTest {
             String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
-            ComaXsdChecker instance = new ComaXsdChecker();
+            ComaXsdChecker instance = new ComaXsdChecker(new Properties());
             Collection<CorpusData> cdc;
             //what happens when we check coma files
             for (CorpusData cd : corp.getMetadata()){
@@ -68,7 +70,7 @@ public class ComaXsdCheckerTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ComaXsdChecker instance = new ComaXsdChecker();
+        ComaXsdChecker instance = new ComaXsdChecker(new Properties());
         //Collection<Class> expResult = null;
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here

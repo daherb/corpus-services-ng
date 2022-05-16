@@ -87,7 +87,8 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
     @Override
     public Collection<String> getFileExtensions() {
         Set<String> fileExts = new HashSet<>();
-        fileExts.add("xml");
+        // XML extension is handled separately in CorpusIO
+        // fileExts.add("xml");
         fileExts.add("cmdi");
         return fileExts;
     }
@@ -121,5 +122,14 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
     public Collection<URL> getReferencedCorpusDataURLs() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-   
+
+    @Override
+    public Object clone() {
+        return new CmdiData(this.url);
+    }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

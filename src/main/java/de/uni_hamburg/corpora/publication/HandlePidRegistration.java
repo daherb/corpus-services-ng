@@ -5,7 +5,6 @@
  */
 package de.uni_hamburg.corpora.publication;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import de.uni_hamburg.corpora.CmdiData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
@@ -22,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -160,7 +160,7 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
         //http://pid.gwdg.de/handles/11022?URL=http://www.corpora.uni-hamburg.de/repository
         
         String authString = EpicApiUser + ":" + EpicApiPass;
-        String authStringEnc = Base64.encode(authString.getBytes("UTF-8"));
+        String authStringEnc = Base64.getEncoder().encodeToString(authString.getBytes("UTF-8"));
 
         URL url = new URL(HandleEndpoint + HandlePrefix + "?URL=" + handleURL);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -193,7 +193,7 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
         //http://pid.gwdg.de/handles/11022?URL=http://www.corpora.uni-hamburg.de/repository
         
         String authString = EpicApiUser + ":" + EpicApiPass;
-        String authStringEnc = Base64.encode(authString.getBytes("UTF-8"));
+        String authStringEnc = Base64.getEncoder().encodeToString(authString.getBytes("UTF-8"));
 
         URL object=new URL(HandleEndpoint + HandlePrefix + "/");
         HttpURLConnection con = (HttpURLConnection) object.openConnection();

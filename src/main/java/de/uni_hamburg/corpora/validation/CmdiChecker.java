@@ -16,6 +16,8 @@ import de.uni_hamburg.corpora.CorpusFunction;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -32,9 +34,9 @@ public class CmdiChecker extends Checker implements CorpusFunction {
 
     ValidatorSettings settings;
 
-    public CmdiChecker() {
+    public CmdiChecker(Properties properties) {
         //no fix available
-        super(false);
+        super(false, properties);
     }
 
     private boolean isUrlHandleOrHzsk(String url) {
@@ -281,6 +283,7 @@ public class CmdiChecker extends Checker implements CorpusFunction {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         return Collections.singleton(CmdiData.class);
     }
+
 
     /**Default function which returns a two/three line description of what 
      * this class is about.

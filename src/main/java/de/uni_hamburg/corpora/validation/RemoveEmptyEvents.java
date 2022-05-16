@@ -8,9 +8,8 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.*;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -20,7 +19,6 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -35,12 +33,9 @@ public class RemoveEmptyEvents extends Checker implements CorpusFunction {
 
     Document doc = null;
 
-    public RemoveEmptyEvents() {
-        
-    /**
-     * Fix is applicable for this feature.
-     */
-    super(true);
+    public RemoveEmptyEvents(Properties properties) {
+        //fixing is possible
+        super(true, properties);
     }
 
     @Override
@@ -81,8 +76,8 @@ public class RemoveEmptyEvents extends Checker implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add(EXMARaLDACorpusData.class);
-        IsUsableFor.add(SegmentedEXMARaLDATranscription.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
+        IsUsableFor.add(EXMARaLDASegmentedTranscriptionData.class);
         return IsUsableFor;
     }
 

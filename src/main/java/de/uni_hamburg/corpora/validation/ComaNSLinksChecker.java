@@ -31,6 +31,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -43,9 +45,9 @@ public class ComaNSLinksChecker extends Checker implements CorpusFunction {
     String comaLoc = "";
     String communicationname;
 
-    public ComaNSLinksChecker() {
+    public ComaNSLinksChecker(Properties properties) {
         //no fixing available
-        super(false);
+        super(false,properties);
     }
 
     @Override

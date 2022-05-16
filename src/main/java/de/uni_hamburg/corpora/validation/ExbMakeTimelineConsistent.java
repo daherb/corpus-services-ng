@@ -6,12 +6,13 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -32,12 +33,12 @@ import org.xml.sax.SAXException;
 public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction {
 
     Document doc = null;
-    EXMARaLDACorpusData btd = null;
+    EXMARaLDATranscriptionData btd = null;
     Boolean interpolateTimeline = false;
 
-    public ExbMakeTimelineConsistent() {
+    public ExbMakeTimelineConsistent(Properties properties) {
         //fixing option available
-        super(true);
+        super(true, properties);
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
         Report report = new Report();
         if (fix) {
 
-            btd = (EXMARaLDACorpusData) cd;
+            btd = (EXMARaLDATranscriptionData) cd;
             BasicTranscription bt = btd.getEXMARaLDAbt();
             bt.getBody().getCommonTimeline().makeConsistent();
             if (interpolateTimeline) {
@@ -72,7 +73,7 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     public void setInterpolateTimeline(String s) {

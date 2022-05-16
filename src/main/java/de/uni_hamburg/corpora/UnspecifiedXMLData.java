@@ -32,9 +32,9 @@ import org.xml.sax.SAXException;
  */
 public class UnspecifiedXMLData implements CorpusData, XMLData {
 
-    Document jdom;
+    Document jdom = null;
     URL url;
-    String originalstring;
+    String originalstring = null;
     URL parenturl;
     String filename;
     String filenamewithoutending;
@@ -46,15 +46,12 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
     public UnspecifiedXMLData(URL url) {
         try {
             this.url = url;
-            SAXBuilder builder = new SAXBuilder();
-            jdom = builder.build(url);
-            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
-        } catch (JDOMException | IOException | URISyntaxException ex) {
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -71,7 +68,16 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
 
     @Override
     public String toUnformattedString() {
-        return originalstring;
+        try {
+            if (originalstring == null)
+                originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
+            return originalstring;
+        }
+        catch (URISyntaxException | IOException ex) {
+            Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // Return empty string to avoid null-exceptions
+        return "";
     }
 
     private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
@@ -91,6 +97,17 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
 
     @Override
     public Document getJdom() {
+        if (jdom == null) {
+            SAXBuilder builder = new SAXBuilder();
+            try {
+                builder.setExpandEntities(false);
+                builder.setEntityResolver(null);
+                jdom = builder.build(url);
+            } catch (JDOMException | IOException e) {
+                Logger.getLogger(UnspecifiedXMLData.class.getName()).log(Level.SEVERE, "Exception while reading file: ",
+                        e);
+            }
+        }
         return jdom;
     }
 
@@ -114,4 +131,13 @@ public class UnspecifiedXMLData implements CorpusData, XMLData {
         return filenamewithoutending;
     }
 
+    @Override
+    public Object clone() {
+        return new UnspecifiedXMLData(this.url);
+    }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

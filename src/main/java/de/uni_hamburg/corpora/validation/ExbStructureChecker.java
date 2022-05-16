@@ -10,7 +10,7 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import java.io.IOException;
 import java.io.File;
@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import java.net.URISyntaxException;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -38,9 +39,9 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
     ValidatorSettings settings;
     String filename;
 
-    public ExbStructureChecker() {
+    public ExbStructureChecker(Properties properties) {
         //fixing is not possible
-        super(false);
+        super(false, properties);
     }
     
     /**
@@ -51,7 +52,7 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, JDOMException, IOException, JexmaraldaException {
         Report stats = new Report();
-        EXMARaLDACorpusData btd = (EXMARaLDACorpusData) cd;
+        EXMARaLDATranscriptionData btd = (EXMARaLDATranscriptionData) cd;
         filename = cd.getFilename();
         bt = btd.getEXMARaLDAbt();
 
@@ -117,7 +118,7 @@ public class ExbStructureChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     /**

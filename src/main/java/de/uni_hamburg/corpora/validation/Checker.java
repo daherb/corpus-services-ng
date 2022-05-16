@@ -13,8 +13,7 @@ import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -35,17 +34,21 @@ import org.xml.sax.SAXException;
  */
 public abstract class Checker implements CorpusFunction {
 
+    // Same as below with report
     CorpusData cd;
     // This is dangerous and should be solved differently
     // Report report = new Report();
     final String function;
     Boolean canfix;
+    protected Properties props;
 
-    Checker(boolean hasfixingoption) {
+
+    public Checker(boolean hasfixingoption, Properties properties) {
         function = this.getClass().getSimpleName();
         canfix = hasfixingoption;
-
+        props = properties;
     }
+
 
     public Report execute(Corpus c) {
         return execute(c, false);
@@ -153,5 +156,13 @@ public abstract class Checker implements CorpusFunction {
 
     public Boolean getCanFix() {
         return canfix;
+    }
+
+    /**
+     * Lists all supported parameter for the checker
+     * @return The map of all parameters and their description
+     */
+    public Map<String, String> getParameters() {
+        return new HashMap<>();
     }
 }

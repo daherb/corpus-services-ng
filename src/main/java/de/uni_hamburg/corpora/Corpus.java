@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashSet;
+
+import org.apache.commons.lang.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
@@ -31,13 +34,13 @@ public class Corpus {
     Collection<AnnotationSpecification> annotationspecification = new ArrayList<>();
     Collection<ConfigParameters> configparameters = new ArrayList<>();
     private Collection<CmdiData> cmdidata = new ArrayList<>();
-    Collection<EXMARaLDACorpusData> basictranscriptiondata = new ArrayList<>();
-    Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptiondata = new ArrayList<>();
+    Collection<EXMARaLDATranscriptionData> basictranscriptiondata = new ArrayList<>();
+    Collection<EXMARaLDASegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList<>();
     Collection<ELANData> elandata = new ArrayList<>();
     Collection<FlextextData> flextextdata = new ArrayList<>();
     ComaData comadata;
     //all the data together
-    Collection<CorpusData> cdc = new ArrayList<>();
+    Collection<CorpusData> cdc = new HashSet<>();
     URL basedirectory;
     String corpusname;
 
@@ -45,7 +48,8 @@ public class Corpus {
     }
 
     public Corpus(URL url) throws JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException {
-        this(new CorpusIO().read(url));
+        // TODO this could be problematic
+        this(new CorpusIO().read(url, new Report()));
     }
 
     //only read in the files we need!
@@ -65,16 +69,43 @@ public class Corpus {
                 cdc.add(cddd);
             }
         }
-        //Coma is coma is 
+        //Coma is coma is
         comadata = coma;
-        //Now create the needed 
+        // Now sort the corpus data files into categories
+        addCorpusDataCollection(cdc);
+        //we don't need to check it because we know it
+        cdc.add(coma);
+    }
+
+    public Corpus(String corpusName, URL baseDir, Collection<CorpusData> cdc) throws MalformedURLException, SAXException, JexmaraldaException {
+        this(cdc);
+        basedirectory = baseDir ;
+        corpusname = corpusName ;
+    }
+
+    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, SAXException, JexmaraldaException {
+        this.cdc = cdc ;
+        // Now sort the corpus data files into categories
+        addCorpusDataCollection(cdc);
+        // We don't have a name
+        corpusname = "" ;
+        // Get the common prefix of all parent urls
+        String commonPrefix =
+                StringUtils.getCommonPrefix(cdc.stream().map((cd) -> cd.getParentURL().toString()).toArray(String[]::new));
+        // Convert to basedirectory
+        if (commonPrefix.isEmpty())
+            commonPrefix = "file:///" ;
+        basedirectory = new URL(commonPrefix) ;
+    }
+
+    private void addCorpusDataCollection(Collection<CorpusData> cdc) {
         for (CorpusData cd : cdc) {
             if (cd instanceof ContentData) {
                 contentdata.add((ContentData) cd);
-                if (cd instanceof EXMARaLDACorpusData) {
-                    basictranscriptiondata.add((EXMARaLDACorpusData) cd);
-                } else if (cd instanceof SegmentedEXMARaLDATranscription) {
-                    segmentedtranscriptiondata.add((SegmentedEXMARaLDATranscription) cd);
+                if (cd instanceof EXMARaLDATranscriptionData) {
+                    basictranscriptiondata.add((EXMARaLDATranscriptionData) cd);
+                } else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
+                    segmentedtranscriptiondata.add((EXMARaLDASegmentedTranscriptionData) cd);
                 } else if (cd instanceof ELANData) {
                     elandata.add((ELANData) cd);
                 } else if (cd instanceof FlextextData) {
@@ -96,38 +127,6 @@ public class Corpus {
                 }
             }
         }
-        //we don't need to check it because we know it
-        cdc.add(coma);
-    }
-
-    public Corpus(Collection<CorpusData> cdc) throws MalformedURLException, SAXException, JexmaraldaException {
-        for (CorpusData cd : cdc) {
-            this.cdc = cdc ;
-            if (cd instanceof ContentData) {
-                contentdata.add((ContentData) cd);
-            }
-            if (cd instanceof Recording) {
-                recording.add((Recording) cd);
-            }
-            if (cd instanceof AdditionalData) {
-                additionaldata.add((AdditionalData) cd);
-            } if (cd instanceof Metadata) {
-                metadata.add((Metadata) cd);
-            }
-            if (cd instanceof AnnotationSpecification) {
-                annotationspecification.add((AnnotationSpecification) cd);
-            }
-            if (cd instanceof ConfigParameters) {
-                configparameters.add((ConfigParameters) cd);
-            }
-            if (cd instanceof CmdiData) {
-                cmdidata.add((CmdiData) cd);
-            }
-            if (cd instanceof EXMARaLDACorpusData) {
-                basictranscriptiondata.add((EXMARaLDACorpusData) cd);
-            }
-        }
-        //and also the other collections maybe
     }
 
     public Collection<CorpusData> getCorpusData() {
@@ -162,11 +161,11 @@ public class Corpus {
         return cmdidata;
     }
 
-    public Collection<EXMARaLDACorpusData> getBasicTranscriptionData() {
+    public Collection<EXMARaLDATranscriptionData> getBasicTranscriptionData() {
         return basictranscriptiondata;
     }
 
-    public Collection<SegmentedEXMARaLDATranscription> getSegmentedTranscriptionData() {
+    public Collection<EXMARaLDASegmentedTranscriptionData> getSegmentedTranscriptionData() {
         return segmentedtranscriptiondata;
     }
     
@@ -214,11 +213,11 @@ public class Corpus {
         this.cmdidata = cmdidata;
     }
 
-    public void setBasicTranscriptionData(Collection<EXMARaLDACorpusData> basictranscriptions) {
+    public void setBasicTranscriptionData(Collection<EXMARaLDATranscriptionData> basictranscriptions) {
         this.basictranscriptiondata = basictranscriptions;
     }
 
-    public void setSegmentedTranscriptionData(Collection<SegmentedEXMARaLDATranscription> segmentedtranscriptions) {
+    public void setSegmentedTranscriptionData(Collection<EXMARaLDASegmentedTranscriptionData> segmentedtranscriptions) {
         this.segmentedtranscriptiondata = segmentedtranscriptions;
     }
     

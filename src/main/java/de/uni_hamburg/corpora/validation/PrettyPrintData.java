@@ -14,6 +14,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -47,9 +48,9 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
 
     String prettyCorpusData = "";
 
-    public PrettyPrintData() {
+    public PrettyPrintData(Properties properties) {
         //fixing is possible
-        super(true);
+        super(true, properties);
     }
 
     public Report function(CorpusData cd, Boolean fix) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
@@ -79,10 +80,10 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         IsUsableFor.add(UnspecifiedXMLData.class);
         IsUsableFor.add(ComaData.class);
-        IsUsableFor.add(SegmentedEXMARaLDATranscription.class);
+        IsUsableFor.add(EXMARaLDASegmentedTranscriptionData.class);
         return IsUsableFor;
     }
 

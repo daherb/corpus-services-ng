@@ -53,7 +53,7 @@ public class ComaData implements Metadata, CorpusData, XMLData {
     public static String SEGMENTED_FILE_XPATH = "//Transcription[Description/Key[@Name='segmented']/text()='true']/NSLink";
     public static String BASIC_FILE_XPATH = "//Transcription[Description/Key[@Name='segmented']/text()='false']/NSLink";
     public static String ALL_FILE_XPATH = "//Transcription/NSLink";
-    public static String CORPUSNAME_XPATH = "//Description/Key[@Name='DC:title']";
+    public static String CORPUSNAME_XPATH = "//Description/Key[@Name='DC:title' or @Name='dc:title']";
 
     String corpusname;
 
@@ -271,5 +271,20 @@ public class ComaData implements Metadata, CorpusData, XMLData {
         
     public Element getCorpusData() throws JDOMException{
       return (Element) XPath.selectSingleNode(readcomaasjdom, "/Corpus/CorpusData");
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return new ComaData(this.url);
+        } catch (SAXException | JexmaraldaException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
     }
 }

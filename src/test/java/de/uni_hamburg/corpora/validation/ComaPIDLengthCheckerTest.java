@@ -11,6 +11,8 @@ import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -53,7 +55,7 @@ public class ComaPIDLengthCheckerTest {
             String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
-            ComaFedoraIdentifierLengthChecker instance = new ComaFedoraIdentifierLengthChecker();
+            ComaFedoraIdentifierLengthChecker instance = new ComaFedoraIdentifierLengthChecker(new Properties());
             Collection<CorpusData> cdc;
             //what happens when we check coma files
             for (CorpusData cd : corp.getMetadata()){
@@ -67,7 +69,7 @@ public class ComaPIDLengthCheckerTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ComaFedoraIdentifierLengthChecker instance = new ComaFedoraIdentifierLengthChecker();
+        ComaFedoraIdentifierLengthChecker instance = new ComaFedoraIdentifierLengthChecker(new Properties());
         //Collection<Class> expResult = null;
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here

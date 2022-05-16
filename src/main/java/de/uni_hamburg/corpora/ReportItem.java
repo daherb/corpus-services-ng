@@ -10,11 +10,12 @@
 package de.uni_hamburg.corpora;
 
 import de.uni_hamburg.corpora.utilities.TypeConverter;
+import org.apache.commons.text.StringEscapeUtils;
 import org.xml.sax.SAXParseException;
 import java.io.StringWriter;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Error message class is meant to facilitate creating user friendly error
@@ -90,6 +91,42 @@ public class ReportItem {
         this.what = what;
     }
 
+    /**
+     * Creates a new report item based on parameters given in a mp
+     * @param s the severity level
+     * @param parameters a map containing all relevant parameters
+     * @auther bba1792, Dr. Herbert Lange
+     */
+    public ReportItem(Severity s, Map<String,Object> parameters) {
+        this();
+        severity = s;
+        if (parameters.containsKey("function"))
+            this.function = (String) parameters.get("function");
+        if (parameters.containsKey("filename"))
+            this.filename= (String) parameters.get("filename");
+        if (parameters.containsKey("exception"))
+            this.e = (Throwable) parameters.get("exception");
+        if (parameters.containsKey("description"))
+            this.what = (String) parameters.get("description");
+        if (parameters.containsKey("columns"))
+            this.columns = (String) parameters.get("columns");
+        if (parameters.containsKey("lines"))
+            this.lines = (String) parameters.get("lines");
+        if (parameters.containsKey("tier"))
+            this.lines = (String) parameters.get("tier");
+        if (parameters.containsKey("segment"))
+            this.columns = (String) parameters.get("segment");
+        if (parameters.containsKey("howtoFix"))
+            this.howto = (String) parameters.get("howtoFix");
+
+    }
+
+    public ReportItem(Severity s, String function, String what) {
+        // Call constructor above
+        this(s,what);
+        this.function = function ;
+    }
+
     public ReportItem(Severity s, Throwable e, String what) {
         // Call constructor above
         this(s,what);
@@ -117,7 +154,7 @@ public class ReportItem {
     public ReportItem(Severity s, SAXParseException saxpe, String what) {
         this(s,what);
         if (saxpe != null) {
-            this.e = (Throwable) saxpe ;
+            this.e = saxpe ;
             this.filename = saxpe.getSystemId();
             this.lines = "" + saxpe.getLineNumber();
             this.columns = "" + saxpe.getColumnNumber();
@@ -160,7 +197,7 @@ public class ReportItem {
             case UNKNOWN: // ???
                 return false ;
             default:
-                throw new IllegalArgumentException("Missed a severity case in isGood :-( "+ this.severity.toString());
+                throw new IllegalArgumentException("Missed a severity case in isGood :-( "+ this.severity);
         }
     }
 
@@ -179,7 +216,7 @@ public class ReportItem {
             case UNKNOWN: // ???
                 return true;
             default:
-                throw new IllegalArgumentException("Missed a severity case in isBad :-( "+ this.severity.toString());
+                throw new IllegalArgumentException("Missed a severity case in isBad :-( "+ this.severity);
         }
     }
     /**
@@ -197,7 +234,7 @@ public class ReportItem {
             case UNKNOWN: // ???
                 return true ;
             default:
-                throw new IllegalArgumentException("Missed a severity case in isSevere :-( " + this.severity.toString());
+                throw new IllegalArgumentException("Missed a severity case in isSevere :-( " + this.severity);
         }
     }
 
@@ -216,7 +253,7 @@ public class ReportItem {
             case UNKNOWN:
                 return false;
             default:
-                throw new IllegalArgumentException("Missed a severity case in isFix :-( " + this.severity.toString());
+                throw new IllegalArgumentException("Missed a severity case in isFix :-( " + this.severity);
         }
     }
 
@@ -224,7 +261,7 @@ public class ReportItem {
      * Location of error in filename:lines.columns format if any.
      */
     public String getLocation() {
-        String loc = new String();
+        String loc;
         if (filename != null) {
             loc = filename;
         } else {
@@ -299,7 +336,7 @@ public class ReportItem {
     public String toString() {
         String str = getLocation() + ": " + getWhat() + ". " + getHowto() + ". " +
             getLocalisedMessage() ;
-        if (getStackTrace() != "") {
+        if (!getStackTrace().equals("")) {
             str += "\n" + getStackTrace();
         }
         return str ;
@@ -329,7 +366,7 @@ public class ReportItem {
     public static String
         generatePlainText(Collection<ReportItem> errors,
                 boolean verbose) {
-        String report = new String();
+        StringBuilder report = new StringBuilder();
         int criticals = 0;
         int warnings = 0;
         int notes = 0;
@@ -352,26 +389,26 @@ public class ReportItem {
                     break;
             }
         }
-        report += "Messages (" + errors.size() + "), of which: ";
+        report.append("Messages (" + errors.size() + "), of which: ");
         if (verbose) {
-            report += criticals + " critical, " + warnings + " warnings, " +
-                notes + " notes and " + unknowns + " not classified\n";
+            report.append(criticals + " critical, " + warnings + " warnings, " +
+                notes + " notes and " + unknowns + " not classified\n");
         } else {
-            report += criticals + " critical and " + warnings +
+            report.append(criticals + " critical and " + warnings +
                 " warnings (and " + (notes + unknowns) +
-                " hidden as non-problems or unknown)\n";
+                " hidden as non-problems or unknown)\n");
         }
         for (ReportItem error : errors) {
             if (verbose) {
-                report += "  " + error + "\n";
+                report.append("  " + error + "\n");
             } else if (error.getSeverity() == ReportItem.Severity.WARNING ||
                     error.getSeverity() == ReportItem.Severity.CRITICAL) {
-                report += "  " + error.getLocation() + ": " +
+                report.append("  " + error.getLocation() + ": " +
                     error.getWhat() + "\n" +
-                    "    " + error.getHowto() + "\n";
+                    "    " + error.getHowto() + "\n");
             }
         }
-        return report;
+        return report.toString();
     }
 
     /**
@@ -380,7 +417,6 @@ public class ReportItem {
      */
     public static String generateSummary(Collection<ReportItem>
             errors) {
-        String report = new String();
         int criticals = 0;
         int warnings = 0;
         int notes = 0;
@@ -404,11 +440,10 @@ public class ReportItem {
                 //    break;
             }
         }
-        report = "Total of " +  (criticals + warnings + notes + unknowns) +
+        return "Total of " +  (criticals + warnings + notes + unknowns) +
             " messages: " + criticals + " critical errors, " +
             warnings + " warnings, " + notes + " notes and " + unknowns +
             " others.";
-        return report;
     }
 
     /**
@@ -416,7 +451,7 @@ public class ReportItem {
      * Includes quite ugly table of all the reports with a java script to hide
      * errors based on severity.
      */
-    public static String generateHTML(Collection<ReportItem>
+    public static String generateHTML(List<ReportItem>
             errors) {
         int criticals = 0;
         int warnings = 0;
@@ -440,9 +475,9 @@ public class ReportItem {
                     break;
             }
         }
-        String report = new String();
+        StringBuilder report = new StringBuilder();
         //report = "<p>The following errors are from XML Schema validation only.</p>\n";
-        report += "<script type='text/javascript'>\n" +
+        report.append("<script type='text/javascript'>\n" +
             "function showClick(clicksource, stuff) {\n\t" +
             "  var elems = document.getElementsByClassName(stuff);\n" +
             "  for (i = 0; i < elems.length; i++) {\n" +
@@ -452,8 +487,8 @@ public class ReportItem {
             "      elems[i].style.display = 'none';\n" +
             "    }\n" +
             "  }\n" +
-            "}\n</script>";
-        report += "<form>\n" +
+            "}\n</script>");
+        report.append("<form>\n" +
             "  <input type='checkbox' id='critical' name='critical' value='show' checked='checked' onclick='showClick(this, &apos;critical&apos;)'>"
             + "Show criticals (" + criticals + ")</input>" +
             "  <input type='checkbox' name='warning' value='show' checked='checked' onclick='showClick(this, &apos;warning&apos;)'>"
@@ -462,45 +497,47 @@ public class ReportItem {
             + "Show notes (" + notes + ")</input>" +
             "  <input type='checkbox' name='unknown' value='show' onclick='showClick(this, &apos;unknown&apos;)'>"
             + "Show unknowns (" + unknowns + ")</input>" +
-            "</form>";
-        report += "<table>\n  <thead><tr>" +
+            "</form>");
+        report.append("<table>\n  <thead><tr>" +
             "<th>File:line.column</th><th>Error</th>" +
             "<th>Fix</th><th>Original</th>" +
-            "</tr></thead>\n";
-        report += "  <tbody>\n";
+            "</tr></thead>\n");
+        report.append("  <tbody>\n");
         for (ReportItem error : errors) {
+
             switch (error.getSeverity()) {
                 case CRITICAL:
-                    report += "<tr class='critical'><td style='border-left: red solid 3px'>";
+                    report.append("<tr class='critical'><td style='border-left: red solid 3px'>");
                     break;
                 case WARNING:
-                    report += "<tr class='warning'><td style='border-left: yellow solid 3px'>";
+                    report.append("<tr class='warning'><td style='border-left: yellow solid 3px'>");
                     break;
                 case NOTE:
-                    report += "<tr class='note' style='display: none;'><td style='border-left: green solid 3px'>";
+                    report.append("<tr class='note' style='display: none;'><td style='border-left: green solid 3px'>");
                     break;
                 case UNKNOWN:
-                    report += "<tr class='unknown' style='display: none;'><td style='border-left: orange solid 3px'>";
+                    report.append("<tr class='unknown' style='display: none;'><td style='border-left: orange solid " +
+                            "3px'>");
                     break;
                 default:
-                    report += "<tr class='other' style='display: none;'><td style='border-left: black solid 3px'>";
+                    report.append("<tr class='other' style='display: none;'><td style='border-left: black solid 3px'>");
                     break;
             }
-            report += error.getLocation() + "</td>";
-            report += "<td style='border: red solid 1px; white-space: pre'>" +
-                error.getWhat() +
-                "</td>";
-            report += "<td style='border: green solid 1px; white-space: pre'>" +
-                error.getHowto() +
-                "</td>";
-            report += "<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre'>(" +
-                error.getLocalisedMessage() +
-                ")</td>\n";
-            report += "<!-- " + error.getStackTrace() + " -->\n";
-            report += "</tr>";
+            report.append(StringEscapeUtils.escapeHtml4(error.getLocation()) + "</td>");
+            report.append("<td style='border: red solid 1px; white-space: pre'>" +
+                StringEscapeUtils.escapeHtml4(error.getWhat()) +
+                "</td>");
+            report.append("<td style='border: green solid 1px; white-space: pre'>" +
+                StringEscapeUtils.escapeHtml4(error.getHowto()) +
+                "</td>");
+            report.append("<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre'>(" +
+                StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
+                ")</td>\n");
+            report.append("<!-- " + StringEscapeUtils.escapeHtml4(error.getStackTrace()) + " -->\n");
+            report.append("</tr>");
         }
-        report += "  </tbody>\n  </table>\n";
-        return report;
+        report.append("  </tbody>\n  </table>\n");
+        return report.toString();
     }
 
 
@@ -510,127 +547,161 @@ public class ReportItem {
      * Includes quite ugly table of all the reports with a java script to hide
      * errors based on severity.
      */
-    public static String generateDataTableHTML(Collection<ReportItem> errors, String summarylines) {
-
-        String report = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-
-        report += "<html>\n   <head>\n";
-
-        report += "<title>Corpus Check Report</title>\n";
-        report += "<meta charset=\"utf-8\"></meta>\n";
-
+    public static String generateDataTableHTML(List<ReportItem> errors, String summarylines) {
+        
+        StringBuilder report = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        
+        report.append("<html>\n   <head>\n");
+        
+        report.append("<title>Corpus Check Report</title>\n");
+        report.append("<meta charset=\"utf-8\"></meta>\n");
+        
         //add JS libraries
-        report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/jquery/jquery-3.1.1.min.js")) + "</script>\n";
-        report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/DataTables/jquery.dataTables-1.10.12.min.js")) + "</script>\n";
-        report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/DataTables/dataTables-bootstrap.min.js")) + "</script>\n";
-        report += "<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/bootstrap/bootstrap-3.3.7.min.js")) + "</script>\n";
-
+        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/jquery" +
+                "/jquery-3.1.1.min.js")) + "</script>\n");
+        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
+                "/DataTables/jquery.dataTables-1.10.12.min.js")) + "</script>\n");
+        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
+                "/DataTables/dataTables-bootstrap.min.js")) + "</script>\n");
+        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
+                "/bootstrap/bootstrap-3.3.7.min.js")) + "</script>\n");
+        
         //add CSS
-        report += "<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css/DataTables/dataTables.bootstrap.min.css")) + "</style>\n";
-        report += "<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css/DataTables/buttons.dataTables.min.css")) + "</style>\n";
-        report += "<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css/bootstrap/bootstrap-3.3.7.min.css")) + "</style>\n";
-
+        report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
+                "/DataTables/dataTables.bootstrap.min.css")) + "</style>\n");
+        report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
+                "/DataTables/buttons.dataTables.min.css")) + "</style>\n");
+        report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
+                "/bootstrap/bootstrap-3.3.7.min.css")) + "</style>\n");
+	
         //add custom CSS
-        report += "<style>"+
+        report.append("<style>"+
                 "body{padding:15px;}"+
                 "#timestamp{margin-bottom:30px;}"+
                 ".critical{ background:#ffdddd; } "+
+                ".correct{ background:#ddffdd; } "+
                 ".other{ background:#ffd39e; } "+
                 ".warning{ background:#fafcc2; } "+
                 ".char_Cyrillic{ color:#b51d0d; } "+
                 ".char_Greek{ background:#022299; } "+
                 ".char_Armenian{ background:#ad7600; } "+
                 ".char_Georgian{ background:#9c026d; } "+
-                "</style>\n";
-        report += "   </head>\n   <body>\n";
-
+                "</style>\n");
+        report.append("   </head>\n   <body>\n");
+        
         //add timestamp
-        report += "   <div id='timestamp'>Generated: ";
+        report.append("   <div id='timestamp'>Generated: ");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        report += timestamp + "</div>\n";
-
-        report += "<table>\n  <thead><tr>" +
+        report.append(timestamp + "</div>\n");
+        
+        report.append("<table>\n  <thead><tr>" +
+            "<th>ID</th>" +
             "<th>Type</th>"+
             "<th>Function</th>"+
             "<th>Filename:line.column</th>"+
             "<th>Error</th>" +
             "<th>Fix</th>"+
             "<th>Original</th>" +
-            "</tr></thead>\n";
-        report += "  <tbody>\n";
+            "</tr></thead>\n");
+        report.append("  <tbody>\n");
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
-                    report += "<tr class='critical'><td style='border-left: red solid 3px'>Critical</td><td>";
+                    report.append("<tr class='critical'><td>" + errors.indexOf(error) + "</td><td style='border-left: red solid 3px'>Critical</td><td>");
+                    break;
+                case CORRECT:
+                    report.append("<tr class='correct'><td>" + errors.indexOf(error) + "</td><td style='border-left: green solid 3px'>Correct</td><td>");
                     break;
                 case WARNING:
-                    report += "<tr class='warning'><td style='border-left: yellow solid 3px'>Warning</td><td>";
+                    report.append("<tr class='warning'><td>" + errors.indexOf(error) + "</td><td style='border-left: yellow solid 3px'>Warning</td><td>");
                     break;
                 case NOTE:
-                    report += "<tr class='note'><td style='border-left: green solid 3px'>Note</td><td>";
+                    report.append("<tr class='note'><td>" + errors.indexOf(error) + "</td><td style='border-left: green solid 3px'>Note</td><td>");
                     break;
                 case UNKNOWN:
-                    report += "<tr class='unknown'><td style='border-left: orange solid 3px'>Unknown</td><td>";
+                    report.append("<tr class='unknown'><td>" + errors.indexOf(error) + "</td><td style='border-left: orange solid 3px'>Unknown</td><td>");
                     break;
                 default:
-                    report += "<tr class='other'><td style='border-left: black solid 3px'>Other</td><td>";
+                    report.append("<tr class='other'><td>" + errors.indexOf(error) + "</td><td style='border-left: black solid 3px'>Other</td><td>");
                     break;
             }
-            report += error.getFunction() + "</td><td>";
-            report += error.getLocation() + "</td>";
-            report += "<td style='white-space: pre'>" +
-                error.getWhat() +
-                "</td>";
-            report += "<td style='white-space: pre'>" +
-                error.getHowto() +
-                "</td>";
-            report += "<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre;'>(" +
-                error.getLocalisedMessage() +
-                ")</td>\n";
-            report += "<!-- " + error.getStackTrace() + " -->\n";
-            report += "</tr>";
+            report.append(StringEscapeUtils.escapeHtml4(error.getFunction()) + "</td><td>");
+            report.append(StringEscapeUtils.escapeHtml4(error.getLocation()) + "</td>");
+            report.append("<td style='white-space: pre'>" +
+                StringEscapeUtils.escapeHtml4(error.getWhat()).replace("\n", "<br>") +
+                "</td>");
+            report.append("<td style='white-space: pre'>" +
+                StringEscapeUtils.escapeHtml4(error.getHowto()).replace("\n", "<br>") +
+                "</td>");
+            report.append("<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre;'>(" +
+                StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
+                ")</td>\n");
+            report.append("<!-- " + StringEscapeUtils.escapeHtml4(error.getStackTrace()) + " -->\n");
+            report.append("</tr>");
         }
-        report += "  </tbody>\n  </table>\n";
-
+        report.append("  </tbody>\n  </table>\n");
+        
         //initiate DataTable on <table>
-        report += "<script>$(document).ready( function () {\n" +
+        report.append("<script>$(document).ready( function () {\n" +
                   "    $('table').DataTable({ 'iDisplayLength': 50 });\n" +
-                  "} );</script>";
 
-        report += "   <footer style='white-space: pre'>" + summarylines + "</footer>";
-        report += "   </body>\n</html>";
-
-        return report;
+                  "} );</script>");
+        
+        report.append("   <footer style='white-space: pre'>" + summarylines + "</footer>");
+        report.append("   </body>\n</html>");
+        
+        return report.toString();
     }
 
     /* Generate a CSV file with validation errors list with double quotes as delimeters*/
     public static String GenerateCSV (Collection<ReportItem> errors, String summarylines) {
-        String report = new String();
-        report += "\"Type\"\t\"Function\"\t\"Filename:line.column\"\t\"Error\"\t\"Fix\"\t\"Original\"\n";
+        StringBuilder report = new StringBuilder();
+        report.append("Type\"Function\"FIlename:line.column\"Error\"Fix\"Original\n");
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
-                    report += "\"Critical\"\t";
+                    report.append("Critical\"");
                     break;
                 case WARNING:
-                    report += "\"Warning\"\t";
+                    report.append("Warning\"");
                     break;
                 case NOTE:
-                    report += "\"Note\"\t";
+                    report.append("Note\"");
                     break;
                 case UNKNOWN:
-                    report += "\"Unknown\"\t";
+                    report.append("Unknown\"");
                     break;
                 default:
-                    report += "\"Other\"\t";
+                    report.append("Other\"");
                     break;
             }
-            report += "\"" + error.getFunction() + "\"\t";
-            report += "\"" + error.getLocation() + "\"\t";
-            report += "\"" + error.getWhat() + "\"\t";
-            report += "\"" + error.getHowto() + "\"\t";
-            report += "\"" + error.getLocalisedMessage() + "\"\n";
+            report.append(error.getFunction() + "\"");
+            report.append(error.getLocation() + "\"");
+            report.append(error.getWhat() + "\"");
+            report.append(error.getHowto() + "\"");
+            report.append(error.getLocalisedMessage() + "\"");
+            report.append(error.getStackTrace() +"\n");
         }
-        return report;
+        return report.toString();
+       }
+
+    /**
+     * Creates a new map from a string array of keys and an object array of values.
+     * Only covers the shorter one completely
+     * @param keys the keys
+     * @param vals the values
+     * @return the map
+     */
+    public static Map<String,Object> newParamMap(String[] keys, Object[] vals) {
+        List<String> validKeys = Arrays.asList(new String[]{"function", "filename", "exception", "description",
+                "columns", "lines", "howtoFix", "tier", "segment"});
+           HashMap<String,Object> params = new HashMap<>();
+           for (int i = 0 ; i < Math.min(keys.length,vals.length); i++) {
+               if (validKeys.contains(keys[i]))
+                   params.put(keys[i],vals[i]);
+               else
+                   throw new IllegalArgumentException("Invalid key for parameter given");
+           }
+           return params;
        }
 }

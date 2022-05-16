@@ -15,6 +15,8 @@ import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -154,4 +156,8 @@ public abstract class Converter implements CorpusFunction {
         return canfix;
     }
 
+    @Override
+    public Map<String, String> getParameters() {
+        return Collections.EMPTY_MAP;
+    }
 }

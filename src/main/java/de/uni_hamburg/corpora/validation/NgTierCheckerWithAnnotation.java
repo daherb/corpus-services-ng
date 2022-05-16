@@ -31,8 +31,9 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
     ArrayList<String> annotations = new ArrayList<>(); // list for holding annotations of annotation spec file
     int counter = 0; // counter for controlling whether we are on coma or annotation spec file
 
-    public NgTierCheckerWithAnnotation() {
-        super(false);
+    public NgTierCheckerWithAnnotation(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     /**
@@ -165,7 +166,7 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         IsUsableFor.add(AnnotationSpecification.class);
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         return IsUsableFor;
     }
 

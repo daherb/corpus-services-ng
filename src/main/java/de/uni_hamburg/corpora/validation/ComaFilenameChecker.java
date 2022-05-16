@@ -13,10 +13,7 @@ import de.uni_hamburg.corpora.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,9 +32,9 @@ public class ComaFilenameChecker extends Checker implements CorpusFunction {
     Pattern unacceptable;
     ValidatorSettings settings = new ValidatorSettings();
 
-    public ComaFilenameChecker() {
+    public ComaFilenameChecker(Properties properties) {
         //fixing is not possible
-        super(false);
+        super(false,properties);
     }
 
     /**

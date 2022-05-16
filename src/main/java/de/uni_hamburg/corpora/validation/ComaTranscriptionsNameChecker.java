@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -27,9 +29,9 @@ import org.xml.sax.SAXException;
  */
 public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunction {
 
-    public ComaTranscriptionsNameChecker() {
+    public ComaTranscriptionsNameChecker(Properties properties) {
         //can fix
-        super(true);
+        super(true,properties);
     }
 
     /**

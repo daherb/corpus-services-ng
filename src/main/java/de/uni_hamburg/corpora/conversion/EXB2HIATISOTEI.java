@@ -5,7 +5,7 @@
  */
 package de.uni_hamburg.corpora.conversion;
 
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 import de.uni_hamburg.corpora.ComaData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
@@ -275,7 +275,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
     public Document cd2SegmentedTranscription(CorpusData cd) throws SAXException, FSMException {
         //we create a BasicTranscription form the CorpusData
-        EXMARaLDACorpusData btd = (EXMARaLDACorpusData) cd;
+        EXMARaLDATranscriptionData btd = (EXMARaLDATranscriptionData) cd;
         BasicTranscription bt = btd.getEXMARaLDAbt();
         //normalize the exb (!)
         bt.normalize();
@@ -809,7 +809,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
+            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDATranscriptionData");
             IsUsableFor.add(cl);
             //Coma will only be used if a corpus is supplied
             //Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");

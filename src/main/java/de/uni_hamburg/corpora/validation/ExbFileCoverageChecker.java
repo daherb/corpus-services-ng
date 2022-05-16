@@ -15,10 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,9 +38,9 @@ public class ExbFileCoverageChecker extends Checker implements CorpusFunction {
     static List<String> whitelist;
     static List<String> fileendingwhitelist;
 
-    public ExbFileCoverageChecker() {
+    public ExbFileCoverageChecker(Properties properties) {
         //no fixing available
-        super(false);
+        super(false,properties);
         // these are acceptable
         setWhitelist();
 
@@ -101,7 +98,7 @@ public class ExbFileCoverageChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     public static void setWhitelist() {

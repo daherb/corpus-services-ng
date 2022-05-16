@@ -11,6 +11,8 @@ import de.uni_hamburg.corpora.Report;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -52,7 +54,7 @@ public class CalculateAnnotatedTimeTest {
         String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ExbCalculateAnnotatedTime instance = new ExbCalculateAnnotatedTime();
+        ExbCalculateAnnotatedTime instance = new ExbCalculateAnnotatedTime(new Properties());
         Collection<CorpusData> cdc;
         //what happens when we check exb files
         for (CorpusData cd : corp.getContentdata()) {
@@ -69,7 +71,7 @@ public class CalculateAnnotatedTimeTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ExbCalculateAnnotatedTime instance = new ExbCalculateAnnotatedTime();
+        ExbCalculateAnnotatedTime instance = new ExbCalculateAnnotatedTime(new Properties());
         //Collection<Class> expResult = null;
         //Collection<Class> result = instance.getIsUsableFor();
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();

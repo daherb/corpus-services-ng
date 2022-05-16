@@ -10,6 +10,7 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import java.util.regex.Pattern;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -36,9 +37,9 @@ public class FlextextPunctuationChecker extends Checker implements CorpusFunctio
     Document doc;
     String flexFile = "";
 
-    public FlextextPunctuationChecker() {
-        //fixing option available
-        super(true);
+    public FlextextPunctuationChecker(Properties properties) {
+        //fixing is possible
+        super(true, properties);
     }
 
     /**

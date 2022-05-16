@@ -6,12 +6,13 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -31,18 +32,18 @@ import org.xml.sax.SAXException;
 public class ExbNormalize extends Checker implements CorpusFunction {
 
     Document doc = null;
-    EXMARaLDACorpusData btd = null;
+    EXMARaLDATranscriptionData btd = null;
     Boolean fixWhiteSpaces = false;
 
-    public ExbNormalize() {
-        super(true);
+    public ExbNormalize(Properties properties) {
+        super(true, properties);
     }
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (fix) {
-            btd = (EXMARaLDACorpusData) cd;
+            btd = (EXMARaLDATranscriptionData) cd;
             BasicTranscription bt = btd.getEXMARaLDAbt();
             bt.normalize();
             if (fixWhiteSpaces) {
@@ -67,7 +68,7 @@ public class ExbNormalize extends Checker implements CorpusFunction {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     public void setfixWhiteSpaces(String s) {

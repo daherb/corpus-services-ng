@@ -8,10 +8,7 @@ import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -54,9 +51,9 @@ public class ExbMerger extends Checker implements CorpusFunction {
     //private int noOfAnnotations = 0;     // total no of annotations
     //private int noOfDifferentAnnotations = 0; // total number of different annotations between different two different versions 
 
-    public ExbMerger() {
+    public ExbMerger(Properties properties) {
         //fixing option available
-        super(false);
+        super(false, properties);
     }
 
     /**
@@ -459,7 +456,7 @@ public class ExbMerger extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
 

@@ -37,9 +37,9 @@ public class ComaAddTiersFromExbsCorrector extends Checker implements CorpusFunc
     String tierTextFormat = "%s";
     String comaLoc = "";
 
-    public ComaAddTiersFromExbsCorrector() {
+    public ComaAddTiersFromExbsCorrector(Properties properties) {
         //can fix
-        super(true);
+        super(true,properties);
     }
 
     /**

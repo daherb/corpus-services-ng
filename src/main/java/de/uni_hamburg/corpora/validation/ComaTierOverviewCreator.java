@@ -1,18 +1,14 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
-import java.util.ArrayList;
+
+import java.util.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.TreeSet;
-import java.util.List;
-import java.util.Set;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -29,9 +25,9 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
 
     String comaLoc = "";
 
-    public ComaTierOverviewCreator() {
+    public ComaTierOverviewCreator(Properties properties) {
         //no fixing available
-        super(false);
+        super(false,properties);
     }
 
     /**
@@ -46,7 +42,7 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
         CorpusIO cio = new CorpusIO();
         Collection<URL> resulturls;
         ArrayList<Tier> tiers = new ArrayList<>();
-        ArrayList<EXMARaLDACorpusData> btds = new ArrayList<>();
+        ArrayList<EXMARaLDATranscriptionData> btds = new ArrayList<>();
         String htmltemplate = TypeConverter.InputStream2String(getClass().getResourceAsStream("/xsl/tier_overview_datatable_template.html"));
         String overviewTable = "";
         String communicationsTable = "";
@@ -54,7 +50,7 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
         for (URL resulturl : resulturls) {
             CorpusData cdexb = cio.readFileURL(resulturl);
             if (cdexb!=null) {
-            EXMARaLDACorpusData btexb = (EXMARaLDACorpusData) cdexb;
+            EXMARaLDATranscriptionData btexb = (EXMARaLDATranscriptionData) cdexb;
 
             btds.add(btexb);
             Tier t;
@@ -124,7 +120,7 @@ public class ComaTierOverviewCreator extends Checker implements CorpusFunction {
                     + "   </thead>\n"
                     + "   <tbody>\n";
             String content = "";
-            for (EXMARaLDACorpusData btd : btds) {
+            for (EXMARaLDATranscriptionData btd : btds) {
                 //first is the column for filename, then all the tier category/type combinations
                 content = content + "<tr><td class=\"compact\">" + btd.getFilename() + "</td>";
                 for (String s : hash_Set) {

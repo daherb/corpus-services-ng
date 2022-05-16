@@ -40,9 +40,9 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
     boolean missingTimestamp = false;
     Document doc;
 
-    public ExbEventTokenizationChecker() {
+    public ExbEventTokenizationChecker(Properties properties) {
         //fixing option not available
-        super(false);
+        super(false, properties);
     }
     
     String tokensTierName = "t";
@@ -162,7 +162,7 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class) ;
+        return Collections.singleton(EXMARaLDATranscriptionData.class) ;
     }
 
     /**

@@ -13,6 +13,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,9 +35,9 @@ public class ComaChartsGeneration extends Checker implements CorpusFunction {
     boolean inel = false;
     String xslpath = "/xsl/Coma2Charts.xsl";
     
-    public ComaChartsGeneration() {
+    public ComaChartsGeneration(Properties properties) {
         //no fixing available
-        super(false);
+        super(false,properties);
     }
 
     @Override

@@ -12,6 +12,8 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -53,7 +55,7 @@ public class FilenameCheckerTest {
         String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        ComaFilenameChecker instance = new ComaFilenameChecker();
+        ComaFilenameChecker instance = new ComaFilenameChecker(new Properties());
         Collection<CorpusData> cdc;
 
         //what happens when we check exb files
@@ -73,7 +75,7 @@ public class FilenameCheckerTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        ComaFilenameChecker instance = new ComaFilenameChecker();
+        ComaFilenameChecker instance = new ComaFilenameChecker(new Properties());
         //Collection<Class> expResult = null;
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here

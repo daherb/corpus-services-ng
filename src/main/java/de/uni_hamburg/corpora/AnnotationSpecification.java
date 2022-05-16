@@ -109,4 +109,18 @@ public class AnnotationSpecification implements CorpusData, XMLData {
     public void setJdom(Document njdom) {
         jdom = njdom;
     }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return new AnnotationSpecification(this.url);
+        }
+    }
+
+    @Override
+    public Location getLocation(String token) {
+        return new Location("undefined","");
+    }
 }

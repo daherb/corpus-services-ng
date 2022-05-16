@@ -6,7 +6,7 @@
 package de.uni_hamburg.corpora.visualization;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import java.io.IOException;
@@ -231,8 +231,8 @@ public class ScoreHTML extends Visualizer {
     @Override
     public Report function(Corpus co) throws JDOMException, TransformerException, TransformerConfigurationException, IOException, MalformedURLException, ParserConfigurationException, SAXException, XPathExpressionException {
         Report stats = new Report();
-        Collection<EXMARaLDACorpusData> btc = co.getBasicTranscriptionData();
-        for (EXMARaLDACorpusData bt : btc) {
+        Collection<EXMARaLDATranscriptionData> btc = co.getBasicTranscriptionData();
+        for (EXMARaLDATranscriptionData bt : btc) {
             stats.merge(function(bt));
         }
         return stats;
@@ -241,7 +241,7 @@ public class ScoreHTML extends Visualizer {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDACorpusData");
+            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDATranscriptionData");
             IsUsableFor.add(cl);
         } catch (ClassNotFoundException ex) {
             report.addException(ex, "Usable class not found.");

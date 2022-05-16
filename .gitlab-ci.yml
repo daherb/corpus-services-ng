@@ -1,11 +1,15 @@
 compile_withmaven:
   image: maven:latest
   script:
+    - cd lib
+    - bash download.sh
+    - cd ..
     - mvn install:install-file -Dfile=lib/EXMARaLDA-Preview-20201130.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=Preview-20201130 -Dpackaging=jar  -DgeneratePom=true
+#    - mvn install:install-file -Dfile=lib/EXMARaLDA.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=1.0 -Dpackaging=jar  -DgeneratePom=true
+    - mvn install:install-file -Dfile=lib/elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
     - mvn clean test compile assembly:single
     
   artifacts:
     expire_in: 10 week
-    paths:
-    
+    paths:    
       - target/corpus-services-1.0.jar

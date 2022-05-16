@@ -37,9 +37,9 @@ public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
     boolean generateDoc = true; // flag for whether the file created or not
     int iterateExbs = 0;
 
-    public GenerateAnnotationPanel() {
-        //fixing not available
-        super(false);
+    public GenerateAnnotationPanel(Properties properties) {
+        //fixing is not possible
+        super(false, properties);
     }
 
     /**
@@ -181,7 +181,7 @@ public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         IsUsableFor.add(ComaData.class);
         return IsUsableFor;
     }

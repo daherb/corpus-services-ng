@@ -21,6 +21,7 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -35,9 +36,9 @@ import org.w3c.dom.NodeList;
  */
 public class ExbFileReferenceChecker extends Checker implements CorpusFunction {
 
-    public ExbFileReferenceChecker() {
+    public ExbFileReferenceChecker(Properties properties) {
         //no fixing option available
-        super(false);
+        super(false,properties);
     }
 
     /**
@@ -95,7 +96,7 @@ public class ExbFileReferenceChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     /**Default function which returns a two/three line description of what 

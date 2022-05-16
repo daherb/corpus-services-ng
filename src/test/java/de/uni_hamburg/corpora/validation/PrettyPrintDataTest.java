@@ -12,6 +12,7 @@ import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -55,7 +56,7 @@ public class PrettyPrintDataTest {
             String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
-            PrettyPrintData instance = new PrettyPrintData();
+            PrettyPrintData instance = new PrettyPrintData(new Properties());
             //what happens when we check coma files
             Collection<CorpusData> cdc;
             //what happens when we check coma files
@@ -89,7 +90,7 @@ public class PrettyPrintDataTest {
             PrettyPrinter pp = new PrettyPrinter();
             URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
             Corpus corp = new Corpus(corpusURL);
-            PrettyPrintData instance = new PrettyPrintData();
+            PrettyPrintData instance = new PrettyPrintData(new Properties());
             //what happens when we check coma files
             Collection<CorpusData> cdc;
             //what happens when we check coma files
@@ -155,7 +156,7 @@ public class PrettyPrintDataTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        PrettyPrintData instance = new PrettyPrintData();
+        PrettyPrintData instance = new PrettyPrintData(new Properties());
         //Collection<Class> expResult = null;
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here

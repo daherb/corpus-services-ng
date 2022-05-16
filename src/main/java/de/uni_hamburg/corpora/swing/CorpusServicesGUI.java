@@ -824,7 +824,7 @@ public class CorpusServicesGUI extends javax.swing.JFrame {
                     System.out.println("[Directory " + f.getName() + "]");
                     //need to use CorpusIO read(URL) method here
                     //that gives back a Colelction of CorpusData Objects
-                    ArrayList<CorpusData> allcd = (ArrayList<CorpusData>) cio.read(url);
+                    ArrayList<CorpusData> allcd = (ArrayList<CorpusData>) cio.read(url, report);
                     for (CorpusData cd: allcd){
                         message(cd.getFilename() + " added to list.");    
                     }                 

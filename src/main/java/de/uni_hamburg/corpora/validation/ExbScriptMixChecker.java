@@ -45,9 +45,9 @@ public class ExbScriptMixChecker extends Checker implements CorpusFunction {
     Pattern rxGeorgian = Pattern.compile(sCharClassGeorgian, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CHARACTER_CLASS);
     Map<String, Pattern> dictScripts = new HashMap<>();
     
-    public ExbScriptMixChecker() {
+    public ExbScriptMixChecker(Properties properties) {
         //no fixing option available
-        super(false);
+        super(false, properties);
         dictScripts.put("Cyrillic", rxCyr);
         dictScripts.put("Latin", rxLat);
         dictScripts.put("Greek", rxGreek);
@@ -63,7 +63,7 @@ public class ExbScriptMixChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class) ;
+        return Collections.singleton(EXMARaLDATranscriptionData.class) ;
     }
     
     

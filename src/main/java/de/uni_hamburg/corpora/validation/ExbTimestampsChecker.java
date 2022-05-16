@@ -17,6 +17,7 @@ import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -36,9 +37,9 @@ public class ExbTimestampsChecker extends Checker implements CorpusFunction {
     boolean missingTimestamp = false;
     Document doc;
 
-    public ExbTimestampsChecker() {
+    public ExbTimestampsChecker(Properties properties) {
         //fixing option not available
-        super(false);
+        super(false, properties);
     }
         
     /**
@@ -105,7 +106,7 @@ public class ExbTimestampsChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(SegmentedEXMARaLDATranscription.class);
+        return Collections.singleton(EXMARaLDASegmentedTranscriptionData.class);
     }
 
     /**

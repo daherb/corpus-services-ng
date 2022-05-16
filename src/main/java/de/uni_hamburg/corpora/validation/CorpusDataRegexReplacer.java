@@ -9,10 +9,7 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -40,8 +37,8 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
     Document doc = null;
     XPath context;
 
-    public CorpusDataRegexReplacer() {
-        super(true);
+    public CorpusDataRegexReplacer(Properties properties) {
+        super(true, properties);
     }
 
     /**
@@ -110,7 +107,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
         if (coma) {
             IsUsableFor.add(ComaData.class);
         } else {
-            IsUsableFor.add(EXMARaLDACorpusData.class);
+            IsUsableFor.add(EXMARaLDATranscriptionData.class);
         }
         return IsUsableFor;
     }
@@ -155,7 +152,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
             stats = function(cd, fix);
 
         } else {
-            for (EXMARaLDACorpusData btd : c.getBasicTranscriptionData()) {
+            for (EXMARaLDATranscriptionData btd : c.getBasicTranscriptionData()) {
                 stats.merge(function(btd, fix));
             }
         }

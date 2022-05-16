@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -36,8 +37,8 @@ import org.xml.sax.SAXException;
  */
 public class ComaXsdChecker extends Checker implements CorpusFunction {
 
-    public ComaXsdChecker() {
-        super(false);
+    public ComaXsdChecker(Properties properties) {
+        super(false, properties);
     }
     
     /**

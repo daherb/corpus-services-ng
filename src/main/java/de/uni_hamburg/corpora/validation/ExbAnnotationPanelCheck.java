@@ -6,10 +6,7 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,9 +31,9 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
 
     ArrayList<String> allTagStrings = new ArrayList<>();
 
-    public ExbAnnotationPanelCheck() {
+    public ExbAnnotationPanelCheck(Properties properties) {
         //no fixing option available
-        super(false);
+        super(false, properties);
     }
 
     /**
@@ -104,7 +101,7 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         Set<Class<? extends CorpusData>> IsUsableFor = new HashSet<>();
         IsUsableFor.add(AnnotationSpecification.class);
-        IsUsableFor.add(EXMARaLDACorpusData.class);
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
         return IsUsableFor;
     }
 

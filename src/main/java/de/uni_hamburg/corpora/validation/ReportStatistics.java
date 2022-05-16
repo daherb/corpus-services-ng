@@ -10,9 +10,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,9 +32,9 @@ public class ReportStatistics extends Checker implements CorpusFunction {
     CorpusData cd;
     String corpusname = "";
 
-    public ReportStatistics() {
+    public ReportStatistics(Properties parameters) {
         //no fixing available
-        super(false);
+        super(false,parameters);
     }
 
     @Override

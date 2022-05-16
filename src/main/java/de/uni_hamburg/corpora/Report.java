@@ -9,14 +9,18 @@
  */
 package de.uni_hamburg.corpora;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import de.uni_hamburg.corpora.ReportItem.Severity;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+
 import org.jdom.JDOMException;
 
 /**
@@ -47,12 +51,12 @@ public class Report {
     /**
      * the data structure holding all statistics.
      */
-    private Map<String, Collection<ReportItem>> statistics;
+    private Map<String, List<ReportItem>> statistics;
 
     /**
      * convenience function to create new statistic set if missing or get old.
      */
-    private Collection<ReportItem> getOrCreateStatistic(String statId) {
+    private List<ReportItem> getOrCreateStatistic(String statId) {
         if (!statistics.containsKey(statId)) {
             statistics.put(statId, new ArrayList<ReportItem>());
         }
@@ -63,7 +67,7 @@ public class Report {
      * Create empty report.
      */
     public Report() {
-        statistics = new HashMap<String, Collection<ReportItem>>();
+        statistics = new HashMap<String, List<ReportItem>>();
     }
 
     /**
@@ -71,16 +75,18 @@ public class Report {
      * this one.
      */
     public void merge(Report sr) {
-        for (Map.Entry<String, Collection<ReportItem>> kv
+        for (Map.Entry<String, List<ReportItem>> kv
                 : sr.statistics.entrySet()) {
-            if (statistics.containsKey(kv.getKey())) {
-                Collection<ReportItem> c
+            getOrCreateStatistic(kv.getKey()).addAll(kv.getValue());
+            /*if (statistics.containsKey(kv.getKey())) {
+                List<ReportItem> c
                         = statistics.get(kv.getKey());
                 c.addAll(kv.getValue());
                 statistics.put(kv.getKey(), c);
+                statistics.get(kv.getKey()).addAll(kv.getValue());
             } else {
                 statistics.put(kv.getKey(), kv.getValue());
-            }
+            }*/
         }
     }
 
@@ -110,8 +116,18 @@ public class Report {
      */
     public void addCritical(String statId, String description) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
+        stat.add(new ReportItem(ReportItem.Severity.CRITICAL, statId,
                 description));
+    }
+
+    /**
+     * Puts a new repot item into a bucket using the information given in a map
+     * @param statId the bucket the item has to be put into
+     * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
+     */
+    public void addCritical(String statId, Map<String,Object> params) {
+        Collection<ReportItem> stat = getOrCreateStatistic(statId);
+        stat.add(new ReportItem(ReportItem.Severity.CRITICAL, params));
     }
 
     /**
@@ -194,6 +210,16 @@ public class Report {
     }
 
     /**
+     * Puts a new repoty item into a bucket using the information given in a map
+     * @param statId the bucket the item has to be put into
+     * @param params the map for all relevant parameters
+     */
+    public void addWarning(String statId, Map<String,Object> params) {
+        Collection<ReportItem> stat = getOrCreateStatistic(statId);
+        stat.add(new ReportItem(Severity.WARNING, params));
+    }
+
+    /**
      * Add error about missing data in named statistics bucket.
      */
     public void addMissing(String statId, String description) {
@@ -209,6 +235,16 @@ public class Report {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
         stat.add(new ReportItem(ReportItem.Severity.MISSING,
                 cd.getURL().toString(), description, statId));
+    }
+
+     /**
+     * Puts a new repot item into a bucket using the information given in a map
+     * @param statId the bucket the item has to be put into
+     * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
+     */
+    public void addCorrect(String statId, Map<String,Object> params) {
+        Collection<ReportItem> stat = getOrCreateStatistic(statId);
+        stat.add(new ReportItem(Severity.CORRECT, params));
     }
 
     /**
@@ -244,7 +280,7 @@ public class Report {
      */
     public void addNote(String statId, String description) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.NOTE,
+        stat.add(new ReportItem(ReportItem.Severity.NOTE, statId,
                 description));
     }
 
@@ -385,7 +421,7 @@ public class Report {
      */
     public String getSummaryLines() {
         String rv = "";
-        for (Map.Entry<String, Collection<ReportItem>> kv
+        for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             rv += getSummaryLine(kv.getKey());
         }
@@ -443,7 +479,7 @@ public class Report {
      */
     public String getErrorReports() {
         String rv = "Errors:\n";
-        for (Map.Entry<String, Collection<ReportItem>> kv
+        for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             rv += getErrorReport(kv.getKey());
         }
@@ -455,7 +491,7 @@ public class Report {
      */
     public String getWarningReports() {
         String rv = "Warnings:\n";
-        for (Map.Entry<String, Collection<ReportItem>> kv
+        for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             rv += getWarningReport(kv.getKey());
         }
@@ -486,7 +522,7 @@ public class Report {
      */
     public String getFullReports() {
         String rv = "All reports\n";
-        for (Map.Entry<String, Collection<ReportItem>> kv
+        for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             rv += getFullReport(kv.getKey());
         }
@@ -496,9 +532,9 @@ public class Report {
     /**
      * Get single collection of statistics.
      */
-    public Collection<ReportItem> getRawStatistics() {
-        Collection<ReportItem> allStats = new ArrayList<ReportItem>();
-        for (Map.Entry<String, Collection<ReportItem>> kv
+    public List<ReportItem> getRawStatistics() {
+        List<ReportItem> allStats = new ArrayList<ReportItem>();
+        for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             allStats.addAll(kv.getValue());
         }
@@ -508,16 +544,18 @@ public class Report {
     /**
      * Get single collection of only error statistics.
      */
-    public Collection<ReportItem> getErrorStatistics() {
-        Collection<ReportItem> errorStats = new ArrayList<ReportItem>();
-        Collection<ReportItem> onlyerrorStats = new ArrayList<ReportItem>();
-        for (Map.Entry<String, Collection<ReportItem>> kv
+    public List<ReportItem> getErrorStatistics() {
+        List<ReportItem> errorStats = new ArrayList<ReportItem>();
+        List<ReportItem> onlyerrorStats = new ArrayList<ReportItem>();
+        for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             errorStats.addAll(kv.getValue());
         }
         for (ReportItem ri : errorStats) {
-            // HL 20210628: Should use isBad?
-            if (ri.getSeverity().equals(Severity.CRITICAL) || ri.getSeverity().equals(Severity.WARNING) || ri.getSeverity().equals(Severity.MISSING)) {
+            // HL 20210628: Change to isSever to match getErrorReports
+            //if (ri.getSeverity().equals(Severity.CRITICAL) || ri.getSeverity().equals(Severity.WARNING) || ri
+            // .getSeverity().equals(Severity.MISSING)) {
+            if (ri.isSevere()) {
                 //now make the Location relative to the base dir
                 // HL 20210628: This line does not do anything?
                 ri.getLocation();
@@ -533,7 +571,7 @@ public class Report {
      */
     public String getFixJson(Corpus corpus) throws JDOMException {
         String rv = "";
-        for (Map.Entry<String, Collection<ReportItem>> kfj
+        for (Map.Entry<String, List<ReportItem>> kfj
                 : statistics.entrySet()) {
             rv += getFixLine(kfj.getKey(), corpus);
         }
@@ -546,7 +584,7 @@ public class Report {
      */
     public String getFixJson() {
         String rv = "";
-        for (Map.Entry<String, Collection<ReportItem>> kfj
+        for (Map.Entry<String, List<ReportItem>> kfj
                 : statistics.entrySet()) {
             rv += getFixLine(kfj.getKey());
         }
@@ -649,4 +687,20 @@ public class Report {
         return line;
     }
 
+    /**
+     * Dumps the complete report into a JSON file
+     * @param filename the filename of the target JSON file
+     */
+    public void dump(String filename) {
+        // Generate pretty-printed json
+        ObjectMapper mapper = new ObjectMapper();
+        // Allows serialization even when getters are missing
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
+        try {
+            mapper.writeValue(new File(filename),this.getRawStatistics());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
