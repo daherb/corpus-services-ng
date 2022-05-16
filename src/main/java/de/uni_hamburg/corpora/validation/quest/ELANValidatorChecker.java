@@ -21,6 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +37,7 @@ import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 public class ELANValidatorChecker extends Checker implements CorpusFunction {
 
     // The local logger that can be used for debugging
-    // Logger logger = Logger.getLogger(this.getClass().toString());
+    Logger logger = Logger.getLogger(this.getClass().toString());
 
     public ELANValidatorChecker(Properties properties) {
         super(false, properties) ;
@@ -56,21 +57,29 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
         eafValidator.validate();
         ProcessReport eafReport = eafValidator.getReport();
         // Extract the errors and warnings from the validator report
-        Matcher m = Pattern.compile("Received (\\d+) warnings and (\\d+) errors").matcher(eafReport.getReportAsString());
-        if (m.matches()) {
-            int warningCount = Integer.parseInt(m.group(1));
-            int errorCount = Integer.parseInt(m.group(2));
-            if (warningCount == 0 && errorCount == 0)
-                report.addNote(getFunction(), "No errors and warnings");
-            else if (warningCount > 0 && errorCount == 0)
-                report.addWarning(getFunction(), "Encountered " + warningCount + " warnings and no errors");
-            else if (warningCount == 0 && errorCount > 0)
-                report.addCritical(getFunction(), "Encountered no warnings and " + errorCount + " errors");
-            else
-                report.addCritical(getFunction(), "Encountered " + warningCount + " warnings and " + errorCount + " errors");
-        }
-        else
-            report.addCritical(getFunction(), "Error extracting warning and error counts");
+//        Boolean matched = false;
+//        for (String line : eafReport.getReportAsString().split("\n+")) {
+//            Matcher m = Pattern.compile("Received (\\d+) warnings and (\\d+) errors").matcher(line);
+//            if (m.matches()) {
+//                matched = true;
+//                int warningCount = Integer.parseInt(m.group(1));
+//                int errorCount = Integer.parseInt(m.group(2));
+//                if (warningCount == 0 && errorCount == 0)
+//                    report.addNote(getFunction(), "No errors and warnings");
+//                else if (warningCount > 0 && errorCount == 0)
+//                    report.addWarning(getFunction(), "Encountered " + warningCount + " warnings and no errors");
+//                else if (warningCount == 0 && errorCount > 0)
+//                    report.addCritical(getFunction(), "Encountered no warnings and " + errorCount + " errors");
+//                else
+//                    report.addCritical(getFunction(), "Encountered " + warningCount + " warnings and " + errorCount + " errors");
+//            }
+//        if (!matched)
+//            report.addCritical(getFunction(),
+//                    ReportItem.newParamMap(
+//                            new String[]{"function", "filename", "description"},
+//                            new Object[]{getFunction(), cd.getFilename(), "Error extracting warning and error counts"}));
+//        }
+        report.addNote(getFunction(),cd,"EAF Validator report:\n" + eafReport.getReportAsString());
         return report;
     }
 
