@@ -43,12 +43,12 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     private boolean showTagStats = false;
 
     // List of tiers to be checked
-    private final List<String> tierIds = new ArrayList<>();
+    protected final List<String> tierIds = new ArrayList<>();
     // Regex to separate tokens
     private final String tokenSeparator = "\\s+" ;
 
     // Check if the minimal setup is done
-    private boolean setUp = false;
+    protected boolean setUp = false;
 
     public AnnotationChecker(Properties properties) {
         super(false, properties);
