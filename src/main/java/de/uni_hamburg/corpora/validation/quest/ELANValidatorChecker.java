@@ -56,6 +56,7 @@ public class ELANValidatorChecker extends Checker implements CorpusFunction {
         EAFValidator eafValidator = new EAFValidator(fileUri);
         eafValidator.validate();
         ProcessReport eafReport = eafValidator.getReport();
+        // TODO: Analyse report to give better feedback
         // Extract the errors and warnings from the validator report
 //        Boolean matched = false;
 //        for (String line : eafReport.getReportAsString().split("\n+")) {
