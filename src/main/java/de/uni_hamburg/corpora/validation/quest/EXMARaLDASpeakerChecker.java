@@ -42,11 +42,18 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
      */
     @Override
     protected List<String> getCorpusSpeakerList(Corpus c) throws JDOMException {
-        Document dom = c.getComaData().getJdom();
-        uniqueSpeakerDistinction = dom.getRootElement().getAttributeValue("uniqueSpeakerDistinction");
-        List<Text> sigles = Collections.checkedList(XPath.newInstance("//Speaker/Sigle/text()").selectNodes(dom),
-                Text.class);
-        return sigles.stream().map(Text::getText).collect(Collectors.toList());
+        List<String> speakers = new ArrayList<>();
+        for (CorpusData cd : c.getCorpusData()) {
+            if (cd.getClass().equals(ComaData.class)) {
+                Document dom = ((ComaData) cd).getJdom();
+                uniqueSpeakerDistinction = dom.getRootElement().getAttributeValue("uniqueSpeakerDistinction");
+                List<Text> sigles = Collections.checkedList(XPath.newInstance("//Speaker/Sigle/text()").selectNodes(dom),
+                        Text.class);
+                speakers.addAll(sigles.stream().map(Text::getText).collect(Collectors.toList()));
+            }
+
+        }
+        return speakers;
     }
 
     /**
