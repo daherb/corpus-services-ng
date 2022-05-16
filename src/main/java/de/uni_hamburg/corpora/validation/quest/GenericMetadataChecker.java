@@ -103,11 +103,6 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        // Validate XML data if possible
-        if (cd instanceof XMLData) {
-            XsdChecker xsdc = new XsdChecker(new Properties());
-            report.merge(xsdc.function(cd,false));
-        }
         // Only work if properly set up
         if (setUp && shouldBeChecked(cd.getURL())) {
             for (GenericMetadataCriterion c : criteria) {
