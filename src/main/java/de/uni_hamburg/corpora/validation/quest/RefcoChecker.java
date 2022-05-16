@@ -693,7 +693,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         if (refcoFileLoaded) {
             report.addNote(getFunction(),"Report created by RefCo checker version " + REFCO_CHECKER_VERSION +
-                    " based on documentation following RefCo " + criteria.refcoVersion +
+                    " based on documentation following RefCo " + criteria.refcoVersion.information +
                     " specification version");
             System.out.println("... running the corpus function");
             // Create the current report
