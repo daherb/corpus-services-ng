@@ -73,14 +73,15 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     /**
      * Loads the tags from an annotation specification file
      * see https://exmaralda.org/en/utilities/ Templates for working with the Annotation Panel
-     * @param fileName the name of the annotation specification file
+     * @param fileName the name of the annotation specification file as a resource
      * @return the list of tags specified
      */
     private Collection<String> loadAnnotationSpecification(String fileName) {
         SAXBuilder sb = new SAXBuilder();
         List<String> tags = new ArrayList<>();
         try {
-            Document dom = sb.build(new File(fileName));
+            //Document dom = sb.build(new File(fileName));
+            Document dom = sb.build(this.getClass().getClassLoader().getResourceAsStream(fileName));
             List<Attribute> names = Collections.checkedList(XPath.newInstance("//tag/@name").selectNodes(dom),
                     Attribute.class);
             // Extract attribute values and add them to the tags list
