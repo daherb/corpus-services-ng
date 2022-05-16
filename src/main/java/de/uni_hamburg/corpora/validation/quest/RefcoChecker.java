@@ -1303,10 +1303,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         if (punctuation.function.equalsIgnoreCase("morpheme break"))
                             glossSeparator.add(punctuation.character);
                         criteria.punctuations.add(punctuation);
-                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
-                            "Characters")) {
-                        missingData = true;
                     }
+                    // TODO: this is weird
+//                    else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+//                            "Characters")) {
+//                        missingData = true;
+//                    }
                 }
                  if (missingData || rowList.size() <= 1)
                      report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
