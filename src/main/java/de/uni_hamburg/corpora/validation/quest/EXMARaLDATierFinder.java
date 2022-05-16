@@ -20,8 +20,9 @@ public class EXMARaLDATierFinder extends TierFinder {
 
     public EXMARaLDATierFinder(Properties properties) {
         super(properties);
-        if (attribute == null || attribute.isEmpty()) {
-            attribute = "id";
+        // Use default attribute
+        if (attribute_name == null || attribute_name.isEmpty()) {
+            attribute_name = "id";
         }
     }
 
@@ -44,16 +45,16 @@ public class EXMARaLDATierFinder extends TierFinder {
         List<String> tierIds = new ArrayList<>();
         if (cd instanceof EXMARaLDATranscriptionData) {
             Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
-            tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
-                    String.format("//tier[contains(@%s,\"%s\")]/@id",
-                            attribute, pattern)).selectNodes(dom), Attribute.class))
+            String xpath = String.format("//tier[contains(@%s,\"%s\")]/@id",
+                    attribute_name, pattern);
+            tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(xpath).selectNodes(dom), Attribute.class))
                     .stream().map(Attribute::getValue).collect(Collectors.toList()));
         }
         else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
             Document dom = ((EXMARaLDASegmentedTranscriptionData) cd).getJdom();
             tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
                     String.format("//segmented-tier[contains(@%s,\"%s\")]/@id",
-                            attribute, pattern)).selectNodes(dom), Attribute.class))
+                            attribute_name, pattern)).selectNodes(dom), Attribute.class))
                     .stream().map(Attribute::getValue).collect(Collectors.toList()));
         }
         // Add found tiers to frequency list
