@@ -1058,6 +1058,7 @@ public class CorpusMagician {
         String desc;
         String hasfix;
         StringBuilder usable ;
+        String params;
         for (CorpusFunction cf : getAllExistingCFsAsCFs()) {
             desc = cf.getFunction() + ":   " + cf.getDescription();
             usable = new StringBuilder("\nThe function can be used on:\n");
@@ -1065,7 +1066,16 @@ public class CorpusMagician {
                 usable.append(cl.getSimpleName() + " ");
             }
             hasfix = "\nThe function has a fixing option: " + cf.getCanFix().toString();
-            footerverbose.append(desc + hasfix + usable + "\n\n");
+            if (cf.getParameters().isEmpty()) {
+                params = "";
+            }
+            else {
+                params =
+                        "\nThe function accepts the following parameters:\n" + cf.getParameters().keySet()
+                                .stream().map((k) -> k + ": " + cf.getParameters().get(k))
+                                .collect(Collectors.joining("\n"));
+            }
+            footerverbose.append(desc + hasfix + usable + params + "\n\n");
         }
         footerverbose.append("\n\nPlease report issues at https://lab.multilingua.uni-hamburg" +
             ".de/redmine/projects/corpus-services/issues");
