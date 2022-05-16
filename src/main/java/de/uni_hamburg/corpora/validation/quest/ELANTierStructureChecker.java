@@ -55,7 +55,8 @@ public class ELANTierStructureChecker extends TierStructureChecker {
                                         String.join("|", speakers),"speaker"));
                         // Also get constraints
                             Element linguisticTypeElement =
-                                    (Element) XPath.newInstance("//LINGUISTIC_TYPE[@LINGUISTIC_TYPE_ID=" + id.getValue() + "]")
+                                    (Element) XPath.newInstance("//LINGUISTIC_TYPE[@LINGUISTIC_TYPE_ID=\"" +
+                                                    id.getValue() + "\"]")
                                             .selectSingleNode(((ELANData) cd).getJdom());
                             if (linguisticTypeElement != null) {
                                 Attribute constraints = linguisticTypeElement.getAttribute("CONSTRAINTS");

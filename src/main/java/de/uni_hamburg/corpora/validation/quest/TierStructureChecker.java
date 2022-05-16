@@ -16,6 +16,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -24,6 +25,8 @@ import java.util.stream.Collectors;
  * @version 20220324
  */
 abstract class TierStructureChecker extends Checker implements CorpusFunction {
+
+    Logger logger = Logger.getLogger(this.getClass().toString());
 
     // All tier structures
     Map<URI,Set<Map<String,String>>> tierStructure = new HashMap<>();
@@ -55,9 +58,10 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         Set<Map<String,String>> tiers = getTierStructure(report, cd);
         tierStructure.put(cd.getURL().toURI(),tiers);
-        if (individualStructure)
-            report.addNote(getFunction(),cd,"All tiers:\n" + tiers.stream().map((o) -> o.toString())
+        if (individualStructure) {
+            report.addNote(getFunction(), cd, "All tiers:\n" + tiers.stream().map((o) -> o.toString())
                     .collect(Collectors.joining("\n")));
+        }
         return report;
     }
 
@@ -66,13 +70,15 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         Set<Map<String,String>> commonTiers = new HashSet<>();
         for (CorpusData cd : c.getCorpusData()){
-            report.merge(function(cd,getCanFix()));
-            if (commonTiers.isEmpty())
-                commonTiers.addAll(tierStructure.get(cd.getURL().toURI()));
-            else
-                commonTiers =
-                        Sets.intersection(commonTiers,tierStructure.get(cd.getURL().toURI()))
-                                .stream().collect(Collectors.toSet());
+            if (getIsUsableFor().contains(cd.getClass())) {
+                report.merge(function(cd, getCanFix()));
+                if (commonTiers.isEmpty())
+                    commonTiers.addAll(tierStructure.get(cd.getURL().toURI()));
+                else
+                    commonTiers =
+                            Sets.intersection(commonTiers, tierStructure.get(cd.getURL().toURI()))
+                                    .stream().collect(Collectors.toSet());
+            }
         }
         for (URI file : tierStructure.keySet()) {
             Sets.SetView<Map<String,String>> missingTiers = Sets.difference(tierStructure.get(file),commonTiers);
@@ -85,7 +91,7 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
 
         }
         if (sharedStructure)
-            report.addNote(getFunction(),commonTiers.stream().map((o) -> o.toString())
+            report.addNote(getFunction(),"Common tiers: " + commonTiers.stream().map((o) -> o.toString())
                     .collect(Collectors.joining("\n")));
         return report;
     }

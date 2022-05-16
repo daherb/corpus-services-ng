@@ -1,0 +1,34 @@
+Property,Requirement,Value type,CMDI,,Reference: https://catalog.clarin.eu/ds/ComponentRegistry#/?itemId=clarin.eu%3Acr1%3Ap_1417617523856&registrySpace=public
+Identifier,1 - unbounded,URI,//cmd:MdSelfLink,,
+Title,1 - unbounded,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Name OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Title,,
+Description,1 - unbounded,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Project/cmd:descriptions/cmd:Description OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:InfoLink/cmd:Description,,description seems to be a child of Project and InfoLink does not seem to appear in data
+Version,0 - 1,string,N/A,,
+Keywords,0 - 1,string,N/A,,
+License,1 - 1,URI OR string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:SL_CreativeCommonsLicense,,
+Rightsholder,0 - unbounded,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:MediaFile/cmd:Access/cmd:Owner OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:WrittenResource/cmd:Access/cmd:Owner OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:Anonyms/cmd:Access/cmd:Owner,,finds one result for each linked file -> changed to unbounded
+Access Rights,0 - unbounded,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:SL_CreativeCommonsLicense OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:MediaFile/cmd:Access/cmd:Availability OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:WrittenResource/cmd:Access/cmd:Availability OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:Anonyms/cmd:Access/cmd:Availability,,same cardinality as rightsholder
+PublicationYear,1 - 1,date,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Date,,
+Publisher,1 - unbounded,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:MediaFile/cmd:Access/cmd:Publisher OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:WrittenResource/cmd:Access/cmd:Publisher OR /cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Resources/cmd:Anonyms/cmd:Access/cmd:Publisher,,same cardinality as rightsholder
+Creator,1 - unbounded,string,N/A,,
+CreatorName,0 - 1,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Project/cmd:Contact/cmd:Name OR /cmd:CMD/cmd:Header/cmd:MdCreator,,
+FamilyName,1 - 1,string,N/A,,was the same as creator name
+GivenName,0 - 1,string,N/A,,was the same as creator name
+CreatorIdentifier,1 - unbounded,URI,N/A,,
+Affiliation,0 - unbounded,URI OR string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Project/cmd:Contact/cmd:Organisation,,
+CreatorEmail,0 - unbounded,URI OR string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Project/cmd:Contact/cmd:Email,,
+Organisation,N/A,N/A,N/A,,
+OrganisationName,1 - 1,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:Project/cmd:Contact/cmd:Organisation,,
+OrganisationIdentifier,0 - unbounded,N/A,N/A,,
+OrganisationURL,0 - 1,URI,N/A,,
+OrganisationEmail,0 - 1,URI OR string,N/A,,
+sameAs,0 - unbounded,URI,N/A,,
+isPartOf,0 - unbounded,URI,N/A,,
+hasPart,0 - unbounded,URI,N/A,,
+isBasedOn,0 - unbounded,URI,N/A,,
+ObjectLanguage,1 - unbounded,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:SL-Content/cmd:Content_Languages,,
+LinguisticDataType,0 - unbounded,string,N/A,,
+Modality,0 - unbounded,string,/cmd:CDM/cmd:Components/cmd:lat-SL-session/cmd:SL-Content/cmd:Modalities,,
+Language,N/A,N/A,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:SL-Content/cmd:Content_Languages/cmd:Content_Language,,
+LanguageName,1 - 1,string,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:SL-Content/cmd:Content_Languages/cmd:Content_Language/cmd:Name,,
+LanguagePreferredLable,0 - 1,URI OR string,N/A,,
+LanguageIdentifier,1 - unbounded,URI,/cmd:CMD/cmd:Components/cmd:lat-SL-session/cmd:SL-Content/cmd:Content_Languages/cmd:Content_Language/cmd:Id,,

@@ -2,8 +2,6 @@ package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.ELANData;
-import de.uni_hamburg.corpora.EXMARaLDASegmentedTranscriptionData;
-import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -21,8 +19,8 @@ public class ELANTierFinder extends TierFinder {
 
     public ELANTierFinder(Properties properties) {
         super(properties);
-        if (attribute == null || attribute.isEmpty()) {
-            attribute = "TIER_ID";
+        if (attribute_name == null || attribute_name.isEmpty()) {
+            attribute_name = "TIER_ID";
         }
     }
 
@@ -42,7 +40,7 @@ public class ELANTierFinder extends TierFinder {
         // Get all id attributes for tiers matching the pattern, get the values and add them to a new list
         List<String> tierIds = new ArrayList<>(((List<Attribute>) Collections.checkedList(XPath.newInstance(
                 String.format("//TIER[contains(@%s,\"%s\")]/@TIER_ID",
-                        attribute, pattern)).selectNodes(dom), Attribute.class))
+                        attribute_name, pattern)).selectNodes(dom), Attribute.class))
                 .stream().map(Attribute::getValue).collect(Collectors.toList()));
         // Add found tiers to frequency list
         tiers.putAll(tierIds);

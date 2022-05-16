@@ -22,6 +22,11 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker {
      */
     public ComaGenericMetadataChecker(Properties properties) {
         super(properties);
+        if (properties != null && !properties.isEmpty() && properties.containsKey("coma-criteria-file"))
+            setCriteriaFile(properties.getProperty("coma-criteria-file"));
+        else {
+            loadCriteriaResource("coma-generic.csv");
+        }
     }
     /**
      * Function providing a description of a checker
@@ -99,5 +104,12 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker {
         }
         Optional<String> optPath = path.stream().reduce((s1, s2) -> s1 + "/" + s2);
         return optPath.orElse("") ;
+    }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> p = super.getParameters();
+        p.put("coma-criteria-file", "The file for Coma generic metadata criteria");
+        return p;
     }
 }

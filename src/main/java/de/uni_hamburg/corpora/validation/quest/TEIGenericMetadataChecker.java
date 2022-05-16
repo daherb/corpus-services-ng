@@ -21,6 +21,11 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
      */
     public TEIGenericMetadataChecker(Properties properties) {
         super(properties);
+        if (properties != null && !properties.isEmpty() && properties.containsKey("tei-criteria-file"))
+            setCriteriaFile(properties.getProperty("tei-criteria-file"));
+        else {
+            loadCriteriaResource("tei-generic.csv");
+        }
     }
 
     /**

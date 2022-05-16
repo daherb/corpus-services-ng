@@ -186,7 +186,13 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
 
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
-        return null;
+        Report report = new Report();
+        for (CorpusData cd : c.getCorpusData()) {
+            if (getIsUsableFor().contains(cd.getClass())) {
+                report.merge(function(cd,fix));
+            }
+        }
+        return report;
     }
 
     @Override

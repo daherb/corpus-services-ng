@@ -9,10 +9,18 @@
  */
 package de.uni_hamburg.corpora;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import de.uni_hamburg.corpora.ReportItem.Severity;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 import org.jdom.JDOMException;
 
 /**
@@ -679,4 +687,20 @@ public class Report {
         return line;
     }
 
+    /**
+     * Dumps the complete report into a JSON file
+     * @param filename the filename of the target JSON file
+     */
+    public void dump(String filename) {
+        // Generate pretty-printed json
+        ObjectMapper mapper = new ObjectMapper();
+        // Allows serialization even when getters are missing
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
+        try {
+            mapper.writeValue(new File(filename),this.getRawStatistics());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

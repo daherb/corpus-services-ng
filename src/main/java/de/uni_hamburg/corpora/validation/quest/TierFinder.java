@@ -40,7 +40,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     private boolean summary = false;
 
     // The attribute used for matching
-    protected String attribute;
+    protected String attribute_name;
 
     // Frequency list of tiers found
     protected FrequencyList tiers = new FrequencyList();
@@ -54,8 +54,8 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         if (properties.containsKey("tier-summary") && properties.getProperty("tier-summary").equalsIgnoreCase("true")) {
             summary = true;
         }
-        if (properties.containsKey("attribute-name")) {
-            attribute = properties.getProperty("attribute-name");
+        if (properties.containsKey("tier-attribute-name")) {
+            attribute_name = properties.getProperty("tier-attribute-name");
         }
     }
 
@@ -115,7 +115,8 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
         params.put("tier-pattern","Pattern to identify the tier");
-        params.put("attribute-name","Optional attribute name used for the matching, case-insensitive, defaults to ID");
+        params.put("tier-attribute-name","Optional attribute name used for the matching, case-insensitive, defaults " +
+                "to ID");
         params.put("tier-summary", "Optional flag if the summary over matching tiers in a corpus should be included " +
                 "in the report");
         return params;

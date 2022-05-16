@@ -9,6 +9,7 @@ import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
 import de.uni_hamburg.corpora.utilities.quest.FileTools;
+import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang.time.DurationFormatUtils;
@@ -557,23 +558,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      *  The frequency list of all transcription tokens in the corpus
      */
-    private HashMap<String,Integer> tokenFreq = new HashMap<>();
+    // private HashMap<String,Integer> tokenFreq = new HashMap<>();
+    private FrequencyList tokenFreq = new FrequencyList();
 
     /**
      * The frequency list of all segmented annotation/morphology glosses in the corpus
      */
-    private HashMap<String,Integer> morphemeFreq = new HashMap<>();
+    // private HashMap<String,Integer> morphemeFreq = new HashMap<>();
+    private FrequencyList morphemeFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-segmented annotation/morphology glosses in the corpus
      */
-    private HashMap<String,Integer> glossFreq = new HashMap<>();
+    // private HashMap<String,Integer> glossFreq = new HashMap<>();
+    private FrequencyList glossFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-segmentable gloss tokens
      */
-    private HashMap<String,Integer> missingGlossFreq = new HashMap<>();
-
+    // private HashMap<String,Integer> missingGlossFreq = new HashMap<>();
+    private FrequencyList missingGlossFreq = new FrequencyList();
     /**
      * The global report, will be filled by the constructor and the function applied to the complete corpus
      */
@@ -689,7 +693,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         if (refcoFileLoaded) {
             report.addNote(getFunction(),"Report created by RefCo checker version " + REFCO_CHECKER_VERSION +
-                    " based on documentation following RefCo " + criteria.refcoVersion +
+                    " based on documentation following RefCo " + criteria.refcoVersion.information +
                     " specification version");
             System.out.println("... running the corpus function");
             // Create the current report
@@ -697,21 +701,27 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Set the RefCo corpus
             setRefcoCorpus(c);
             // Initialize frequency list for glosses
-            for (Gloss gloss : criteria.glosses) {
-                morphemeFreq.put(gloss.gloss, 0);
-            }
+//            for (Gloss gloss : criteria.glosses) {
+//                morphemeFreq.put(gloss.gloss, 0);
+//            }
             // Run the generic tests and merge their reports into the current report
             // but flag allows skipping it
             if (!props.containsKey("skip-documentation-check")
                     || !props.getProperty("skip-documentation-check").equalsIgnoreCase("true"))
                 report.merge(refcoDocumentationCheck());
+            // Generic tier test
+            props.put("elan-speakers",
+                    criteria.sessions.stream().map((s) ->
+                            s.speakerName).collect(Collectors.joining(",")));
+            ELANTierStructureChecker etsc = new ELANTierStructureChecker(props);
+            report.merge(etsc.function(c,false));
             // Apply function for each of the supported file. Again merge the reports
             for (CorpusData cdata : c.getCorpusData()) {
                 //report.merge(function(cdata, fix));
                 function(cdata, fix);
             }
             // Check for morpheme glosses that never occurred in the complete corpus
-            for (Map.Entry<String, Integer> e : morphemeFreq.entrySet()) {
+            for (Map.Entry<String, Integer> e : morphemeFreq.getMap().entrySet()) {
                 if (e.getValue() == 0)
                     report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                     "howtoFix"},
@@ -719,11 +729,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     "Corpus data: Morpheme gloss never encountered in corpus: " + e.getKey(),
                                     "Check for potential errors or remove gloss from documentation"}));
             }
-            if (!missingGlossFreq.isEmpty() && props.containsKey("missing-gloss-stats") &&
-                    props.getProperty("missing-gloss-stats").equalsIgnoreCase("true"))
+            if (!missingGlossFreq.isEmpty())
                 report.addNote(getFunction(),"Corpus data: Morpheme glosses missing from documentations:\n" +
-                                            missingGlossFreq.keySet().stream().map((k) -> k + ":" + missingGlossFreq.get(k))
-                                                    .collect(Collectors.joining("\n")));
+                        missingGlossFreq.toString());
+//                                            missingGlossFreq.keySet().stream().map((k) -> k + ":" + missingGlossFreq.get(k))
+//                                                    .collect(Collectors.joining("\n")));
+            if (!glossFreq.isEmpty() && props.containsKey("gloss-stats") &&
+                    props.getProperty("gloss-stats").equalsIgnoreCase("true")) {
+                report.addNote(getFunction(), "Corpus data: Glosses encountered in the corpus:\n" +
+                        glossFreq.toString());
+//                        glossFreq.keySet().stream().map((k) -> k + ":" + glossFreq.get(k))
+//                                .collect(Collectors.joining("\n")));
+            }
             // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
             // Levenshtein difference 1 with a higher frequency count
         /*DictionaryAutomaton glossDictionary =
@@ -1286,10 +1303,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         if (punctuation.function.equalsIgnoreCase("morpheme break"))
                             glossSeparator.add(punctuation.character);
                         criteria.punctuations.add(punctuation);
-                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
-                            "Characters")) {
-                        missingData = true;
                     }
+                    // TODO: this is weird
+//                    else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals(
+//                            "Characters")) {
+//                        missingData = true;
+//                    }
                 }
                  if (missingData || rowList.size() <= 1)
                      report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
@@ -2029,7 +2048,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Check if token either is a gloss or each character is in the valid characters
                 mismatch = false ;
                 // Update frequency list
-                tokenFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
+                //tokenFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
+                tokenFreq.put(token);
                 // Token is not one of the glosses
                 if (!glosses.contains(token)) {
                     // Check if we can segment the token using the chunks
@@ -2236,7 +2256,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         List<String> segments = glossAutomaton.segmentWord(normalizedMorpheme);
                         if (segments == null || segments.isEmpty()) {
                             missing += 1;
-                             missingGlossFreq.compute(normalizedMorpheme, (k, v) -> (v == null) ? 1 : v + 1);
+//                             missingGlossFreq.compute(normalizedMorpheme, (k, v) -> (v == null) ? 1 : v + 1);
+                            missingGlossFreq.put(normalizedMorpheme);
                             // his would lead to large amount of warnings
                             try {
                                 // Location l = getLocation((ELANData) cd, morpheme);
@@ -2260,14 +2281,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             matched += 1;
                             for (String segment : segments) {
                                 // Remove initial periods and keep track of the count
-                                morphemeFreq.compute(segment.replaceAll("^\\.",""), (k, v) -> (v == null) ? 1 : v + 1);
+                                //morphemeFreq.compute(segment.replaceAll("^\\.",""), (k, v) -> (v == null) ? 1 : v +
+                                // 1);
+                                morphemeFreq.put(segment.replaceAll("^\\.",""));
                             }
                         }
                     }
                 // OLD
 //                    morphemeFreq.compute(normalizedMorpheme,(k, v) -> (v == null) ? 1 : v + 1);
                 }
-                glossFreq.compute(token,(k, v) -> (v == null) ? 1 : v + 1);
+//                glossFreq.compute(token,(k, v) -> (v == null) ? 1 : v + 1);
+                glossFreq.put(token);
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
@@ -2363,6 +2387,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Report report = new Report() ;
         // Check for ELAN data
         if (cd instanceof ELANData) {
+            // Generic checks
+            try {
+                // Part of ELANValidatorCheckes
+                // XsdChecker xc = new XsdChecker(props);
+                // report.merge(xc.function(cd, false));
+                ELANValidatorChecker evc = new ELANValidatorChecker(props);
+                report.merge(evc.function(cd,false));
+            }
+            catch (Exception e){
+                report.addCritical(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function","filename","description", "exception"},
+                                new Object[]{getFunction(), cd.getFilename(), "Exception encountered when calling " +
+                                        "validation checker ", e}));
+            }
+
             // Check the transcription
             // but parameter allows skipping
             if (!props.containsKey("skip-transcription-check") ||
@@ -2573,6 +2612,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         params.put("skip-documentation-check", "Flag to skip the documentation check");
         params.put("skip-transcription-check", "Flag to skip the transcription check");
         params.put("skip-gloss-check", "Flag to skip the gloss check");
+        params.put("gloss-stats", "Includes stats about all glosses");
         return params;
     }
 

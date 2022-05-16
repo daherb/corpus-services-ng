@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,6 +47,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         logger.info("Running function");
+        boolean problem = false;
         Report report = new Report();
         URL fileUri = Paths.get(cd.getURL().toURI()).toAbsolutePath().toUri().toURL();
         BasicTranscription bt = new BasicTranscription();
@@ -53,6 +55,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         bt.BasicTranscriptionFromJDOMDocument(((EXMARaLDATranscriptionData) cio.readFileURL(fileUri)).getJdom());
         String[] duplicateTranscriptionTiers = bt.getDuplicateTranscriptionTiers();
         if (duplicateTranscriptionTiers.length > 0) {
+            problem = true;
             report.addCritical(getFunction(),
                     ReportItem.newParamMap(new String[]{"function", "filename", "description"},
                             new String[]{getFunction(), cd.getFilename(), "Duplicate transcription tiers: " + String.join(
@@ -60,6 +63,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         }
         String[] orphanedTranscriptionTiers = bt.getOrphanedTranscriptionTiers();
         if (orphanedTranscriptionTiers.length > 0) {
+            problem = true;
             report.addWarning(getFunction(),
                     ReportItem.newParamMap(new String[]{"function", "filename", "description"},
                             new String[]{getFunction(), cd.getFilename(), "Orphaned transcription tiers: " + String.join(
@@ -67,6 +71,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         }
         String[] orphanedAnnotationTiers = bt.getOrphanedAnnotationTiers();
         if (orphanedAnnotationTiers.length > 0) {
+            problem = true;
             report.addWarning(getFunction(),
                     ReportItem.newParamMap(new String[]{"function", "filename", "description"},
                             new String[]{getFunction(), cd.getFilename(), "Orphaned annotation tiers: " + String.join(
@@ -74,6 +79,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         }
         String[] inconsistencies = bt.getBody().getCommonTimeline().getInconsistencies();
         if (inconsistencies.length > 0) {
+            problem = true;
             report.addCritical(getFunction(),
                     ReportItem.newParamMap(new String[]{"function", "filename", "description"},
                             new String[]{getFunction(), cd.getFilename(),
@@ -81,17 +87,29 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
                             ",", inconsistencies)}));
         }
         Hashtable<String, String[]> annotationMismatches = bt.getAnnotationMismatches();
-        if (!annotationMismatches.isEmpty())
-            report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                            new String[]{getFunction(), cd.getFilename(),"Annotation mismatch in tiers: " + String.join(",",
-                                    annotationMismatches.keySet())}));
+        // Only check tiers where we have a non-empty list in the map
+        Set<String> missmatchTiers = annotationMismatches.keySet().stream().filter((k) ->
+                annotationMismatches.get(k).length != 0).collect(Collectors.toSet());
+        if (!missmatchTiers.isEmpty()) {
+            problem = true;
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                    new String[]{getFunction(), cd.getFilename(), "Annotation mismatch in tiers: " + String.join(",",
+                            missmatchTiers)}));
+        }
         Vector segmentationErrors = new HIATSegmentation().getSegmentationErrors(bt);
         // TODO the exact reason and form of segmentation errors is not clear
         if (!segmentationErrors.isEmpty()) {
+            problem = true;
             for (Object o : segmentationErrors) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description"},
                         new String[]{getFunction(), cd.getFilename(),"HIAT Segmentation error: " + o.toString()}));
             }
+        }
+        if (!problem) {
+            report.addCorrect(getFunction(),ReportItem.newParamMap(
+                    new String[]{"function","filename","description"},
+                    new Object[]{getFunction(),cd.getFilename(),"No problems found in file"}
+            ));
         }
         return report;
     }

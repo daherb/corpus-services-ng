@@ -24,9 +24,11 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
      */
     public IMDIGenericMetadataChecker(Properties properties) {
         super(properties);
-        logger.info(properties.toString());
         if (properties != null && !properties.isEmpty() && properties.containsKey("imdi-criteria-file"))
             setCriteriaFile(properties.getProperty("imdi-criteria-file"));
+        else {
+            loadCriteriaResource("imdi-generic.csv");
+        }
     }
 
     /**

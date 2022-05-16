@@ -13,6 +13,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -101,11 +103,6 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        // Validate XML data if possible
-        if (cd instanceof XMLData) {
-            XsdChecker xsdc = new XsdChecker(new Properties());
-            report.merge(xsdc.function(cd,false));
-        }
         // Only work if properly set up
         if (setUp && shouldBeChecked(cd.getURL())) {
             for (GenericMetadataCriterion c : criteria) {
@@ -372,6 +369,27 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     .parse();
             setUp = true;
         } catch (IOException e) {
+            logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
+        }
+    }
+
+    /**
+     * Loads the criteria as a resource
+     * @param name the name of the resource
+     */
+    public void loadCriteriaResource(String name) {
+        try {
+            InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream("metadata/"+name);
+            if (resourceStream != null) {
+                // Read CSV file
+                criteria = new CsvToBeanBuilder<GenericMetadataCriterion>(new InputStreamReader(resourceStream))
+                        .withType(GenericMetadataCriterion.class)
+                        .withSkipLines(1) // skip header
+                        .build()
+                        .parse();
+                setUp = true;
+            }
+        } catch (Exception e) {
             logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
         }
     }

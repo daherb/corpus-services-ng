@@ -43,17 +43,17 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     private boolean showTagStats = false;
 
     // List of tiers to be checked
-    private final List<String> tierIds = new ArrayList<>();
+    protected final List<String> tierIds = new ArrayList<>();
     // Regex to separate tokens
     private final String tokenSeparator = "\\s+" ;
 
     // Check if the minimal setup is done
-    private boolean setUp = false;
+    protected boolean setUp = false;
 
     public AnnotationChecker(Properties properties) {
         super(false, properties);
-        if (properties.containsKey("tier-ids")) {
-            tierIds.addAll(Arrays.asList(properties.getProperty("tier-ids").split(",")));
+        if (properties.containsKey("annotation-tier-ids")) {
+            tierIds.addAll(Arrays.asList(properties.getProperty("annotation-tier-ids").split(",")));
             setUp = true;
         }
         // Tags as list in parameter
@@ -73,14 +73,15 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     /**
      * Loads the tags from an annotation specification file
      * see https://exmaralda.org/en/utilities/ Templates for working with the Annotation Panel
-     * @param fileName the name of the annotation specification file
+     * @param fileName the name of the annotation specification file as a resource
      * @return the list of tags specified
      */
     private Collection<String> loadAnnotationSpecification(String fileName) {
         SAXBuilder sb = new SAXBuilder();
         List<String> tags = new ArrayList<>();
         try {
-            Document dom = sb.build(new File(fileName));
+            //Document dom = sb.build(new File(fileName));
+            Document dom = sb.build(this.getClass().getClassLoader().getResourceAsStream(fileName));
             List<Attribute> names = Collections.checkedList(XPath.newInstance("//tag/@name").selectNodes(dom),
                     Attribute.class);
             // Extract attribute values and add them to the tags list
@@ -99,10 +100,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                 String text = getTierText(cd, tier);
                 if (!text.isEmpty()) {
                     List<String> tokens = Arrays.asList(text.split(tokenSeparator));
-                    if (tokens.size() == 1)
-
-                        // Put all tokens into the summary
-                        tagStats.putAll(tokens);
+                    // Put all tokens into the summary
+                    tagStats.putAll(tokens);
                     for (String token : tokens) {
                         // Check if the token is in the tag list
                         if (!tags.isEmpty() && !tags.contains(token)) {
@@ -161,7 +160,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     @Override
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
-        params.put("tier-ids","Mandatory identificator(s) for the tiers to be checked, separated by commas");
+        params.put("annotation-tier-ids","Mandatory identifier(s) for the tiers to be checked, separated by commas");
         params.put("annotation-tags", "Optional list of expected annotation tags, separated by comma");
         params.put("annotation-specification", "Optional list of expected annotation tags, in the EXMARaLDA " +
                 "Annotation Panel compatible format");

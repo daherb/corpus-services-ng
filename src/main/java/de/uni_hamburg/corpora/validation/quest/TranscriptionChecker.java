@@ -3,6 +3,7 @@ package de.uni_hamburg.corpora.validation.quest;
 import com.google.common.collect.Sets;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
+import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
@@ -28,6 +29,9 @@ import java.util.stream.Collectors;
 abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
     private final Logger logger = Logger.getLogger(this.getFunction());
+
+    // List of all interesting tiers
+    protected final Set<String> tierIds = new HashSet<>();
 
     // Regex to split tokens
     private final String tokenSeparator = " ";
@@ -150,7 +154,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                         Arrays.asList("abcdefghijklmnopqrstuvwzyz".toUpperCase().split(""))
                 );
             }
-
+            if (properties.containsKey("transcription-tiers")) {
+                tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",")));
+            }
 
         }
     }
@@ -185,7 +191,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
     abstract List<Element> getTranscriptionTiers(CorpusData cd) throws JDOMException;
 
-    abstract String getTranscriptionText(Element tier) throws JDOMException;
+    public String getTranscriptionText(Element tier) throws JDOMException {
+        return XMLTools.showAllText(tier);
+    }
 
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
@@ -228,6 +236,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         params.put("transcription-graphemes","List of transcription graphemes, separated by commas");
         params.put("transcription-method", "Standard transcription method used, if any. Currently HIAT, DIDA, GAT and" +
                 " IPA");
+        params.put("transcription-tiers","List of transcription tier IDs separated by commas");
+        params.put("transcription-tier-pattern","A pattern, i.e. substring of tier IDs to identify transcription " +
+                "tiers");
         return params;
     }
 }
