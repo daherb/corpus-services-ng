@@ -52,8 +52,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
     public AnnotationChecker(Properties properties) {
         super(false, properties);
-        if (properties.containsKey("tier-ids")) {
-            tierIds.addAll(Arrays.asList(properties.getProperty("tier-ids").split(",")));
+        if (properties.containsKey("annotation-tier-ids")) {
+            tierIds.addAll(Arrays.asList(properties.getProperty("annotation-tier-ids").split(",")));
             setUp = true;
         }
         // Tags as list in parameter
@@ -161,7 +161,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     @Override
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
-        params.put("tier-ids","Mandatory identificator(s) for the tiers to be checked, separated by commas");
+        params.put("annotation-tier-ids","Mandatory identifier(s) for the tiers to be checked, separated by commas");
         params.put("annotation-tags", "Optional list of expected annotation tags, separated by comma");
         params.put("annotation-specification", "Optional list of expected annotation tags, in the EXMARaLDA " +
                 "Annotation Panel compatible format");
