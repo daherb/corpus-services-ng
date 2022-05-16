@@ -77,9 +77,9 @@ public class ExbReplaceGlosses extends Checker implements CorpusFunction {
     Document doc;
     //XMLOutputter xmOut = new XMLOutputter(); //for testing
 
-    public ExbReplaceGlosses() {
+    public ExbReplaceGlosses(Properties props) {
         //fixing option available
-        super(true);
+        super(true, props);
     }
         
     /**
@@ -156,7 +156,7 @@ public class ExbReplaceGlosses extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor()  {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
 
     /**

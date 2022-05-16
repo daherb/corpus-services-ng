@@ -651,7 +651,7 @@ public class CorpusMagician {
                     }
                     break;
                 case "exbreplaceglosses":
-                    ExbReplaceGlosses erg = new ExbReplaceGlosses();
+                    ExbReplaceGlosses erg = new ExbReplaceGlosses(cfProperties);
                     cf2strcorpusfunctions.add(erg);
                     if (cfProperties != null) {
                         if (cfProperties.containsKey("original")) {

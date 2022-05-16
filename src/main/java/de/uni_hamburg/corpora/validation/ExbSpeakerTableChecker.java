@@ -1,13 +1,14 @@
 package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.EXMARaLDACorpusData;
+import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -24,22 +25,22 @@ import org.xml.sax.SAXException;
  */
 public class ExbSpeakerTableChecker extends Checker implements CorpusFunction {
     
-    public ExbSpeakerTableChecker() {
-        super(true);
+    public ExbSpeakerTableChecker(Properties props) {
+        super(true,props);
     }
     
     
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(EXMARaLDACorpusData.class);
+        return Collections.singleton(EXMARaLDATranscriptionData.class);
     }
     
     @Override
     public Report function(CorpusData cd, Boolean fix) throws IOException, SAXException, TransformerException, ParserConfigurationException, XPathExpressionException {
         Report stats = new Report();
         Document doc = null;
-        EXMARaLDACorpusData ecd = new EXMARaLDACorpusData();
-        ecd = (EXMARaLDACorpusData) cd;
+        EXMARaLDATranscriptionData ecd = new EXMARaLDATranscriptionData();
+        ecd = (EXMARaLDATranscriptionData) cd;
         doc = TypeConverter.JdomDocument2W3cDocument(ecd.getJdom());
         
         NodeList speakerTable = doc.getElementsByTagName("speaker");
