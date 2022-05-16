@@ -128,7 +128,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
             presentFiles.addAll(FileTools.listFiles(Paths.get(c.getBaseDirectory().toURI())));
         }
         Set<URI> unexpectedFiles =
-                presentFiles.stream().filter((f) -> !expectedFiles.contains(f)).collect(Collectors.toSet());
+                presentFiles.stream().filter((f) -> !(expectedFiles.contains(f) || new File(f).isDirectory())).collect(Collectors.toSet());
         Set<URI> missingFiles =
                 expectedFiles.stream().filter((f) -> !presentFiles.contains(f)).collect(Collectors.toSet());
         if (!unexpectedFiles.isEmpty())
