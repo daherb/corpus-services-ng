@@ -376,7 +376,7 @@ public class Report {
         int totes = good + severe + badish + unk;
         return MessageFormat.format("  {0}: {1} %: {2} OK, {3} bad, "
                 + "{4} warnings and {5} unknown. "
-                + "= {6} items.\n", statId, 100 * good / totes,
+                + "= {6} items.\n", statId, (totes == 0 ? 0 : 100 * good / totes),
                 good, severe, badish, unk, totes);
     }
 
