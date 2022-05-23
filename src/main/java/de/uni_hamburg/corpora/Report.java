@@ -67,7 +67,16 @@ public class Report {
      * Create empty report.
      */
     public Report() {
-        statistics = new HashMap<String, List<ReportItem>>();
+
+    }
+
+    /**
+     * Create report based on some previous items
+     * @param bucket the bucket to place the items in
+     * @param items the items
+     */
+    public Report(String bucket, Collection<ReportItem> items) {
+        getOrCreateStatistic(bucket).addAll(items);
     }
 
     /**
