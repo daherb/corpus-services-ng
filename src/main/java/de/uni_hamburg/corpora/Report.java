@@ -78,15 +78,6 @@ public class Report {
         for (Map.Entry<String, List<ReportItem>> kv
                 : sr.statistics.entrySet()) {
             getOrCreateStatistic(kv.getKey()).addAll(kv.getValue());
-            /*if (statistics.containsKey(kv.getKey())) {
-                List<ReportItem> c
-                        = statistics.get(kv.getKey());
-                c.addAll(kv.getValue());
-                statistics.put(kv.getKey(), c);
-                statistics.get(kv.getKey()).addAll(kv.getValue());
-            } else {
-                statistics.put(kv.getKey(), kv.getValue());
-            }*/
         }
     }
 
