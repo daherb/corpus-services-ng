@@ -51,14 +51,14 @@ public class Report {
     /**
      * the data structure holding all statistics.
      */
-    private Map<String, List<ReportItem>> statistics;
+    private final Map<String, List<ReportItem>> statistics = new HashMap<>();
 
     /**
      * convenience function to create new statistic set if missing or get old.
      */
     private List<ReportItem> getOrCreateStatistic(String statId) {
         if (!statistics.containsKey(statId)) {
-            statistics.put(statId, new ArrayList<ReportItem>());
+            statistics.put(statId, new ArrayList<>());
         }
         return statistics.get(statId);
     }
@@ -95,7 +95,7 @@ public class Report {
      * work like this, I thought it may be needed to add ReportItems generated
      * by corpusFunctions?
      *
-     * @sa addCritical(String, String)
+     * @see Report#addCritical(String, String)
      */
     public void addReportItem(String statId, ReportItem reportItem) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
@@ -105,7 +105,7 @@ public class Report {
     /**
      * Add a critical error in the root log.
      *
-     * @sa addCritical(String, String)
+     * @see Report#addCritical(String, String)
      */
     public void addCritical(String description) {
         addCritical(ROOT_BUCKET, description);
@@ -133,8 +133,8 @@ public class Report {
     /**
      * Add a critical error in named statistics bucket.
      *
-     * @todo extrablah
      */
+    // todo extrablah
     public void addCritical(String statId, String description, String extraBlah) {
         addCritical(statId, description + extraBlah);
     }
@@ -150,8 +150,8 @@ public class Report {
     /**
      * Add a critical error in named statistics bucket.
      *
-     * @todo extrablah
      */
+    // todo extrablah
     public void addCritical(String statId, Throwable e, String description) {
         addCritical(statId, description + e.getStackTrace()[0]);
     }
@@ -186,8 +186,8 @@ public class Report {
     /**
      * Add a non-critical error in named statistics bucket.
      *
-     * @todo extrablah
      */
+    // todo extrablah
     public void addWarning(String statId, String description, String extraBlah) {
         addWarning(statId, description + extraBlah);
     }
@@ -318,7 +318,7 @@ public class Report {
     /**
      * Add error with throwable to root log.
      *
-     * @sa addException(String, Throwable, String)
+     * @see Report#addException(String, Throwable, String)
      */
     public void addException(Throwable e, String description) {
         addException(ROOT_BUCKET, e, description);
@@ -388,7 +388,7 @@ public class Report {
         int severe = 0;
         int badish = 0;
         int unk = 0;
-        Collection<ReportItem> stats = new ArrayList<ReportItem>();
+        Collection<ReportItem> stats = new ArrayList<>();
         for (String statId : statistics.keySet()) {
             //System.out.println("key : " + statId);
             //System.out.println("value : " + statistics.get(statId));
@@ -420,14 +420,14 @@ public class Report {
      * Generate summaries for all buckets.
      */
     public String getSummaryLines() {
-        String rv = "";
+        StringBuilder rv = new StringBuilder();
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
-            rv += getSummaryLine(kv.getKey());
+            rv.append(getSummaryLine(kv.getKey()));
         }
         //add summary of all buckets in one line
-        rv += getAllAsSummaryLine();
-        return rv;
+        rv.append(getAllAsSummaryLine());
+        return rv.toString();
     }
 
     /**
@@ -436,20 +436,20 @@ public class Report {
      */
     public String getErrorReport(String statId) {
         Collection<ReportItem> stats = statistics.get(statId);
-        String rv = MessageFormat.format("{0}:\n", statId);
+        StringBuilder rv = new StringBuilder(MessageFormat.format("{0}:\n", statId));
         int suppressed = 0;
         for (ReportItem s : stats) {
             if (s.isSevere()) {
-                rv += s.getSummary() + "\n";
+                rv.append(String.format("%s\n",s.getSummary()));
             } else {
                 suppressed += 1;
             }
         }
         if (suppressed != 0) {
-            rv += MessageFormat.format("{0} warnings and notes hidden\n",
-                    suppressed);
+            rv.append(MessageFormat.format("{0} warnings and notes hidden\n",
+                    suppressed));
         }
-        return rv;
+        return rv.toString();
     }
 
     /**
@@ -458,44 +458,44 @@ public class Report {
      */
     public String getWarningReport(String statId) {
         Collection<ReportItem> stats = statistics.get(statId);
-        String rv = MessageFormat.format("{0}:\n", statId);
+        StringBuilder rv = new StringBuilder(MessageFormat.format("{0}:\n", statId));
         int suppressed = 0;
         for (ReportItem s : stats) {
             if (s.isBad()) {
-                rv += s.getSummary() + "\n";
+                rv.append(String.format("%s\n",s.getSummary()));
             } else {
                 suppressed += 1;
             }
         }
         if (suppressed != 0) {
-            rv += MessageFormat.format("{0} notes hidden\n",
-                    suppressed);
+            rv.append(MessageFormat.format("{0} notes hidden\n",
+                    suppressed));
         }
-        return rv;
+        return rv.toString();
     }
 
     /**
      * Generate error reports for all buckets.
      */
     public String getErrorReports() {
-        String rv = "Errors:\n";
+        StringBuilder rv = new StringBuilder("Errors:\n");
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
-            rv += getErrorReport(kv.getKey());
+            rv.append(getErrorReport(kv.getKey()));
         }
-        return rv;
+        return rv.toString();
     }
 
     /**
      * Generate error reports for all buckets.
      */
     public String getWarningReports() {
-        String rv = "Warnings:\n";
+        StringBuilder rv = new StringBuilder("Warnings:\n");
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
-            rv += getWarningReport(kv.getKey());
+            rv.append(getWarningReport(kv.getKey()));
         }
-        return rv;
+        return rv.toString();
     }
 
     /**
@@ -503,37 +503,37 @@ public class Report {
      */
     public String getFullReport(String statId) {
         Collection<ReportItem> stats = statistics.get(statId);
-        String rv = MessageFormat.format("{0}:\n", statId);
+        StringBuilder rv = new StringBuilder(MessageFormat.format("{0}:\n", statId));
         for (ReportItem s : stats) {
             if (s.isGood()) {
-                rv += s.toString() + "\n";
+                rv.append(String.format("%s\n", s));
             }
         }
         for (ReportItem s : stats) {
             if (s.isBad()) {
-                rv += s.toString() + "\n";
+                rv.append(String.format("%s\n", s));
             }
         }
-        return rv;
+        return rv.toString();
     }
 
     /**
      * Generate verbose reports for all buckets.
      */
     public String getFullReports() {
-        String rv = "All reports\n";
+        StringBuilder rv = new StringBuilder("All reports\n");
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
-            rv += getFullReport(kv.getKey());
+            rv.append(getFullReport(kv.getKey()));
         }
-        return rv;
+        return rv.toString();
     }
 
     /**
      * Get single collection of statistics.
      */
     public List<ReportItem> getRawStatistics() {
-        List<ReportItem> allStats = new ArrayList<ReportItem>();
+        List<ReportItem> allStats = new ArrayList<>();
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             allStats.addAll(kv.getValue());
@@ -545,8 +545,8 @@ public class Report {
      * Get single collection of only error statistics.
      */
     public List<ReportItem> getErrorStatistics() {
-        List<ReportItem> errorStats = new ArrayList<ReportItem>();
-        List<ReportItem> onlyerrorStats = new ArrayList<ReportItem>();
+        List<ReportItem> errorStats = new ArrayList<>();
+        List<ReportItem> onlyerrorStats = new ArrayList<>();
         for (Map.Entry<String, List<ReportItem>> kv
                 : statistics.entrySet()) {
             errorStats.addAll(kv.getValue());
@@ -570,26 +570,26 @@ public class Report {
      * Generate summaries for all buckets.
      */
     public String getFixJson(Corpus corpus) throws JDOMException {
-        String rv = "";
+        StringBuilder rv = new StringBuilder();
         for (Map.Entry<String, List<ReportItem>> kfj
                 : statistics.entrySet()) {
-            rv += getFixLine(kfj.getKey(), corpus);
+            rv.append(getFixLine(kfj.getKey(), corpus));
         }
-        rv = rv + "\n";
-        return rv;
+        rv.append("\n");
+        return rv.toString();
     }
 
     /**
      * Generate summaries for all buckets.
      */
     public String getFixJson() {
-        String rv = "";
+        StringBuilder rv = new StringBuilder();
         for (Map.Entry<String, List<ReportItem>> kfj
                 : statistics.entrySet()) {
-            rv += getFixLine(kfj.getKey());
+            rv.append(getFixLine(kfj.getKey()));
         }
-        rv = rv + "\n";
-        return rv;
+        rv.append("\n");
+        return rv.toString();
     }
 
     /**
