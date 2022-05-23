@@ -703,7 +703,13 @@ public class CorpusMagician {
                         // Get all classes derived from CorpusData
                         for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
                             // Here we can control which packages we want to include
-                            String[] validPackages = {"de.uni_hamburg.corpora.validation.quest"};
+                            String[] validPackages = {
+                                    "de.uni_hamburg.corpora.conversion",
+                                    "de.uni_hamburg.corpora.publication",
+                                    "de.uni_hamburg.corpora.validation",
+                                    "de.uni_hamburg.corpora.validation.quest",
+                                    "de.uni_hamburg.corpora.visualization",
+                            };
                             if (cf.getName().toLowerCase().endsWith(function.toLowerCase()) &&
                                     Arrays.asList(validPackages).contains(cf.getPackage().getName())) {
                                 try {
