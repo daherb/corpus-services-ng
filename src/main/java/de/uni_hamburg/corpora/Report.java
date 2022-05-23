@@ -703,4 +703,30 @@ public class Report {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Loads a report from a JSON file
+     * @param filename the JSON file
+     * @return the report as list of reportitems
+     */
+    public static List<ReportItem> load(String filename) {
+        List<ReportItem> report = new ArrayList<>();
+        // Generate pretty-printed json
+        ObjectMapper mapper = new ObjectMapper();
+        // Allows serialization even when getters are missing
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        File logFile = new File(filename);
+        // If file is not empty, read it as a list of ReportItems
+        if (logFile.length() != 0) {
+            try {
+                report.addAll(mapper.readerForListOf(ReportItem.class).readValue(logFile));
+            } catch (IOException e) {
+                report.add(new ReportItem(Severity.CRITICAL,e,"Exception when reading report file " + filename));
+            }
+        }
+        else {
+            report.add(new ReportItem(Severity.CRITICAL,"Empty report file " + filename));
+        }
+        return report;
+    }
 }
