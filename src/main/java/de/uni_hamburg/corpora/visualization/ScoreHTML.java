@@ -190,7 +190,6 @@ public class ScoreHTML extends Visualizer {
     /**
      * Get the width that was set for the Score HTML visualization
      *
-     * @param btAsString the EXB file represented in a String object
      * @return
      */
     public Integer getWidth() {
