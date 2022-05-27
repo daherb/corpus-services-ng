@@ -95,7 +95,7 @@ public class ReportItem {
      * Creates a new report item based on parameters given in a mp
      * @param s the severity level
      * @param parameters a map containing all relevant parameters
-     * @auther bba1792, Dr. Herbert Lange
+     * @author bba1792, Dr. Herbert Lange
      */
     public ReportItem(Severity s, Map<String,Object> parameters) {
         this();
