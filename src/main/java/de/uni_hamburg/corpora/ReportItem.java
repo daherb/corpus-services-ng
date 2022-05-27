@@ -389,23 +389,21 @@ public class ReportItem {
                     break;
             }
         }
-        report.append("Messages (" + errors.size() + "), of which: ");
+        report.append(String.format("Messages (%d), of which: ",errors.size()));
         if (verbose) {
-            report.append(criticals + " critical, " + warnings + " warnings, " +
-                notes + " notes and " + unknowns + " not classified\n");
+            report.append(String.format("%d critical, %d warnings, %d notes and %d not classified\n",
+                    criticals, warnings, notes, unknowns));
         } else {
-            report.append(criticals + " critical and " + warnings +
-                " warnings (and " + (notes + unknowns) +
-                " hidden as non-problems or unknown)\n");
+            report.append( String.format("%d critical and %d warnings (and %d hidden as non-problems or unknown)\n",
+                    criticals, warnings, (notes + unknowns)));
         }
         for (ReportItem error : errors) {
             if (verbose) {
-                report.append("  " + error + "\n");
+                report.append(String.format("  %s\n", error));
             } else if (error.getSeverity() == ReportItem.Severity.WARNING ||
                     error.getSeverity() == ReportItem.Severity.CRITICAL) {
-                report.append("  " + error.getLocation() + ": " +
-                    error.getWhat() + "\n" +
-                    "    " + error.getHowto() + "\n");
+                report.append(String.format("  %s: %s\n%s\n",
+                        error.getLocation(), error.getWhat(), error.getHowto()));
             }
         }
         return report.toString();
@@ -488,16 +486,16 @@ public class ReportItem {
             "    }\n" +
             "  }\n" +
             "}\n</script>");
-        report.append("<form>\n" +
+        report.append(String.format("<form>\n" +
             "  <input type='checkbox' id='critical' name='critical' value='show' checked='checked' onclick='showClick(this, &apos;critical&apos;)'>"
-            + "Show criticals (" + criticals + ")</input>" +
+            + "Show criticals (%d)</input>" +
             "  <input type='checkbox' name='warning' value='show' checked='checked' onclick='showClick(this, &apos;warning&apos;)'>"
-            + "Show warnings (" + warnings + ")</input>" +
+            + "Show warnings (%d)</input>" +
             "  <input type='checkbox' name='note' value='show' onclick='showClick(this, &apos;note&apos;)'>"
-            + "Show notes (" + notes + ")</input>" +
+            + "Show notes (%d)</input>" +
             "  <input type='checkbox' name='unknown' value='show' onclick='showClick(this, &apos;unknown&apos;)'>"
-            + "Show unknowns (" + unknowns + ")</input>" +
-            "</form>");
+            + "Show unknowns (%d)</input>" +
+            "</form>", criticals, warnings, notes, unknowns));
         report.append("<table>\n  <thead><tr>" +
             "<th>File:line.column</th><th>Error</th>" +
             "<th>Fix</th><th>Original</th>" +
@@ -523,17 +521,14 @@ public class ReportItem {
                     report.append("<tr class='other' style='display: none;'><td style='border-left: black solid 3px'>");
                     break;
             }
-            report.append(StringEscapeUtils.escapeHtml4(error.getLocation()) + "</td>");
-            report.append("<td style='border: red solid 1px; white-space: pre'>" +
-                StringEscapeUtils.escapeHtml4(error.getWhat()) +
-                "</td>");
-            report.append("<td style='border: green solid 1px; white-space: pre'>" +
-                StringEscapeUtils.escapeHtml4(error.getHowto()) +
-                "</td>");
-            report.append("<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre'>(" +
-                StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
-                ")</td>\n");
-            report.append("<!-- " + StringEscapeUtils.escapeHtml4(error.getStackTrace()) + " -->\n");
+            report.append(String.format("%s</td>",StringEscapeUtils.escapeHtml4(error.getLocation())));
+            report.append(String.format("<td style='border: red solid 1px; white-space: pre'>%s</td>",
+                    StringEscapeUtils.escapeHtml4(error.getWhat())));
+            report.append(String.format("<td style='border: green solid 1px; white-space: pre'>%s</td>",
+                    StringEscapeUtils.escapeHtml4(error.getHowto())));
+            report.append(String.format("<td style='font-face: monospace; color: gray; border: gray solid 1px; " +
+                    "white-space: pre'>(%s)</td>\n",StringEscapeUtils.escapeHtml4(error.getLocalisedMessage())));
+            report.append(String.format("<!-- %s -->\n",StringEscapeUtils.escapeHtml4(error.getStackTrace())));
             report.append("</tr>");
         }
         report.append("  </tbody>\n  </table>\n");
@@ -557,22 +552,29 @@ public class ReportItem {
         report.append("<meta charset=\"utf-8\"></meta>\n");
         
         //add JS libraries
-        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/jquery" +
-                "/jquery-3.1.1.min.js")) + "</script>\n");
-        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
-                "/DataTables/jquery.dataTables-1.10.12.min.js")) + "</script>\n");
-        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
-                "/DataTables/dataTables-bootstrap.min.js")) + "</script>\n");
-        report.append("<script>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
-                "/bootstrap/bootstrap-3.3.7.min.js")) + "</script>\n");
+        report.append(String.format("<script>%s</script>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js/jquery" +
+                        "/jquery-3.1.1.min.js"))));
+        report.append(String.format("<script>%s</script>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
+                        "/DataTables/jquery.dataTables-1.10.12.min.js"))));
+        report.append(String.format("<script>%s</script>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
+                        "/DataTables/dataTables-bootstrap.min.js"))));
+        report.append(String.format("<script>%s</script>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/js" +
+                        "/bootstrap/bootstrap-3.3.7.min.js"))));
         
         //add CSS
-        report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
-                "/DataTables/dataTables.bootstrap.min.css")) + "</style>\n");
-        report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
-                "/DataTables/buttons.dataTables.min.css")) + "</style>\n");
-        report.append("<style>" + TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
-                "/bootstrap/bootstrap-3.3.7.min.css")) + "</style>\n");
+        report.append(String.format("<style>%s</style>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
+                        "/DataTables/dataTables.bootstrap.min.css"))));
+        report.append(String.format("<style>%s</style>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
+                        "/DataTables/buttons.dataTables.min.css"))));
+        report.append(String.format("<style>%s</style>\n",
+                TypeConverter.InputStream2String(ReportItem.class.getResourceAsStream("/css" +
+                                "/bootstrap/bootstrap-3.3.7.min.css"))));
 	
         //add custom CSS
         report.append("<style>"+
@@ -592,7 +594,7 @@ public class ReportItem {
         //add timestamp
         report.append("   <div id='timestamp'>Generated: ");
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        report.append(timestamp + "</div>\n");
+        report.append(String.format("%s</div>\n", timestamp));
         
         report.append("<table>\n  <thead><tr>" +
             "<th>ID</th>" +
@@ -607,36 +609,40 @@ public class ReportItem {
         for (ReportItem error : errors) {
             switch (error.getSeverity()) {
                 case CRITICAL:
-                    report.append("<tr class='critical'><td>" + errors.indexOf(error) + "</td><td style='border-left: red solid 3px'>Critical</td><td>");
+                    report.append(String.format("<tr class='critical'><td>%d</td><td style='border-left: red solid " +
+                            "3px'>Critical</td><td>", errors.indexOf(error)));
                     break;
                 case CORRECT:
-                    report.append("<tr class='correct'><td>" + errors.indexOf(error) + "</td><td style='border-left: green solid 3px'>Correct</td><td>");
+                    report.append(String.format("<tr class='correct'><td>%d</td><td style='border-left: green solid " +
+                            "3px'>Correct</td><td>", errors.indexOf(error)));
                     break;
                 case WARNING:
-                    report.append("<tr class='warning'><td>" + errors.indexOf(error) + "</td><td style='border-left: yellow solid 3px'>Warning</td><td>");
+                    report.append(String.format("<tr class='warning'><td>%d</td><td style='border-left: yellow solid " +
+                            "3px'>Warning</td><td>", errors.indexOf(error)));
                     break;
                 case NOTE:
-                    report.append("<tr class='note'><td>" + errors.indexOf(error) + "</td><td style='border-left: green solid 3px'>Note</td><td>");
+                    report.append(String.format("<tr class='note'><td>%d</td><td style='border-left: green solid " +
+                            "3px'>Note</td><td>", errors.indexOf(error)));
                     break;
                 case UNKNOWN:
-                    report.append("<tr class='unknown'><td>" + errors.indexOf(error) + "</td><td style='border-left: orange solid 3px'>Unknown</td><td>");
+                    report.append(String.format("<tr class='unknown'><td>%d</td><td style='border-left: orange solid " +
+                            "3px'>Unknown</td><td>", errors.indexOf(error)));
                     break;
                 default:
-                    report.append("<tr class='other'><td>" + errors.indexOf(error) + "</td><td style='border-left: black solid 3px'>Other</td><td>");
+                    report.append(String.format("<tr class='other'><td>%d</td><td " +
+                            "style='border-left: black solid 3px'>Other</td><td>",errors.indexOf(error)));
                     break;
             }
-            report.append(StringEscapeUtils.escapeHtml4(error.getFunction()) + "</td><td>");
-            report.append(StringEscapeUtils.escapeHtml4(error.getLocation()) + "</td>");
-            report.append("<td style='white-space: pre'>" +
-                StringEscapeUtils.escapeHtml4(error.getWhat()).replace("\n", "<br>") +
-                "</td>");
-            report.append("<td style='white-space: pre'>" +
-                StringEscapeUtils.escapeHtml4(error.getHowto()).replace("\n", "<br>") +
-                "</td>");
-            report.append("<td style='font-face: monospace; color: gray; border: gray solid 1px; white-space: pre;'>(" +
-                StringEscapeUtils.escapeHtml4(error.getLocalisedMessage()) +
-                ")</td>\n");
-            report.append("<!-- " + StringEscapeUtils.escapeHtml4(error.getStackTrace()) + " -->\n");
+            report.append(String.format("%s</td><td>",StringEscapeUtils.escapeHtml4(error.getFunction())));
+            report.append(String.format("%s</td>", StringEscapeUtils.escapeHtml4(error.getLocation())));
+            report.append(String.format("<td style='white-space: pre'>%s</td>",
+                StringEscapeUtils.escapeHtml4(
+                        error.getWhat()).replace("\n", "<br>")));
+            report.append(String.format("<td style='white-space: pre'>%s</td>",
+                    StringEscapeUtils.escapeHtml4(error.getHowto()).replace("\n", "<br>")));
+            report.append(String.format("<td style='font-face: monospace; color: gray; border: gray solid 1px; " +
+                    "white-space: pre;'>(%s)</td>\n",StringEscapeUtils.escapeHtml4(error.getLocalisedMessage())));
+            report.append(String.format("<!-- %s -->\n",StringEscapeUtils.escapeHtml4(error.getStackTrace())));
             report.append("</tr>");
         }
         report.append("  </tbody>\n  </table>\n");
@@ -647,7 +653,7 @@ public class ReportItem {
 
                   "} );</script>");
         
-        report.append("   <footer style='white-space: pre'>" + summarylines + "</footer>");
+        report.append(String.format("   <footer style='white-space: pre'>%s</footer>", summarylines));
         report.append("   </body>\n</html>");
         
         return report.toString();
@@ -675,12 +681,12 @@ public class ReportItem {
                     report.append("Other\"");
                     break;
             }
-            report.append(error.getFunction() + "\"");
-            report.append(error.getLocation() + "\"");
-            report.append(error.getWhat() + "\"");
-            report.append(error.getHowto() + "\"");
-            report.append(error.getLocalisedMessage() + "\"");
-            report.append(error.getStackTrace() +"\n");
+            report.append(String.format("%s\"", error.getFunction()));
+            report.append(String.format("%s\"",error.getLocation()));
+            report.append(String.format("%s\"",error.getWhat()));
+            report.append(String.format("%s\"",error.getHowto()));
+            report.append(String.format("%s\"", error.getLocalisedMessage()));
+            report.append(String.format("%s\n", error.getStackTrace()));
         }
         return report.toString();
        }
