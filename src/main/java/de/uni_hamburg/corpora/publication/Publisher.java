@@ -12,10 +12,7 @@ import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -35,8 +32,10 @@ public abstract class Publisher implements CorpusFunction {
     Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<Class<? extends CorpusData>>();
     final String function;
     Boolean canfix = false;
+    private Properties props;
 
-    public Publisher(){
+    public Publisher(Properties properties){
+        props = properties;
         function = this.getClass().getSimpleName();
     }
 

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -31,9 +32,9 @@ public class CorpusHTML extends Visualizer {
     URL targeturl;
     CorpusData cod;
 
-    public CorpusHTML() {
+    public CorpusHTML(Properties properties) {
+        super(properties);
     }
-
     public String createFromComa(String coma) {
         //TODO this report is never used anywhere
         Report stats = new Report();

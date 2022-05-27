@@ -12,10 +12,7 @@ import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -37,6 +34,7 @@ import org.xml.sax.SAXException;
  */
 public abstract class Visualizer implements CorpusFunction {
 
+    private Properties props;
     private String html = null;
     protected BasicTranscription basicTranscription = null;
     protected String basicTranscriptionString = null;
@@ -57,7 +55,8 @@ public abstract class Visualizer implements CorpusFunction {
     final String function;
     Boolean canfix = false;
 
-    public Visualizer() {
+    public Visualizer(Properties properties) {
+        props = properties;
         function = this.getClass().getSimpleName();
     }
 

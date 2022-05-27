@@ -19,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -50,15 +51,18 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
      * creates a new instance of AddCSVMetadataToComa
      */
     public AddCSVMetadataToComa(String corpusPath) {
+        this(new Properties());
     }
 
-    public AddCSVMetadataToComa() {
+    public AddCSVMetadataToComa(Properties properties) {
+        super(properties);
     }
 
     /**
      * creates a new instance of AddCSVMetadataToComa
      */
     public AddCSVMetadataToComa(String corpusPath, String csvPath, String SpeakerOrCommunication) {
+        this(new Properties());
         this.comaFile = corpusPath;
         this.csvFile = csvPath;
         this.SpeakerOrCommunication = SpeakerOrCommunication;

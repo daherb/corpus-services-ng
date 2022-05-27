@@ -17,6 +17,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,10 +41,12 @@ public class HScoreHTML extends Visualizer {
     CorpusData cd;
     String corpusname = "";
 
-    public HScoreHTML() {
+    public HScoreHTML(Properties properties) {
+        super(properties);
     }
 
     public HScoreHTML(String btAsString) {
+        this(new Properties());
         try {
             createFromBasicTranscription(btAsString);
         } catch (TransformerException ex) {

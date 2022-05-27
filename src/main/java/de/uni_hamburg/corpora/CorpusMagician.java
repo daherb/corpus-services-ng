@@ -332,7 +332,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(xc);
                     break;
                 case "exb2inelisotei":
-                    EXB2HIATISOTEI eiit = new EXB2HIATISOTEI();
+                    EXB2HIATISOTEI eiit = new EXB2HIATISOTEI(cfProperties);
                     eiit.setInel();
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
@@ -349,7 +349,7 @@ public class CorpusMagician {
                     break;
                 //Maybe get rid of those special cases too!
                 case "exb2inelisoteisel":
-                    EXB2HIATISOTEI eiitsel = new EXB2HIATISOTEI();
+                    EXB2HIATISOTEI eiitsel = new EXB2HIATISOTEI(cfProperties);
                     eiitsel.setInel();
                     if (cfProperties.containsKey(fsm)) {
                         eiitsel.setFSM(cfProperties.getProperty(fsm));
@@ -359,7 +359,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(eiitsel);
                     break;
                 case "exb2inelisoteidlg":
-                    EXB2HIATISOTEI eiitdlg = new EXB2HIATISOTEI();
+                    EXB2HIATISOTEI eiitdlg = new EXB2HIATISOTEI(cfProperties);
                     eiitdlg.setInel();
                     if (cfProperties.containsKey(fsm)) {
                         eiitdlg.setFSM(cfProperties.getProperty(fsm));
@@ -369,7 +369,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(eiitdlg);
                     break;
                 case "exb2inelisoteixas":
-                    EXB2HIATISOTEI eiitxas = new EXB2HIATISOTEI();
+                    EXB2HIATISOTEI eiitxas = new EXB2HIATISOTEI(cfProperties);
                     eiitxas.setInel();
                     if (cfProperties.containsKey(fsm)) {
                         eiitxas.setFSM(cfProperties.getProperty(fsm));
@@ -379,7 +379,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(eiitxas);
                     break;
                 case "exb2hiatisotei":
-                    EXB2HIATISOTEI ehit = new EXB2HIATISOTEI();
+                    EXB2HIATISOTEI ehit = new EXB2HIATISOTEI(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(lang)) {
@@ -450,7 +450,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(cdrr);
                     break;
                 case "zipcorpus":
-                    ZipCorpus zc = new ZipCorpus();
+                    ZipCorpus zc = new ZipCorpus(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey("source_folder")) {
@@ -469,7 +469,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(zc);
                     break;
                 case "handlepidregistration":
-                    HandlePidRegistration hppr = new HandlePidRegistration();
+                    HandlePidRegistration hppr = new HandlePidRegistration(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey("user")) {
@@ -489,7 +489,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(hppr);
                     break;
                 case "scorehtml":
-                    ScoreHTML shtml = new ScoreHTML();
+                    ScoreHTML shtml = new ScoreHTML(cfProperties);
                     if (cfProperties != null) {
                         if (cfProperties.containsKey(corpusname)) {
                             shtml.setCorpusName(cfProperties.getProperty(corpusname));
@@ -499,7 +499,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(shtml);
                     break;
                 case "listhtml":
-                    ListHTML lhtml = new ListHTML();
+                    ListHTML lhtml = new ListHTML(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey(segmentation)) {
@@ -559,7 +559,7 @@ public class CorpusMagician {
                     cf2strcorpusfunctions.add(esegr);
                     break;
                 case "addcsvmetadatatocoma":
-                    AddCSVMetadataToComa acmtc = new AddCSVMetadataToComa();
+                    AddCSVMetadataToComa acmtc = new AddCSVMetadataToComa(cfProperties);
                     if (cfProperties != null) {
                         // Pass on the configuration parameter
                         if (cfProperties.containsKey("csv")) {

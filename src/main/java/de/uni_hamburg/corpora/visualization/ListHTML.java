@@ -32,6 +32,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation;
@@ -61,10 +62,12 @@ public class ListHTML extends Visualizer {
     String path2ExternalFSM = "";
     String segmentationAlgorithm = "GENERIC";
 
-    public ListHTML() {
+    public ListHTML(Properties properties) {
+        super(properties);
     }
 
     public ListHTML(String btAsString, String segmAlgorithm) {
+        this(new Properties());
         Report stats = new Report();
         try {
             createFromBasicTranscription(btAsString, segmAlgorithm);
@@ -230,7 +233,7 @@ public class ListHTML extends Visualizer {
     }
 
     public static void main(String[] args) {
-        ListHTML lhtml = new ListHTML();
+        ListHTML lhtml = new ListHTML(new Properties());
         Report stats = lhtml.doMain(args);
         System.out.println(stats.getSummaryLines());
         System.out.println(stats.getErrorReports());

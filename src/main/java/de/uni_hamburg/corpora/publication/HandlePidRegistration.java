@@ -21,10 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
@@ -58,8 +55,8 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
     
     
     
-    public HandlePidRegistration() {
-        super();
+    public HandlePidRegistration(Properties properties) {
+        super(properties);
     }
 
     @Override

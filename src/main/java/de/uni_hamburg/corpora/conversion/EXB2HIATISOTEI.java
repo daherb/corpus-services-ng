@@ -96,6 +96,10 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
     URL cdURL;
 
+    public EXB2HIATISOTEI(Properties properties) {
+        super(properties);
+    }
+
 
     /*
     * this method takes a CorpusData object, converts it into HIAT ISO TEI and saves it 

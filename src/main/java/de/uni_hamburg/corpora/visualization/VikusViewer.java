@@ -12,7 +12,7 @@ import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -32,9 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.xpath.XPath;
@@ -58,6 +56,10 @@ public class VikusViewer extends Visualizer {
     String title;
     String description;
     ArrayList<String> allDistinctYears = new ArrayList<>();
+
+    public VikusViewer(Properties properties) {
+        super(properties);
+    }
 
     @Override
     public Report function(CorpusData cd) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {

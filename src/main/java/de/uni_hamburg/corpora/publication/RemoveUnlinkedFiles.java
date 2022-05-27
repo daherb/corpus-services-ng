@@ -12,10 +12,7 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,8 +36,8 @@ public class RemoveUnlinkedFiles extends Publisher implements CorpusFunction {
     String baseDirectory;
     final List<String> filenamewhitelist;
 
-    public RemoveUnlinkedFiles() {
-        super();
+    public RemoveUnlinkedFiles(Properties properties) {
+        super(properties);
         fileList = new ArrayList<String>();
         //these are the files we don't want to remove even if they are not in Coma
         filenamewhitelist = new ArrayList<String>();

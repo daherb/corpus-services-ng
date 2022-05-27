@@ -16,10 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -59,11 +56,12 @@ public class ScoreHTML extends Visualizer {
     CorpusData cd;
     String corpusname = "";
 
-    public ScoreHTML() {
+    public ScoreHTML(Properties properties) {
+        super(properties);
     }
 
     public ScoreHTML(String btAsString) throws JDOMException, TransformerException, TransformerConfigurationException, IOException {
-
+        this(new Properties());
         createFromBasicTranscription(btAsString);
     }
 
@@ -210,7 +208,7 @@ public class ScoreHTML extends Visualizer {
     }
 
     public static void main(String[] args) {
-        ScoreHTML shtml = new ScoreHTML();
+        ScoreHTML shtml = new ScoreHTML(new Properties());
         Report stats = shtml.doMain(args);
         System.out.println(stats.getSummaryLines());
         System.out.println(stats.getErrorReports());

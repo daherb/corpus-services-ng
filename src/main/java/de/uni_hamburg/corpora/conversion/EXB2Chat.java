@@ -21,6 +21,8 @@ import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
 import java.util.Collection;
 import java.net.URL;
+import java.util.Properties;
+
 import de.uni_hamburg.corpora.CorpusIO;
 import javax.xml.transform.TransformerException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -35,8 +37,8 @@ public class EXB2Chat extends Converter implements CorpusFunction {
 
     Boolean COMA = false;
 
-    public EXB2Chat() {
-
+    public EXB2Chat(Properties properties) {
+        super(properties);
     }
 
     public static final String EXB2CHAT = "exb2chat";

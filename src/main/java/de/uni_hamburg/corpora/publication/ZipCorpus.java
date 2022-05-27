@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -39,8 +40,8 @@ public class ZipCorpus extends Publisher implements CorpusFunction {
     String AUDIO = "";
     CorpusData comadata;
 
-    public ZipCorpus() {
-        super();
+    public ZipCorpus(Properties properties) {
+        super(properties);
         fileList = new ArrayList<String>();
     }
 
