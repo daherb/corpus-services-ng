@@ -79,7 +79,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>de.uni_hamburg.corpora.CorpusMagician</mainClass>
+                    <mainClass>${mainClass}</mainClass>
                     <!-- mainClass>de.uni_hamburg.corpora.validation.quest.RefcoChecker</mainClass -->
                     <!-- mainClass>de.uni_hamburg.corpora.validation.EXMARaLDAValidatorChecker</mainClass-->
                     <!--mainClass>de.uni_hamburg.corpora.utilities.MediaFileChecker</mainClass-->
@@ -133,6 +133,7 @@
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mainClass>de.uni_hamburg.corpora.CorpusMagician</mainClass>
     </properties>
 
     <dependencies>
