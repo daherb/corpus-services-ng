@@ -202,7 +202,7 @@ public class VikusViewer extends Visualizer {
             String listurl = transrepourl + id.getValue() + "/LIST/" + id.getValue() + "-list.html";
             comrow[11] = listurl;
             //pdf url
-            Element pdf = (Element) XPath.selectSingleNode(communication, "descendant::File[mimetype='application/pdf']/relPath']");
+            Element pdf = (Element) XPath.selectSingleNode(communication, "descendant::File[mimetype='application/pdf']/relPath");
             //audio url
             Element audio = (Element) XPath.selectSingleNode(communication, "descendant::Recording/Media/NSLink");
             //check for cases with no audio and no pdf or both!
