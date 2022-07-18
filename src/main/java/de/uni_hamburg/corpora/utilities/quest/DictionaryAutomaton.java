@@ -327,4 +327,35 @@ public class DictionaryAutomaton {
         else
             return Collections.emptyList() ;
     }
+
+    public void saveDot(String filename) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph dictAutomaton {\n");
+        sb.append("\tstart [shape=point];\n");
+        for (int i = 0; i < this.stateCount ; i++) {
+            String state = "s" + i;
+            // Mark accepting states
+            if (this.isAcceptingState(state)) {
+                sb.append(String.format("\t%s [shape=doublecircle];\n",state));
+            }
+            // Or regular states
+            else {
+                sb.append(String.format("\t%s [shape=circle];\n",state));
+            }
+            // Connect initial state
+            if (state.equals(this.initialState))
+                sb.append(String.format("\tstart -> %s;\n",state));
+            Map<Character,String> transitions = this.transitionsFrom.get(state);
+            if (transitions != null) {
+                for (Map.Entry<Character, String> transition : transitions.entrySet()) {
+                    // Connect states
+                    sb.append(String.format("\t%s -> %s [label=\"%s\"];\n", state, transition.getValue(), transition.getKey()));
+                }
+            }
+        }
+        sb.append("}");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+        bw.write(sb.toString());
+        bw.close();
+    }
 }
