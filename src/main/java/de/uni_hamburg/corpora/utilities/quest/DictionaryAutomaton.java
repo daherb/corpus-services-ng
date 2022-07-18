@@ -31,7 +31,8 @@ public class DictionaryAutomaton {
     private final Set<String> acceptingStates = new HashSet<>();
 
     // The transitions in the automaton from one state to another determined by a character
-    HashMap<String, HashMap<Character,String>> transitions = new HashMap<>();
+    HashMap<String, HashMap<Character,String>> transitionsFrom = new HashMap<>();
+    HashMap<String, HashMap<Character,String>> transitionsTo = new HashMap<>();
 
     /**
      * Function to read a file and return a list of lines
