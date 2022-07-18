@@ -118,6 +118,8 @@ public class DictionaryAutomaton {
         // The state we use if we use to follow transitions, null indicates that we haven't a matching transition in
         // the current state
         String newState = null ;
+        // No transitions to start state
+        transitionsTo.put(state,new HashMap<>());
         for (Character c : word.toCharArray()) {
             // Keep track of all characters
             alphabet.add(c);
@@ -130,13 +132,22 @@ public class DictionaryAutomaton {
                 newState = "s" + stateCount;
                 stateCount += 1;
                 // Push the new transition
-                transitions.get(state).put(c,newState);
+                transitionsFrom.get(state).put(c,newState);
+                // Create entry if necessary
+                if (!transitionsTo.containsKey(newState)) {
+                    transitionsTo.put(newState,new HashMap<>());
+                }
+                transitionsTo.get(newState).put(c,state);
             }
             state = newState ;
         }
         // After adding a complete word, add the final state to the accepting states
-        if (newState != null)
+        if (newState != null) {
+            // No transitions at the end of the word
+            if (!transitionsFrom.containsKey(newState))
+                transitionsFrom.put(newState,new HashMap<>());
             acceptingStates.add(newState);
+        }
     }
 
     /**
@@ -167,10 +178,10 @@ public class DictionaryAutomaton {
      * @return the new state, or null if no valid transition for the character in the state
      */
     public String transition(String state, Character input) {
-        HashMap<Character,String> currentTransitions = transitions.get(state);
+        HashMap<Character,String> currentTransitions = transitionsFrom.get(state);
         if (currentTransitions == null)
         {
-            transitions.put(state,new HashMap<>());
+            transitionsFrom.put(state,new HashMap<>());
             return null;
         }
         return currentTransitions.get(input);
