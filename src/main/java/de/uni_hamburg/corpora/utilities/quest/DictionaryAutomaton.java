@@ -45,10 +45,7 @@ public class DictionaryAutomaton {
             // Open file
             BufferedReader br = new BufferedReader(new FileReader(f));
             // Read all lines and add to list
-            String line;
-            while ((line = br.readLine()) != null) {
-                lines.add(line);
-            }
+            lines.addAll(br.lines().collect(Collectors.toList()));
             // Return non-empty list if the file is not empty
             return lines;
         } catch (IOException e) {
