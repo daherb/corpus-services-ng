@@ -24,11 +24,11 @@ public class DictionaryAutomaton {
     private int stateCount;
 
     // The alphabet, i.e. all characters encountered in the dictionary
-    private Set<Character> alphabet = new HashSet<>();
+    private final Set<Character> alphabet = new HashSet<>();
 
     // Initial and accepting states of the automaton
-    private String initialState;
-    private Set<String> acceptingStates = new HashSet<>();
+    private final String initialState;
+    private final Set<String> acceptingStates = new HashSet<>();
 
     // The transitions in the automaton from one state to another determined by a character
     HashMap<String, HashMap<Character,String>> transitions = new HashMap<>();
