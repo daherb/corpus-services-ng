@@ -74,7 +74,7 @@ public class DictionaryAutomaton {
         // Initialize start state as state 0
         initialState = "s0";
         // Keep track of the number of states in the automaton to be able to create new ones on demand
-        stateCount = 0;
+        stateCount = 1;
         // For each word, change the automaton to accept it
         for (String w : dict) {
             // Add word to automaton
@@ -127,8 +127,8 @@ public class DictionaryAutomaton {
             // If we fail (new state is null), we need to create a new state and add a transition to it
             if (newState == null) {
                 // Create new state
-                stateCount += 1;
                 newState = "s" + stateCount;
+                stateCount += 1;
                 // Push the new transition
                 transitions.get(state).put(c,newState);
             }
