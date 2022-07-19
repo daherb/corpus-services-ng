@@ -74,6 +74,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Separator used to separate morpheme glosses (see https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf)
     private final Set<String> glossSeparator = new HashSet<>(); //new HashSet(Arrays.asList("-", "=")); // "[-=;:\\\\>()
     // <~\\[\\]]+"
+    // Separator to split tier ids in tier names and speakers
+    private Optional<String> tierSpeakerSeparator = Optional.empty();
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
@@ -1650,6 +1652,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Check all tiers
         // Get all tiers from the corpus
         Map<String, Set<String>> allTiers;
+        // First we have to see if we have a tier speaker separator character
+        // If we have a tier speaker separator we can update the field
+        tierSpeakerSeparator = criteria.punctuations.stream()
+                .filter((c) -> c.function.equalsIgnoreCase("tier speaker separator"))
+                .map(Punctuation::getCharacter).findAny();
         try {
             allTiers = getTierIDs();
         } catch (Exception e) {
@@ -1660,7 +1667,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             allTiers = new HashMap<>();
         }
         for (Tier t : criteria.tiers) {
-            allTiers.remove(t.tierName);
+            // If we have a tier speaker separator we also have to check the combination of tier names with speakers
+            if (tierSpeakerSeparator.isPresent()) {
+                for (String fileName :
+                        allTiers.keySet().stream().filter((tn) -> tn.startsWith(t.tierName))
+                                .map(allTiers::get).collect(ArrayList<String>::new, ArrayList::addAll,
+                                        ArrayList::addAll)) {
+                    for (String newTier :
+                            findSpeakers(fileName).stream().map((s) -> t.tierName + tierSpeakerSeparator.get() + s)
+                                    .collect(Collectors.toList())) {
+                        allTiers.remove(newTier);
+                    }
+                }
+            }
+            else {
+                allTiers.remove(t.tierName);
+            }
             if (t.tierName == null || t.tierName.isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
@@ -1889,19 +1911,59 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
     /**
      * function to find all transcription tier names
+     * @param file the file to contain the tiers
      * @return list of transcription tiers
      */
-    private ArrayList<String> findTranscriptionTiers() {
+    private ArrayList<String> findTranscriptionTiers(String file) {
+        // Add tiers containing transcription in the tier function
+        // as well as the ones with morpheme segmentation
+        return findTiersByFunction(file,Arrays.asList("transcription", "morpheme segmentation"));
+    }
+
+    /**
+     * function to find all gloss tier names
+     * @param file the file to contain the tiers
+     * @return list of gloss tiers
+     */
+    private ArrayList<String> findGlossTiers(String file) {
+        return findTiersByFunction(file,Arrays.asList("morpheme gloss","morpheme glossing"));
+    }
+
+    /**
+     * function to find all tiers based on their function
+     * @param file the file to contain the tiers
+     * @param functions list of tier functions
+     * @return list of tiers matching the functions
+     */
+    private ArrayList<String> findTiersByFunction(String file, List<String> functions) {
         ArrayList<String> transcriptionTiers = new ArrayList<>();
         for (Tier t: criteria.tiers) {
-            // Add tiers containing transcription in the tier function
-            if (t.tierFunctions.contains("transcription") ||
-            // as well as the ones with morpheme segmentation
-                    (t.tierFunctions.contains("morpheme segmentation"))) {
-                transcriptionTiers.add(t.tierName);
+//            if (t.tierFunctions.contains() ||
+//                    (t.tierFunctions.contains())) {
+            if (functions.stream().anyMatch((f) -> t.tierFunctions.contains(f))) {
+                // If we have a tier speaker separator we have to combine tier names with speakers
+                if (tierSpeakerSeparator.isPresent()) {
+                    List<String> speakers = findSpeakers(file);
+                    for (String speaker : speakers)
+                        transcriptionTiers.add(t.tierName + tierSpeakerSeparator.get() + speaker);
+                }
+                else {
+                    transcriptionTiers.add(t.tierName);
+                }
             }
         }
         return transcriptionTiers;
+    }
+
+    /**
+     * Function to find all documented speakers for a file
+     * @param fileName the file for which the speakers are documented
+     * @return list of speakers
+     */
+    public List<String> findSpeakers(String fileName) {
+        return criteria.sessions.stream().filter((s) -> s.fileNames.contains(fileName))
+                .map((s) -> Arrays.asList(s.getSpeakerName().split(",\\s+")))
+                .collect(ArrayList::new, List::addAll, List::addAll);
     }
     /**
      * function to check the transcription text based on valid chunks and glosses
@@ -2023,7 +2085,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Get the dom
         Document content = ((ELANData) cd).getJdom();
         // Get all transcription tiers
-        ArrayList<String> transcriptionTiers = findTranscriptionTiers();
+        ArrayList<String> transcriptionTiers = findTranscriptionTiers(cd.getFilename());
+        logger.info("Checking transcription tiers: " + String.join(",", transcriptionTiers));
         // Check if we actually have relevant tiers
         if (transcriptionTiers.isEmpty()) {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
@@ -2048,7 +2111,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     // Add all of the punctuation's characters
                     // validTranscriptionCharacters.addAll(getChars(p.character));
                     validTranscriptionCharacters.add(p.character);
-                else if (Arrays.asList(p.tiers.split(valueSeparator)).contains(tierId)) {
+                else if ((Arrays.asList(p.tiers.split(valueSeparator)).contains(tierId)) ||
+                        (tierSpeakerSeparator.isPresent() && Arrays.asList(p.tiers.split(valueSeparator)).stream()
+                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator)))){
                     // Add all of the punctuation's characters
                     validTranscriptionCharacters.add(p.character);
                 }
@@ -2058,7 +2123,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (Gloss g : criteria.glosses) {
                 if (g.tiers.equals("all"))
                     validGlosses.add(g.gloss);
-                else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
+                // else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
+                else if ((Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) ||
+                        (tierSpeakerSeparator.isPresent() && Arrays.asList(g.tiers.split(valueSeparator)).stream()
+                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator.get())))) {
                     validGlosses.add(g.gloss);
                 }
             }
@@ -2208,12 +2276,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Get the dom
         Document content = ((ELANData) cd).getJdom();
         // Get morphology tiers
-        List<String> morphologyTiers = criteria.tiers.stream()
-                .filter((t) ->
-                        t.tierFunctions.contains("morpheme gloss") || t.tierFunctions.contains("morpheme glossing")
-                )
-                .map((t) -> t.tierName).collect(Collectors.toList()) ;
-        // Chekc if we actually have tiers
+        List<String> morphologyTiers = findGlossTiers(cd.getFilename());
+        // Check if we actually have tiers
         if (morphologyTiers.isEmpty()) {
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
                                 , "howtoFix"},
