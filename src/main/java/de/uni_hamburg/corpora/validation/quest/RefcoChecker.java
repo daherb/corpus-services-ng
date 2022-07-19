@@ -136,7 +136,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         @XmlElement(required=true)
         String sessionName ;
         @XmlElement(required=true)
-        String fileName ;
+        String fileNames;
         @XmlElement(required=true)
         String speakerName ;
         @XmlElement(required=true)
@@ -157,20 +157,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Session session = (Session) o;
-            return Objects.equals(sessionName, session.sessionName) && Objects.equals(fileName, session.fileName) && Objects.equals(speakerName, session.speakerName) && Objects.equals(speakerAge, session.speakerAge) && Objects.equals(speakerGender, session.speakerGender) && Objects.equals(recordingLocation, session.recordingLocation) && Objects.equals(recordingDate, session.recordingDate) && Objects.equals(genre, session.genre);
+            return Objects.equals(sessionName, session.sessionName) && Objects.equals(fileNames, session.fileNames) && Objects.equals(speakerName, session.speakerName) && Objects.equals(speakerAge, session.speakerAge) && Objects.equals(speakerGender, session.speakerGender) && Objects.equals(recordingLocation, session.recordingLocation) && Objects.equals(recordingDate, session.recordingDate) && Objects.equals(genre, session.genre);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(sessionName, fileName, speakerName, speakerAge, speakerGender, recordingLocation, recordingDate, genre);
+            return Objects.hash(sessionName, fileNames, speakerName, speakerAge, speakerGender, recordingLocation, recordingDate, genre);
         }
 
         public String getSessionName() {
             return sessionName;
         }
 
-        public String getFileName() {
-            return fileName;
+        public String getFileNames() {
+            return fileNames;
         }
 
         public String getSpeakerName() {
@@ -1154,7 +1154,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Sessions")) {
                         Session session = new Session();
                         session.sessionName = safeGetText(columns.get(0).getChild("p", textNamespace));
-                        session.fileName = safeGetText(columns.get(1).getChild("p", textNamespace));
+                        session.fileNames = safeGetText(columns.get(1).getChild("p", textNamespace));
                         session.speakerName = safeGetText(columns.get(2).getChild("p", textNamespace));
                         session.speakerAge = safeGetText(columns.get(3).getChild("p", textNamespace));
                         session.speakerGender = safeGetText(columns.get(4).getChild("p", textNamespace));
@@ -1559,7 +1559,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Session name is empty","Add session name"}));
-            if (s.fileName == null || s.fileName.isEmpty())
+            if (s.fileNames == null || s.fileNames.isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Session file names are empty: " + s.sessionName,
@@ -1567,7 +1567,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             else {
                 // Each cell can contain several files. Split the files and check for each one if it exists
                 ArrayList<String> filenames = new ArrayList<>(
-                    Arrays.asList(s.fileName.split(valueSeparator)));
+                    Arrays.asList(s.fileNames.split(valueSeparator)));
                 for (String f : filenames) {
                     try {
                         // Collect all candidate URIs, even for files in other directories
