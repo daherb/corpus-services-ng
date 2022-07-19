@@ -407,10 +407,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         InformationNotes numberTranscribedWords ;
         @XmlElement(required=true)
         InformationNotes numberAnnotatedWords ;
-        // Annotation Strategies
-        // All languages are in a single cell
-        @XmlElement(required=true)
-        InformationNotes translationLanguages ;
         // Tab: Corpus Compositions
         @XmlElementWrapper(name="sessions")
         @XmlElement(required=true,name="session")
@@ -484,10 +480,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return numberAnnotatedWords;
         }
 
-        public InformationNotes getTranslationLanguages() {
-            return translationLanguages;
-        }
-
         public ArrayList<Session> getSessions() {
             return sessions;
         }
@@ -513,12 +505,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             RefcoCriteria that = (RefcoCriteria) o;
-            return Objects.equals(corpusTitle, that.corpusTitle) && Objects.equals(subjectLanguages, that.subjectLanguages) && Objects.equals(archive, that.archive) && Objects.equals(persistentId, that.persistentId) && Objects.equals(annotationLicense, that.annotationLicense) && Objects.equals(recordingLicense, that.recordingLicense) && Objects.equals(creatorName, that.creatorName) && Objects.equals(creatorContact, that.creatorContact) && Objects.equals(creatorInstitution, that.creatorInstitution) && Objects.equals(refcoVersion, that.refcoVersion) && Objects.equals(numberSessions, that.numberSessions) && Objects.equals(numberTranscribedWords, that.numberTranscribedWords) && Objects.equals(numberAnnotatedWords, that.numberAnnotatedWords) && Objects.equals(translationLanguages, that.translationLanguages) && Objects.equals(sessions, that.sessions) && Objects.equals(tiers, that.tiers) && Objects.equals(transcriptions, that.transcriptions) && Objects.equals(glosses, that.glosses) && Objects.equals(punctuations, that.punctuations);
+            return Objects.equals(corpusTitle, that.corpusTitle) && Objects.equals(subjectLanguages,
+                    that.subjectLanguages) && Objects.equals(archive, that.archive) && Objects.equals(persistentId,
+              that.persistentId) && Objects.equals(annotationLicense, that.annotationLicense) && Objects.equals(recordingLicense, that.recordingLicense) && Objects.equals(creatorName, that.creatorName) && Objects.equals(creatorContact, that.creatorContact) && Objects.equals(creatorInstitution, that.creatorInstitution) && Objects.equals(refcoVersion, that.refcoVersion) && Objects.equals(numberSessions, that.numberSessions) && Objects.equals(numberTranscribedWords, that.numberTranscribedWords) && Objects.equals(numberAnnotatedWords, that.numberAnnotatedWords) && // Objects.equals(translationLanguages, that.translationLanguages) &&
+                Objects.equals(sessions, that.sessions) && Objects.equals(tiers, that.tiers) && Objects.equals(transcriptions, that.transcriptions) && Objects.equals(glosses, that.glosses) && Objects.equals(punctuations, that.punctuations);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(corpusTitle, subjectLanguages, archive, persistentId, annotationLicense, recordingLicense, creatorName, creatorContact, creatorInstitution, refcoVersion, numberSessions, numberTranscribedWords, numberAnnotatedWords, translationLanguages, sessions, tiers, transcriptions, glosses, punctuations);
+            return Objects.hash(corpusTitle, subjectLanguages, archive, persistentId, annotationLicense,
+                    recordingLicense, creatorName, creatorContact, creatorInstitution, refcoVersion, numberSessions,
+                    numberTranscribedWords, numberAnnotatedWords, // translationLanguages,
+                        sessions, tiers, transcriptions, glosses, punctuations);
         }
     }
 
@@ -1120,7 +1118,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             criteria.numberSessions = getInformationNotes(cellXPath, overviewTable, "Number of sessions") ;
             criteria.numberTranscribedWords = getInformationNotes(cellXPath, overviewTable, "Total number of transcribed words");
             criteria.numberAnnotatedWords = getInformationNotes(cellXPath, overviewTable, "Total number of morphologically analyzed words");
-            criteria.translationLanguages = getInformationNotes(cellXPath, overviewTable, "Translation language(s)");
             // Read CorpusComposition tab
             Element sessionTable = (Element) XPath.newInstance("//table:table[@table:name='CorpusComposition']").selectSingleNode(refcoDoc);
             if (sessionTable == null)
@@ -1481,27 +1478,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Number of annotated words is not a number",
                                 "Check and fix the number of annotated words"}));
-            }
-        }
-        if (criteria.translationLanguages.information == null || criteria.translationLanguages.information.isEmpty())
-            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
-                            "howtoFix"},
-                    new Object[]{getFunction(),refcoShortName,"Translation languages is empty",
-                            "Add translation languages"}));
-        else {
-            // Each cell can contain several languages. Split the languages and check for each one if it is a
-            // valid language code
-            // TODO check if that is the intended way to separate languages
-            ArrayList<String> translationLangList = new ArrayList<>(
-                    Arrays.asList(criteria.translationLanguages.information.split(valueSeparator)));
-            for (String l : translationLangList) {
-                if (!checkLanguage(l)) {
-                    report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
-                                    "description","howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Corpus documentation: translation language is " +
-                                "neither a Glottolog, ISO-639-3 language code nor otherwise known: " + l,
-                                "Use a valid language code"}));
-                }
             }
         }
         return report;
