@@ -2541,7 +2541,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return A map from tier id to files in which it is defined
      * @throws JDOMException on problems with the xpath expressions
      */
-    private Map<String,Set<String>> getTierIDs() throws JDOMException{
+    private Map<String, Set<String>> getTierIDs() throws JDOMException{
         Map<String,Set<String>> allTiers = new HashMap<>();
         for (ELANData cd : refcoCorpus.getELANData()) {
             for (String tier_id :
