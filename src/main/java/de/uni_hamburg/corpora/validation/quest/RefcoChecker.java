@@ -2131,8 +2131,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (String token : t.getText().split(tokenSeparator)) {
                 // Check if token is a gloss
                 for (String morpheme : token.split(splitRegex)) {
-                    // Remove digits e.g. in 3PL or 1INCL
-                    //String normalizedMorpheme = morpheme.replaceAll("^[0-9]","");
+                    // Remove some  digits e.g. in 3PL or 1INCL
                     String normalizedMorpheme = morpheme.replaceAll("[1-3]","")
                             // and . at the end of the gloss
                             .replaceAll("\\.$","");
@@ -2143,7 +2142,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         if (segments == null || segments.isEmpty()) {
                             missing += 1;
                             missingGlossFreq.put(normalizedMorpheme);
-                            // his would lead to large amount of warnings
+                            // This leads to large amount of warnings
                             try {
                                 for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
                                     report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
