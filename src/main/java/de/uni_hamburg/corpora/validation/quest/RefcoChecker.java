@@ -149,8 +149,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String recordingDate ;
         @XmlElement(required=true)
         String genre ; // is this a controlled vocabulary?
-//        String ageGroup ; // is this a controlled vocabulary?
-
 
         @Override
         public boolean equals(Object o) {
@@ -558,25 +556,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      *  The frequency list of all transcription tokens in the corpus
      */
-    // private HashMap<String,Integer> tokenFreq = new HashMap<>();
     private FrequencyList tokenFreq = new FrequencyList();
 
     /**
      * The frequency list of all segmented annotation/morphology glosses in the corpus
      */
-    // private HashMap<String,Integer> morphemeFreq = new HashMap<>();
     private FrequencyList morphemeFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-segmented annotation/morphology glosses in the corpus
      */
-    // private HashMap<String,Integer> glossFreq = new HashMap<>();
     private FrequencyList glossFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-segmentable gloss tokens
      */
-    // private HashMap<String,Integer> missingGlossFreq = new HashMap<>();
     private FrequencyList missingGlossFreq = new FrequencyList();
     /**
      * The global report, will be filled by the constructor and the function applied to the complete corpus
@@ -696,14 +690,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     " based on documentation following RefCo " + criteria.refcoVersion.information +
                     " specification version");
             System.out.println("... running the corpus function");
-            // Create the current report
-            //Report report = new Report();
             // Set the RefCo corpus
             setRefcoCorpus(c);
-            // Initialize frequency list for glosses
-//            for (Gloss gloss : criteria.glosses) {
-//                morphemeFreq.put(gloss.gloss, 0);
-//            }
             // Run the generic tests and merge their reports into the current report
             // but flag allows skipping it
             if (!props.containsKey("skip-documentation-check")
@@ -732,14 +720,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (!missingGlossFreq.isEmpty())
                 report.addNote(getFunction(),"Corpus data: Morpheme glosses missing from documentations:\n" +
                         missingGlossFreq.toString());
-//                                            missingGlossFreq.keySet().stream().map((k) -> k + ":" + missingGlossFreq.get(k))
-//                                                    .collect(Collectors.joining("\n")));
             if (!glossFreq.isEmpty() && props.containsKey("gloss-stats") &&
                     props.getProperty("gloss-stats").equalsIgnoreCase("true")) {
                 report.addNote(getFunction(), "Corpus data: Glosses encountered in the corpus:\n" +
                         glossFreq.toString());
-//                        glossFreq.keySet().stream().map((k) -> k + ":" + glossFreq.get(k))
-//                                .collect(Collectors.joining("\n")));
             }
             // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
             // Levenshtein difference 1 with a higher frequency count
@@ -1619,54 +1603,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                         "description","exception"},
                                 new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
                     }
-//                    boolean fileExists = false;
-//                    try {
-//                        File file = new File(new URI(refcoCorpus.getBaseDirectory() + f));
-//                        fileExists = file.exists();
-//                        allFiles.remove(file.toURI().normalize());
-//                        // If it is an ELAN file, it can/should be in the annotation folder
-//                        if (f.toLowerCase().endsWith("eaf")) {
-//                            fileExists = fileExists
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).exists()
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).exists()
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).exists()
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).exists();
-//                            allFiles.removeAll(Arrays.asList(
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI()).normalize().toUri(),
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI()).normalize().toUri(),
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI()).normalize().toUri(),
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI()).normalize().toUri()
-//                                    ));
-//
-//                        }
-//                        // if it is a wav file, it can should be in the recordings folder
-//                        else if (f.toLowerCase().endsWith("wav")) {
-//                            fileExists = fileExists
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).exists()
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).exists()
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).exists()
-//                                    || new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).exists();
-//                            allFiles.removeAll(Arrays.asList(
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI()).normalize().toUri(),
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI()).normalize().toUri(),
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI()).normalize().toUri(),
-//                                    Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI()).normalize().toUri()
-//                                    ));
-//                        }
-//                    }
-//                    catch (MalformedURLException | URISyntaxException e) {
-//                        report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename",
-//                                        "description","exception"},
-//                                new Object[]{getFunction(),refcoShortName,"Exception encountered checking file name: "+ f,e}));
-//                    }
-//                    if (!fileExists) {
-//                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-//                                        "description", "howtoFix"},
-//                                new Object[]{getFunction(), refcoShortName, "Corpus composition: File does not " +
-//                                        "exist:\n" + f,
-//                                        "Check the file reference in the documentation and remove the reference to " +
-//                                                "the file if it is removed intentionally"}));
-//                    }
                 }
             }
             if (s.speakerName == null || s.speakerName.isEmpty())
@@ -1720,20 +1656,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Corpus composition: Genre is empty", "Add genre"}));
-            // This is a custom column
-//            if (s.ageGroup == null || s.ageGroup.isEmpty())
-//                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description"},
-//                        new Object[]{getFunction(),refcoShortName,"Age group is empty"}));
         }
-//        if (!allFiles.isEmpty()) {
-//            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-//                            "description", "howtoFix"},
-//                    new Object[]{getFunction(), refcoShortName, "Corpus composition: Files are not " +
-//                            "documented:\n" +
-//                            allFiles.stream().map(Object::toString).collect(Collectors.joining("\n")),
-//                            "Check the file reference in the documentation and add the references to " +
-//                                    "the files if they should be included or delete unused files"}));
-//        }
         // Check the documented files against the files found
         FileListChecker fileListChecker = new FileListChecker(documentedFiles,allFiles,new Properties());
         try {
@@ -2211,11 +2134,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param tier the relevant tier
      * @param text the extracted text from all morphology tiers
      * @param glosses all documented glosses
-//     * @param morphemeRegex a regex matching the gloss part
      * @return the detailed report of the checks
      */
-    //private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses,
-    //                                    String morphemeRegex) {
     private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses) {
         Report report = new Report() ;
         // The gloss matcher using a dictionary automaton
@@ -2250,17 +2170,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             .replaceAll("\\.$","");
                     // TODO take properly care of morpheme distinction
                     String morphemeRegex = "[0-9A-Z.]+";
-                    // OLD
-//                    if (morpheme.matches(morphemeRegex) && !glosses.contains(normalizedMorpheme)) {
                     if (normalizedMorpheme.matches(morphemeRegex)) {
                         List<String> segments = glossAutomaton.segmentWord(normalizedMorpheme);
                         if (segments == null || segments.isEmpty()) {
                             missing += 1;
-//                             missingGlossFreq.compute(normalizedMorpheme, (k, v) -> (v == null) ? 1 : v + 1);
                             missingGlossFreq.put(normalizedMorpheme);
                             // his would lead to large amount of warnings
                             try {
-                                // Location l = getLocation((ELANData) cd, morpheme);
                                 for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
                                     report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                                     "howtoFix", "tier", "segment"},
@@ -2281,16 +2197,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             matched += 1;
                             for (String segment : segments) {
                                 // Remove initial periods and keep track of the count
-                                //morphemeFreq.compute(segment.replaceAll("^\\.",""), (k, v) -> (v == null) ? 1 : v +
-                                // 1);
                                 morphemeFreq.put(segment.replaceAll("^\\.",""));
                             }
                         }
                     }
-                // OLD
-//                    morphemeFreq.compute(normalizedMorpheme,(k, v) -> (v == null) ? 1 : v + 1);
                 }
-//                glossFreq.compute(token,(k, v) -> (v == null) ? 1 : v + 1);
                 glossFreq.put(token);
             }
         }
@@ -2646,103 +2557,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return allTiers;
     }
 
-//    /**
-//     * Class representing a location in a corpus given by a tier id and an annotation id
-//     */
-//    public static class Location {
-//        String tier;
-//        String segment;
-//
-//        public Location(String tier, String segment) {
-//            this.tier = tier;
-//            this.segment = segment;
-//        }
-//
-//        @Override
-//        public boolean equals(Object o) {
-//            if (this == o) return true;
-//            if (o == null || getClass() != o.getClass()) return false;
-//            Location location = (Location) o;
-//            return tier.equals(location.tier) && segment.equals(location.segment);
-//        }
-//
-//        @Override
-//        public int hashCode() {
-//            return Objects.hash(tier, segment);
-//        }
-//
-//        @Override
-//        public String toString() {
-//            return "Location{" +
-//                    "tier='" + tier + '\'' +
-//                    ", segment='" + segment + '\'' +
-//                    '}';
-//        }
-//    }
-
-//    /**
-//     * Gives the location of a text token in a corpus document
-//     * @param cd the corpus document
-//     * @param token the token to be looked up
-//     * @throws JDOMException on problems with the xpath expressions
-//     * @return the location consisting of a tier and a segment
-//     */
-//    private Location getLocation(ELANData cd, String token) throws JDOMException {
-//        if (token == null || token.isEmpty())
-//            return new Location("unknown", "");
-//        String normalizedToken = token.replaceAll("\"", "'");
-//        Element tier =
-//                (Element) XPath.newInstance(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
-//                                normalizedToken))
-//                        .selectSingleNode(cd.getJdom());
-//        if (tier != null) {
-//            Attribute tier_id = (Attribute) XPath.newInstance("//@TIER_ID")
-//                .selectSingleNode(tier);
-//            assert tier_id != null : "Tier id is null";
-//            Element annotation_segment =
-//                    (Element) XPath.newInstance(String.format("//*[contains(text(),\"%s\")]/..",
-//                                    normalizedToken))
-//                            .selectSingleNode(tier);
-//            assert annotation_segment != null : "Annotation segment is null";
-//            String annotation_id = annotation_segment.getAttributeValue("ANNOTATION_ID");
-//            if (annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
-//                // do nothing
-//            }
-//            else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
-//                // Resolve reference first
-//                annotation_segment = (Element) XPath.newInstance(
-//                        String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
-//                        annotation_segment.getAttributeValue("ANNOTATION_REF"))).selectSingleNode(tier);
-//                assert annotation_segment != null : "Annotation segment is null after resolving reference";
-//            }
-//            else {
-//                return new Location("Tier:" + tier_id.getValue() + "",
-//                        "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=") + "");
-//            }
-//            Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
-//            Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
-//            assert start_ref != null : "Start ref is null";
-//            assert end_ref != null : "End ref is null";
-//            Attribute start_time =
-//                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-//                                    start_ref.getValue()))
-//                            .selectSingleNode(cd.getJdom());
-//            assert start_time != null : "Start time is null";
-//            Attribute end_time =
-//                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-//                                    end_ref.getValue()))
-//                            .selectSingleNode(cd.getJdom());
-//            assert end_time != null : "End time is null";
-//            return new Location("Tier:" + tier_id.getValue() + "",
-//                    "Segment:" + annotation_id + ", Time:" +
-//                            DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
-//                            DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"));
-//        }
-//        // Return unkown location if tier is not found
-//        return new Location("unknown", "");
-//    }
-
-
     /**
      * Gives the location of a text token in a corpus document
      * @param cd the corpus document
@@ -2817,27 +2631,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else
             return locations;
     }
-
-//    /**
-//     * List all files given a path
-//     * @param path the path all files are listed in
-//     * @return the set of all files in path
-//     */
-//    public static Set<URI> listFiles(Path path) {
-//        // The set of all files
-//        Set<URI> allFiles = new HashSet<>();
-//        // Add all files in directory
-//        File[] dirFiles = path.toFile().listFiles();
-//        if (dirFiles != null)
-//            for (File f : dirFiles) {
-//                allFiles.add(f.toURI().normalize());
-//                // Recurse into directory
-//                if (f.isDirectory()) {
-//                    allFiles.addAll(listFiles(f.toPath()));
-//            }
-//        }
-//        return allFiles;
-//    }
 
     /**
      * Checks if a tier exists in a corpus file
