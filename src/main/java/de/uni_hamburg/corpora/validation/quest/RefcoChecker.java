@@ -1344,8 +1344,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else if (!checkUrl(criteria.persistentId)){
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
-                    new Object[]{getFunction(),refcoShortName,"Overview: Persistent identifier not a URL",
-                            "Use a valid URL as the persistent identifier"}));
+                    new Object[]{getFunction(),refcoShortName,"Overview: Persistent identifier not a valid or working" +
+                            " URL",
+                            "Use a valid URL as the persistent identifier and check that it works properly, i.e. " +
+                                    "refers to an accessible resource"}));
         }
         if (criteria.annotationLicense == null || criteria.annotationLicense.isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
