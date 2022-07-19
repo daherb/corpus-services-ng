@@ -2655,7 +2655,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         StringWriter sw = new StringWriter();
         ctx.generateSchema(new SchemaOutputResolver() {
             @Override
-            public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+            public Result createOutput(String namespaceUri, String suggestedFileName) {
                 StreamResult result = new StreamResult(sw);
                 result.setSystemId("StringWriter");
                 return result;
