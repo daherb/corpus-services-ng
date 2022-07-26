@@ -18,6 +18,8 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
+
 import org.jdom.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -77,7 +79,7 @@ public class AddCSVMetadataToComaTest {
         String corpusFolder = "src/test/java/de/uni_hamburg/corpora/resources/example";
         URL corpusURL = Paths.get(corpusFolder).toUri().toURL();
         Corpus corp = new Corpus(corpusURL);
-        AddCSVMetadataToComa instance = new AddCSVMetadataToComa();
+        AddCSVMetadataToComa instance = new AddCSVMetadataToComa(new Properties());
         instance.setCSVFilePath("C:\\Users\\Ozzy\\HZSK\\hzsk-corpus-services\\src"
                 + "\\test\\java\\de\\uni_hamburg\\corpora\\resources\\example\\sample-csv.csv");
         instance.setSpeakerOrCommunication("speaker");
@@ -95,7 +97,7 @@ public class AddCSVMetadataToComaTest {
     @Test
     public void testGetIsUsableFor() {
         System.out.println("getIsUsableFor");
-        AddCSVMetadataToComa instance = new AddCSVMetadataToComa();
+        AddCSVMetadataToComa instance = new AddCSVMetadataToComa(new Properties());
         //Collection<Class> expResult = null;
         Collection<Class<? extends CorpusData>> result = instance.getIsUsableFor();
         //no null object here
