@@ -691,22 +691,22 @@ public class RefcoCheckerTest {
         RefcoChecker.Session s = rc.getCriteria().sessions.get(0);
         // Check file name
         {
-            String origFileName = s.fileName;
+            String origFileName = s.fileNames;
             // Null file name
-            s.fileName = null;
+            s.fileNames = null;
             report = (Report) refcoSessionCheckMethod.invoke(rc);
             assertEquals("Report does not contain the expected number of elements for null filename", 2,
                     report.getRawStatistics().size());
             assertTrue("Report does not contain the expected item for null filename",
                     report.getFullReports().contains("Session file names are empty: T1"));
             // Empty file name
-            s.fileName = "";
+            s.fileNames = "";
             assertEquals("Report does not contain the expected number of elements for empty filename", 2,
                     report.getRawStatistics().size());
             assertTrue("Report does not contain the expected item for empty filename",
                     report.getFullReports().contains("Session file names are empty: T1"));
             // Just an invalid file name
-            s.fileName = "foo";
+            s.fileNames = "foo";
             report = (Report) refcoSessionCheckMethod.invoke(rc);
             assertEquals("Report does not contain the expected number of elements for invalid filename", 2,
                     report.getRawStatistics().size());
@@ -714,14 +714,14 @@ public class RefcoCheckerTest {
                     report.getFullReports().contains("Check the file references in the documentation and remove the reference to the files if they have been removed intentionally"));
             //checkReport("invalid file name", report);
             // The invalid file name followed by the original valid one
-            s.fileName = "foo," + origFileName;
+            s.fileNames = "foo," + origFileName;
             report = (Report) refcoSessionCheckMethod.invoke(rc);
             checkReport("invalid and valid file name", report);
             // The original valid file name followed by an invalid one
-            s.fileName = origFileName + ",1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf";
+            s.fileNames = origFileName + ",1_15-12-2013_Levetbao_Aven_Waet-Masta_1089.eaf";
             report = (Report) refcoSessionCheckMethod.invoke(rc);
             checkReport("valid and invalid file name", report);
-            s.fileName = origFileName;
+            s.fileNames = origFileName;
         }
         // Check speaker age
         {
