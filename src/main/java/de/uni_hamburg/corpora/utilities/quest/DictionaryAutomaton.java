@@ -1,12 +1,10 @@
 package de.uni_hamburg.corpora.utilities.quest;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of an automaton representing a dictionary.
