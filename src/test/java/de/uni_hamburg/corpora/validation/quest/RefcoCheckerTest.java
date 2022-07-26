@@ -649,32 +649,6 @@ public class RefcoCheckerTest {
             checkReport("wrong number of annotated words", report);
             rc.getCriteria().numberAnnotatedWords.information = origNumberAnnotatedWords;
         }
-        // Check translation languages
-        {
-            String origTranslationLanguages = rc.getCriteria().translationLanguages.information;
-            rc.getCriteria().translationLanguages.information = "ger";
-            report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertTrue("non-empty report for valid iso translation language code",
-                    report.getRawStatistics().isEmpty());
-            rc.getCriteria().translationLanguages.information = "nisv1234";
-            report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertTrue("non-empty report for valid glottolog translation language code",
-                    report.getRawStatistics().isEmpty());
-            rc.getCriteria().translationLanguages.information = "French";
-            report = (Report) refcoGenericCheckMethod.invoke(rc);
-            assertTrue("non-empty report for valid known translation language",
-                    report.getRawStatistics().isEmpty());
-            rc.getCriteria().translationLanguages.information = "foo";
-            report = (Report) refcoGenericCheckMethod.invoke(rc);
-            checkReport("invalid iso translation language code", report);
-            rc.getCriteria().translationLanguages.information = "foob1234";
-            report = (Report) refcoGenericCheckMethod.invoke(rc);
-            checkReport("invalid glottolog translation language code", report);
-            rc.getCriteria().translationLanguages.information = "foobar_translation";
-            report = (Report) refcoGenericCheckMethod.invoke(rc);
-            checkReport("invalid translation language", report);
-            rc.getCriteria().translationLanguages.information = origTranslationLanguages;
-        }
     }
 
     /**
