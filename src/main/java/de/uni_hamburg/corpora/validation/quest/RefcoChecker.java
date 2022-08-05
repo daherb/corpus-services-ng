@@ -53,12 +53,12 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20220719
+ * @version 20220805
  * The checker for Refco set of criteria.
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 
-    private final String REFCO_CHECKER_VERSION="20220719";
+    private final String REFCO_CHECKER_VERSION="20220805";
 
     // The local logger that can be used for debugging
     private final Logger logger = Logger.getLogger(this.getClass().toString());
