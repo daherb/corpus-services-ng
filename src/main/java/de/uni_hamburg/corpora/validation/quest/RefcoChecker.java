@@ -1287,12 +1287,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingData = true;
                     }
                 }
-                 if (missingData || rowList.size() <= 1)
-                     report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+                 if (missingData || rowList.size() <= 1) {
+                     report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                      "description", "howtoFix"},
-                             new Object[]{getFunction(),refcoShortName,"Corpus documentation: Wrong number of columns or " +
+                             new Object[]{getFunction(), refcoShortName, "Corpus documentation: Wrong number of columns or " +
                                      "missing data in Punctuation table",
                                      "Check number of columns and presence of data in all cells"}));
+                 }
             }
         } catch (JDOMException | NullPointerException exception) {
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
@@ -2199,6 +2200,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else {
             splitRegex = "####DON'T_SPLIT####";
         }
+
         // All the tokens that are valid
         int matched = 0;
         // All invalid tokens in the text
