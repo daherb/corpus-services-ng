@@ -603,17 +603,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             catch (IOException e) {
                 logger.log(Level.SEVERE,"Unable to load ISO-639-3 language list", e);
             }
-        if (properties.containsKey("refco-file")) {
-            // Load config and add potential problems to log
-            if (new File(properties.getProperty("refco-file")).exists())
-                report.merge(setRefcoFile(properties.getProperty("refco-file")));
-            else {
-                report.addCritical(getFunction(), "Missing corpus documentation file " + properties.getProperty("refco-file"));
-            }
-        }
-        else {
-            report.addCritical(getFunction(),"Missing corpus documentation file property");
-        }
         if (properties.containsKey("get-schema")) {
 
             try {
@@ -685,6 +674,22 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        if (props.containsKey("refco-file")) {
+            String path = "";
+            if (!props.containsKey("refco-config-path-absolute") || !props.getProperty("refco-config-path-absolute")
+                    .equalsIgnoreCase("true"))
+                path = c.getBaseDirectory().getPath();
+            // Load config and add potential problems to log
+            if (new File(path + props.getProperty("refco-file")).exists())
+                report.merge(setRefcoFile(path + props.getProperty("refco-file")));
+            else {
+                report.addCritical(getFunction(), "Missing corpus documentation file " +
+                        props.getProperty("refco-file"));
+            }
+        }
+        else {
+            report.addCritical(getFunction(),"Missing corpus documentation file property");
+        }
         if (refcoFileLoaded) {
             report.addNote(getFunction(),"Report created by RefCo checker version " + REFCO_CHECKER_VERSION +
                     " based on documentation following RefCo " + criteria.refcoVersion.information +
@@ -2548,6 +2553,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public Map<String, String> getParameters() {
         Map<String,String> params = new HashMap<>();
         params.put("refco-file","The corpus documentation file as a ODS of FODS spreadsheet");
+        params.put("refco-config-path-absolute", "Flag that the path to the corpus documentation file" +
+                " is absolute");
         params.put("skip-documentation-check", "Flag to skip the documentation check");
         params.put("skip-transcription-check", "Flag to skip the transcription check");
         params.put("skip-gloss-check", "Flag to skip the gloss check");
