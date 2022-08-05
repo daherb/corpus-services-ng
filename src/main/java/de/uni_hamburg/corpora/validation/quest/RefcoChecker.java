@@ -608,7 +608,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (new File(properties.getProperty("refco-file")).exists())
                 report.merge(setRefcoFile(properties.getProperty("refco-file")));
             else {
-                report.addCritical(getFunction(), "Missing corpus documentation file");
+                report.addCritical(getFunction(), "Missing corpus documentation file " + properties.getProperty("refco-file"));
             }
         }
         else {
