@@ -119,7 +119,11 @@ public class CorpusMagician {
             //if it is a folder or another corpus file we don't
             //we can maybe minmize the heapspace when having a structured corpus
             //we only want to have the data as objects that will be really needed in the functions
-            corpuma.initDataWithURL(inputurl, neededcorpusdatatypes);
+            System.out.println("Corpus URL: " + inputurl);
+            if (new File(inputurl.getFile()).exists())
+                corpuma.initDataWithURL(inputurl, neededcorpusdatatypes);
+            else
+                throw new IOException("Input URL does not exist");
             //We can only init an corpus object if we know it's a structured corpus
             //now all chosen functions must be run
             //if we have the coma file, we just give Coma as Input and the Functions need to take care of using the
