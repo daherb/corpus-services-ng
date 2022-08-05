@@ -1271,6 +1271,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith("Character")) {
                         Punctuation punctuation = new Punctuation();
                         punctuation.character = safeGetText(columns.get(0).getChild("p", textNamespace));
+                        if (punctuation.character.equals("␣"))
+                            punctuation.character = " ";
                         punctuation.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
                         punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
                         punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
