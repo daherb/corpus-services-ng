@@ -684,7 +684,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.merge(setRefcoFile(path + props.getProperty("refco-file")));
             else {
                 report.addCritical(getFunction(), "Missing corpus documentation file " +
-                        props.getProperty("refco-file"));
+                        path + props.getProperty("refco-file"));
             }
         }
         else {
