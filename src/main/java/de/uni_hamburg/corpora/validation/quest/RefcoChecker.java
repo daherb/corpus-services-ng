@@ -2187,11 +2187,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 .collect(Collectors.toList())
         );
         // The regex used to segment glosses
-        String splitRegex = "[" + String.join("", glossSeparator) + "]";
-        // Move around problematic dashes
-        if (splitRegex.contains("-")) {
-            splitRegex = splitRegex.replaceAll("-", "");
-            splitRegex = splitRegex.replace("]","-]");
+        String splitRegex = "";
+        if (!glossSeparator.isEmpty()) {
+            splitRegex = "[" + String.join("", glossSeparator) + "]";
+            // Move around problematic dashes
+            if (splitRegex.contains("-")) {
+                splitRegex = splitRegex.replaceAll("-", "");
+                splitRegex = splitRegex.replace("]", "-]");
+            }
+        }
+        else {
+            splitRegex = "####DON'T_SPLIT####";
         }
         // All the tokens that are valid
         int matched = 0;
