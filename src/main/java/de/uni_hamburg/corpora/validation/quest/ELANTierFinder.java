@@ -35,14 +35,16 @@ public class ELANTierFinder extends TierFinder {
     }
 
     @Override
-    void findTiers(CorpusData cd, String pattern) throws JDOMException {
+    void findTiers(CorpusData cd, String patterns) throws JDOMException {
         Document dom = ((ELANData) cd).getJdom();
         // Get all id attributes for tiers matching the pattern, get the values and add them to a new list
-        List<String> tierIds = new ArrayList<>(((List<Attribute>) Collections.checkedList(XPath.newInstance(
-                String.format("//TIER[contains(@%s,\"%s\")]/@TIER_ID",
-                        attribute_name, pattern)).selectNodes(dom), Attribute.class))
-                .stream().map(Attribute::getValue).collect(Collectors.toList()));
-        // Add found tiers to frequency list
-        tiers.putAll(tierIds);
+        for (String pattern : patterns.split(", *")) {
+            List<String> tierIds = new ArrayList<>(((List<Attribute>) Collections.checkedList(XPath.newInstance(
+                    String.format("//TIER[contains(@%s,\"%s\")]/@TIER_ID",
+                            attribute_name, pattern)).selectNodes(dom), Attribute.class))
+                    .stream().map(Attribute::getValue).collect(Collectors.toList()));
+            // Add found tiers to frequency list
+            tiers.putAll(tierIds);
+        }
     }
 }

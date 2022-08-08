@@ -40,22 +40,23 @@ public class EXMARaLDATierFinder extends TierFinder {
     }
 
     @Override
-    void findTiers(CorpusData cd, String pattern) throws JDOMException {
+    void findTiers(CorpusData cd, String patterns) throws JDOMException {
         // Get all id attributes for tiers matching the pattern, get the values and add them to a new list
         List<String> tierIds = new ArrayList<>();
-        if (cd instanceof EXMARaLDATranscriptionData) {
-            Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
-            String xpath = String.format("//tier[contains(@%s,\"%s\")]/@id",
-                    attribute_name, pattern);
-            tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(xpath).selectNodes(dom), Attribute.class))
-                    .stream().map(Attribute::getValue).collect(Collectors.toList()));
-        }
-        else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
-            Document dom = ((EXMARaLDASegmentedTranscriptionData) cd).getJdom();
-            tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
-                    String.format("//segmented-tier[contains(@%s,\"%s\")]/@id",
-                            attribute_name, pattern)).selectNodes(dom), Attribute.class))
-                    .stream().map(Attribute::getValue).collect(Collectors.toList()));
+        for (String pattern : patterns.split(", *")) {
+            if (cd instanceof EXMARaLDATranscriptionData) {
+                Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
+                String xpath = String.format("//tier[contains(@%s,\"%s\")]/@id",
+                        attribute_name, pattern);
+                tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(xpath).selectNodes(dom), Attribute.class))
+                        .stream().map(Attribute::getValue).collect(Collectors.toList()));
+            } else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
+                Document dom = ((EXMARaLDASegmentedTranscriptionData) cd).getJdom();
+                tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
+                        String.format("//segmented-tier[contains(@%s,\"%s\")]/@id",
+                                attribute_name, pattern)).selectNodes(dom), Attribute.class))
+                        .stream().map(Attribute::getValue).collect(Collectors.toList()));
+            }
         }
         // Add found tiers to frequency list
         tiers.putAll(tierIds);

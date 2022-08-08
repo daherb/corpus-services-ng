@@ -237,7 +237,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         params.put("transcription-method", "Standard transcription method used, if any. Currently HIAT, DIDA, GAT and" +
                 " IPA");
         params.put("transcription-tiers","List of transcription tier IDs separated by commas");
-        params.put("transcription-tier-pattern","A pattern, i.e. substring of tier IDs to identify transcription " +
+        params.put("transcription-tier-patterns","A patterns, i.e. substring of tier IDs to identify transcription " +
                 "tiers");
         return params;
     }

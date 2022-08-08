@@ -34,7 +34,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     private boolean setUp = false;
 
     // The pattern used to find the tiers
-    private String pattern;
+    private String patterns;
 
     // Flag if the tiers should be summarized in the
     private boolean summary = false;
@@ -48,7 +48,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     public TierFinder(Properties properties) {
         super(false, properties);
         if (properties.containsKey("tier-pattern")) {
-            pattern = properties.getProperty("tier-pattern");
+            patterns = properties.getProperty("tier-patterns");
             setUp = true;
         }
         if (properties.containsKey("tier-summary") && properties.getProperty("tier-summary").equalsIgnoreCase("true")) {
@@ -64,7 +64,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
             try {
-                findTiers(cd, pattern);
+                findTiers(cd, patterns);
             }
             catch (JDOMException e)
             {
@@ -114,7 +114,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     @Override
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
-        params.put("tier-pattern","Pattern to identify the tier");
+        params.put("tier-patterns","Patterns to identify tiers");
         params.put("tier-attribute-name","Optional attribute name used for the matching, case-insensitive, defaults " +
                 "to ID");
         params.put("tier-summary", "Optional flag if the summary over matching tiers in a corpus should be included " +
@@ -130,6 +130,6 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         return new ArrayList<>(tiers.getMap().keySet());
     }
 
-    abstract void findTiers(CorpusData cd, String pattern) throws JDOMException;
+    abstract void findTiers(CorpusData cd, String patterns) throws JDOMException;
 
 }
