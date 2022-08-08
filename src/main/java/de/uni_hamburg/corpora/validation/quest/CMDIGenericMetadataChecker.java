@@ -8,6 +8,7 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -21,7 +22,7 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
     /**
      * Default constructor not providing fixing options
      */
-    public CMDIGenericMetadataChecker(Properties properties) {
+    public CMDIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("cmdi-criteria-file"))
             setCriteriaFile(properties.getProperty("cmdi-criteria-file"));

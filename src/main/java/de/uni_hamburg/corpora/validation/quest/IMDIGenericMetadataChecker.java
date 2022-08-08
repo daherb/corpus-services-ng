@@ -8,6 +8,7 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
     /**
      * Default constructor not providing fixing options
      */
-    public IMDIGenericMetadataChecker(Properties properties) {
+    public IMDIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("imdi-criteria-file"))
             setCriteriaFile(properties.getProperty("imdi-criteria-file"));

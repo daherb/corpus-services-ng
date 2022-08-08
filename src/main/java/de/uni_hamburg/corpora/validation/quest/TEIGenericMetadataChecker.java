@@ -6,6 +6,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
+
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -19,7 +21,7 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public TEIGenericMetadataChecker(Properties properties) {
+    public TEIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("tei-criteria-file"))
             setCriteriaFile(properties.getProperty("tei-criteria-file"));

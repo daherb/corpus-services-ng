@@ -11,10 +11,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -377,8 +374,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
      * Loads the criteria as a resource
      * @param name the name of the resource
      */
-    public void loadCriteriaResource(String name) {
-        try {
+    public void loadCriteriaResource(String name) throws FileNotFoundException {
             InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream("metadata/"+name);
             if (resourceStream != null) {
                 // Read CSV file
@@ -389,9 +385,9 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         .parse();
                 setUp = true;
             }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
-        }
+            else {
+                throw new FileNotFoundException("Missing file in resources: " + name);
+            }
     }
 
     @Override

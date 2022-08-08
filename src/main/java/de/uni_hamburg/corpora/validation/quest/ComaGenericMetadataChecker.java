@@ -7,6 +7,7 @@ import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
@@ -20,7 +21,7 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker {
     /**
      * Default constructor without parameter, not providing fixing options
      */
-    public ComaGenericMetadataChecker(Properties properties) {
+    public ComaGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("coma-criteria-file"))
             setCriteriaFile(properties.getProperty("coma-criteria-file"));
