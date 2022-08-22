@@ -24,8 +24,6 @@ import org.xml.sax.SAXException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.SchemaOutputResolver;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.TransformerException;
@@ -95,432 +93,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // The set of all undocumented languages we encountered. To skip duplicate warnings
     private final Set<String> knownLanguages = new HashSet<>();
 
-    /**
-     * A pair of information with potentially associated notes, used e.g. in the Overview table
-     */
-    static class InformationNotes {
-        public InformationNotes(String information, String notes) {
-            this.information = information;
-            this.notes = notes;
-        }
-        @XmlElement(required=true)
-        String information ;
-        @XmlElement(required=true)
-        String notes;
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            InformationNotes that = (InformationNotes) o;
-            return Objects.equals(information, that.information) && Objects.equals(notes, that.notes);
-        }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(information, notes);
-        }
-
-        public String getInformation() {
-            return information;
-        }
-
-        public String getNotes() {
-            return notes;
-        }
-    }
-
-    /**
-     * Representation of information in the CorpusComposition table consisting of e.g.
-     * speaker information, location and date
-     */
-    static class Session {
-        @XmlElement(required=true)
-        String sessionName ;
-        @XmlElement(required=true)
-        String fileNames;
-        @XmlElement(required=true)
-        String speakerName ;
-        @XmlElement(required=true)
-        String speakerAge ;
-        @XmlElement(required=true)
-        String speakerGender ;
-        @XmlElement(required=true)
-        String recordingLocation ;
-        @XmlElement(required=true)
-        String recordingDate ;
-        @XmlElement(required=true)
-        String genre ; // is this a controlled vocabulary?
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Session session = (Session) o;
-            return Objects.equals(sessionName, session.sessionName) && Objects.equals(fileNames, session.fileNames) && Objects.equals(speakerName, session.speakerName) && Objects.equals(speakerAge, session.speakerAge) && Objects.equals(speakerGender, session.speakerGender) && Objects.equals(recordingLocation, session.recordingLocation) && Objects.equals(recordingDate, session.recordingDate) && Objects.equals(genre, session.genre);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(sessionName, fileNames, speakerName, speakerAge, speakerGender, recordingLocation, recordingDate, genre);
-        }
-
-        public String getSessionName() {
-            return sessionName;
-        }
-
-        public String getFileNames() {
-            return fileNames;
-        }
-
-        public String getSpeakerName() {
-            return speakerName;
-        }
-
-        public String getSpeakerAge() {
-            return speakerAge;
-        }
-
-        public String getSpeakerGender() {
-            return speakerGender;
-        }
-
-        public String getRecordingLocation() {
-            return recordingLocation;
-        }
-
-        public String getRecordingDate() {
-            return recordingDate;
-        }
-
-        public String getGenre() {
-            return genre;
-        }
-    }
-
-
-    /**
-     * Representation of information in the AnnotationTiers table consisting of e.g.
-     * tier functions and languages
-     */
-    static class Tier {
-        @XmlElement(required=true)
-        String tierName ;
-        @XmlElement(required=true)
-        List<String> tierFunctions;
-        @XmlElement(required=true)
-        String segmentationStrategy ;
-        @XmlElement(required=true)
-        String languages ;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Tier tier = (Tier) o;
-            return Objects.equals(tierName, tier.tierName) && Objects.equals(tierFunctions, tier.tierFunctions) && Objects.equals(segmentationStrategy, tier.segmentationStrategy) && Objects.equals(languages, tier.languages);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(tierName, tierFunctions, segmentationStrategy, languages);
-        }
-
-        public String getTierName() {
-            return tierName;
-        }
-
-        public List<String> getTierFunctions() {
-            return tierFunctions;
-        }
-
-        public String getSegmentationStrategy() {
-            return segmentationStrategy;
-        }
-
-        public String getLanguages() {
-            return languages;
-        }
-    }
-
-    /**
-     * Representation of information in the Transcriptions table consisting of e.g.
-     * the list of valid graphemes used in transcription tiers
-     */
-    static class Transcription {
-        @XmlElement(required=true)
-        String grapheme ;
-        @XmlElement(required=true)
-        String linguisticValue ;
-        @XmlElement(required=true)
-        String linguisticConvention ;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Transcription that = (Transcription) o;
-            return Objects.equals(grapheme, that.grapheme) && Objects.equals(linguisticValue, that.linguisticValue) && Objects.equals(linguisticConvention, that.linguisticConvention);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(grapheme, linguisticValue, linguisticConvention);
-        }
-
-        public String getGrapheme() {
-            return grapheme;
-        }
-
-        public String getLinguisticValue() {
-            return linguisticValue;
-        }
-
-        public String getLinguisticConvention() {
-            return linguisticConvention;
-        }
-    }
-
-    /**
-     * Representation of information in the Glosses table consisting of e.g.
-     * list of expected glosses and the tiers they are valid in
-     */
-    static class Gloss {
-        @XmlElement(required=true)
-        String gloss ;
-        @XmlElement(required=true)
-        String meaning ;
-        @XmlElement
-        String comments ;
-        @XmlElement(required=true)
-        String tiers ;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Gloss gloss1 = (Gloss) o;
-            return Objects.equals(gloss, gloss1.gloss) && Objects.equals(meaning, gloss1.meaning) && Objects.equals(comments, gloss1.comments) && Objects.equals(tiers, gloss1.tiers);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(gloss, meaning, comments, tiers);
-        }
-
-        public String getGloss() {
-            return gloss;
-        }
-
-        public String getMeaning() {
-            return meaning;
-        }
-
-        public String getComments() {
-            return comments;
-        }
-
-        public String getTiers() {
-            return tiers;
-        }
-    }
-
-    /**
-     * Representation of information in the Punctuation table consisting of e.g.
-     * valid punctuation characters and the tiers they are valid in
-     */
-    static class Punctuation {
-        @XmlElement(required=true)
-        String character ;
-        @XmlElement(required=true)
-        String meaning ;
-        @XmlElement
-        String comments ;
-        @XmlElement(required=true)
-        String tiers ;
-        @XmlElement(required=true)
-        String function;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Punctuation that = (Punctuation) o;
-            return Objects.equals(character, that.character) && Objects.equals(meaning, that.meaning) && Objects.equals(comments, that.comments) && Objects.equals(tiers, that.tiers) && Objects.equals(function, that.function);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(character, meaning, comments, tiers, function);
-        }
-
-        public String getCharacter() {
-            return character;
-        }
-
-        public String getMeaning() {
-            return meaning;
-        }
-
-        public String getComments() {
-            return comments;
-        }
-
-        public String getTiers() {
-            return tiers;
-        }
-
-        public String getFunction() {
-            return function;
-        }
-    }
-
-    /**
-     * Representation of the complete information defined in the RefCo spreadsheet
-     */
-    public static class RefcoCriteria {
-        // Tab: Overview
-        // Corpus information
-        @XmlElement(required=true)
-        String corpusTitle ;
-        @XmlElement(required=true)
-        String subjectLanguages ;
-        @XmlElement(required=true)
-        String archive ;
-        @XmlElement(required=true)
-        String persistentId ; // should be an url to either a doi or handle
-        @XmlElement(required=true)
-        String annotationLicense ;
-        @XmlElement(required=true)
-        String recordingLicense ;
-        @XmlElement(required=true)
-        String creatorName ;
-        @XmlElement(required=true)
-        String creatorContact ; // usually mail address
-        @XmlElement(required=true)
-        String creatorInstitution ;
-        // Certification information
-        @XmlElement(required=true)
-        InformationNotes refcoVersion ;
-        // Quantitative Summary
-        @XmlElement(required=true)
-        InformationNotes numberSessions ;
-        @XmlElement(required=true)
-        InformationNotes numberTranscribedWords ;
-        @XmlElement(required=true)
-        InformationNotes numberAnnotatedWords ;
-        // Tab: Corpus Compositions
-        @XmlElementWrapper(name="sessions")
-        @XmlElement(required=true,name="session")
-        ArrayList<Session> sessions = new ArrayList<>() ;
-        // Tab: Annotation Tiers
-        @XmlElementWrapper(name="tiers")
-        @XmlElement(required = true,name="tier")
-        ArrayList<Tier> tiers = new ArrayList<>() ;
-        // Tab: Transcriptions
-        @XmlElementWrapper(name="transcriptions")
-        @XmlElement(required = true, name="transcription")
-        ArrayList<Transcription> transcriptions = new ArrayList<>() ;
-        // Tab: Glosses
-        @XmlElementWrapper(name="glosses")
-        @XmlElement(required = true, name="gloss")
-        ArrayList<Gloss> glosses = new ArrayList<>() ;
-        // Tab: Punctuation
-        @XmlElementWrapper(name="punctuations")
-        @XmlElement(required = true, name="punctuation")
-        ArrayList<Punctuation> punctuations = new ArrayList<>() ;
-
-        public String getCorpusTitle() {
-            return corpusTitle;
-        }
-
-        public String getSubjectLanguages() {
-            return subjectLanguages;
-        }
-
-        public String getArchive() {
-            return archive;
-        }
-
-        public String getPersistentId() {
-            return persistentId;
-        }
-
-        public String getAnnotationLicense() {
-            return annotationLicense;
-        }
-
-        public String getRecordingLicense() {
-            return recordingLicense;
-        }
-
-        public String getCreatorName() {
-            return creatorName;
-        }
-
-        public String getCreatorContact() {
-            return creatorContact;
-        }
-
-        public String getCreatorInstitution() {
-            return creatorInstitution;
-        }
-
-        public InformationNotes getRefcoVersion() {
-            return refcoVersion;
-        }
-
-        public InformationNotes getNumberSessions() {
-            return numberSessions;
-        }
-
-        public InformationNotes getNumberTranscribedWords() {
-            return numberTranscribedWords;
-        }
-
-        public InformationNotes getNumberAnnotatedWords() {
-            return numberAnnotatedWords;
-        }
-
-        public ArrayList<Session> getSessions() {
-            return sessions;
-        }
-
-        public ArrayList<Tier> getTiers() {
-            return tiers;
-        }
-
-        public ArrayList<Transcription> getTranscriptions() {
-            return transcriptions;
-        }
-
-        public ArrayList<Gloss> getGlosses() {
-            return glosses;
-        }
-
-        public ArrayList<Punctuation> getPunctuations() {
-            return punctuations;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            RefcoCriteria that = (RefcoCriteria) o;
-            return Objects.equals(corpusTitle, that.corpusTitle) && Objects.equals(subjectLanguages,
-                    that.subjectLanguages) && Objects.equals(archive, that.archive) && Objects.equals(persistentId,
-              that.persistentId) && Objects.equals(annotationLicense, that.annotationLicense) && Objects.equals(recordingLicense, that.recordingLicense) && Objects.equals(creatorName, that.creatorName) && Objects.equals(creatorContact, that.creatorContact) && Objects.equals(creatorInstitution, that.creatorInstitution) && Objects.equals(refcoVersion, that.refcoVersion) && Objects.equals(numberSessions, that.numberSessions) && Objects.equals(numberTranscribedWords, that.numberTranscribedWords) && Objects.equals(numberAnnotatedWords, that.numberAnnotatedWords) && // Objects.equals(translationLanguages, that.translationLanguages) &&
-                Objects.equals(sessions, that.sessions) && Objects.equals(tiers, that.tiers) && Objects.equals(transcriptions, that.transcriptions) && Objects.equals(glosses, that.glosses) && Objects.equals(punctuations, that.punctuations);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(corpusTitle, subjectLanguages, archive, persistentId, annotationLicense,
-                    recordingLicense, creatorName, creatorContact, creatorInstitution, refcoVersion, numberSessions,
-                    numberTranscribedWords, numberAnnotatedWords, // translationLanguages,
-                        sessions, tiers, transcriptions, glosses, punctuations);
-        }
-    }
 
     /**
      * The filename of the RefCo spreadsheet
@@ -692,7 +266,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         if (refcoFileLoaded) {
             report.addNote(getFunction(),"Report created by RefCo checker version " + REFCO_CHECKER_VERSION +
-                    " based on documentation following RefCo " + criteria.refcoVersion.information +
+                    " based on documentation following RefCo " + criteria.getRefcoVersion().getInformation() +
                     " specification version");
             System.out.println("... running the corpus function");
             // Set the RefCo corpus
@@ -827,7 +401,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Handle relative paths
                 URL url = Paths.get(args[1]).toAbsolutePath().normalize().toUri().toURL();
                 // Create the corpus
-                Corpus corpus = new Corpus(rc.criteria.corpusTitle, url, cio.read(url, report));
+                Corpus corpus = new Corpus(rc.criteria.getCorpusTitle(), url, cio.read(url, report));
                 // Run the tests on the corpus
                 Logger.getLogger(RefcoChecker.class.toString()).log(Level.INFO, "Running tests");
                 report.merge(rc.function(corpus,false));
@@ -1087,8 +661,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return an object representing both the information and the associated notes
      * @throws JDOMException if the xpath expression is invalid
      */
-    private InformationNotes getInformationNotes(String path, Element root, String title) throws JDOMException {
-        return new InformationNotes(getTextInRow(path, root, title, 2),getTextInRow(path, root, title, 3));
+    private RefcoCriteria.InformationNotes getInformationNotes(String path, Element root, String title) throws JDOMException {
+        return new RefcoCriteria.InformationNotes(getTextInRow(path, root, title, 2),getTextInRow(path, root, title, 3));
     }
 
     /**
@@ -1105,19 +679,19 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             Element overviewTable = (Element) XPath.newInstance("//table:table[@table:name='Overview']").selectSingleNode(refcoDoc);
             String cellXPath =
                     "//table:table-row[table:table-cell[text:p=\"%s\"]]/table:table-cell[position()=%d]/text:p";
-            criteria.corpusTitle = getCellText(cellXPath, overviewTable,  "Corpus Title");
-            criteria.subjectLanguages = getCellText(cellXPath, overviewTable,  "Subject Language(s)");
-            criteria.archive = getCellText(cellXPath, overviewTable,  "Archive");
-            criteria.persistentId = getCellText(cellXPath, overviewTable,  "Corpus Persistent Identifier") ;
-            criteria.annotationLicense = getCellText(cellXPath, overviewTable,  "Annotation Files Licence");
-            criteria.recordingLicense = getCellText(cellXPath, overviewTable,  "Recording Files Licence") ;
-            criteria.creatorName = getCellText(cellXPath, overviewTable,  "Corpus Creator Name") ;
-            criteria.creatorContact = getCellText(cellXPath, overviewTable,  "Corpus Creator Contact") ;
-            criteria.creatorInstitution = getCellText(cellXPath, overviewTable,  "Corpus Creator Institution") ;
-            criteria.refcoVersion = getInformationNotes(cellXPath, overviewTable, "Corpus Documentation's Version") ;
-            criteria.numberSessions = getInformationNotes(cellXPath, overviewTable, "Number of sessions") ;
-            criteria.numberTranscribedWords = getInformationNotes(cellXPath, overviewTable, "Total number of transcribed words");
-            criteria.numberAnnotatedWords = getInformationNotes(cellXPath, overviewTable, "Total number of morphologically analyzed words");
+            criteria.setCorpusTitle(getCellText(cellXPath, overviewTable,  "Corpus Title"));
+            criteria.setSubjectLanguages(getCellText(cellXPath, overviewTable, "Subject Language(s)"));
+            criteria.setArchive(getCellText(cellXPath, overviewTable, "Archive"));
+            criteria.setPersistentId(getCellText(cellXPath, overviewTable, "Corpus Persistent Identifier"));
+            criteria.setAnnotationLicense(getCellText(cellXPath, overviewTable, "Annotation Files Licence"));
+            criteria.setRecordingLicense(getCellText(cellXPath, overviewTable, "Recording Files Licence"));
+            criteria.setCreatorName(getCellText(cellXPath, overviewTable, "Corpus Creator Name"));
+            criteria.setCreatorContact(getCellText(cellXPath, overviewTable, "Corpus Creator Contact"));
+            criteria.setCreatorInstitution(getCellText(cellXPath, overviewTable, "Corpus Creator Institution"));
+            criteria.setRefcoVersion(getInformationNotes(cellXPath, overviewTable, "Corpus Documentation's Version"));
+            criteria.setNumberSessions(getInformationNotes(cellXPath, overviewTable, "Number of sessions"));
+            criteria.setNumberTranscribedWords(getInformationNotes(cellXPath, overviewTable, "Total number of transcribed words"));
+            criteria.setNumberAnnotatedWords(getInformationNotes(cellXPath, overviewTable, "Total number of morphologically analyzed words"));
             // Read CorpusComposition tab
             Element sessionTable = (Element) XPath.newInstance("//table:table[@table:name='CorpusComposition']").selectSingleNode(refcoDoc);
             if (sessionTable == null)
@@ -1133,15 +707,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 7 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith("Session")) {
-                        Session session = new Session();
-                        session.sessionName = safeGetText(columns.get(0).getChild("p", textNamespace));
-                        session.fileNames = safeGetText(columns.get(1).getChild("p", textNamespace));
-                        session.speakerName = safeGetText(columns.get(2).getChild("p", textNamespace));
-                        session.speakerAge = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        session.speakerGender = safeGetText(columns.get(4).getChild("p", textNamespace));
-                        session.recordingLocation = safeGetText(columns.get(5).getChild("p", textNamespace));
-                        session.recordingDate = safeGetText(columns.get(6).getChild("p", textNamespace));
-                        session.genre = safeGetText(columns.get(7).getChild("p", textNamespace));
+                        RefcoCriteria.Session session = new RefcoCriteria.Session();
+                        session.setSessionName(safeGetText(columns.get(0).getChild("p", textNamespace)));
+                        session.setFileNames(safeGetText(columns.get(1).getChild("p", textNamespace)));
+                        session.setSpeakerNames(safeGetText(columns.get(2).getChild("p", textNamespace)));
+                        session.setSpeakerAges(safeGetText(columns.get(3).getChild("p", textNamespace)));
+                        session.setSpeakerGender(safeGetText(columns.get(4).getChild("p", textNamespace)));
+                        session.setRecordingLocation(safeGetText(columns.get(5).getChild("p", textNamespace)));
+                        session.setRecordingDate(safeGetText(columns.get(6).getChild("p", textNamespace)));
+                        session.setGenre(safeGetText(columns.get(7).getChild("p", textNamespace)));
                         // Age group was a custom column
                         // session.ageGroup = safeGetText(columns.get(8).getChild("p", textNamespace));
                         criteria.sessions.add(session);
@@ -1174,13 +748,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Names")) {
-                        Tier tier = new Tier();
-                        tier.tierName = safeGetText(columns.get(0).getChild("p", textNamespace)).trim();
-                        tier.tierFunctions = Arrays.stream(safeGetText(columns.get(1).getChild("p", textNamespace))
-                                .split(valueSeparator)).map(String::toLowerCase).collect(Collectors.toList());
-                        tier.segmentationStrategy = safeGetText(columns.get(2).getChild("p", textNamespace));
-                        tier.languages = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        criteria.tiers.add(tier);
+                        RefcoCriteria.Tier tier = new RefcoCriteria.Tier();
+                        tier.setTierName(safeGetText(columns.get(0).getChild("p", textNamespace)).trim());
+                        tier.setTierFunctions(Arrays.stream(safeGetText(columns.get(1).getChild("p", textNamespace))
+                                .split(valueSeparator)).map(String::toLowerCase).collect(Collectors.toList()));
+                        tier.setSegmentationStrategy(safeGetText(columns.get(2).getChild("p", textNamespace)));
+                        tier.setLanguages(safeGetText(columns.get(3).getChild("p", textNamespace)));
+                        criteria.getTiers().add(tier);
                     }  else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Name")) {
                         missingData = true;
@@ -1208,11 +782,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 2 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Graphemes")) {
-                        Transcription transcription = new Transcription();
-                        transcription.grapheme = safeGetText(columns.get(0).getChild("p", textNamespace));
-                        transcription.linguisticValue = safeGetText(columns.get(1).getChild("p", textNamespace));
-                        transcription.linguisticConvention = safeGetText(columns.get(2).getChild("p", textNamespace));
-                        criteria.transcriptions.add(transcription);
+                        RefcoCriteria.Transcription transcription = new RefcoCriteria.Transcription();
+                        transcription.setGrapheme(safeGetText(columns.get(0).getChild("p", textNamespace)));
+                        transcription.setLinguisticValue(safeGetText(columns.get(1).getChild("p", textNamespace)));
+                        transcription.setLinguisticConvention(safeGetText(columns.get(2).getChild("p", textNamespace)));
+                        criteria.getTranscriptions().add(transcription);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Grapheme")) {
                         missingData = true;
@@ -1241,12 +815,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Abbreviations")) {
-                        Gloss gloss = new Gloss();
-                        gloss.gloss = safeGetText(columns.get(0).getChild("p", textNamespace)).replace("\\s+","");
-                        gloss.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
-                        gloss.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
-                        gloss.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        criteria.glosses.add(gloss);
+                        RefcoCriteria.Gloss gloss = new RefcoCriteria.Gloss();
+                        gloss.setGloss(safeGetText(columns.get(0).getChild("p", textNamespace)).replace("\\s+", ""));
+                        gloss.setMeaning(safeGetText(columns.get(1).getChild("p", textNamespace)));
+                        gloss.setComments(safeGetText(columns.get(2).getChild("p", textNamespace)));
+                        gloss.setTiers(safeGetText(columns.get(3).getChild("p", textNamespace)));
+                        criteria.getGlosses().add(gloss);
                     } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Abbreviation")) {
                         missingData = true;
@@ -1274,18 +848,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
                     if (columns.size() > 4 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith("Character")) {
-                        Punctuation punctuation = new Punctuation();
-                        punctuation.character = safeGetText(columns.get(0).getChild("p", textNamespace));
-                        if (punctuation.character.equals("␣"))
-                            punctuation.character = " ";
-                        punctuation.meaning = safeGetText(columns.get(1).getChild("p", textNamespace));
-                        punctuation.comments = safeGetText(columns.get(2).getChild("p", textNamespace));
-                        punctuation.tiers = safeGetText(columns.get(3).getChild("p", textNamespace));
-                        punctuation.function = safeGetText(columns.get(4).getChild("p", textNamespace));
+                        RefcoCriteria.Punctuation punctuation = new RefcoCriteria.Punctuation();
+                        punctuation.setCharacter(safeGetText(columns.get(0).getChild("p", textNamespace)));
+                        if (punctuation.getCharacter().equals("␣"))
+                            punctuation.setCharacter(" ");
+                        punctuation.setMeaning(safeGetText(columns.get(1).getChild("p", textNamespace)));
+                        punctuation.setComments(safeGetText(columns.get(2).getChild("p", textNamespace)));
+                        punctuation.setTiers(safeGetText(columns.get(3).getChild("p", textNamespace)));
+                        punctuation.setFunction(safeGetText(columns.get(4).getChild("p", textNamespace)));
                         // Add gloss separator
-                        if (punctuation.function.equalsIgnoreCase("morpheme break"))
-                            glossSeparator.add(punctuation.character);
-                        criteria.punctuations.add(punctuation);
+                        if (punctuation.getFunction().equalsIgnoreCase("morpheme break"))
+                            glossSeparator.add(punctuation.getCharacter());
+                        criteria.getPunctuations().add(punctuation);
                     }
                     else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Character")) {
@@ -1316,11 +890,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private Report refcoGenericCheck() {
         Report report = new Report() ;
-        if (criteria.corpusTitle == null || criteria.corpusTitle.isEmpty())
+        if (criteria.getCorpusTitle() == null || criteria.getCorpusTitle().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Overview: Corpus title is empty", "Add a corpus title"}));
-        if (criteria.subjectLanguages == null || criteria.subjectLanguages.isEmpty())
+        if (criteria.getSubjectLanguages() == null || criteria.getSubjectLanguages().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Overview: Subject languages is empty",
@@ -1329,7 +903,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Each cell can contain several languages. Split the languages and check for each one if it is a
             // valid language code
             // TODO check if that is the intended way to separate languages
-            ArrayList<String> subjectLangList = new ArrayList<>(Arrays.asList(criteria.subjectLanguages
+            ArrayList<String> subjectLangList = new ArrayList<>(Arrays.asList(criteria.getSubjectLanguages()
                     .split(valueSeparator)));
             for (String l : subjectLangList) {
                 if (!checkLanguage(l)) {
@@ -1340,16 +914,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
         }
-        if (criteria.archive == null || criteria.archive.isEmpty())
+        if (criteria.getArchive() == null || criteria.getArchive().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Archive name is empty", "Add an archive name"}));
-        if (criteria.persistentId == null || criteria.persistentId.isEmpty())
+        if (criteria.getPersistentId() == null || criteria.getPersistentId().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Persistent identifier is empty",
                             "Add a persistent identifier"}));
-        else if (!checkUrl(criteria.persistentId)){
+        else if (!checkUrl(criteria.getPersistentId())){
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Persistent identifier not a valid or working" +
@@ -1357,37 +931,37 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             "Use a valid URL as the persistent identifier and check that it works properly, i.e. " +
                                     "refers to an accessible resource"}));
         }
-        if (criteria.annotationLicense == null || criteria.annotationLicense.isEmpty())
+        if (criteria.getAnnotationLicense() == null || criteria.getAnnotationLicense().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Annotation license is empty",
                             "Add annotation license"}));
-        if (criteria.recordingLicense == null || criteria.recordingLicense.isEmpty())
+        if (criteria.getRecordingLicense() == null || criteria.getRecordingLicense().isEmpty())
             report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Recording license is empty",
                             "Add recording license"}));
-        if (criteria.creatorName == null || criteria.creatorName.isEmpty())
+        if (criteria.getCreatorName() == null || criteria.getCreatorName().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Creator name is empty","Add creator name"}));
-        if (criteria.creatorContact == null || criteria.creatorContact.isEmpty())
+        if (criteria.getCreatorContact() == null || criteria.getCreatorContact().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Creator contact is empty","Add Creator contact"}));
-        if (criteria.creatorInstitution == null || criteria.creatorInstitution.isEmpty())
+        if (criteria.getCreatorInstitution() == null || criteria.getCreatorInstitution().isEmpty())
             report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Creator institution is empty",
                             "Add creator institution"}));
-        if (criteria.refcoVersion.information == null || criteria.refcoVersion.information.isEmpty())
+        if (criteria.getRefcoVersion().getInformation() == null || criteria.getRefcoVersion().getInformation().isEmpty())
             report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: RefCo version is empty","Add RefCo version"}));
         else {
             try {
                 // Check the number by trying to parse it
-                Integer.parseInt(criteria.refcoVersion.information);
+                Integer.parseInt(criteria.getRefcoVersion().getInformation());
                 // TODO do something with this number
             }
             catch (NumberFormatException e) {
@@ -1397,7 +971,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Check the RefCo version number"}));
             }
         }
-        if (criteria.numberSessions.information == null || criteria.numberSessions.information.isEmpty())
+        if (criteria.getNumberSessions().getInformation() == null || criteria.getNumberSessions().getInformation().isEmpty())
             report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Number of sessions is empty",
@@ -1405,9 +979,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else {
             try {
                 // Check the number by trying to parse it
-                int i = Integer.parseInt(criteria.numberSessions.information);
+                int i = Integer.parseInt(criteria.getNumberSessions().getInformation());
                 // Compare it to the number of rows in the CorpusComposition table
-                if (i != criteria.sessions.size())
+                if (i != criteria.getSessions().size())
                     report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
                             new Object[]{getFunction(),refcoShortName,"Corpus composition: Number of sessions does not " +
@@ -1421,7 +995,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Check the number of sessions"}));
             }
         }
-        if (criteria.numberTranscribedWords.information == null || criteria.numberTranscribedWords.information.isEmpty())
+        if (criteria.getNumberTranscribedWords().getInformation() == null || criteria.getNumberTranscribedWords().getInformation().isEmpty())
             report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                     new Object[]{getFunction(),refcoShortName,"Overview: Number of transcribed words is empty",
@@ -1429,7 +1003,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else {
             try {
                 // Check the number by trying to parse it
-                int i = Integer.parseInt(criteria.numberTranscribedWords.information);
+                int i = Integer.parseInt(criteria.getNumberTranscribedWords().getInformation());
                 // Compare it to our own count
                 int c = countTranscribedWords();
                 if (i==0 || c == 0 || 0.8 > (float)c/i || (float)c/i > 1.2)
@@ -1452,7 +1026,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         }));
             }
         }
-        if (criteria.numberAnnotatedWords.information == null || criteria.numberAnnotatedWords.information.isEmpty())
+        if (criteria.getNumberAnnotatedWords().getInformation() == null || criteria.getNumberAnnotatedWords().getInformation().isEmpty())
             report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename", "description",
                             "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Overview: Number of annotated words is empty",
@@ -1460,7 +1034,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         else {
             try {
                 // Check the number by trying to parse it
-                int documentedWords = Integer.parseInt(criteria.numberAnnotatedWords.information);
+                int documentedWords = Integer.parseInt(criteria.getNumberAnnotatedWords().getInformation());
                 try {
                     int countedWords = countAnnotatedWords();
                     if (documentedWords==0 || countedWords == 0 || 0.8 > (float)countedWords/documentedWords ||
@@ -1518,20 +1092,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         ).collect(Collectors.toSet());
         Set<URI> documentedFiles = new HashSet<>();
         // Check each of the sessions
-        for (Session s : criteria.sessions) {
-            if (s.sessionName == null || s.sessionName.isEmpty())
+        for (RefcoCriteria.Session s : criteria.sessions) {
+            if (s.getSessionName() == null || s.getSessionName().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Session name is empty","Add session name"}));
-            if (s.fileNames == null || s.fileNames.isEmpty())
+            if (s.getFileNames() == null || s.getFileNames().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Session file names are empty: " + s.sessionName,
+                        new Object[]{getFunction(),refcoShortName,"Session file names are empty: " + s.getSessionName(),
                                 "Add all relevant file names for session"}));
             else {
                 // Each cell can contain several files. Split the files and check for each one if it exists
                 ArrayList<String> filenames = new ArrayList<>(
-                    Arrays.asList(s.fileNames.split(valueSeparator)));
+                    Arrays.asList(s.getFileNames().split(valueSeparator)));
                 for (String f : filenames) {
                     try {
                         // Collect all candidate URIs, even for files in other directories
@@ -1585,54 +1159,54 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            if (s.speakerName == null || s.speakerName.isEmpty())
+            if (s.getSpeakerNames() == null || s.getSpeakerNames().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker name is empty",
                                 "Add speaker name"}));
-            if (s.speakerAge == null || s.speakerAge.isEmpty())
+            if (s.getSpeakerAges() == null || s.getSpeakerAges().isEmpty())
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Corpus composition: Speaker age is empty: " + s.speakerName,"Add speaker age"}));
-            else if (!s.speakerAge.matches("~?\\d{1,3}"))
+                                "Corpus composition: Speaker age is empty: " + s.getSpeakerNames(),"Add speaker age"}));
+            else if (!s.getSpeakerAges().matches("~?\\d{1,3}"))
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker age does not match " +
-                                "schema: " + s.speakerAge, "Check and fix speaker age"}));
-            if (s.speakerGender == null || s.speakerGender.isEmpty())
+                                "schema: " + s.getSpeakerAges(), "Check and fix speaker age"}));
+            if (s.getSpeakerGender() == null || s.getSpeakerGender().isEmpty())
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Corpus composition: Speaker gender is empty: " + s.speakerName,"Add speaker gender"}));
-            if (s.recordingLocation == null || s.recordingLocation.isEmpty())
+                                "Corpus composition: Speaker gender is empty: " + s.getSpeakerNames(),"Add speaker gender"}));
+            if (s.getRecordingLocation() == null || s.getRecordingLocation().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Corpus composition: Recording location is empty: " + s.speakerName,
+                                "Corpus composition: Recording location is empty: " + s.getSpeakerNames(),
                                 "Add recording location"}));
-            if (s.recordingDate == null || s.recordingDate.isEmpty())
+            if (s.getRecordingDate() == null || s.getRecordingDate().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Corpus composition: Recording date is empty: " + s.speakerName,
+                                "Corpus composition: Recording date is empty: " + s.getSpeakerNames(),
                                 "Add recording date"}));
             else {
                 // Check date by trying to parse it
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 try {
-                    Date date = df.parse(s.recordingDate);
+                    Date date = df.parse(s.getRecordingDate());
                     // Java is very lax when parsing dates, so we have to compare the parsed date to the original one
-                    if (!df.format(date).equals(s.recordingDate))
+                    if (!df.format(date).equals(s.getRecordingDate()))
                         throw new IllegalArgumentException("Parsed date does not match given date");
                 } catch (ParseException | IllegalArgumentException e) {
                     report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                     "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Corpus composition: Recording date in invalid format. Expected yyyy-mm-dd, got: "
-                                + s.recordingDate, "Check and fix recording date"}));
+                                + s.getRecordingDate(), "Check and fix recording date"}));
                 }
             }
-            if (s.genre == null || s.genre.isEmpty())
+            if (s.getGenre() == null || s.getGenre().isEmpty())
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Corpus composition: Genre is empty", "Add genre"}));
@@ -1693,40 +1267,40 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             else {
                 allTiers.remove(t.tierName);
             }
-            if (t.tierName == null || t.tierName.isEmpty())
+            if (t.getTierName() == null || t.getTierName().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName, "Annotation Tiers: tier name is empty",
                                 "Add tier name"}));
-            if (t.tierFunctions == null || t.tierFunctions.isEmpty())
+            if (t.getTierFunctions() == null || t.getTierFunctions().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName,
-                                "Annotation Tiers: tier function is empty: " + t.tierName, "Add tier function"}));
-            else if (t.tierFunctions.stream().filter(validTierFunctions::contains).collect(Collectors.toSet()).isEmpty()) {
+                                "Annotation Tiers: tier function is empty: " + t.getTierName(), "Add tier function"}));
+            else if (t.getTierFunctions().stream().filter(validTierFunctions::contains).collect(Collectors.toSet()).isEmpty()) {
                 report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName,
-                                "Annotation Tiers: potential custom tier detected:\n" + t.tierName + " with tier " +
-                                        "function " + t.tierFunctions,
+                                "Annotation Tiers: potential custom tier detected:\n" + t.getTierName() + " with tier " +
+                                        "function " + t.getTierFunctions(),
                                 "Check if custom tier function is intended or change tier function"}));
             }
-            if (t.segmentationStrategy == null || t.segmentationStrategy.isEmpty())
+            if (t.getSegmentationStrategy() == null || t.getSegmentationStrategy().isEmpty())
                 report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName,
-                                "Annotation Tiers: segmentation strategy is empty: " + t.tierName,
+                                "Annotation Tiers: segmentation strategy is empty: " + t.getTierName(),
                                 "Add segmentation strategy"}));
-            if (t.languages == null || t.languages.isEmpty())
+            if (t.getLanguages() == null || t.getLanguages().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName,
-                                "Annotation Tiers: tier languages is empty: " + t.tierName, "Add tier language"}));
+                                "Annotation Tiers: tier languages is empty: " + t.getTierName(), "Add tier language"}));
             else {
                 // Each cell can contain several languages. Split the languages and check for each one if it is a
                 // valid language code
                 // TODO check if that is the intended way to separate languages
-                ArrayList<String> tierLangList = new ArrayList<>(Arrays.asList(t.languages.split(valueSeparator)));
+                ArrayList<String> tierLangList = new ArrayList<>(Arrays.asList(t.getLanguages().split(valueSeparator)));
                 for (String l : tierLangList) {
                     if (!checkLanguage(l)) {
                         report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
@@ -1760,21 +1334,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private Report refcoTranscriptionCheck() {
         Report report = new Report();
         // Check all transcription graphemes
-        for (Transcription t : criteria.transcriptions) {
-            if (t.grapheme == null || t.grapheme.isEmpty())
+        for (RefcoCriteria.Transcription t : criteria.getTranscriptions()) {
+            if (t.getGrapheme() == null || t.getGrapheme().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName, "Grapheme is empty", "Add grapheme"}));
-            if (t.linguisticValue == null || t.linguisticValue.isEmpty())
+            if (t.getLinguisticValue() == null || t.getLinguisticValue().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(), refcoShortName, "Grapheme linguistic value is empty: " + t.grapheme
+                        new Object[]{getFunction(), refcoShortName, "Grapheme linguistic value is empty: " + t.getGrapheme()
                                 , "Add linguistic value"}));
-            if (t.linguisticConvention == null || t.linguisticConvention.isEmpty())
+            if (t.getLinguisticConvention() == null || t.getLinguisticConvention().isEmpty())
                 report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName,
-                                "Grapheme linguistic convention is empty: " + t.grapheme,
+                                "Grapheme linguistic convention is empty: " + t.getGrapheme(),
                                 "Add linguistic convention"}));
         }
         return report;
@@ -1788,8 +1362,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private Report refcoGlossCheck() {
         Report report = new Report();
         // Check all glosses
-        for (Gloss g : criteria.glosses) {
-            if (g.gloss == null || g.gloss.isEmpty())
+        for (RefcoCriteria.Gloss g : criteria.getGlosses()) {
+            if (g.getGloss() == null || g.getGloss().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName, "Glosses: Gloss is empty",
@@ -1797,33 +1371,33 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
             // lower-case letters)
 //            else if (g.gloss.split("[" + String.join("", glossSeparator) + "]").length > 1
-            else if (Arrays.stream(g.gloss.split("")).map((c) ->glossSeparator.contains(c)).reduce(Boolean::logicalOr).orElse(false)
-                    && !g.gloss.matches(".*[a-z].*"))
+            else if (Arrays.stream(g.getGloss().split("")).map((c) ->glossSeparator.contains(c)).reduce(Boolean::logicalOr).orElse(false)
+                    && !g.getGloss().matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
                         ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
                                 new Object[]{getFunction(), refcoShortName,
-                                        "Glosses: Gloss contains separating character:\n" + g.gloss + " contains one of " +
+                                        "Glosses: Gloss contains separating character:\n" + g.getGloss() + " contains one of " +
                                                 glossSeparator,
                                         "Document the gloss parts separately"}));
-            if (g.meaning == null || g.meaning.isEmpty())
+            if (g.getMeaning() == null || g.getMeaning().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                 "howtoFix"},
-                        new Object[]{getFunction(), refcoShortName, "Glosses: Gloss meaning is empty: " + g.gloss,
+                        new Object[]{getFunction(), refcoShortName, "Glosses: Gloss meaning is empty: " + g.getGloss(),
                                 "Add a gloss definition to the corpus documentation"}));
             // We skip comments assuming it is optional
-            if (g.tiers == null || g.tiers.isEmpty())
+            if (g.getTiers() == null || g.getTiers().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                 "howtoFix"},
-                        new Object[]{getFunction(), refcoShortName, "Corpus data: Gloss tiers are empty: " + g.gloss,
+                        new Object[]{getFunction(), refcoShortName, "Corpus data: Gloss tiers are empty: " + g.getGloss(),
                                 "Check that all gloss tiers are documented as such"}));
                 // If the tiers is not "all", check if its valid tiers
-            else if (!g.tiers.equalsIgnoreCase("all")) {
+            else if (!g.getTiers().equalsIgnoreCase("all")) {
                 // Each cell can contain several tiers. Split the tiers and check for each one if it is a
                 // valid tier defined in AnnotationTiers
-                ArrayList<String> tierList = new ArrayList<>(Arrays.asList(g.tiers.split(valueSeparator)));
+                ArrayList<String> tierList = new ArrayList<>(Arrays.asList(g.getTiers().split(valueSeparator)));
                 for (String t : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
-                    if (criteria.tiers.stream().filter((tt) -> tt.tierName.equals(t) || tt.tierFunctions.contains(t)).toArray().length == 0)
+                    if (criteria.getTiers().stream().filter((tt) -> tt.getTierName().equals(t) || tt.getTierFunctions().contains(t)).toArray().length == 0)
                         report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                         "description", "howtoFix"},
                                 new Object[]{getFunction(), refcoShortName,
@@ -1844,35 +1418,35 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private Report refcoPunctuationCheck() {
         Report report = new Report();
         // Check all punctuation
-        for (Punctuation p : criteria.punctuations) {
-            if (p.character == null || p.character.isEmpty())
+        for (RefcoCriteria.Punctuation p : criteria.getPunctuations()) {
+            if (p.getCharacter() == null || p.getCharacter().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,"Punctuation: Grapheme is empty",
                                 "Add punctuation grapheme"}));
-            if (p.meaning == null || p.meaning.isEmpty())
+            if (p.getMeaning() == null || p.getMeaning().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Punctuation: meaning is empty for grapheme: " + p.character, "Add grapheme meaning"}));
+                                "Punctuation: meaning is empty for grapheme: " + p.getCharacter(), "Add grapheme meaning"}));
             // We skip comments assuming it is optional
-            if (p.tiers == null || p.tiers.isEmpty())
+            if (p.getTiers() == null || p.getTiers().isEmpty())
                 report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
-                                "Punctuation: tiers is empty for grapheme: " + p.character,
+                                "Punctuation: tiers is empty for grapheme: " + p.getCharacter(),
                                 "Add valid tiers for punctuation"}));
             // If the tiers is not "all", check if its valid tiers
-            else if (!p.tiers.equalsIgnoreCase("all")) {
+            else if (!p.getTiers().equalsIgnoreCase("all")) {
                 // Each cell can contain several tiers. Split the tiers and check for each one if it is a
                 // valid tier defined in AnnotationTiers
-                ArrayList<String> tierList = new ArrayList<>(Arrays.asList(p.tiers.split(valueSeparator)));
+                ArrayList<String> tierList = new ArrayList<>(Arrays.asList(p.getTiers().split(valueSeparator)));
                 for (String tierName : tierList) {
                     // At least one of the tiers has to be defined in the AnnotationTiers table, otherwise report error
                     boolean isDocumented = false;
-                    for (Tier tier : criteria.tiers) {
-                        if (tier.tierName.equalsIgnoreCase(tierName) ||
-                                tier.tierFunctions.contains(tierName.toLowerCase())) {
+                    for (RefcoCriteria.Tier tier : criteria.getTiers()) {
+                        if (tier.getTierName().equalsIgnoreCase(tierName) ||
+                                tier.getTierFunctions().contains(tierName.toLowerCase())) {
                             isDocumented = true;
                             break;
                         }
@@ -1886,11 +1460,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            if (p.function == null || p.function.isEmpty()) {
+            if (p.getFunction() == null || p.getFunction().isEmpty()) {
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
                         new Object[]{getFunction(), refcoShortName,
-                                "Punctuation: function is empty for grapheme: " + p.character,
+                                "Punctuation: function is empty for grapheme: " + p.getCharacter(),
                                 "Add valid function for punctuation"}));
             }
         }
@@ -2109,30 +1683,32 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (String tierId : transcriptionTiers) {
             // Get all transcription graphemes
             // Set<Character> validTranscriptionCharacters = new HashSet<>(criteria.transcriptions.size()) ;
-            List<String> validTranscriptionCharacters = new ArrayList<>(criteria.transcriptions.size());
-            for (Transcription t : criteria.transcriptions) {
+            // logger.info("Load all valid transcription characters");
+            List<String> validTranscriptionCharacters = new ArrayList<>(criteria.getTranscriptions().size());
+            for (RefcoCriteria.Transcription t : criteria.getTranscriptions()) {
                 // Add all of the grapheme's characters
                 // validTranscriptionCharacters.addAll(getChars(t.grapheme));
-                validTranscriptionCharacters.add(t.grapheme);
+                validTranscriptionCharacters.add(t.getGrapheme());
             }
             // and punctuation characters
-            for (Punctuation p : criteria.punctuations) {
-                if (p.tiers.equals("all"))
+            for (RefcoCriteria.Punctuation p : criteria.getPunctuations()) {
+                if (p.getTiers().equals("all"))
                     // Add all of the punctuation's characters
                     // validTranscriptionCharacters.addAll(getChars(p.character));
-                    validTranscriptionCharacters.add(p.character);
-                else if ((Arrays.asList(p.tiers.split(valueSeparator)).contains(tierId)) ||
-                        (tierSpeakerSeparator.isPresent() && Arrays.asList(p.tiers.split(valueSeparator)).stream()
-                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator)))){
+                    validTranscriptionCharacters.add(p.getCharacter());
+                // TODO: does that work properly
+                else if ((Arrays.asList(p.getTiers().split(valueSeparator)).contains(tierId)) ||
+                        Arrays.asList(p.getTiers().split(valueSeparator)).stream()
+                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator))) {
                     // Add all of the punctuation's characters
-                    validTranscriptionCharacters.add(p.character);
+                    validTranscriptionCharacters.add(p.getCharacter());
                 }
             }
             // Also get all glosses valid for the transcription tiers
             Set<String> validGlosses = new HashSet<>();
-            for (Gloss g : criteria.glosses) {
-                if (g.tiers.equals("all"))
-                    validGlosses.add(g.gloss);
+            for (RefcoCriteria.Gloss g : criteria.getGlosses()) {
+                if (g.getTiers().equals("all"))
+                    validGlosses.add(g.getGloss());
                 // else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
                 else if ((Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) ||
                         (tierSpeakerSeparator.isPresent() && Arrays.asList(g.tiers.split(valueSeparator)).stream()
@@ -2306,11 +1882,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (String tierId : morphologyTiers) {
             // Get all valid Glosses
             HashSet<String> validGlosses = new HashSet<>();
-            for (Gloss g : criteria.glosses) {
-                if (g.tiers.equals("all"))
-                    validGlosses.add(g.gloss);
-                else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
-                    validGlosses.add(g.gloss);
+            for (RefcoCriteria.Gloss g : criteria.getGlosses()) {
+                if (g.getTiers().equals("all"))
+                    validGlosses.add(g.getGloss());
+                else if (Arrays.asList(g.getTiers().split(valueSeparator)).contains(tierId)) {
+                    validGlosses.add(g.getGloss());
                 }
             }
             // Get the text from all morphology tiers
@@ -2476,8 +2052,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private int countWordsInTierByFunction(String tierFunction) throws JDOMException{
         int count = 0 ;
         List<String> tierList =
-                criteria.tiers.stream().filter((t) -> t.tierFunctions
-                                .contains(tierFunction.toLowerCase())).map((tn) -> tn.tierName)
+                criteria.getTiers().stream().filter((t) -> t.getTierFunctions()
+                                .contains(tierFunction.toLowerCase())).map((tn) -> tn.getTierName())
                         .collect(Collectors.toList());
         for (String tierName :
                 tierList) {
