@@ -19,6 +19,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * EXMARaLDA version of the annotation checker
+ * @author bba1792, Dr. Herbert Lange
+ * @version 20220823
+ */
 public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
 
     public EXMARaLDAAnnotationChecker(Properties properties) {
@@ -29,16 +34,16 @@ public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
-        if (props.containsKey("annotation-tier-pattern")) {
+        if (props.containsKey("annotation-tier-patterns")) {
             // Copy old properties
-            Properties newProperties = new Properties();
-            newProperties.putAll(props);
-            // convert tier pattern
-            newProperties.put("tier-pattern", props.getProperty("annotation-tier-pattern"));
-            // run tier finder
-            EXMARaLDATierFinder etf = new EXMARaLDATierFinder(newProperties);
-            report.merge(etf.function(c, fix));
-            tierIds.addAll(etf.getTierList());
+            Properties properties = new Properties(props);
+            for (String pattern : tierPatterns) {
+                properties.put("tier-pattern", pattern);
+                // run tier finder
+                EXMARaLDATierFinder etf = new EXMARaLDATierFinder(properties);
+                report.merge(etf.function(c, fix));
+                tierIds.addAll(etf.getTierList());
+            }
             setUp = true;
         }
         report.merge(super.function(c, fix));

@@ -15,7 +15,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Abstract annotation checker class
  * @author bba1792, Dr. Herbert Lange
- * @version 20220328
+ * @version 20220823
  */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
@@ -43,7 +42,10 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     private boolean showTagStats = false;
 
     // List of tiers to be checked
-    protected final List<String> tierIds = new ArrayList<>();
+    protected final Set<String> tierIds = new HashSet<>();
+    // List of patterns to identify tiers
+    protected final Set<String> tierPatterns = new HashSet<>();
+
     // Regex to separate tokens
     private final String tokenSeparator = "\\s+" ;
 
@@ -52,8 +54,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
     public AnnotationChecker(Properties properties) {
         super(false, properties);
-        if (properties.containsKey("annotation-tier-ids")) {
-            tierIds.addAll(Arrays.asList(properties.getProperty("annotation-tier-ids").split(",")));
+        if (properties.containsKey("annotation-tiers")) {
+            tierIds.addAll(Arrays.asList(properties.getProperty("annotation-tiers").split(",")));
             setUp = true;
         }
         // Tags as list in parameter
@@ -67,6 +69,12 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         // Flag if summary should be included
         if (properties.containsKey("tag-summary") && properties.getProperty("tag-summary").equalsIgnoreCase("true")) {
             showTagStats = true;
+        }
+        if (properties.containsKey("annotation-tiers")) {
+            tierIds.addAll(Arrays.asList(properties.getProperty("annotation-tiers").split(",\\s*")));
+        }
+        if (properties.containsKey("annotation-tier-patterns")) {
+            tierPatterns.addAll(Arrays.asList(properties.getProperty("annotation-tier-patterns").split(",\\s*")));
         }
     }
 
@@ -160,7 +168,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     @Override
     public Map<String, String> getParameters() {
         Map<String,String> params = super.getParameters();
-        params.put("annotation-tier-ids","Mandatory identifier(s) for the tiers to be checked, separated by commas");
+        params.put("annotation-tiers","List of transcription tier IDs separated by commas");
+        params.put("annotation-tier-patterns","List of transcription tier IDs separated by commas");
         params.put("annotation-tags", "Optional list of expected annotation tags, separated by comma");
         params.put("annotation-specification", "Optional list of expected annotation tags, in the EXMARaLDA " +
                 "Annotation Panel compatible format");

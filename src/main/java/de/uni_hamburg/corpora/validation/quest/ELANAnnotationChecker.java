@@ -1,20 +1,52 @@
 package de.uni_hamburg.corpora.validation.quest;
 
+import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.ELANData;
+import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
+import org.exmaralda.partitureditor.fsm.FSMException;
+import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * ELAN version of the annotation checker
+ * @author bba1792, Dr. Herbert Lange
+ * @version 20220823
+ */
 public class ELANAnnotationChecker extends AnnotationChecker {
 
     public ELANAnnotationChecker(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        Report report = new Report();
+        if (props.containsKey("annotation-tier-patterns")) {
+            Properties properties = new Properties(props);
+            for (String pattern : tierPatterns) {
+                properties.put("tier-pattern", pattern);
+                ELANTierFinder etf = new ELANTierFinder(props);
+                report.merge(etf.function(c, fix));
+                tierIds.addAll(etf.getTierList());
+            }
+        }
+        report.merge(super.function(c, fix));
+        return report;
     }
 
     @Override
