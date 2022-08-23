@@ -1572,16 +1572,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private Report checkTranscriptionText(CorpusData cd, String tier, List<Text> text, List<String> chunks,
                                           Set<String> glosses) {
-        DictionaryAutomaton dict = new DictionaryAutomaton(chunks);
         // Create a string for all the characters in the automaton
         String dictAlphabet = "";
-        if (!dict.getAlphabet().isEmpty()) {
-            dictAlphabet = "[" +
-                    dict.getAlphabet().stream().map(Object::toString).collect(Collectors.joining())
+        if (!chunks.isEmpty()) {
+            dictAlphabet = "(" +
+                    chunks.stream().map(Object::toString).collect(Collectors.joining("|"))
                             .replace("[", "\\[")
                             .replace("]", "\\]")
                             .replace("-","\\-") +
-                    "]";
+                    ")";
         }
         Report report = new Report();
         // All the characters that are valid
@@ -1601,7 +1600,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Token is not one of the glosses
                 if (!glosses.contains(token)) {
                     // Check if we can segment the token using the chunks
-                    if (dict.checkSegmentableWord(token)) {
+                    if (segmentWord(token,chunks)) {
+                    //if (dict.checkSegmentableWord(token)) {
                         matched += token.length();
                     }
                     else {
@@ -1675,6 +1675,51 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                         Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
         return report ;
+    }
+
+    /**
+     * Method to check if a word is segmentable into chunks
+     * @param token the word to be segmented
+     * @param chunks candidates for chunks
+     * @return if the word can be segmented
+     */
+    private boolean segmentWord(String token, List<String> chunks) {
+        // Filter out blank strings, remove duplicates and sort by length
+        chunks = chunks.stream().filter((s) -> !s.isEmpty())
+                .collect(Collectors.toSet())
+                .stream().collect(Collectors.toList());
+        chunks.sort(Comparator.comparingInt(String::length).reversed());
+        // List of states to remember and initial state with nothing matched and all remaining
+        List<Pair<List<String>,String>> states = new ArrayList<>();
+        List<String> matched = new ArrayList<>();
+        String remaining;
+        states.add(new Pair<>(matched,token));
+        // Continue as long as we have states
+        while (!states.isEmpty()) {
+            // Get the first remaining state and recover both matched and remaining
+            Pair<List<String>, String> state = states.remove(0);
+            matched = state.getFirst().stream().collect(Collectors.toList());
+            remaining = state.getSecond();
+            // Check all possible chunks if remaining string starts with it
+            for (String c : chunks) {
+                if (remaining.startsWith(c)) {
+                    // Copy matched and add new chunk
+                    List<String> newMatched = matched.stream().collect(Collectors.toList());
+                    newMatched.add(c);
+                    // Remove matched prefix from remaining
+                    String newRemaining = remaining.replaceFirst(c, "");
+                    // If nothing remains we are done
+                    if (newRemaining.isEmpty())
+                        return true;
+                    else {
+                        // Otherwise, store where to continue
+                        states.add(new Pair<>(newMatched, newRemaining));
+                    }
+                }
+            }
+        }
+        // Return if failed
+        return false;
     }
 
     /**
