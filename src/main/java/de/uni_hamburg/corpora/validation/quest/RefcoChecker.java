@@ -1641,12 +1641,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
                 // Only accept non-morpholical glosses, i.e. glosses that are not only uppercase letters
-                else if (token.matches(".*[a-z].*")){
+                //else if (token.matches(".*[a-z].*")){
+                else if (glosses.contains(token)){
                     // Add the length of the gloss to matched
                     matched += token.length() ;
                 }
                 // It is neither recognized by the automaton nor a non-morphological gloss
                 else {
+                    missing += token.length();
                     mismatch = true;
                 }
                 if (mismatch && !token.isEmpty()) {
