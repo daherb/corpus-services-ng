@@ -32,11 +32,19 @@ import java.util.stream.Collectors;
  */
 public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction {
 
+
     // The local logger that can be used for debugging
     Logger logger = Logger.getLogger(this.getClass().toString());
 
+    // Flag to check hiat segmentation
+    private boolean checkHIAT = false;
+
     public EXMARaLDAValidatorChecker(Properties properties) {
         super(false, properties) ;
+        if (properties.containsKey("examaralda-check-hiat") && properties.getProperty("examaralda-check-hiat")
+                .equalsIgnoreCase("true")) {
+            checkHIAT = true;
+        }
     }
 
     @Override
@@ -96,13 +104,16 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
                     new String[]{getFunction(), cd.getFilename(), "Annotation mismatch in tiers: " + String.join(",",
                             missmatchTiers)}));
         }
-        Vector segmentationErrors = new HIATSegmentation().getSegmentationErrors(bt);
-        // TODO the exact reason and form of segmentation errors is not clear
-        if (!segmentationErrors.isEmpty()) {
-            problem = true;
-            for (Object o : segmentationErrors) {
-                report.addCritical(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description"},
-                        new String[]{getFunction(), cd.getFilename(),"HIAT Segmentation error: " + o.toString()}));
+        if (checkHIAT) {
+            Vector segmentationErrors = new HIATSegmentation().getSegmentationErrors(bt);
+            // TODO the exact reason and form of segmentation errors is not clear
+            if (!segmentationErrors.isEmpty()) {
+                problem = true;
+                for (Object o : segmentationErrors) {
+                    report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                            new String[]{getFunction(), cd.getFilename(),
+                                    "HIAT Segmentation error: " + o.toString() + " - " + o.getClass()}));
+                }
             }
         }
         if (!problem) {
@@ -148,6 +159,13 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Only works for EXB data
         return Collections.singleton(EXMARaLDATranscriptionData.class);
+    }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> params = super.getParameters();
+        params.put("exmaralda-check-hiat", "Flag if HIAT segmentation should be checked");
+        return params;
     }
 
     public static void main(String[] args) {
