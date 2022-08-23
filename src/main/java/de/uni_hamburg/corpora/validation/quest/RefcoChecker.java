@@ -7,10 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
-import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
-import de.uni_hamburg.corpora.utilities.quest.FileTools;
-import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
-import de.uni_hamburg.corpora.utilities.quest.XMLTools;
+import de.uni_hamburg.corpora.utilities.quest.*;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
@@ -73,7 +70,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private final Set<String> glossSeparator = new HashSet<>(); //new HashSet(Arrays.asList("-", "=")); // "[-=;:\\\\>()
     // <~\\[\\]]+"
     // Separator to split tier ids in tier names and speakers
-    private Optional<String> tierSpeakerSeparator = Optional.empty();
+    private String tierSpeakerSeparator = "@";
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
@@ -1253,6 +1250,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 .filter((c) -> c.getFunction().equalsIgnoreCase("convention for associating a speaker to a tier"))
                 .map(RefcoCriteria.Punctuation::getCharacter).findAny().orElse(tierSpeakerSeparator);
         try {
+            // Get all the tier names from the ELAN files
             allTiers = getTierIDs();
         } catch (Exception e) {
             report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
@@ -1261,23 +1259,47 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             e}));
             allTiers = new HashMap<>();
         }
-        for (Tier t : criteria.tiers) {
-            // If we have a tier speaker separator we also have to check the combination of tier names with speakers
-            if (tierSpeakerSeparator.isPresent()) {
-                for (String fileName :
-                        allTiers.keySet().stream().filter((tn) -> tn.startsWith(t.tierName))
-                                .map(allTiers::get).collect(ArrayList<String>::new, ArrayList::addAll,
-                                        ArrayList::addAll)) {
-                    for (String newTier :
-                            findSpeakers(fileName).stream().map((s) -> t.tierName + tierSpeakerSeparator.get() + s)
-                                    .collect(Collectors.toList())) {
-                        allTiers.remove(newTier);
+        // Make a deep copy of the tier map
+        Map<String,Set<String>> remainingTiers = allTiers.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, (e) -> e.getValue().stream().collect(Collectors.toSet())));
+        for (Map.Entry<String,Set<String>> tier : allTiers.entrySet()) {
+            String tierName = tier.getKey();
+            // logger.info("Looking at " + tierName);
+            if (tierName.contains(tierSpeakerSeparator)) {
+                for (String fileName : tier.getValue()) {
+                    // Get all speakers for all files in which the tier appears
+                    for (String speaker : criteria.sessions.stream()
+                            .filter((s) -> Arrays.asList(s.getFileNames().split(",\\s*")).contains(fileName))
+                            .map((s) -> Arrays.asList(s.getSpeakerNames().split(",\\s*")))
+                            .collect(ArrayList<String>::new, ArrayList::addAll, ArrayList::addAll)) {
+                        // If we have a matching speaker for a file we remove the file from the tier list
+                        if (tierName.endsWith(tierSpeakerSeparator + speaker)) {
+                            remainingTiers.get(tierName).remove(fileName);
+                        }
                     }
                 }
             }
-            else {
-                allTiers.remove(t.tierName);
+            else if (criteria.getTiers().stream().anyMatch((t) -> t.getTierName().equals(tierName))) {
+                remainingTiers.remove(tierName);
             }
+        }
+        for (RefcoCriteria.Tier t : criteria.getTiers()) {
+//            // If we have a tier speaker separator we also have to check the combination of tier names with speakers
+//            if (t.tierName.contains(tierSpeakerSeparator)) {
+//                for (String fileName :
+//                        allTiers.keySet().stream().filter((tn) -> tn.startsWith(t.tierName))
+//                                .map(allTiers::get).collect(ArrayList<String>::new, ArrayList::addAll,
+//                                        ArrayList::addAll)) {
+//                    for (String newTier :
+//                            findSpeakers(fileName).stream().map((s) -> t.tierName + tierSpeakerSeparator + s)
+//                                    .collect(Collectors.toList())) {
+//                        allTiers.remove(newTier);
+//                    }
+//                }
+//            }
+//            else {
+//                allTiers.remove(t.tierName);
+//            }
             if (t.getTierName() == null || t.getTierName().isEmpty())
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
@@ -1323,14 +1345,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
         }
-        if (allTiers.size() > 0) {
-            Map<String, Set<String>> finalAllTiers = allTiers;
+        // If we have some tiers left and at least one of them has files left we have to report it
+        if (remainingTiers.size() > 0 && remainingTiers.entrySet().stream().anyMatch((e) -> !e.getValue().isEmpty())) {
             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                             "description", "howtoFix"},
                     new Object[]{getFunction(), refcoShortName, "Tiers are not documented:\n" +
-                            allTiers.keySet().stream().map((k) ->
-                                    finalAllTiers.get(k).stream().map((v) -> v + ":" + k)
-                                            .collect(Collectors.joining(",\n"))).collect(Collectors.joining(",\n")),
+                            remainingTiers.entrySet().stream()
+                                    .filter((e) -> !e.getValue().isEmpty())
+                                    .map((e) -> e.getKey() + ": " +
+                                    String.join(",", e.getValue()))
+                                    .collect(Collectors.joining(",\n")),
                             "Add documentation for all tiers"}));
         }
         return report;
@@ -1531,23 +1555,30 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return list of tiers matching the functions
      */
     private ArrayList<String> findTiersByFunction(String file, List<String> functions) {
-        ArrayList<String> transcriptionTiers = new ArrayList<>();
-        for (Tier t: criteria.tiers) {
+        ArrayList<String> foundTiers = new ArrayList<>();
+        // Get all documented speakers for the file
+        List<String> speakers = findSpeakers(file);
+        for (RefcoCriteria.Tier t: criteria.getTiers()) {
 //            if (t.tierFunctions.contains() ||
 //                    (t.tierFunctions.contains())) {
-            if (functions.stream().anyMatch((f) -> t.tierFunctions.contains(f))) {
+            if (functions.stream().anyMatch((f) -> t.getTierFunctions().stream().anyMatch((tf) -> tf.contains(f)))) {
                 // If we have a tier speaker separator we have to combine tier names with speakers
-                if (tierSpeakerSeparator.isPresent()) {
-                    List<String> speakers = findSpeakers(file);
+                // if (tierSpeakerSeparator.isPresent()) {
                     for (String speaker : speakers)
-                        transcriptionTiers.add(t.tierName + tierSpeakerSeparator.get() + speaker);
-                }
-                else {
-                    transcriptionTiers.add(t.tierName);
-                }
+                        foundTiers.add(t.getTierName() + tierSpeakerSeparator + speaker);
+//                }
+//                else {
+                    foundTiers.add(t.getTierName());
+//                }
             }
+
         }
-        return transcriptionTiers;
+        logger.info("TIERS FOUND " + String.join(",", foundTiers) +
+                " FOR FUNCTIONS " + String.join(",", functions) + " AND " +
+                "SPEAKERS " + String.join(",", speakers) + " IN FILE " +
+                file
+        );
+        return foundTiers;
     }
 
     /**
@@ -1775,10 +1806,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 if (g.getTiers().equals("all"))
                     validGlosses.add(g.getGloss());
                 // else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
-                else if ((Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) ||
-                        (tierSpeakerSeparator.isPresent() && Arrays.asList(g.tiers.split(valueSeparator)).stream()
-                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator.get())))) {
-                    validGlosses.add(g.gloss);
+                // TODO does this work properly
+                else if ((Arrays.asList(g.getTiers().split(valueSeparator)).contains(tierId)) ||
+                        Arrays.asList(g.getTiers().split(valueSeparator)).stream()
+                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator))) {
+                    validGlosses.add(g.getGloss());
                 }
             }
             // Get the text from all transcription tiers
