@@ -1249,9 +1249,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Map<String, Set<String>> allTiers;
         // First we have to see if we have a tier speaker separator character
         // If we have a tier speaker separator we can update the field
-        tierSpeakerSeparator = criteria.punctuations.stream()
-                .filter((c) -> c.function.equalsIgnoreCase("tier speaker separator"))
-                .map(Punctuation::getCharacter).findAny();
+        tierSpeakerSeparator = criteria.getPunctuations().stream()
+                .filter((c) -> c.getFunction().equalsIgnoreCase("convention for associating a speaker to a tier"))
+                .map(RefcoCriteria.Punctuation::getCharacter).findAny().orElse(tierSpeakerSeparator);
         try {
             allTiers = getTierIDs();
         } catch (Exception e) {
