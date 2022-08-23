@@ -4,7 +4,6 @@ import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.ELANData;
 import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Document;
