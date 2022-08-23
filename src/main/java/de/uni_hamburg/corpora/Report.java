@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 import org.jdom.JDOMException;
 
@@ -38,6 +39,8 @@ import org.jdom.JDOMException;
  * </pre>
  */
 public class Report {
+
+    static int reportLimit = 0;
 
     //Anne: Is this the ErrorList in the UML? If so, should we rename here or use StatisticsReport in UML? Or maybe best: ErrorReport?
     //But what would be the Items in here? ReportItems? Errors? StatisticsStuff?
@@ -99,7 +102,15 @@ public class Report {
      */
     public void addReportItem(String statId, ReportItem reportItem) {
         Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(reportItem);
+        if (reportLimit == 0 || stat.stream().filter((r) -> r.isBad()).count() < reportLimit) {
+            stat.add(reportItem);
+        }
+        else if (reportLimit > 0 && stat.stream().filter((r) -> r.isBad()).count() == reportLimit) {
+            stat.add(new ReportItem(Severity.CRITICAL,reportItem.getFunction(),
+                    String.format("More than %d bad report items. Stopping now", reportLimit),
+                    "Fix issues and try again"));
+            // Logger.getGlobal().info("EXCESS ITEMS FOR " + reportItem.getFunction());
+        }
     }
 
     /**
@@ -115,8 +126,7 @@ public class Report {
      * Add a critical error in named statistics bucket.
      */
     public void addCritical(String statId, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL, statId,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CRITICAL, statId,
                 description));
     }
 
@@ -126,8 +136,7 @@ public class Report {
      * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
      */
     public void addCritical(String statId, Map<String,Object> params) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL, params));
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CRITICAL, params));
     }
 
     /**
@@ -160,8 +169,7 @@ public class Report {
      * Add a critical error in named statistics bucket. with CorpusData object
      */
     public void addCritical(String statId, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CRITICAL,
                 cd.getURL().toString(), description, statId));
     }
 
@@ -169,8 +177,7 @@ public class Report {
      * Add a critical error in named statistics bucket. with CorpusData object
      */
     public void addFix(String statId, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.IFIXEDITFORYOU,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.IFIXEDITFORYOU,
                 cd.getURL().toString(), description, statId));
     }
 
@@ -178,8 +185,7 @@ public class Report {
      * Add a non-critical error in named statistics bucket.
      */
     public void addWarning(String statId, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.WARNING,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.WARNING,
                 description));
     }
 
@@ -204,8 +210,7 @@ public class Report {
      * Add a critical error in named statistics bucket. with CorpusData object
      */
     public void addWarning(String statId, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.WARNING,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.WARNING,
                 cd.getURL().toString(), description, statId));
     }
 
@@ -215,16 +220,14 @@ public class Report {
      * @param params the map for all relevant parameters
      */
     public void addWarning(String statId, Map<String,Object> params) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(Severity.WARNING, params));
+        addReportItem(statId, new ReportItem(Severity.WARNING, params));
     }
 
     /**
      * Add error about missing data in named statistics bucket.
      */
     public void addMissing(String statId, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.MISSING,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.MISSING,
                 description));
     }
 
@@ -232,8 +235,7 @@ public class Report {
      * Add a critical error in named statistics bucket. with CorpusData object
      */
     public void addMissing(String statId, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.MISSING,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.MISSING,
                 cd.getURL().toString(), description, statId));
     }
 
@@ -243,16 +245,14 @@ public class Report {
      * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
      */
     public void addCorrect(String statId, Map<String,Object> params) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(Severity.CORRECT, params));
+        addReportItem(statId, new ReportItem(Severity.CORRECT, params));
     }
 
     /**
      * Add note for correctly formatted data in named statistics bucket.
      */
     public void addCorrect(String statId, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CORRECT,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CORRECT,
                 description));
     }
 
@@ -261,8 +261,7 @@ public class Report {
      * filenamre
      */
     public void addCorrect(String statId, String filename, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CORRECT, filename,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CORRECT, filename,
                 description, statId));
     }
 
@@ -270,8 +269,7 @@ public class Report {
      * Add a correct note in named statistics bucket. with CorpusData object
      */
     public void addCorrect(String statId, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CORRECT,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CORRECT,
                 cd.getURL().toString(), description, statId));
     }
 
@@ -279,8 +277,7 @@ public class Report {
      * Add note for correctly formatted data in named statistics bucket.
      */
     public void addNote(String statId, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.NOTE, statId,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.NOTE, statId,
                 description));
     }
 
@@ -310,8 +307,7 @@ public class Report {
      * Add a correct note in named statistics bucket. with CorpusData object
      */
     public void addNote(String statId, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.NOTE,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.NOTE,
                 cd.getURL().toString(), description, statId));
     }
 
@@ -331,8 +327,7 @@ public class Report {
      * in statistics.
      */
     public void addException(String statId, Throwable e, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CRITICAL,
                 e, description));
     }
 
@@ -348,8 +343,7 @@ public class Report {
      * Add a exception in named statistics bucket. with CorpusData object
      */
     public void addException(String statId, Throwable e, CorpusData cd, String description) {
-        Collection<ReportItem> stat = getOrCreateStatistic(statId);
-        stat.add(new ReportItem(ReportItem.Severity.CRITICAL,
+        addReportItem(statId, new ReportItem(ReportItem.Severity.CRITICAL,
                 e, cd.getURL().toString(), description));
     }
 
