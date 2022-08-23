@@ -30,6 +30,8 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
     private final Logger logger = Logger.getLogger(this.getFunction());
 
+    // Flag if we are properly set up
+    protected boolean setUp = false;
 
     // List of all interesting tiers
     protected Set<String> tierIds = new HashSet<>();
@@ -160,6 +162,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
             }
             if (properties.containsKey("transcription-tiers")) {
                 tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",\\s*")));
+                setUp = true;
             }
             if (properties.containsKey("transcription-tier-patterns")) {
                 tierPatterns.addAll(Arrays.asList(properties.getProperty("transcription-tier-patterns").split(",\\s*")));
@@ -170,28 +173,33 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        try {
-            // Find transcription tiers
-            List<Element> transcriptionTiers = getTranscriptionTiers(cd);
-            // Get transcription content
-            List<String> transcriptionText = new ArrayList<>();
-            for (Element tier : transcriptionTiers) {
-                transcriptionText.add(getTranscriptionText(tier));
-            }
-            // Do the analysis
-            for (String text : transcriptionText) {
-                for (String token : text.split(tokenSeparator)) {
-                    // Split the word into graphemes
-                    Set<String> graphemes = new HashSet<>(Arrays.asList(token.split("")));
-                    updateSimpleStats(graphemes);
+        if (setUp) {
+            try {
+                // Find transcription tiers
+                List<Element> transcriptionTiers = getTranscriptionTiers(cd);
+                // Get transcription content
+                List<String> transcriptionText = new ArrayList<>();
+                for (Element tier : transcriptionTiers) {
+                    transcriptionText.add(getTranscriptionText(tier));
                 }
+                // Do the analysis
+                for (String text : transcriptionText) {
+                    for (String token : text.split(tokenSeparator)) {
+                        // Split the word into graphemes
+                        Set<String> graphemes = new HashSet<>(Arrays.asList(token.split("")));
+                        updateSimpleStats(graphemes);
+                    }
+                }
+            } catch (JDOMException e) {
+                report.addCritical(getFunction(),
+                        ReportItem.newParamMap(new String[]{"function", "exception", "description"},
+                                new Object[]{getFunction(), e, "Exception encountered while reading the transcription"}));
             }
         }
-        catch (JDOMException e) {
+        else
             report.addCritical(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function","exception","description"},
-                            new Object[]{getFunction(),e,"Exception encountered while reading the transcription"}));
-        }
+                    ReportItem.newParamMap(new String[]{"function", "description"},
+                            new Object[]{getFunction(), "Checker not properly set up"}));
         return report;
     }
 
