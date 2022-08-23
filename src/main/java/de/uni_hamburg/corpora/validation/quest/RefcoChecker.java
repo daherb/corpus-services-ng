@@ -2189,7 +2189,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @throws JDOMException on XPath problems
      */
     private int countTranscribedWords() throws JDOMException {
-        return countWordsInTierByFunction("Transcription") ;
+        return countWordsInTierByFunction("transcription") ;
     }
 
     /**
