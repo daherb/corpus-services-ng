@@ -1626,7 +1626,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Check if token either is a gloss or each character is in the valid characters
                 mismatch = false ;
                 // Update frequency list
-                //tokenFreq.compute(token,(k,v) -> (v == null) ? 1 : v + 1);
                 tokenFreq.put(token);
                 // Token is not one of the glosses
                 if (!glosses.contains(token)) {
