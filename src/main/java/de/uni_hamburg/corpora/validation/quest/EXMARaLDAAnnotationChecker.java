@@ -33,6 +33,8 @@ public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
+        // Backup tiers
+        Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
         if (props.containsKey("annotation-tier-patterns")) {
             // Copy old properties
@@ -42,11 +44,14 @@ public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
                 // run tier finder
                 EXMARaLDATierFinder etf = new EXMARaLDATierFinder(properties);
                 report.merge(etf.function(c, fix));
+                // Add additional tiers
                 tierIds.addAll(etf.getTierList());
             }
             setUp = true;
         }
         report.merge(super.function(c, fix));
+        // Restore backup
+        tierIds = backupTiers;
         return report;
     }
 

@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Checker for transcription data in an EXMARaLDA file
@@ -34,6 +35,8 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
+        // Backup tiers
+        Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
         if (props.containsKey("transcription-tier-patterns")) {
             // Copy old properties
@@ -44,10 +47,14 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
                 // run tier finder
                 EXMARaLDATierFinder etf = new EXMARaLDATierFinder(properties);
                 report.merge(etf.function(c, fix));
+                // Add additional tiers
                 tierIds.addAll(etf.getTierList());
             }
+            setUp = true;
         }
         report.merge(super.function(c, fix));
+        // Restore backup
+        tierIds = backupTiers;
         return report;
     }
 

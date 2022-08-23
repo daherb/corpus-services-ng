@@ -36,15 +36,22 @@ public class ELANAnnotationChecker extends AnnotationChecker {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
+        // Backup tiers
+        Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
+        // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
         if (props.containsKey("annotation-tier-patterns")) {
             Properties properties = new Properties(props);
             for (String pattern : tierPatterns) {
                 properties.put("tier-pattern", pattern);
                 ELANTierFinder etf = new ELANTierFinder(props);
                 report.merge(etf.function(c, fix));
+                // Add additional tiers
                 tierIds.addAll(etf.getTierList());
             }
+            setUp = true;
         }
+        // Restore backup
+        tierIds = backupTiers;
         report.merge(super.function(c, fix));
         return report;
     }
