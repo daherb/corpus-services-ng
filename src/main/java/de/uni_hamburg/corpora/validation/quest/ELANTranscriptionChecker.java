@@ -43,7 +43,8 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
         Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
         if (props.containsKey("transcription-tier-patterns")) {
-            Properties properties = new Properties(props);
+            Properties properties = new Properties();
+            properties.putAll(props);
             for (String pattern : tierPatterns) {
                 properties.put("tier-pattern", pattern);
                 ELANTierFinder etf = new ELANTierFinder(props);

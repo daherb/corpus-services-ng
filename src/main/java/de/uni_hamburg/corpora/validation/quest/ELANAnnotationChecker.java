@@ -40,7 +40,8 @@ public class ELANAnnotationChecker extends AnnotationChecker {
         Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
         if (props.containsKey("annotation-tier-patterns")) {
-            Properties properties = new Properties(props);
+            Properties properties = new Properties();
+            properties.putAll(props);
             for (String pattern : tierPatterns) {
                 properties.put("tier-pattern", pattern);
                 ELANTierFinder etf = new ELANTierFinder(props);

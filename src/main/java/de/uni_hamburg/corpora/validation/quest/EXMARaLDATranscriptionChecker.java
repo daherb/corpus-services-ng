@@ -40,7 +40,8 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
         if (props.containsKey("transcription-tier-patterns")) {
             // Copy old properties
-            Properties properties = new Properties(props);
+            Properties properties = new Properties();
+            properties.putAll(props);
             // convert tier pattern
             for (String pattern : tierPatterns) {
                 properties.put("tier-pattern", pattern);
