@@ -48,7 +48,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     public TierFinder(Properties properties) {
         super(false, properties);
         if (properties.containsKey("tier-pattern")) {
-            patterns = properties.getProperty("tier-patterns");
+            patterns = properties.getProperty("tier-pattern");
             setUp = true;
         }
         if (properties.containsKey("tier-summary") && properties.getProperty("tier-summary").equalsIgnoreCase("true")) {

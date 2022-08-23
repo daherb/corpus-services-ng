@@ -35,16 +35,17 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Check if we have a tier pattern. if yes we use the tier finder to get all tier ids
-        if (props.containsKey("transcription-tier-pattern")) {
+        if (props.containsKey("transcription-tier-patterns")) {
             // Copy old properties
-            Properties newProperties = new Properties();
-            newProperties.putAll(props);
+            Properties properties = new Properties(props);
             // convert tier pattern
-            newProperties.put("tier-pattern", props.getProperty("transcription-tier-pattern"));
-            // run tier finder
-            EXMARaLDATierFinder etf = new EXMARaLDATierFinder(newProperties);
-            report.merge(etf.function(c, fix));
-            tierIds.addAll(etf.getTierList());
+            for (String pattern : tierPatterns) {
+                properties.put("tier-pattern", pattern);
+                // run tier finder
+                EXMARaLDATierFinder etf = new EXMARaLDATierFinder(properties);
+                report.merge(etf.function(c, fix));
+                tierIds.addAll(etf.getTierList());
+            }
         }
         report.merge(super.function(c, fix));
         return report;

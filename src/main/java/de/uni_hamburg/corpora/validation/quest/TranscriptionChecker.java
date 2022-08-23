@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Super class for checking transcription alphabets
  * @author bba1792, Dr. Herbert Lange
- * @version 20220324
+ * @version 20220823
  */
 abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
@@ -32,6 +32,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
     // List of all interesting tiers
     protected final Set<String> tierIds = new HashSet<>();
+
+    // List of all patterns to find tiers
+    protected final Set<String> tierPatterns = new HashSet<>();
 
     // Regex to split tokens
     private final String tokenSeparator = " ";
@@ -157,7 +160,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
             if (properties.containsKey("transcription-tiers")) {
                 tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",")));
             }
-
+            if (properties.containsKey("transcription-tier-patterns")) {
+                tierPatterns.addAll(Arrays.asList(properties.getProperty("transcription-tier-patterns").split(",")));
+            }
         }
     }
 
@@ -236,9 +241,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         params.put("transcription-graphemes","List of transcription graphemes, separated by commas");
         params.put("transcription-method", "Standard transcription method used, if any. Currently HIAT, DIDA, GAT and" +
                 " IPA");
-        params.put("transcription-tiers","List of transcription tier IDs separated by commas");
-        params.put("transcription-tier-patterns","A patterns, i.e. substring of tier IDs to identify transcription " +
-                "tiers");
+        params.put("transcription-tiers","List of transcription tier IDs, separated by commas");
+        params.put("transcription-tier-patterns","List of patterns, i.e. substring of tier IDs to identify " +
+                "transcription tiers, separated by commas");
         return params;
     }
 }

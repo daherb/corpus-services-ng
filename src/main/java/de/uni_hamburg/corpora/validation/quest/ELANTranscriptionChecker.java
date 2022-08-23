@@ -39,11 +39,14 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        if (props.containsKey("transcription-tier-pattern")) {
+        if (props.containsKey("transcription-tier-patterns")) {
             Properties properties = new Properties(props);
-            properties.put("tier-pattern", props.getProperty("transcription-tier-pattern"));
-            ELANTierFinder etf = new ELANTierFinder(props);
-            report.merge(etf.function(c, fix));
+            for (String pattern : tierPatterns) {
+                properties.put("tier-pattern", pattern);
+                ELANTierFinder etf = new ELANTierFinder(props);
+                report.merge(etf.function(c, fix));
+                tierIds.addAll(etf.getTierList());
+            }
         }
         report.merge(super.function(c, fix));
         return report;
@@ -64,17 +67,17 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
         List<Element> tiers = new ArrayList<>();
         Document dom = ((ELANData) cd).getJdom();
         // Explicit list of tiers
-        if (!tierIds.isEmpty())
+        if (!tierIds.isEmpty()) {
             for (String id : tierIds) {
                 Element tier =
-                        (Element) XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]",id)).selectSingleNode(dom);
+                        (Element) XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]", id)).selectSingleNode(dom);
                 if (tier != null)
                     tiers.add(tier);
             }
+        }
         // HIAT tiers of category v (verbal)
-        else if (props.containsKey("transcription-method") &&
+        if (props.containsKey("transcription-method") &&
                 props.getProperty("transcription-method").equalsIgnoreCase("hiat")) {
-            logger.info("HIAT");
             tiers.addAll(Collections.checkedList(XPath.newInstance("//TIER[@LINGUISTIC_TYPE_REF=\"v\"]").selectNodes(dom),
                     Element.class));
         }
