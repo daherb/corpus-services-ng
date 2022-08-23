@@ -93,7 +93,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // The set of all undocumented languages we encountered. To skip duplicate warnings
     private final Set<String> knownLanguages = new HashSet<>();
 
-
+    // Flag if locations should be skipped
+    private boolean skipLocations = false;
+    // Flag if we want segment and time in the location
+    private boolean detailedLocations = false;
 
 
     /**
@@ -187,6 +190,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+        if (properties.containsKey("skip-locations") && properties.getProperty("skip-locations")
+                .equalsIgnoreCase("true")) {
+            skipLocations = true;
+        }
+        if (properties.containsKey("detailed-locations") && properties.getProperty("detailed-locations")
+                .equalsIgnoreCase("true")) {
+            skipLocations = true;
         }
     }
 
@@ -1609,15 +1620,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
                 if (mismatch && !token.isEmpty()) {
                     try {
-                        // Location l = getLocation((ELANData) cd, token);
-                        List<CorpusData.Location> locations = getLocations((ELANData) cd, Collections.singletonList(tier), token);
-                        for (CorpusData.Location l : locations) {
+                        if (skipLocations) {
                             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                            "description", "tier", "segment", "howtoFix"},
+                                            "description", "howtoFix"},
                                     new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
                                             "invalid character(s):\n" + token + " containing: [" +
                                             token.replaceAll(dictAlphabet, "") + "]",
-                                            l.tier, l.segment, "Add all transcription characters to the documentation"}));
+                                            "Add all transcription characters to the documentation"}));
+                        }
+                        else {
+                            List<CorpusData.Location> locations = getLocations((ELANData) cd, Collections.singletonList(tier), token);
+                            for (CorpusData.Location l : locations) {
+                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                                "description", "tier", "segment", "howtoFix"},
+                                        new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+                                                "invalid character(s):\n" + token + " containing: [" +
+                                                token.replaceAll(dictAlphabet, "") + "]",
+                                                l.tier, l.segment, "Add all transcription characters to the documentation"}));
+                            }
                         }
                     } catch (Exception e) {
                         report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
@@ -1805,14 +1825,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             missingGlossFreq.put(normalizedMorpheme);
                             // This leads to large amount of warnings
                             try {
-                                for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
+                                if (skipLocations) {
                                     report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
-                                                    "howtoFix", "tier", "segment"},
+                                                    "howtoFix"},
                                             new Object[]{getFunction(), cd.getFilename(),
                                                     "Invalid morpheme in token: " + normalizedMorpheme + " in " + token,
-                                                    "Add gloss to documentation or check for typo",
-                                                    l.tier, l.segment
+                                                    "Add gloss to documentation or check for typo"
                                             }));
+                                }
+                                else {
+                                    for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
+                                        report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                                        "howtoFix", "tier", "segment"},
+                                                new Object[]{getFunction(), cd.getFilename(),
+                                                        "Invalid morpheme in token: " + normalizedMorpheme + " in " + token,
+                                                        "Add gloss to documentation or check for typo",
+                                                        l.tier, l.segment
+                                                }));
+                                    }
                                 }
                             } catch (Exception e) {
                                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
@@ -2135,6 +2165,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         params.put("skip-transcription-check", "Flag to skip the transcription check");
         params.put("skip-gloss-check", "Flag to skip the gloss check");
         params.put("gloss-stats", "Includes stats about all glosses");
+        params.put("skip-locations", "Flag to skip determining the location of an error");
+        params.put("detailed-locations", "Flag to include details such as segment and time slot in location (takes a " +
+                "lot of time!)");
         return params;
     }
 
@@ -2188,53 +2221,59 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 validTiers.contains(t.getAttributeValue("TIER_ID"))).collect(Collectors.toList())) {
             Attribute tier_id = tier.getAttribute("TIER_ID");
             assert tier_id != null : "Tier id is null";
-            Element annotation_segment = null;
-            // All elements are ANNOTATION tags here
-            for (Element e : (List<Element>) tier.getChildren()) {
-                if (e.getChild("ALIGNABLE_ANNOTATION") != null)
-                    annotation_segment = e.getChild("ALIGNABLE_ANNOTATION");
-                else if (e.getChild("REF_ANNOTATION") != null)
-                    annotation_segment = e.getChild("REF_ANNOTATION");
-                assert annotation_segment != null : "Annotation segment is null";
-                if (XMLTools.showAllText(annotation_segment).contains(normalizedToken)) {
-                    String annotation_id = annotation_segment.getAttributeValue("ANNOTATION_ID");
-                    if (annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
-                        // do nothing
-                    } else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
-                        // Resolve reference first
-                        annotation_segment = (Element) XPath.newInstance(
-                                String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
-                                        annotation_segment.getAttributeValue("ANNOTATION_REF"))).selectSingleNode(tier);
-                        assert annotation_segment != null : "Annotation segment is null after resolving reference";
-                    } else {
-                        locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
-                                "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=") + ""));
-                    }
-                    if (annotation_segment == null)
-                         locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
-                            "Segment:" + annotation_id));
-                    else {
-                        Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
-                        Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
-                        assert start_ref != null : "Start ref is null";
-                        assert end_ref != null : "End ref is null";
-                        Attribute start_time =
-                                (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                                start_ref.getValue()))
-                                        .selectSingleNode(cd.getJdom());
-                        assert start_time != null : "Start time is null";
-                        Attribute end_time =
-                                (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                                end_ref.getValue()))
-                                        .selectSingleNode(cd.getJdom());
-                        assert end_time != null : "End time is null";
-                        locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
-                                "Segment:" + annotation_id + ", Time:" +
-                                        DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
-                                        DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"))
-                        );
+            // TODO finding the segment and time takes too long
+            if (detailedLocations) {
+                Element annotation_segment = null;
+                // All elements are ANNOTATION tags here
+                for (Element e : (List<Element>) tier.getChildren()) {
+                    if (e.getChild("ALIGNABLE_ANNOTATION") != null)
+                        annotation_segment = e.getChild("ALIGNABLE_ANNOTATION");
+                    else if (e.getChild("REF_ANNOTATION") != null)
+                        annotation_segment = e.getChild("REF_ANNOTATION");
+                    assert annotation_segment != null : "Annotation segment is null";
+                    if (XMLTools.showAllText(annotation_segment).contains(normalizedToken)) {
+                        String annotation_id = annotation_segment.getAttributeValue("ANNOTATION_ID");
+                        if (annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
+                            // do nothing
+                        } else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
+                            // Resolve reference first
+                            annotation_segment = (Element) XPath.newInstance(
+                                    String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
+                                            annotation_segment.getAttributeValue("ANNOTATION_REF"))).selectSingleNode(tier);
+                            assert annotation_segment != null : "Annotation segment is null after resolving reference";
+                        } else {
+                            locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
+                                    "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=") + ""));
+                        }
+                        if (annotation_segment == null)
+                            locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
+                                    "Segment:" + annotation_id));
+                        else {
+                            Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
+                            Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
+                            assert start_ref != null : "Start ref is null";
+                            assert end_ref != null : "End ref is null";
+                            Attribute start_time =
+                                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                                    start_ref.getValue()))
+                                            .selectSingleNode(cd.getJdom());
+                            assert start_time != null : "Start time is null";
+                            Attribute end_time =
+                                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                                    end_ref.getValue()))
+                                            .selectSingleNode(cd.getJdom());
+                            assert end_time != null : "End time is null";
+                            locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
+                                    "Segment:" + annotation_id + ", Time:" +
+                                            DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
+                                            DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"))
+                            );
+                        }
                     }
                 }
+            }
+            else {
+                locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "", ""));
             }
         }
         if (locations.isEmpty())
