@@ -95,7 +95,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
             if (tiers.isEmpty()) {
                 report.addWarning(getFunction(), ReportItem.newParamMap(
                         new String[] {"function","description"},
-                        new Object[]{getFunction(),"No tiers matching pattern found"}
+                        new Object[]{getFunction(),"No tiers matching pattern found: " + pattern}
                 ));
             }
             else if (summary) {
