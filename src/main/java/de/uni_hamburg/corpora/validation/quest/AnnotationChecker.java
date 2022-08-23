@@ -42,7 +42,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     private boolean showTagStats = false;
 
     // List of tiers to be checked
-    protected final Set<String> tierIds = new HashSet<>();
+    protected Set<String> tierIds = new HashSet<>();
     // List of patterns to identify tiers
     protected final Set<String> tierPatterns = new HashSet<>();
 

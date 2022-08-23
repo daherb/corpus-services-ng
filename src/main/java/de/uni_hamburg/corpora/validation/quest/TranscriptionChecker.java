@@ -30,8 +30,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
     private final Logger logger = Logger.getLogger(this.getFunction());
 
+
     // List of all interesting tiers
-    protected final Set<String> tierIds = new HashSet<>();
+    protected Set<String> tierIds = new HashSet<>();
 
     // List of all patterns to find tiers
     protected final Set<String> tierPatterns = new HashSet<>();
