@@ -34,7 +34,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     private boolean setUp = false;
 
     // The pattern used to find the tiers
-    private String patterns;
+    private String pattern;
 
     // Flag if the tiers should be summarized in the
     private boolean summary = false;
@@ -48,7 +48,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
     public TierFinder(Properties properties) {
         super(false, properties);
         if (properties.containsKey("tier-pattern")) {
-            patterns = properties.getProperty("tier-pattern");
+            pattern = properties.getProperty("tier-pattern");
             setUp = true;
         }
         if (properties.containsKey("tier-summary") && properties.getProperty("tier-summary").equalsIgnoreCase("true")) {
@@ -64,7 +64,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
             try {
-                findTiers(cd, patterns);
+                findTiers(cd, pattern);
             }
             catch (JDOMException e)
             {
