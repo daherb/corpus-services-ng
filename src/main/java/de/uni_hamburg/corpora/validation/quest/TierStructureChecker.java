@@ -82,13 +82,14 @@ abstract class TierStructureChecker extends Checker implements CorpusFunction {
         }
         for (URI file : tierStructure.keySet()) {
             Sets.SetView<Map<String,String>> missingTiers = Sets.difference(tierStructure.get(file),commonTiers);
-            report.addWarning(getFunction(), ReportItem.newParamMap(
-                    new String[]{"function","filename","description"},
-                    new Object[]{getFunction(),file.toString(), "Individual tiers:\n" +
-                            missingTiers.stream().map((o) -> o.toString())
-                            .collect(Collectors.joining("\n"))}
-            ));
-
+            if (!missingTiers.isEmpty()) {
+                report.addWarning(getFunction(), ReportItem.newParamMap(
+                        new String[]{"function", "filename", "description"},
+                        new Object[]{getFunction(), file.toString(), "Additional individual tiers:\n" +
+                                missingTiers.stream().map((o) -> o.toString())
+                                        .collect(Collectors.joining("\n"))}
+                ));
+            }
         }
         if (sharedStructure)
             report.addNote(getFunction(),"Common tiers: " + commonTiers.stream().map((o) -> o.toString())
