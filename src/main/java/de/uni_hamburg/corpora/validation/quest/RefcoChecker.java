@@ -1587,8 +1587,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return list of speakers
      */
     public List<String> findSpeakers(String fileName) {
-        return criteria.sessions.stream().filter((s) -> s.fileNames.contains(fileName))
-                .map((s) -> Arrays.asList(s.getSpeakerName().split(",\\s+")))
+        return criteria.sessions.stream().filter((s) -> s.getFileNames().contains(fileName))
+                .map((s) -> Arrays.asList(s.getSpeakerNames().split(",\\s*")))
                 .collect(ArrayList::new, List::addAll, List::addAll);
     }
     /**
