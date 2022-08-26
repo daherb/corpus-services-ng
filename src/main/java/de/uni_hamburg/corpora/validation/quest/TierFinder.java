@@ -56,6 +56,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         }
         if (properties.containsKey("tier-attribute-name")) {
             attribute_name = properties.getProperty("tier-attribute-name");
+            logger.info("GOT ATTRIBUTE: " + attribute_name);
         }
     }
 
@@ -65,6 +66,13 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         if (setUp) {
             try {
                 findTiers(cd, pattern);
+                if (tiers.isEmpty()) {
+                    report.addWarning(getFunction(), ReportItem.newParamMap(
+                            new String[] {"function","description"},
+                            new Object[]{getFunction(),
+                                    "No tiers matching pattern " + pattern + " found in file: " + cd.getFilename()}
+                    ));
+                }
             }
             catch (JDOMException e)
             {
