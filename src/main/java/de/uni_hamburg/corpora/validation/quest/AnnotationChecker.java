@@ -104,6 +104,13 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (setUp) {
+            if (tierIds.isEmpty()) {
+                report.addCritical(getFunction(),ReportItem.newParamMap(
+                        new String[]{"function","description","howtoFix"},
+                        new Object[]{getFunction(), "No annotations tiers found in file: " + cd.getFilename(), "Check" +
+                                " the definition of annotation tiers"}
+                ));
+            }
             for (String tier : tierIds) {
                 String text = getTierText(cd, tier);
                 if (!text.isEmpty()) {

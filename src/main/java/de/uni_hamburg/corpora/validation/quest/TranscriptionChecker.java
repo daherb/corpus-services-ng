@@ -178,6 +178,13 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
             try {
                 // Find transcription tiers
                 List<Element> transcriptionTiers = getTranscriptionTiers(cd);
+                if (transcriptionTiers.isEmpty()) {
+                    report.addCritical(getFunction(),ReportItem.newParamMap(
+                            new String[]{"function","description","howtoFix"},
+                            new Object[]{getFunction(), "No transcription tiers found in file: " + cd.getFilename(),
+                                    "Check the definition of transcription tiers"}
+                    ));
+                }
                 // Get transcription content
                 List<String> transcriptionText = new ArrayList<>();
                 for (Element tier : transcriptionTiers) {
