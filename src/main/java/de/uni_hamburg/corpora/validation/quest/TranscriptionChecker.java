@@ -133,7 +133,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
     public TranscriptionChecker(Properties properties) {
         super(false, properties);
         if (properties.containsKey("transcription-graphemes")) {
-            knownGraphemes.addAll(Arrays.asList(properties.getProperty("transcription-graphemes").split(",")));
+            knownGraphemes.addAll(Arrays.asList(properties.getProperty("transcription-graphemes").split(",\\s*")));
         }
         if (properties.containsKey("transcription-method")) {
             if (properties.getProperty("transcription-method").equalsIgnoreCase("hiat")) {
