@@ -89,7 +89,6 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         SAXBuilder sb = new SAXBuilder();
         List<String> tags = new ArrayList<>();
         try {
-            //Document dom = sb.build(new File(fileName));
             Document dom = sb.build(this.getClass().getClassLoader().getResourceAsStream(fileName));
             List<Attribute> names = Collections.checkedList(XPath.newInstance("//tag/@name").selectNodes(dom),
                     Attribute.class);
