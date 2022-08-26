@@ -56,7 +56,6 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         }
         if (properties.containsKey("tier-attribute-name")) {
             attribute_name = properties.getProperty("tier-attribute-name");
-            logger.info("GOT ATTRIBUTE: " + attribute_name);
         }
     }
 
