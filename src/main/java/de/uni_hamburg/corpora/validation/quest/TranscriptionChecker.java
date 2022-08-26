@@ -185,9 +185,17 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 // Do the analysis
                 for (String text : transcriptionText) {
                     for (String token : text.split(tokenSeparator)) {
-                        // Split the word into graphemes
+                        // Split the word into graphemes TODO here we only split in characters
                         Set<String> graphemes = new HashSet<>(Arrays.asList(token.split("")));
                         updateSimpleStats(graphemes);
+                        // Check if we know these graphemes
+                        graphemes.removeAll(knownGraphemes);
+                        if (!graphemes.isEmpty()) {
+                            report.addWarning(getFunction(),
+                                    ReportItem.newParamMap(new String[]{"function",  "description"},
+                                            new Object[]{getFunction(),
+                                                    "Unknown graphemes in token " + token + ": " + graphemes}));
+                        }
                     }
                 }
             } catch (JDOMException e) {
