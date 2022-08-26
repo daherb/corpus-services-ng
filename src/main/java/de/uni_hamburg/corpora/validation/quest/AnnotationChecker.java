@@ -75,6 +75,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         }
         if (properties.containsKey("annotation-tier-patterns")) {
             tierPatterns.addAll(Arrays.asList(properties.getProperty("annotation-tier-patterns").split(",\\s*")));
+            setUp = true;
         }
     }
 
@@ -175,7 +176,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         else
             report.addCritical(getFunction(),ReportItem.newParamMap(
                     new String[]{"function","description","howtoFix"},
-                    new Object[]{getFunction(), "Checker not properly set up", "Give at least one tier identificator " +
+                    new Object[]{getFunction(), "Checker not properly set up", "Give at least one tier identifier " +
                             "as a parameter"}
             ));
         return report;
