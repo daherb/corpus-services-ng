@@ -104,6 +104,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (setUp) {
+            logger.info("Checking " + cd.getFilename());
             if (tierIds.isEmpty()) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new String[]{"function","description","howtoFix"},

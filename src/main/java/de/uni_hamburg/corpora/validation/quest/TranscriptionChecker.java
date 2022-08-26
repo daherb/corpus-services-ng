@@ -176,6 +176,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
             try {
+                logger.info("Checking " + cd.getFilename());
                 // Find transcription tiers
                 List<Element> transcriptionTiers = getTranscriptionTiers(cd);
                 if (transcriptionTiers.isEmpty()) {
