@@ -137,6 +137,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
             knownGraphemes.addAll(Arrays.asList(properties.getProperty("transcription-graphemes").split(",\\s*")));
         }
         if (properties.containsKey("transcription-method")) {
+            setUp = true;
             if (properties.getProperty("transcription-method").equalsIgnoreCase("hiat")) {
                 knownGraphemes.addAll(alphaChars);
                 knownGraphemes.addAll(digitChars);
@@ -158,6 +159,8 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                         Arrays.asList("abcdefghijklmnopqrstuvwzyz".toUpperCase().split(""))
                 );
             }
+            else
+                setUp = false;
         }
         if (properties.containsKey("transcription-tiers")) {
             tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",\\s*")));
