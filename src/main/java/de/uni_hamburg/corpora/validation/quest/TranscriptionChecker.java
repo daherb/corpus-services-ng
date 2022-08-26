@@ -3,6 +3,7 @@ package de.uni_hamburg.corpora.validation.quest;
 import com.google.common.collect.Sets;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
+import de.uni_hamburg.corpora.utilities.quest.UnicodeTools;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
@@ -199,7 +200,10 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                             report.addWarning(getFunction(),
                                     ReportItem.newParamMap(new String[]{"function",  "description"},
                                             new Object[]{getFunction(),
-                                                    "Unknown graphemes in token " + token + ": " + graphemes}));
+                                                    "Unknown graphemes in token " + token + ": " +
+                                                            graphemes.stream().map(UnicodeTools::combineSpace)
+                                                                    .collect(Collectors.toList())
+                                    }));
                         }
                     }
                 }
