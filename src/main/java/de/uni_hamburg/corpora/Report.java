@@ -40,6 +40,9 @@ import org.jdom.JDOMException;
  */
 public class Report {
 
+    /*
+     * Number of "bad" items the report shall contain at most per bucket
+     */
     public static int reportLimit = 0;
 
     //Anne: Is this the ErrorList in the UML? If so, should we rename here or use StatisticsReport in UML? Or maybe best: ErrorReport?
