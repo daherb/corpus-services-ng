@@ -994,6 +994,9 @@ public class CorpusMagician {
             isCorpus = true;
             corpusname = cmd.getOptionValue("corpus");
         }
+        if (cmd.hasOption("report-limit")) {
+            Report.reportLimit = Integer.parseInt(cmd.getOptionValue("report-limit"));
+        }
 
         //now add the functionsstrings to array
         String[] corpusfunctionarray = cmd.getOptionValues("c");
@@ -1075,6 +1078,13 @@ public class CorpusMagician {
                 .build();
         options.addOption(corpus);
 
+        Option reportLimit = Option.builder("rl")
+                .longOpt("report-limit")
+                .hasArg()
+                .desc("Limits the \"bad\" items in the report and aborts checks if too many items are added")
+                .argName("REPORT LIMIT")
+                .build();
+        options.addOption(reportLimit);
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
         formatter.setOptionComparator(null);
