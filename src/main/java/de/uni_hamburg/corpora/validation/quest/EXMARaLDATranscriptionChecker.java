@@ -33,7 +33,8 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+    public Report function(Corpus cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException,
+            FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Backup tiers
         Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
@@ -47,13 +48,13 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
                 properties.put("tier-pattern", pattern);
                 // run tier finder
                 EXMARaLDATierFinder etf = new EXMARaLDATierFinder(properties);
-                report.merge(etf.function(c, fix));
+                report.merge(etf.function(cd, fix));
                 // Add additional tiers
                 tierIds.addAll(etf.getTierList());
             }
             setUp = true;
         }
-        report.merge(super.function(c, fix));
+        report.merge(super.function(cd, fix));
         // Restore backup
         tierIds = backupTiers;
         return report;

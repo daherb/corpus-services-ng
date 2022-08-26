@@ -34,7 +34,8 @@ public class ELANAnnotationChecker extends AnnotationChecker {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+    public Report function(Corpus cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException,
+            FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Backup tiers
         Set<String> backupTiers = tierIds.stream().collect(Collectors.toSet());
@@ -45,7 +46,7 @@ public class ELANAnnotationChecker extends AnnotationChecker {
             for (String pattern : tierPatterns) {
                 properties.put("tier-pattern", pattern);
                 ELANTierFinder etf = new ELANTierFinder(props);
-                report.merge(etf.function(c, fix));
+                report.merge(etf.function(cd, fix));
                 // Add additional tiers
                 tierIds.addAll(etf.getTierList());
             }
@@ -53,7 +54,7 @@ public class ELANAnnotationChecker extends AnnotationChecker {
         }
         // Restore backup
         tierIds = backupTiers;
-        report.merge(super.function(c, fix));
+        report.merge(super.function(cd, fix));
         return report;
     }
 
