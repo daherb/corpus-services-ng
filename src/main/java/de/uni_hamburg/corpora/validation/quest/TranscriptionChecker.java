@@ -140,18 +140,15 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 knownGraphemes.addAll(alphaChars);
                 knownGraphemes.addAll(digitChars);
                 knownGraphemes.addAll(hiatSpecial);
-            }
-            else if (properties.getProperty("transcription-method").equalsIgnoreCase("dida")) {
+            } else if (properties.getProperty("transcription-method").equalsIgnoreCase("dida")) {
                 knownGraphemes.addAll(alphaChars);
                 knownGraphemes.addAll(digitChars);
                 knownGraphemes.addAll(didaSpecial);
-            }
-            else if (properties.getProperty("transcription-method").equalsIgnoreCase("gat")) {
+            } else if (properties.getProperty("transcription-method").equalsIgnoreCase("gat")) {
                 knownGraphemes.addAll(alphaChars);
                 knownGraphemes.addAll(digitChars);
                 knownGraphemes.addAll(gatSpecial);
-            }
-            else if (properties.getProperty("transcription-method").equalsIgnoreCase("ipa")) {
+            } else if (properties.getProperty("transcription-method").equalsIgnoreCase("ipa")) {
                 knownGraphemes.addAll(ipaSpecial);
                 knownGraphemes.addAll(
                         Arrays.asList("abcdefghijklmnopqrstuvwzyz".split(""))
@@ -160,13 +157,13 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                         Arrays.asList("abcdefghijklmnopqrstuvwzyz".toUpperCase().split(""))
                 );
             }
-            if (properties.containsKey("transcription-tiers")) {
-                tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",\\s*")));
-                setUp = true;
-            }
-            if (properties.containsKey("transcription-tier-patterns")) {
-                tierPatterns.addAll(Arrays.asList(properties.getProperty("transcription-tier-patterns").split(",\\s*")));
-            }
+        }
+        if (properties.containsKey("transcription-tiers")) {
+            tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",\\s*")));
+            setUp = true;
+        }
+        if (properties.containsKey("transcription-tier-patterns")) {
+            tierPatterns.addAll(Arrays.asList(properties.getProperty("transcription-tier-patterns").split(",\\s*")));
         }
     }
 
