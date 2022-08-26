@@ -107,7 +107,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         if (setUp) {
             logger.info("Checking " + cd.getFilename());
             if (tierIds.isEmpty()) {
-                report.addCritical(getFunction(),ReportItem.newParamMap(
+                report.addWarning(getFunction(),ReportItem.newParamMap(
                         new String[]{"function","description","howtoFix"},
                         new Object[]{getFunction(), "No annotations tiers found in file: " + cd.getFilename(), "Check" +
                                 " the definition of annotation tiers"}
