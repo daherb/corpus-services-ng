@@ -1066,9 +1066,13 @@ public class CorpusMagician {
         fix.setRequired(false);
         options.addOption(nocuration);
 
-        Option corpus = new Option("cn", "corpus", true, "corpus name (if the data should be treated as a corpus)");
-        corpus.setRequired(false);
-        corpus.setArgName("CORPUS NAME");
+        Option corpus = Option.builder("cn")
+                .longOpt("corpus")
+                .hasArg()
+                .desc("corpus name (if the data should be treated as a corpus)")
+                .required(false)
+                .argName("CORPUS NAME")
+                .build();
         options.addOption(corpus);
 
         CommandLineParser parser = new DefaultParser();
