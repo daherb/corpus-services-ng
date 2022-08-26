@@ -34,7 +34,7 @@ public class ELANAnnotationChecker extends AnnotationChecker {
     }
 
     @Override
-    public Report function(Corpus cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException,
+    public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException,
             FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Backup tiers
@@ -50,7 +50,6 @@ public class ELANAnnotationChecker extends AnnotationChecker {
                 // Add additional tiers
                 tierIds.addAll(etf.getTierList());
             }
-            setUp = true;
         }
         // Restore backup
         tierIds = backupTiers;

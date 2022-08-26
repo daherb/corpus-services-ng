@@ -167,10 +167,11 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         }
         if (properties.containsKey("transcription-tiers")) {
             tierIds.addAll(Arrays.asList(properties.getProperty("transcription-tiers").split(",\\s*")));
-            setUp = true;
+
         }
         if (properties.containsKey("transcription-tier-patterns")) {
             tierPatterns.addAll(Arrays.asList(properties.getProperty("transcription-tier-patterns").split(",\\s*")));
+            setUp = true;
         }
     }
 
