@@ -40,7 +40,7 @@ import org.jdom.JDOMException;
  */
 public class Report {
 
-    static int reportLimit = 0;
+    public static int reportLimit = 0;
 
     //Anne: Is this the ErrorList in the UML? If so, should we rename here or use StatisticsReport in UML? Or maybe best: ErrorReport?
     //But what would be the Items in here? ReportItems? Errors? StatisticsStuff?
