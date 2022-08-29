@@ -1802,7 +1802,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     validTranscriptionCharacters.add(p.getCharacter());
                 // TODO: does that work properly
                 else if ((Arrays.asList(p.getTiers().split(valueSeparator)).contains(tierId)) ||
-                        Arrays.asList(p.getTiers().split(valueSeparator)).stream()
+                        Arrays.stream(p.getTiers().split(valueSeparator))
                                 .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator))) {
                     // Add all of the punctuation's characters
                     validTranscriptionCharacters.add(p.getCharacter());
@@ -1815,7 +1815,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     validGlosses.add(g.getGloss());
                 // else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
                 // TODO does this work properly
-                else if (Arrays.asList(g.getTiers().split(valueSeparator)).stream()
+                else if (Arrays.stream(g.getTiers().split(valueSeparator))
                         .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator) || tierId.equalsIgnoreCase(t))) {
                     validGlosses.add(g.getGloss());
                 }
@@ -2092,7 +2092,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (RefcoCriteria.Gloss g : criteria.getGlosses()) {
                 if (g.getTiers().equals("all"))
                     validGlosses.add(g.getGloss());
-                else if (Arrays.asList(g.getTiers().split(valueSeparator)).stream()
+                else if (Arrays.stream(g.getTiers().split(valueSeparator))
                         .anyMatch(t -> tierId.startsWith(t + tierSpeakerSeparator) || tierId.equalsIgnoreCase(t))) {
                     validGlosses.add(g.getGloss());
                 }
@@ -2261,7 +2261,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         int count = 0 ;
         List<String> tierList =
                 criteria.getTiers().stream().filter((t) -> t.getTierFunctions()
-                                .contains(tierFunction.toLowerCase())).map((tn) -> tn.getTierName())
+                                .contains(tierFunction.toLowerCase())).map(RefcoCriteria.Tier::getTierName)
                         .collect(Collectors.toList());
         for (String tierName :
                 tierList) {
