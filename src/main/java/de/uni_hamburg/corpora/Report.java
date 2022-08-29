@@ -111,7 +111,7 @@ public class Report {
         else if (reportLimit > 0 && stat.stream().filter((r) -> r.isBad()).count() == reportLimit) {
             stat.add(new ReportItem(Severity.CRITICAL,reportItem.getFunction(),
                     String.format("More than %d bad report items. Stopping now", reportLimit),
-                    "Fix issues and try again"));
+                    statId,"Fix issues and try again"));
             // Logger.getGlobal().info("EXCESS ITEMS FOR " + reportItem.getFunction());
         }
     }
