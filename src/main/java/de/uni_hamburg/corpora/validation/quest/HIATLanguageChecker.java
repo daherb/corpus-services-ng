@@ -99,7 +99,6 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
                     "Use and document one of the expected conventions: " + String.join(", ", conventions)}
             ));
         }
-        else report.addNote(getFunction(),cd,"Transcription convention is " + convention);
         return report;
     }
 
