@@ -1533,7 +1533,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param file the file to contain the tiers
      * @return list of transcription tiers
      */
-    private ArrayList<String> findTranscriptionTiers(String file) {
+    private ArrayList<String> findTranscriptionTiers(String file) throws JDOMException {
         // Add tiers containing transcription in the tier function
         // as well as the ones with morpheme segmentation
         return findTiersByFunction(file,Arrays.asList("transcription", "morpheme segmentation"));
@@ -1544,7 +1544,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param file the file to contain the tiers
      * @return list of gloss tiers
      */
-    private ArrayList<String> findGlossTiers(String file) {
+    private ArrayList<String> findGlossTiers(String file) throws JDOMException {
         return findTiersByFunction(file,Arrays.asList("morpheme gloss","morpheme glossing"));
     }
 
@@ -1554,24 +1554,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param functions list of tier functions
      * @return list of tiers matching the functions
      */
-    private ArrayList<String> findTiersByFunction(String file, List<String> functions) {
+    private ArrayList<String> findTiersByFunction(String file, List<String> functions) throws JDOMException {
         ArrayList<String> foundTiers = new ArrayList<>();
         // Get all documented speakers for the file
         List<String> speakers = findSpeakers(file);
+        Map<String,Set<String>> allTiers = getTierIDs();
         for (RefcoCriteria.Tier t: criteria.getTiers()) {
 //            if (t.tierFunctions.contains() ||
 //                    (t.tierFunctions.contains())) {
             if (functions.stream().anyMatch((f) -> t.getTierFunctions().stream().anyMatch((tf) -> tf.contains(f)))) {
-                // If we have a tier speaker separator we have to combine tier names with speakers
-                // if (tierSpeakerSeparator.isPresent()) {
-                    for (String speaker : speakers)
-                        foundTiers.add(t.getTierName() + tierSpeakerSeparator + speaker);
-//                }
-//                else {
+                // Check if the tier is present in the file
+                if (allTiers.containsKey(t.getTierName()) && allTiers.get(t.getTierName()).contains(file)) {
                     foundTiers.add(t.getTierName());
-//                }
+                }
+                // We try to combine tier names with speakers and check if the tier is present in the file
+                for (String speaker : speakers) {
+                    String tierName = t.getTierName() + tierSpeakerSeparator + speaker;
+                    if (allTiers.containsKey(tierName) && allTiers.get(tierName).contains(file))
+                        foundTiers.add(tierName);
+                }
             }
-
         }
         logger.info("TIERS FOUND " + String.join(",", foundTiers) +
                 " FOR FUNCTIONS " + String.join(",", functions) + " AND " +
