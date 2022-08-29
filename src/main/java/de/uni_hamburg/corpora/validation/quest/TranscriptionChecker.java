@@ -298,6 +298,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         params.put("transcription-tiers","List of transcription tier IDs, separated by commas");
         params.put("transcription-tier-patterns","List of patterns, i.e. substring of tier IDs to identify " +
                 "transcription tiers, separated by commas");
+        params.put("transcription-statistics", "Flag to enable a short summary of transcription graphemes used");
         return params;
     }
 }
