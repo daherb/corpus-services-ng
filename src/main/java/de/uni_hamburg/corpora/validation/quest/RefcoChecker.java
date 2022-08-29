@@ -2109,8 +2109,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (glossText.isEmpty()) {
                 report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                                 "howtoFix"},
-                        new Object[]{getFunction(), cd.getFilename(), "No annotated text found in one of the expected tiers: " +
-                                String.join(", ", morphologyTiers),
+                        new Object[]{getFunction(), cd.getFilename(), "No annotated text found in tier: " + tierId,
                                 "Check the tier documentation to make sure that your morphology tiers are covered"}));
                 return report;
             }
