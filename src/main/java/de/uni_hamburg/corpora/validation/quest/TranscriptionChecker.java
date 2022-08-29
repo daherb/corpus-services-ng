@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Super class for checking transcription alphabets
  * @author bba1792, Dr. Herbert Lange
- * @version 20220823
+ * @version 20220829
  */
 abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
@@ -213,11 +213,12 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                         graphemes.removeAll(knownGraphemes);
                         if (!graphemes.isEmpty()) {
                             report.addWarning(getFunction(),
-                                    ReportItem.newParamMap(new String[]{"function",  "description"},
+                                    ReportItem.newParamMap(new String[]{"function",  "description", "filename"},
                                             new Object[]{getFunction(),
                                                     "Unknown graphemes in token " + token + ": " +
                                                             graphemes.stream().map(UnicodeTools::combineSpace)
-                                                                    .collect(Collectors.toList())
+                                                                    .collect(Collectors.toList()),
+                                                    cd.getFilename()
                                     }));
                         }
                     }

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Abstract annotation checker class
  * @author bba1792, Dr. Herbert Lange
- * @version 20220823
+ * @version 20220829
  */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
@@ -107,9 +107,11 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
             logger.info("Checking " + cd.getFilename());
             if (tierIds.isEmpty()) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function","description","howtoFix"},
-                        new Object[]{getFunction(), "No annotations tiers found in file: " + cd.getFilename(), "Check" +
-                                " the definition of annotation tiers"}
+                        new String[]{"function","description","howtoFix","filename"},
+                        new Object[]{getFunction(), "No annotations tiers found in file", "Check" +
+                                " the definition of annotation tiers",
+                                cd.getFilename()
+                        }
                 ));
             }
             for (String tier : tierIds) {
@@ -136,8 +138,8 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                 }
                 else {
                     report.addCritical(getFunction(),ReportItem.newParamMap(
-                            new String[]{"function","description","howtoFix"},
-                            new Object[]{getFunction(), "No annotations found in tier " + tier + " of file: " +
+                            new String[]{"function","description","filename","howtoFix"},
+                            new Object[]{getFunction(), "No annotations found in tier " + tier,
                                     cd.getFilename(),
                                     "Check the definition of annotation tiers"}
                     ));
@@ -147,7 +149,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         else
             report.addCritical(getFunction(),ReportItem.newParamMap(
                     new String[]{"function","description","howtoFix"},
-                    new Object[]{getFunction(), "Checker not properly set up", "Give at least one tier identificator " +
+                    new Object[]{getFunction(), "Checker not properly set up", "Give at least one tier identifier " +
                             "as a parameter"}
             ));
         return report;
