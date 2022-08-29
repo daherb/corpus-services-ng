@@ -85,7 +85,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 
     // The hand-picked list of acceptable tier functions
     private final List<String> validTierFunctions = Arrays.asList("transcription", "reference", "note",
-            "part-of-speech", "morpheme gloss", "morpheme segmentation", "free translation");
+            "part-of-speech", "morpheme gloss", "morpheme glossing", "morpheme segmentation", "free translation");
 
     // The set of all undocumented languages we encountered. To skip duplicate warnings
     private final Set<String> knownLanguages = new HashSet<>();
