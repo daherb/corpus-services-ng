@@ -1609,10 +1609,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         String dictAlphabet = "";
         if (!chunks.isEmpty()) {
             dictAlphabet = "(" +
-                    chunks.stream().map(Object::toString).collect(Collectors.joining("|"))
-                            .replace("[", "\\[")
-                            .replace("]", "\\]")
-                            .replace("-","\\-") +
+                    chunks.stream().map(Pattern::quote).collect(Collectors.joining("|")) +
                     ")";
         }
         Report report = new Report();
@@ -1741,7 +1738,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     List<String> newMatched = matched.stream().collect(Collectors.toList());
                     newMatched.add(c);
                     // Remove matched prefix from remaining
-                    String newRemaining = remaining.replaceFirst(c, "");
+                    String newRemaining = remaining.replaceFirst(Pattern.quote(c), "");
                     // If nothing remains we are done
                     if (newRemaining.isEmpty())
                         return true;
