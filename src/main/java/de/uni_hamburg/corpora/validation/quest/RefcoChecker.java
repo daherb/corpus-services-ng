@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Sets;
 import com.google.common.primitives.Chars;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.*;
@@ -39,7 +40,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -1628,9 +1628,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 tokenFreq.put(token);
                 // Token is not one of the glosses
                 if (!glosses.contains(token)) {
-                    // Check if we can segment the token using the chunks
-                    if (segmentWord(token,chunks)) {
-                    //if (dict.checkSegmentableWord(token)) {
+                    // Check if we can segment the token using the chunks and glosses
+                    if (segmentWord(token,
+                            Sets.union(chunks.stream().collect(Collectors.toSet()),glosses).stream().collect(Collectors.toList()))) {
                         matched += token.length();
                     }
                     else {
