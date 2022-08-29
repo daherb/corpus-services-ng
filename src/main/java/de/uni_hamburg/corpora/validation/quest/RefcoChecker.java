@@ -1860,6 +1860,96 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses) {
         Report report = new Report() ;
+        // Copy the glosses
+        List<String> chunks = glosses.stream().collect(Collectors.toList());
+        // Add digits and separator
+        chunks.addAll(Arrays.asList("1","2","3","."));
+        // All the tokens that are valid
+        int matched = 0;
+        // All invalid tokens in the text
+        int missing = 0 ;
+        // Indicator if a word contains missing characters
+        for (Text t : text) {
+            // Tokenize text
+            for (String token : t.getText().split(tokenSeparator)) {
+                ArrayList<String> segments = new ArrayList<>();
+                // if we can split the token we do that
+                if (!glossSeparator.isEmpty()) {
+                    String splitRegex = "[" + String.join("",
+                            glossSeparator.stream().map(Pattern::quote).collect(Collectors.toSet()))
+                            + "]";
+                    segments.addAll(Arrays.asList(token.split(splitRegex)));
+                }
+                // Otherwise, we take the whole token
+                else
+                    segments.add(token);
+                // Check all the segments
+                for (String s : segments) {
+                    if (segmentWord(s,chunks)) {
+                        morphemeFreq.put(s);
+                        matched++;
+                    }
+                    else if (s.codePoints().anyMatch(Character::isLowerCase)) {
+                        lexicalFreq.put(s);
+                        matched++;
+                    }
+                    else {
+                        missingGlossFreq.put(s);
+                        missing++;
+                        // This leads to large amount of warnings
+                        try {
+                            if (skipLocations) {
+                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                                "howtoFix"},
+                                        new Object[]{getFunction(), cd.getFilename(),
+                                                "Invalid morpheme in token: " + s + " in " + token,
+                                                "Document gloss properly or check for typo"
+                                        }));
+                            }
+                            else {
+                                for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
+                                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                                    "howtoFix", "tier", "segment"},
+                                            new Object[]{getFunction(), cd.getFilename(),
+                                                    "Invalid morpheme in token: " + s + " in " + token,
+                                                    "Document gloss properly or check for typo",
+                                                    l.tier, l.segment
+                                            }));
+                                }
+                            }
+                        } catch (Exception e) {
+                            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                            "description", "exception"},
+                                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
+                                            "locate token " + token,
+                                            e}));
+                        }
+                    }
+                }
+            }
+        }
+        float percentValid = (float)matched/(matched+missing) ;
+        if (percentValid < glossMorphemesValid / 100.0)
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+                            "howtoFix"},
+                            new Object[]{getFunction(), cd.getFilename(),
+                                    "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
+                                            " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                            " Percentage valid: " + Math.round(percentValid*1000)/10.0,
+                                    "Improve the gloss documentation to cover more tokens"}));
+        else
+            if (Math.round(percentValid*1000)/10.0 == 100)
+                report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[] {getFunction(),cd.getFilename(),
+                                "Corpus data: All tokens valid glosses",
+                                "Documentation cannot be improved"}));
+            else
+                report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[] {getFunction(),cd.getFilename(),
+                                "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
+                                        "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                        " Percentage valid: " + Math.round(percentValid*1000)/10.0,
+                                "Documentation can be improved but no fix necessary"}));
 //        // The gloss matcher using a dictionary automaton
 //        // TODO check if it makes sense
 //        DictionaryAutomaton glossAutomaton = new DictionaryAutomaton(
