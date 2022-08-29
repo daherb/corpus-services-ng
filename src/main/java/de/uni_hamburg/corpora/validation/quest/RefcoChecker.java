@@ -1721,9 +1721,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private boolean segmentWord(String token, List<String> chunks) {
         // Filter out blank strings, remove duplicates and sort by length
-        chunks = chunks.stream().filter((s) -> !s.isEmpty())
-                .collect(Collectors.toSet())
-                .stream().collect(Collectors.toList());
+        chunks = new ArrayList<>(chunks.stream().filter((s) -> !s.isEmpty())
+                .collect(Collectors.toSet()));
         chunks.sort(Comparator.comparingInt(String::length).reversed());
         // List of states to remember and initial state with nothing matched and all remaining
         List<Pair<List<String>,String>> states = new ArrayList<>();
