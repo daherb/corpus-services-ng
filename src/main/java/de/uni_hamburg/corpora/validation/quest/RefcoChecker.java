@@ -1081,7 +1081,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         HashSet<URI> allFiles = new HashSet<>();
         try {
             allFiles.addAll(FileTools.listFiles(Paths.get(refcoCorpus.getBaseDirectory().toURI())));
-            allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI())));
+            allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/").toURI())));
             allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI())));
             allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI())));
             allFiles.addAll(FileTools.listFiles(Paths.get(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI())));
