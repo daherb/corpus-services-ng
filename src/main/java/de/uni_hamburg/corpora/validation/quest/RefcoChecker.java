@@ -307,8 +307,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         missingGlossFreq.toString());
             if (!glossFreq.isEmpty() && props.containsKey("gloss-stats") &&
                     props.getProperty("gloss-stats").equalsIgnoreCase("true")) {
-                report.addNote(getFunction(), "Corpus data: Glosses encountered in the corpus:\n" +
-                        glossFreq.toString());
+                report.addNote(getFunction(), "Corpus data: Morphological glosses encountered in the corpus:\n" +
+                        morphemeFreq.toString());
+                report.addNote(getFunction(), "Corpus data: Lexical glosses encountered in the corpus:\n" +
+                        lexicalFreq.toString());
             }
             // Check all gloss tokens (not-segmented) for rare ones very similar to quite common ones, i.e. tokens with
             // Levenshtein difference 1 with a higher frequency count
@@ -830,6 +832,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Abbreviations")) {
                         RefcoCriteria.Gloss gloss = new RefcoCriteria.Gloss();
                         gloss.setGloss(safeGetText(columns.get(0).getChild("p", textNamespace)).replace("\\s+", ""));
+                        // Keep track of the documented glosses
+                        morphemeFreq.put(gloss.getGloss());
                         gloss.setMeaning(safeGetText(columns.get(1).getChild("p", textNamespace)));
                         gloss.setComments(safeGetText(columns.get(2).getChild("p", textNamespace)));
                         gloss.setTiers(safeGetText(columns.get(3).getChild("p", textNamespace)));
