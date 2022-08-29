@@ -138,6 +138,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private FrequencyList morphemeFreq = new FrequencyList();
 
     /**
+     * The frequency list of all segmented lexical glosses in the corpus
+     */
+    private FrequencyList lexicalFreq = new FrequencyList();
+
+    /**
      * The frequency list of all non-segmented annotation/morphology glosses in the corpus
      */
     private FrequencyList glossFreq = new FrequencyList();
