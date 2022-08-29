@@ -183,7 +183,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 logger.log(Level.SEVERE,"Unable to load ISO-639-3 language list", e);
             }
         if (properties.containsKey("get-schema")) {
-
             try {
                 System.out.println(deriveXMLSpecification());
                 System.out.println();
