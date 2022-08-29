@@ -1807,9 +1807,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     validGlosses.add(g.getGloss());
                 // else if (Arrays.asList(g.tiers.split(valueSeparator)).contains(tierId)) {
                 // TODO does this work properly
-                else if ((Arrays.asList(g.getTiers().split(valueSeparator)).contains(tierId)) ||
-                        Arrays.asList(g.getTiers().split(valueSeparator)).stream()
-                                .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator))) {
+                else if (Arrays.asList(g.getTiers().split(valueSeparator)).stream()
+                        .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator) || tierId.equalsIgnoreCase(t))) {
                     validGlosses.add(g.getGloss());
                 }
             }
@@ -1995,7 +1994,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             for (RefcoCriteria.Gloss g : criteria.getGlosses()) {
                 if (g.getTiers().equals("all"))
                     validGlosses.add(g.getGloss());
-                else if (Arrays.asList(g.getTiers().split(valueSeparator)).contains(tierId)) {
+                else if (Arrays.asList(g.getTiers().split(valueSeparator)).stream()
+                        .anyMatch(t -> tierId.startsWith(t + tierSpeakerSeparator) || tierId.equalsIgnoreCase(t))) {
                     validGlosses.add(g.getGloss());
                 }
             }
