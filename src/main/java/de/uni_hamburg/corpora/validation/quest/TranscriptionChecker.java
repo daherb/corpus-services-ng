@@ -238,7 +238,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                                     ReportItem.newParamMap(new String[]{"function",  "description", "filename"},
                                             new Object[]{getFunction(),
                                                     "Unknown graphemes in token " + token + ": " +
-                                                            graphemes.stream().map(UnicodeTools::combineSpace)
+                                                            graphemes.stream().map(UnicodeTools::padCombining)
                                                                     .collect(Collectors.toList()),
                                                     cd.getFilename()
                                     }));

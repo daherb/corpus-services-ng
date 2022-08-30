@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Helper class to deal with unicode characters/strings
  * @author bba1792, Dr. Herbert Lange
- * @version 20220826
+ * @version 20220830
  */
 public class UnicodeTools {
 
@@ -19,16 +19,21 @@ public class UnicodeTools {
     });
 
     /**
-     * Combines all combining characters in a string with a space
+     * Pad all combining characters in a string with spaces
      * @param s the string
      * @return the resulting string
      */
-    public static String combineSpace(String s) {
+    public static String padCombining(String s) {
         StringBuilder sb = new StringBuilder();
         for (int c: s.codePoints().toArray()) {
             sb.append(Character.toChars(c));
             if (combiningBlocks.contains(Character.UnicodeBlock.of(c))) {
                 sb.append(" ");
+                sb.append(Character.toChars(c));
+                sb.append(" ");
+            }
+            else {
+                sb.append(Character.toChars(c));
             }
         }
         return sb.toString();

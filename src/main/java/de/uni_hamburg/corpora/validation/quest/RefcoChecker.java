@@ -1674,7 +1674,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                                 "description", "tier", "segment", "howtoFix"},
                                         new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
                                                 "invalid character(s):\n" + token + " containing: [" +
-                                                UnicodeTools.combineSpace(token.replaceAll(dictAlphabet, "")) + "]",
+                                                UnicodeTools.padCombining(token.replaceAll(dictAlphabet, "")) + "]",
                                                 l.tier, l.segment, "Add all transcription characters to the documentation"}));
                             }
                         }
