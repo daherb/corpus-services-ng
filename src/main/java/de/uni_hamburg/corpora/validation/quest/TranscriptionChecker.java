@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Super class for checking transcription alphabets
  * @author bba1792, Dr. Herbert Lange
- * @version 20220829
+ * @version 20220830
  */
 abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
@@ -118,6 +118,25 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                     "ɶ", "ɷ", "ɸ", "ɹ", "ɺ", "ɻ", "ɼ", "ɽ", "ɾ", "ɿ", "ʀ", "ʁ", "ʂ", "ʃ", "ʄ", "ʅ", "ʆ", "ʇ", "ʈ", "ʉ",
                     "ʊ", "ʋ", "ʌ", "ʍ", "ʎ", "ʏ", "ʐ", "ʑ", "ʒ", "ʓ", "ʔ", "ʕ", "ʖ", "ʗ", "ʘ", "ʙ", "ʚ", "ʛ", "ʜ", "ʝ",
                     "ʞ", "ʟ", "ʠ", "ʡ", "ʢ", "ʣ", "ʤ", "ʥ", "ʦ", "ʧ", "ʨ"));
+    private final Set<String> ipaSpecialSuper = new HashSet<>(
+            Arrays.asList("ᵐ", "ᶬ", "ⁿ", "ᶯ", "ᶮ", "ᵑ", "ᶰ", "ᵖ", "ᵇ", "ᵗ", "ᵈ", "\uD801\uDFAF", "\uD801\uDF8B", "ᶜ",
+                    "ᶡ", "ᵏ", "ᶢ", "ᵍ", "\uD801\uDFA5", "\uD801\uDF92", "\uD801\uDFB3", "ˀ", "\uD801\uDFAC",
+                    "\uD801\uDF87", "\uD801\uDFAE", "\uD801\uDFAB", "\uD801\uDF8A", "\uD801\uDF89", "\uD801\uDFAD",
+                    "\uD801\uDF88", "ᶲ", "ᵝ", "ᶠ", "ᵛ", "ᶿ", "ᶞ", "ˢ", "ᶻ", "ᶴ", "ᶝ", "ᶾ", "ᶽ", "ᶳ", "ᶼ", "ᶜ̧", "ᶨ",
+                    "ˣ", "\uD801\uDF97", "ˠ", "ᵡ", "ʶ", "\uD801\uDF95", "\uD801\uDF90", "ˤ", "ˁ", "ʰ", "ʱ", "ᶹ", "ʴ",
+                    "ʵ", "ʲ", "ᶣ", "\uAB69", "ᶭ", "ʷ", "\uD801\uDFB0", "\uD801\uDFA9", "\uD801\uDFA8", "\uD801\uDF84",
+                    "ʳ", "\uD801\uDFAA", "\uD801\uDF96", "\uD801\uDFB4", "\uD801\uDF9B", "\uD801\uDF99", "\uD801\uDF9E",
+                    "\uD801\uDF9A", "\uD801\uDF9D", "\uD801\uDF9F", "\uD801\uDFA1", "\uD801\uDF9C", "ˡ", "ꭞ", "ᶩ",
+                    "\uD801\uDFA0", "ᶫ", "\uD801\uDFA6", "\uD801\uDFA7", "\uD801\uDF85", "\uD801\uDF8C", "\uD801\uDF8D",
+                    "\uD801\uDF98", "\uD801\uDF93", "\uD801\uDF94", "\uD801\uDFB5", "\uD801\uDFB6", "ꜝ", "\uD801\uDFB9",
+                    "\uD801\uDFB8", "\uD801\uDFB7", "ⁱ", "ʸ", "ᶤ", "ᶶ", "ᵚ", "ᵘ", "ᶦ", "\uD801\uDFB2", "ᶷ", "ᵉ",
+                    "\uD801\uDFA2", "\uD801\uDF8E", "ᶱ", "\uD801\uDF91", "ᵒ", "ᵊ", "ᵋ", "ꟹ", "ᶟ", "\uD801\uDF8F", "ᶺ",
+                    "ᵓ", "\uD801\uDF83", "\uD801\uDFA3", "ᵄ", "ᵅ", "ᶛ", "ᵃ"
+            ));
+    private final Set<String> ipaSpecialAccent = new HashSet<>(
+            Arrays.asList("̄","̀","̀", "̂"));
+    private final Set<String> ipaSpecialSupra = new HashSet<>(
+            Arrays.asList("ː", "ˑ", "ˈ", "̆","ˌ"));
     /**
      * Function to enumerate all alphabetic characters
      * @return all alphabetic characters in the unicode standard
@@ -155,6 +174,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 knownGraphemes.addAll(gatSpecial);
             } else if (properties.getProperty("transcription-method").equalsIgnoreCase("ipa")) {
                 knownGraphemes.addAll(ipaSpecial);
+                knownGraphemes.addAll(ipaSpecialSuper);
+                knownGraphemes.addAll(ipaSpecialSupra);
+                knownGraphemes.addAll(ipaSpecialAccent);
                 knownGraphemes.addAll(
                         Arrays.asList("abcdefghijklmnopqrstuvwzyz".split(""))
                 );
