@@ -37,13 +37,11 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * @param filename the file name of the file list
      * @return the file list as a set of URIs
      * @throws FileNotFoundException if the file list does not exist
-     * @throws MalformedURLException if the file cannot be converted into a URL
-     * @throws URISyntaxException if the URL cannot be converted into a URI
      */
-    private static Set<URI> readFileList(String filename) throws FileNotFoundException, MalformedURLException, URISyntaxException {
+    private static Set<URI> readFileList(URL baseDir, String filename) throws FileNotFoundException {
         Set<URI> uris = new HashSet<>();
         for (String fname : new BufferedReader(new FileReader(filename)).lines().collect(Collectors.toSet())) {
-            uris.add(new URL(fname).toURI().normalize());
+            uris.add(Paths.get(baseDir.getPath(),fname).toFile().toURI().normalize());
         }
         return uris;
     }
@@ -53,10 +51,10 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * @param fileList the comma-separated list
      * @return the set of URIs
      */
-    private static Set<URI> splitFileList(String fileList) {
+    private static Set<URI> splitFileList(URL baseDir, String fileList) {
         Set<URI> uris = new HashSet<>();
         for (String fname : fileList.split(",")) {
-            uris.add(new File(fname).toURI().normalize());
+            uris.add(Paths.get(baseDir.getPath(),fname).toFile().toURI().normalize());
         }
         return uris;
     }
@@ -66,19 +64,6 @@ public class FileListChecker extends Checker implements CorpusFunction {
 
     public FileListChecker(Properties properties) throws FileNotFoundException, MalformedURLException, URISyntaxException {
         super(false, properties);
-        if (properties.containsKey("expected-files-file")) {
-            expectedFiles = readFileList(properties.getProperty("expected-files-file"));
-        }
-        else if (properties.containsKey("expected-files-list")) {
-            expectedFiles = splitFileList(properties.getProperty("expected-files-list"));
-        }
-        if (properties.containsKey("present-files-file")) {
-            presentFiles = readFileList(properties.getProperty("present-files-file"));
-        }
-        else if (properties.containsKey("present-files-list")) {
-            expectedFiles = splitFileList(properties.getProperty("present-files-list"));
-        }
-
     }
 
     /**
@@ -119,6 +104,18 @@ public class FileListChecker extends Checker implements CorpusFunction {
             LinkedFileChecker lfc = new LinkedFileChecker(props);
             lfc.function(c, fix);
             expectedFiles.addAll(lfc.getFileList());
+        }
+        else if (props.containsKey("expected-files-file")) {
+            expectedFiles = readFileList(c.getBaseDirectory(),props.getProperty("expected-files-file"));
+        }
+        else if (props.containsKey("expected-files-list")) {
+            expectedFiles = splitFileList(c.getBaseDirectory(), props.getProperty("expected-files-list"));
+        }
+        if (props.containsKey("present-files-file")) {
+            presentFiles = readFileList(c.getBaseDirectory(),props.getProperty("present-files-file"));
+        }
+        else if (props.containsKey("present-files-list")) {
+            expectedFiles = splitFileList(c.getBaseDirectory(),props.getProperty("present-files-list"));
         }
         Report report = new Report();
         // Try to read corpus directory instead
