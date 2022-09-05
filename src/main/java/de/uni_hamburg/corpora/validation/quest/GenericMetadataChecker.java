@@ -295,13 +295,23 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     @Override
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
+        boolean checked = false;
+        Collection usable = this.getIsUsableFor();
         if (setUp) {
             // Apply function for each supported file
-            Collection usable = this.getIsUsableFor();
             for (CorpusData cdata : c.getCorpusData()) {
                 if (usable.contains(cdata.getClass())) {
                     report.merge(function(cdata, fix));
+                    checked = true;
                 }
+            }
+            if (!checked) {
+                report.addWarning(getFunction(),ReportItem.newParamMap(
+                        new String[]{"function", "description"},
+                        new Object[]{getFunction(), "No metadata files found matching supported formats: " +
+                        usable.stream().map(u -> u.toString()).collect(Collectors.joining(","))
+                        }
+                ));
             }
             // Add statistocs of the parameter is set
             if (props.containsKey("metadata-summary") && !props.getProperty("metadata-summary")
