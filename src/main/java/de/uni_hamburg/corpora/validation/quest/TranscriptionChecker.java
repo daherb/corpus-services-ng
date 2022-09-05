@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Super class for checking transcription alphabets
  * @author bba1792, Dr. Herbert Lange
- * @version 20220830
+ * @version 20220905
  */
 abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
@@ -114,10 +114,10 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 
     private final Set<String> ipaSpecial = new HashSet<>(
             Arrays.asList("ɐ", "ɑ", "ɒ", "ɓ", "ɔ", "ɕ", "ɖ", "ɗ", "ɘ", "ə", "ɚ", "ɛ", "ɜ", "ɝ", "ɞ", "ɟ", "ɠ", "ɡ",
-                    "ɢ", "ɣ", "ɤ", "ɥ", "ɦ", "ɧ", "ɨ", "ɩ", "ɪ", "ɫ", "ɬ", "ɭ", "ɮ", "ɯ", "ɰ", "ɱ", "ɲ", "ɳ", "ɴ", "ɵ",
-                    "ɶ", "ɷ", "ɸ", "ɹ", "ɺ", "ɻ", "ɼ", "ɽ", "ɾ", "ɿ", "ʀ", "ʁ", "ʂ", "ʃ", "ʄ", "ʅ", "ʆ", "ʇ", "ʈ", "ʉ",
-                    "ʊ", "ʋ", "ʌ", "ʍ", "ʎ", "ʏ", "ʐ", "ʑ", "ʒ", "ʓ", "ʔ", "ʕ", "ʖ", "ʗ", "ʘ", "ʙ", "ʚ", "ʛ", "ʜ", "ʝ",
-                    "ʞ", "ʟ", "ʠ", "ʡ", "ʢ", "ʣ", "ʤ", "ʥ", "ʦ", "ʧ", "ʨ"));
+                    "ɢ", "ɣ", "ɤ", "ɥ", "ɦ", "ɧ", "ɨ", "ɩ", "ɪ", "ɫ", "ɬ", "ɭ", "ɮ", "ɯ", "ɰ", "ɱ", "ɲ", "ɳ", "ɴ", "ŋ",
+                    "ɵ", "ɶ", "ɷ", "ɸ", "ɹ", "ɺ", "ɻ", "ɼ", "ɽ", "ɾ", "ɿ", "ʀ", "ʁ", "ʂ", "ʃ", "ʄ", "ʅ", "ʆ", "ʇ",
+                    "ʈ", "ʉ", "ʊ", "ʋ", "ʌ", "ʍ", "ʎ", "ʏ", "ʐ", "ʑ", "ʒ", "ʓ", "ʔ", "ʕ", "ʖ", "ʗ", "ʘ", "ʙ", "ʚ", "ʛ",
+                    "ʜ", "ʝ", "ʞ", "ʟ", "ʠ", "ʡ", "ʢ", "ʣ", "ʤ", "ʥ", "ʦ", "ʧ", "ʨ"));
     private final Set<String> ipaSpecialSuper = new HashSet<>(
             Arrays.asList("ᵐ", "ᶬ", "ⁿ", "ᶯ", "ᶮ", "ᵑ", "ᶰ", "ᵖ", "ᵇ", "ᵗ", "ᵈ", "\uD801\uDFAF", "\uD801\uDF8B", "ᶜ",
                     "ᶡ", "ᵏ", "ᶢ", "ᵍ", "\uD801\uDFA5", "\uD801\uDF92", "\uD801\uDFB3", "ˀ", "\uD801\uDFAC",
@@ -131,7 +131,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                     "\uD801\uDF98", "\uD801\uDF93", "\uD801\uDF94", "\uD801\uDFB5", "\uD801\uDFB6", "ꜝ", "\uD801\uDFB9",
                     "\uD801\uDFB8", "\uD801\uDFB7", "ⁱ", "ʸ", "ᶤ", "ᶶ", "ᵚ", "ᵘ", "ᶦ", "\uD801\uDFB2", "ᶷ", "ᵉ",
                     "\uD801\uDFA2", "\uD801\uDF8E", "ᶱ", "\uD801\uDF91", "ᵒ", "ᵊ", "ᵋ", "ꟹ", "ᶟ", "\uD801\uDF8F", "ᶺ",
-                    "ᵓ", "\uD801\uDF83", "\uD801\uDFA3", "ᵄ", "ᵅ", "ᶛ", "ᵃ"
+                    "ᵓ", "\uD801\uDF83", "\uD801\uDFA3", "ᵄ", "ᵅ", "ᶛ", "ᵃ", "́", "᷆", "᷄"
             ));
     private final Set<String> ipaSpecialAccent = new HashSet<>(
             Arrays.asList("̄","̀","̀", "̂"));
