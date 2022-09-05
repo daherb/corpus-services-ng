@@ -52,13 +52,11 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * Splits a file list on commas and converts to URIs
      * @param fileList the comma-separated list
      * @return the set of URIs
-     * @throws MalformedURLException if the file name cannot be converted into a URL
-     * @throws URISyntaxException if the URL cannot be converted into a URI
      */
-    private static Set<URI> splitFileList(String fileList) throws MalformedURLException, URISyntaxException {
+    private static Set<URI> splitFileList(String fileList) {
         Set<URI> uris = new HashSet<>();
         for (String fname : fileList.split(",")) {
-            uris.add(new URL(fname).toURI().normalize());
+            uris.add(new File(fname).toURI().normalize());
         }
         return uris;
     }
