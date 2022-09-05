@@ -1,5 +1,5 @@
 compile_withmaven:
-  image: maven:latest
+  image: maven:3.8-openjdk-11
   script:
     - cd lib
     - bash download.sh
