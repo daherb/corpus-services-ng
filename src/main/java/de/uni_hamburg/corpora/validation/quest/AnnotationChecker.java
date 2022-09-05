@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Abstract annotation checker class
  * @author bba1792, Dr. Herbert Lange
- * @version 20220829
+ * @version 20220905
  */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
@@ -139,7 +139,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                 else {
                     report.addCritical(getFunction(),ReportItem.newParamMap(
                             new String[]{"function","description","filename","howtoFix"},
-                            new Object[]{getFunction(), "No annotations found in tier " + tier,
+                            new Object[]{getFunction(), "No annotations found in tier or tier missing in file: " + tier,
                                     cd.getFilename(),
                                     "Check the definition of annotation tiers"}
                     ));
