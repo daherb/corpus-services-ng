@@ -131,7 +131,6 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         JAXBContext ctx = JAXBContext.newInstance(Formats.class);
         formats.addAll(((Formats) ctx.createUnmarshaller().unmarshal(this.getClass().getClassLoader()
                 .getResourceAsStream("sis-recommendations.xml"))).formats);
-
         // Update the intended center, if any
         if (properties.containsKey("center")) {
             intendedCenter = properties.getProperty("center");
@@ -181,6 +180,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             List<String> levels =
                             format.centerInfo.stream().filter((c) -> c.name.equalsIgnoreCase(intendedCenter))
                                     .map((c) -> c.level.toLowerCase()).collect(Collectors.toList());
+                            logger.info("Format: " + format.formatInfo.name + " - Level: " + levels);
                             if (levels.contains("recommended")) {
                                 report.addCorrect(getFunction(),
                                         ReportItem.newParamMap(new String[]{"function", "filename", "description"},
