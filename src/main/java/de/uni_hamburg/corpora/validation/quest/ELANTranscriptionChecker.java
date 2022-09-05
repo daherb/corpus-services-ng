@@ -33,7 +33,6 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
 
     public ELANTranscriptionChecker(Properties properties) {
         super(properties);
-
     }
 
     @Override
