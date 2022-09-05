@@ -233,6 +233,8 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                         updateSimpleStats(graphemes);
                         // Check if we know these graphemes
                         graphemes.removeAll(knownGraphemes);
+                        // Remove empty string if it happens to be there
+                        graphemes.remove("");
                         if (!graphemes.isEmpty()) {
                             report.addWarning(getFunction(),
                                     ReportItem.newParamMap(new String[]{"function",  "description", "filename"},
