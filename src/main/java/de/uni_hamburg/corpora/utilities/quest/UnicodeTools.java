@@ -26,7 +26,6 @@ public class UnicodeTools {
     public static String padCombining(String s) {
         StringBuilder sb = new StringBuilder();
         for (int c: s.codePoints().toArray()) {
-            sb.append(Character.toChars(c));
             if (combiningBlocks.contains(Character.UnicodeBlock.of(c))) {
                 sb.append(" ");
                 sb.append(Character.toChars(c));
