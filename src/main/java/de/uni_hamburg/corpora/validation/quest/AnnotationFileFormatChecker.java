@@ -33,10 +33,13 @@ import java.util.stream.Collectors;
  * format for several archives based on the data provided by CLARIN SIS (https://standards.clarin.eu/sis/)
  *
  * @author bba1792, Dr. Herbert Lange
- * @version 20220324
+ * @version 20220905
  */
 public class AnnotationFileFormatChecker extends Checker implements CorpusFunction {
 
+    // The following data structures are used to de-serialize the XML file specifying the supported formats based on
+    // Clarin SIS
+    // Data structure representing a centre
     static class CenterInfo {
         @XmlElement
         String id;
@@ -61,6 +64,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         }
     }
 
+    // Data structure representing a file format
     static class FormatInfo {
         @XmlElement
         String name;
@@ -81,6 +85,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         }
     }
 
+    // Data structure representing a Format specific to a centre
     static class Format {
         @XmlElement
         FormatInfo formatInfo ;
@@ -97,6 +102,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         }
     }
 
+    // Data type for the list of all supported formats
     @XmlRootElement
     static class Formats {
         @XmlElement(name="format")
@@ -110,17 +116,23 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         }
     }
 
+    // The default logger
     Logger logger = Logger.getLogger(this.toString());
 
     // List of all known formats
     List<Format> formats = new ArrayList<>();
 
+    // The center we are interested in
     private String intendedCenter = "";
+
     public AnnotationFileFormatChecker(Properties properties) throws JAXBException {
         super(false, properties);
+        // Deserialize the file formats
         JAXBContext ctx = JAXBContext.newInstance(Formats.class);
         formats.addAll(((Formats) ctx.createUnmarshaller().unmarshal(this.getClass().getClassLoader()
                 .getResourceAsStream("sis-recommendations.xml"))).formats);
+
+        // Update the intended center, if any
         if (properties.containsKey("center")) {
             intendedCenter = properties.getProperty("center");
         }
@@ -129,27 +141,37 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
     @Override
     public String getDescription() {
         return "Checks annotation files in a directory if they follow recommendations for archives based on " +
-                "information provided by CLARIN SIS";
+                "information provided by CLARIN SIS.";
     }
 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
-        return new Report();
+        // New report
+        Report report = new Report();
+        // We don't do anything here
+        report.addCritical(getFunction(),"Checker does not have a checker function for " +
+                "individual corpus files");
+        return report;
     }
 
     @Override
     public Report function(Corpus corpus, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException,
             FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        // New report
         Report report = new Report();
+        // The corpus base directory
         URL directory = corpus.getBaseDirectory();
+        // All files in the corpus directory
         Set<URI> corpusFiles = FileTools.listFiles(Paths.get(directory.toURI()));
         logger.info(corpusFiles.stream().map(URI::toString).collect(Collectors.joining(", ")));
         // Keep track if we ever encountered acceptable file formats
         boolean acceptableFiles = false;
+        // Check all the files
         for (URI fileUri : corpusFiles) {
-            File tmpFile = new File(fileUri);
-            if (!tmpFile.isDirectory()) {
-                String ext = "." + FilenameUtils.getExtension(tmpFile.getName());
+            File fileInfo = new File(fileUri);
+            // Ignore directories
+            if (!fileInfo.isDirectory()) {
+                String ext = "." + FilenameUtils.getExtension(fileInfo.getName());
                 for (Format format: formats) {
                     // Find the correct format
                     if (format.formatInfo.fileExt.stream().map((f) -> f.equalsIgnoreCase(ext))
@@ -211,7 +233,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                                                 }));
                                 acceptableFiles = true;
                             }
-                            // Otherwise try to find at least to find where it is acceptable
+                            // Otherwise, try to find at least to find where it is acceptable
                             else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("acceptable"))
                                     .reduce(Boolean::logicalOr).orElse(false)) {
                                 report.addCorrect(getFunction(),
@@ -265,7 +287,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Does not really match any corpus data
-        return Collections.EMPTY_LIST;
+        return new ArrayList<>();
     }
 
     @Override
