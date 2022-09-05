@@ -154,9 +154,9 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
         super(false, properties);
         if (properties.containsKey("transcription-graphemes")) {
             // Split characters but treat comma in quotes specially
-            knownGraphemes.addAll(Arrays.asList(properties.getProperty("transcription-graphemes")
+            knownGraphemes.addAll(Arrays.stream(properties.getProperty("transcription-graphemes")
                             .replace("','","COMMA")
-                    .split(",\\s*")).stream().map((s) -> s.equals("COMMA") ? "," : s).collect(Collectors.toList()));
+                    .split(",\\s*")).map((s) -> s.equals("COMMA") ? "," : s).collect(Collectors.toList()));
         }
         if (properties.containsKey("transcription-method")) {
             setUp = true;
