@@ -262,7 +262,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
      * Finds all transcription tiers based both on tierIds
      * @param cd the corpus file
      * @return the list of tiers as elements
-     * @throws JDOMException
+     * @throws JDOMException if there is a problem reading the xml document
      */
     abstract List<Element> getTranscriptionTiers(CorpusData cd) throws JDOMException;
 
@@ -270,7 +270,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
      * Extracts all text from a tier
      * @param tier the tier
      * @return the text as a string
-     * @throws JDOMException
+     * @throws JDOMException if there is a problem reading the xml document
      */
     public String getTranscriptionText(Element tier) throws JDOMException {
         return XMLTools.showAllText(tier);
