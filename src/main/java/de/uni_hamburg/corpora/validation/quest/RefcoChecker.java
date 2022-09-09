@@ -1831,7 +1831,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         int missing = 0 ;
         // Object used to segment string
         StringSegmentation sm = new StringSegmentation();
-        // Indicator if a word contains missing characters
         for (Text t : text) {
             // Tokenize text
             for (String token : t.getText().split(tokenSeparator)) {
