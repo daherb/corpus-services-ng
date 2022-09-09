@@ -260,7 +260,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                                                     "Unknown graphemes in token " + token + ": " +
                                                             Arrays.asList(missing.split(""))
                                                                     .stream().map(UnicodeTools::padCombining)
-                                                                    .collect(Collectors.toList()),
+                                                                    .collect(Collectors.toSet()),
                                                     cd.getFilename()
                                     }));
                         }
