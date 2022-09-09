@@ -1627,6 +1627,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         int missing = 0 ;
         // Indicator if a word contains missing characters
         boolean mismatch ;
+        // Object used to segment string
+        StringSegmentation sm = new StringSegmentation();
         for (Text t : text) {
             // Tokenize text
             for (String token : t.getText().split(tokenSeparator)) {
@@ -1637,7 +1639,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Token is not one of the glosses
                 if (!glosses.contains(token)) {
                     // Check if we can segment the token using the chunks and glosses
-                    if (segmentWord(token,
+                    if (sm.segmentWord(token,
                             Sets.union(chunks.stream().collect(Collectors.toSet()),glosses).stream().collect(Collectors.toList()))) {
                         matched += token.length();
                     }
@@ -1714,50 +1716,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                         Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
         return report ;
-    }
-
-    /**
-     * Method to check if a word is segmentable into chunks
-     * @param token the word to be segmented
-     * @param chunks candidates for chunks
-     * @return if the word can be segmented
-     */
-    private boolean segmentWord(String token, List<String> chunks) {
-        // Filter out blank strings, remove duplicates and sort by length
-        chunks = new ArrayList<>(chunks.stream().filter((s) -> !s.isEmpty())
-                .collect(Collectors.toSet()));
-        chunks.sort(Comparator.comparingInt(String::length).reversed());
-        // List of states to remember and initial state with nothing matched and all remaining
-        List<Pair<List<String>,String>> states = new ArrayList<>();
-        List<String> matched = new ArrayList<>();
-        String remaining;
-        states.add(new Pair<>(matched,token));
-        // Continue as long as we have states
-        while (!states.isEmpty()) {
-            // Get the first remaining state and recover both matched and remaining
-            Pair<List<String>, String> state = states.remove(0);
-            matched = state.getFirst().stream().collect(Collectors.toList());
-            remaining = state.getSecond();
-            // Check all possible chunks if remaining string starts with it
-            for (String c : chunks) {
-                if (remaining.startsWith(c)) {
-                    // Copy matched and add new chunk
-                    List<String> newMatched = matched.stream().collect(Collectors.toList());
-                    newMatched.add(c);
-                    // Remove matched prefix from remaining
-                    String newRemaining = remaining.replaceFirst(Pattern.quote(c), "");
-                    // If nothing remains we are done
-                    if (newRemaining.isEmpty())
-                        return true;
-                    else {
-                        // Otherwise, store where to continue
-                        states.add(new Pair<>(newMatched, newRemaining));
-                    }
-                }
-            }
-        }
-        // Return if failed
-        return false;
     }
 
     /**
@@ -1871,6 +1829,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         int matched = 0;
         // All invalid tokens in the text
         int missing = 0 ;
+        // Object used to segment string
+        StringSegmentation sm = new StringSegmentation();
         // Indicator if a word contains missing characters
         for (Text t : text) {
             // Tokenize text
@@ -1888,7 +1848,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     segments.add(token);
                 // Check all the segments
                 for (String s : segments) {
-                    if (segmentWord(s,chunks)) {
+                    if (sm.segmentWord(s,chunks)) {
                         morphemeFreq.put(s);
                         matched++;
                     }
