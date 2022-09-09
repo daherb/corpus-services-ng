@@ -3,6 +3,7 @@ package de.uni_hamburg.corpora.validation.quest;
 import com.google.common.collect.Sets;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
+import de.uni_hamburg.corpora.utilities.quest.StringSegmentation;
 import de.uni_hamburg.corpora.utilities.quest.UnicodeTools;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import de.uni_hamburg.corpora.validation.Checker;
@@ -225,22 +226,29 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                                             "Check the definition of transcription tiers"
                                     }));
                 }
+                // Object used to segment string
+                StringSegmentation sm = new StringSegmentation();
                 // Do the analysis
                 for (String text : transcriptionText) {
                     for (String token : text.split(tokenSeparator)) {
-                        // Split the word into graphemes TODO here we only split in characters
-                        Set<String> graphemes = new HashSet<>(Arrays.asList(token.split("")));
-                        updateSimpleStats(graphemes);
-                        // Check if we know these graphemes
-                        graphemes.removeAll(knownGraphemes);
-                        // Remove empty string if it happens to be there
-                        graphemes.remove("");
-                        if (!graphemes.isEmpty()) {
+                        // Split the word into graphemes
+                        // Check if we can segment the token
+                        if (sm.segmentWord(token,new ArrayList<>(knownGraphemes))) {
+                            // Update the stats using the segments
+                            updateSimpleStats(new HashSet<>(sm.getSegments()));
+                        }
+                        else {
+                            String missing = token;
+                            for (String g :
+                                new ArrayList<>(knownGraphemes).stream().sorted().collect(Collectors.toList())) {
+                                missing = missing.replaceAll(g, "");
+                            }
                             report.addWarning(getFunction(),
                                     ReportItem.newParamMap(new String[]{"function",  "description", "filename"},
                                             new Object[]{getFunction(),
                                                     "Unknown graphemes in token " + token + ": " +
-                                                            graphemes.stream().map(UnicodeTools::padCombining)
+                                                            Arrays.asList(missing.split(""))
+                                                                    .stream().map(UnicodeTools::padCombining)
                                                                     .collect(Collectors.toList()),
                                                     cd.getFilename()
                                     }));
