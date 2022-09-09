@@ -21,6 +21,7 @@ import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -245,7 +246,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                             String missing = token;
                             for (String g :
                                 new ArrayList<>(knownGraphemes).stream().sorted().collect(Collectors.toList())) {
-                                missing = missing.replaceAll(g, "");
+                                missing = missing.replaceAll(Pattern.quote(g), "");
                             }
                             report.addWarning(getFunction(),
                                     ReportItem.newParamMap(new String[]{"function",  "description", "filename"},
