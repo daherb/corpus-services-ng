@@ -244,8 +244,14 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                         }
                         else {
                             String missing = token;
+                            // Sort the list first by using natural order followed by string length (reversed)
+                            Comparator<String> cp = Comparator.naturalOrder();
                             for (String g :
-                                new ArrayList<>(knownGraphemes).stream().sorted().collect(Collectors.toList())) {
+                                new ArrayList<>(knownGraphemes).stream()
+                                        .sorted(
+                                                cp.thenComparingInt(String::length).reversed()
+                                        )
+                                        .collect(Collectors.toList())) {
                                 missing = missing.replaceAll(Pattern.quote(g), "");
                             }
                             report.addWarning(getFunction(),
