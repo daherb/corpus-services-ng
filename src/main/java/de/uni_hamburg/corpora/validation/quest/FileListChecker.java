@@ -38,10 +38,10 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * @return the file list as a set of URIs
      * @throws FileNotFoundException if the file list does not exist
      */
-    private static Set<URI> readFileList(URL baseDir, String filename) throws FileNotFoundException {
+    private static Set<URI> readFileList(URL baseDir, String filename) throws FileNotFoundException, URISyntaxException {
         Set<URI> uris = new HashSet<>();
         for (String fname : new BufferedReader(new FileReader(filename)).lines().collect(Collectors.toSet())) {
-            uris.add(Paths.get(baseDir.getPath(),fname).toFile().toURI().normalize());
+            uris.add(Paths.get(Paths.get(baseDir.toURI()).toString(),fname).toFile().toURI().normalize());
         }
         return uris;
     }
@@ -51,10 +51,10 @@ public class FileListChecker extends Checker implements CorpusFunction {
      * @param fileList the comma-separated list
      * @return the set of URIs
      */
-    private static Set<URI> splitFileList(URL baseDir, String fileList) {
+    private static Set<URI> splitFileList(URL baseDir, String fileList) throws URISyntaxException {
         Set<URI> uris = new HashSet<>();
         for (String fname : fileList.split(",")) {
-            uris.add(Paths.get(baseDir.getPath(),fname).toFile().toURI().normalize());
+            uris.add(Paths.get(Paths.get(baseDir.toURI()).toString(),fname).toFile().toURI().normalize());
         }
         return uris;
     }
