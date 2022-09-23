@@ -1822,12 +1822,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param glosses all documented glosses
      * @return the detailed report of the checks
      */
-    private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses) {
+    private Report checkMorphologyGloss(CorpusData cd, String tier, List<Text> text, HashSet<String> glosses,
+                                        HashSet<String> punctuation) {
         Report report = new Report() ;
         // Copy the glosses
         List<String> chunks = glosses.stream().collect(Collectors.toList());
+        // Add punctuation
+        chunks.addAll(punctuation);
         // Add digits and separator
-        chunks.addAll(Arrays.asList("1","2","3","."));
+        chunks.addAll(Arrays.asList("1","2","3"));
         // All the tokens that are valid
         int matched = 0;
         // All invalid tokens in the text
@@ -2068,6 +2071,16 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     validGlosses.add(g.getGloss());
                 }
             }
+            // Also get the valid punctuation characters
+            HashSet<String> validPunctuation = new HashSet<>();
+            for (RefcoCriteria.Punctuation p : criteria.getPunctuations()) {
+                if (p.getTiers().equals("all"))
+                    validPunctuation.add(p.getCharacter());
+                else if (Arrays.stream(p.getTiers().split(valueSeparator))
+                        .anyMatch(t -> tierId.startsWith(t + tierSpeakerSeparator) || tierId.equalsIgnoreCase(t))) {
+                    validPunctuation.add(p.getCharacter());
+                }
+            }
             // Get the text from all morphology tiers
             List<Text> glossText = getTextsInTierByID(content, tierId);
             // Check if one of the relevant variables is empty and, if yes, skip the transcription test
@@ -2084,7 +2097,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Check the tier documentation to make sure that your morphology tiers are covered"}));
                 return report;
             }
-            report.merge(checkMorphologyGloss(cd,tierId,glossText,validGlosses));
+            report.merge(checkMorphologyGloss(cd,tierId,glossText,validGlosses,validPunctuation));
         }
         return report ;
     }
