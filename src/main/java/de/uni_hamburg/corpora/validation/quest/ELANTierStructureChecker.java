@@ -1,15 +1,22 @@
 package de.uni_hamburg.corpora.validation.quest;
 
 import com.google.common.collect.Lists;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.ELANData;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.ReportItem;
+import de.uni_hamburg.corpora.*;
+import org.exmaralda.partitureditor.fsm.FSMException;
+import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -28,6 +35,16 @@ public class ELANTierStructureChecker extends TierStructureChecker {
         if (properties.containsKey("elan-speakers")) {
             speakers.addAll(Arrays.asList(properties.getProperty("elan-speakers").split(",")));
         }
+    }
+
+    @Override
+    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+        if (props.containsKey("refco-file")) {
+            RefcoChecker rc = new RefcoChecker(props);
+            rc.setRefcoFile(Paths.get(c.getBaseDirectory().getPath(),props.getProperty("refco-file")).toString());
+            speakers.addAll(rc.getDocumentedSpeakers());
+        }
+        return super.function(c, fix);
     }
 
     @Override
@@ -55,8 +72,8 @@ public class ELANTierStructureChecker extends TierStructureChecker {
                                         String.join("|", speakers),"speaker"));
                         // Also get constraints
                             Element linguisticTypeElement =
-                                    (Element) XPath.newInstance("//LINGUISTIC_TYPE[@LINGUISTIC_TYPE_ID=\"" +
-                                                    id.getValue() + "\"]")
+                                    (Element) XPath.newInstance(
+                                            "//LINGUISTIC_TYPE[@LINGUISTIC_TYPE_ID=\"" + id.getValue() + "\"]")
                                             .selectSingleNode(((ELANData) cd).getJdom());
                             if (linguisticTypeElement != null) {
                                 Attribute constraints = linguisticTypeElement.getAttribute("CONSTRAINTS");
