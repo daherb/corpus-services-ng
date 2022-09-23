@@ -2469,4 +2469,32 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         JsonSchema jsonSchema = schemaVisitor.finalSchema();
         return om.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSchema);
     }
+
+    /***
+     * Gets the list of all documented speakers
+     * @return the list of documented speakers
+     */
+    public List<String> getDocumentedSpeakers() {
+        List<String> speakers = new ArrayList<>();
+        if (criteria.getSessions() != null) {
+            for (RefcoCriteria.Session s : criteria.getSessions()) {
+                speakers.addAll(Arrays.asList(s.speakerNames.split(valueSeparator)));
+            }
+        }
+        return speakers;
+    }
+
+    /***
+     * Gets the list of all documented files
+     * @return the list of documented files
+     */
+    public List<String> getDocumentedFiles() {
+        List<String> files = new ArrayList<>();
+        if (criteria.getSessions() != null) {
+            for (RefcoCriteria.Session s : criteria.getSessions()) {
+                files.addAll(Arrays.asList(s.fileNames.split(valueSeparator)));
+            }
+        }
+        return files;
+    }
 }
