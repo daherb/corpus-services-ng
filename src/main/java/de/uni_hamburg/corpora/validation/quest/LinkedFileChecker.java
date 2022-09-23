@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.logging.Logger;
@@ -74,6 +75,13 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         for (CorpusData cd : c.getCorpusData())
             if (getIsUsableFor().contains(cd.getClass()))
                 report.merge(function(cd, fix));
+        // Also load all files referenced in the refco documentation
+        if (props.containsKey("refco-file")) {
+            RefcoChecker rc = new RefcoChecker(props);
+            rc.setRefcoFile(Paths.get(c.getBaseDirectory().getPath(),props.getProperty("refco-file")).toString());
+            corpusFiles.addAll(rc.getDocumentedFiles().stream().map((f) -> Paths.get(c.getBaseDirectory().getPath(),
+                    f).toFile().toURI()).collect(Collectors.toList()));
+        }
         return report;
     }
 
