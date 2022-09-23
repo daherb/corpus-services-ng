@@ -1856,7 +1856,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                     else if (s.codePoints().anyMatch(Character::isLowerCase)) {
                         // TODO which punctuations marks are allowed here
-                        if (Pattern.compile("[\\p{IsAlphabetic}_-]").matcher(s).matches()) {
+                        if (Pattern.compile("[\\p{IsAlphabetic}_-]+").matcher(s).matches()) {
                             lexicalFreq.put(s);
                             matched++;
                         }
