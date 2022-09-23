@@ -73,7 +73,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private String tierSpeakerSeparator = "@";
 
     // Placeholder used in the corpus documentation to denote a space character
-    private String spacePlaceholder = "\" \"";
+    private String spacePlaceholder = "[ ]";
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
