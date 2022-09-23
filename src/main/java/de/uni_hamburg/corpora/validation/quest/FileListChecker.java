@@ -120,7 +120,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         // Try to read corpus directory instead
         if (presentFiles.isEmpty()){
-            presentFiles.addAll(FileTools.listFiles(Paths.get(c.getBaseDirectory().toURI())));
+            presentFiles.addAll(FileTools.listFiles(Paths.get(c.getBaseDirectory().toURI().normalize())));
         }
         Set<URI> unexpectedFiles =
                 presentFiles.stream().filter((f) -> !(expectedFiles.contains(f) || new File(f).isDirectory())).collect(Collectors.toSet());
