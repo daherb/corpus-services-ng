@@ -1855,8 +1855,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         matched++;
                     }
                     else if (s.codePoints().anyMatch(Character::isLowerCase)) {
-                        lexicalFreq.put(s);
-                        matched++;
+                        // TODO which punctuations marks are allowed here
+                        if (Pattern.compile("[\\p{IsAlphabetic}_-]]").matcher(s).matches()) {
+                            lexicalFreq.put(s);
+                            matched++;
+                        }
+                        else {
+                            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                                            "description"},
+                                    new Object[]{getFunction(), cd.getFilename(), "Unexpected characters in lexical " +
+                                            "gloss " + s + ": " + s.replaceAll("[\\p{IsAlphabetic}_-]]","")}));
+                        }
+
                     }
                     else {
                         missingGlossFreq.put(s);
