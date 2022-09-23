@@ -72,6 +72,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Separator to split tier ids in tier names and speakers
     private String tierSpeakerSeparator = "@";
 
+    // Placeholder used in the corpus documentation to denote a space character
+    private String spacePlaceholder = "\" \"";
+
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
             Namespace.getNamespace("table","urn:oasis:names:tc:opendocument:xmlns:table:1.0") ;
@@ -866,7 +869,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith("Character")) {
                         RefcoCriteria.Punctuation punctuation = new RefcoCriteria.Punctuation();
                         punctuation.setCharacter(safeGetText(columns.get(0).getChild("p", textNamespace)));
-                        if (punctuation.getCharacter().equals("␣"))
+                        if (punctuation.getCharacter().equals(spacePlaceholder))
                             punctuation.setCharacter(" ");
                         punctuation.setMeaning(safeGetText(columns.get(1).getChild("p", textNamespace)));
                         punctuation.setComments(safeGetText(columns.get(2).getChild("p", textNamespace)));
