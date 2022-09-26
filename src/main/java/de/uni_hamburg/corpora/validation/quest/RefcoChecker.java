@@ -53,7 +53,7 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 
-    private final String REFCO_CHECKER_VERSION="20220829";
+    private final String REFCO_CHECKER_VERSION="20220926";
 
     // The local logger that can be used for debugging
     private final Logger logger = Logger.getLogger(this.getClass().toString());
