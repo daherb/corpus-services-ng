@@ -1929,24 +1929,25 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
             }
-            // Check if we can disambiguate the approximate matches
-            if (!approximateMatches.isEmpty()) {
-                for (String lexeme : approximateMatches.keySet()) {
-                    int lexemeCount = missingLexicalFreq.get(lexeme);
-                    int maxCount = 0;
-                    String maxCandidate = null;
-                    for (String candidate : approximateMatches.get(lexeme)) {
-                        if (lexicalFreq.contains(candidate)) {
-                            if (lexicalFreq.get(candidate) > maxCount)
-                                maxCandidate = candidate;
-                        }
+        }
+        // Check if we can disambiguate the approximate matches
+        if (!approximateMatches.isEmpty()) {
+            for (String lexeme : approximateMatches.keySet()) {
+                int lexemeCount = missingLexicalFreq.get(lexeme);
+                int maxCount = 0;
+                String maxCandidate = null;
+                for (String candidate : approximateMatches.get(lexeme)) {
+                    if (lexicalFreq.contains(candidate)) {
+                        if (lexicalFreq.get(candidate) > maxCount)
+                            maxCandidate = candidate;
                     }
-                    // TODO what is the threshold
-                    if (maxCount > 10 * lexemeCount && maxCandidate != null) {
-                        addWarningWithLocation(cd,tier,lexeme,
-                                "Potential typo detected in " + lexeme + ": best candidate " + maxCandidate + " with count " + maxCount,
-                                "Check if this actually is a typo and fix if necessary"
-                                );
+                }
+                // TODO what is the threshold
+                if (maxCount > 10 * lexemeCount && maxCandidate != null) {
+                    addWarningWithLocation(cd,tier,lexeme,
+                            "Potential typo detected in " + lexeme + ": best candidate " + maxCandidate + " with count " + maxCount,
+                            "Check if this actually is a typo and fix if necessary"
+                    );
 //                        try {
 //                            if (skipLocations) {
 //                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
@@ -1976,38 +1977,41 @@ public class RefcoChecker extends Checker implements CorpusFunction {
 //                                            "locate token " + lexeme,
 //                                            e}));
 //                        }
-                    }
-                    else {
-                        addWarningWithLocation(cd,tier,lexeme,
-                                "Word not in the dictionary and no similar words found: " + lexeme,
-                                "Check if this could be a typo and fix if necessary"
-                        );
-                    }
+                }
+                else {
+                    addWarningWithLocation(cd,tier,lexeme,
+                            "Word not in the dictionary and no similar words found: " + lexeme,
+                            "Check if this could be a typo and fix if necessary"
+                    );
                 }
             }
         }
         float percentValid = (float)matched/(matched+missing) ;
-        if (percentValid < glossMorphemesValid / 100.0)
-            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
+        if (percentValid < glossMorphemesValid / 100.0) {
+            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
                             "howtoFix"},
-                            new Object[]{getFunction(), cd.getFilename(),
-                                    "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
-                                            " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
-                                            " Percentage valid: " + Math.round(percentValid*1000)/10.0,
-                                    "Improve the gloss documentation to cover more tokens"}));
-        else
-            if (Math.round(percentValid*1000)/10.0 == 100)
-                report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
-                        new Object[] {getFunction(),cd.getFilename(),
+                    new Object[]{getFunction(), cd.getFilename(),
+                            "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
+                                    " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                    " Percentage valid: " + Math.round(percentValid * 1000) / 10.0,
+                            "Improve the gloss documentation to cover more tokens"}));
+        }
+        else {
+            if (Math.round(percentValid * 1000) / 10.0 == 100) {
+                report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(),
                                 "Corpus data: All tokens valid glosses",
                                 "Documentation cannot be improved"}));
-            else
-                report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
-                        new Object[] {getFunction(),cd.getFilename(),
+            }
+            else {
+                report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(),
                                 "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
                                         "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
-                                        " Percentage valid: " + Math.round(percentValid*1000)/10.0,
+                                        " Percentage valid: " + Math.round(percentValid * 1000) / 10.0,
                                 "Documentation can be improved but no fix necessary"}));
+            }
+        }
         return report;
     }
 
