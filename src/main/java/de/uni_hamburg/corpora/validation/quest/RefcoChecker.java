@@ -97,7 +97,10 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private boolean skipLocations = false;
     // Flag if we want segment and time in the location
     private boolean detailedLocations = false;
-
+    // Flag if we have a dictionary to check lexical glosses
+    private boolean hasDict = false;
+    // Automaton for lexeme checking in gloss tiers
+    DictionaryAutomaton dict;
 
     /**
      * The filename of the RefCo spreadsheet
@@ -154,6 +157,17 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * The frequency list of all non-segmentable gloss tokens
      */
     private FrequencyList missingGlossFreq = new FrequencyList();
+
+    /**
+     * The frequency list of all non-matchable lexeme tokens
+     */
+    private FrequencyList missingLexicalFreq = new FrequencyList();
+
+    /**
+     * Collection of approximately matched lexemes to be disambiguated
+     */
+    Map<String,List<String>> approximateMatches = new HashMap<>();
+
     /**
      * The global report, will be filled by the constructor and the function applied to the complete corpus
      */
@@ -202,6 +216,21 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (properties.containsKey("detailed-locations") && properties.getProperty("detailed-locations")
                 .equalsIgnoreCase("true")) {
             skipLocations = true;
+        }
+        if (properties.containsKey("dict")) {
+            logger.info("Load dict " + properties.getProperty("dict"));
+            hasDict = true;
+            try {
+                URL resourceUrl = this.getClass().getClassLoader().getResource(properties.getProperty("dict"));
+                if (resourceUrl != null) {
+                    dict = new DictionaryAutomaton(resourceUrl.openStream());
+                } else {
+                    dict = new DictionaryAutomaton(new File(properties.getProperty("dict")));
+                }
+            } catch (IOException e) {
+                logger.info("Error loading dictionary " + properties.getProperty("dict"));
+            }
+
         }
     }
 
@@ -307,7 +336,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (!missingGlossFreq.isEmpty())
                 report.addNote(getFunction(),"Corpus data: Morpheme glosses missing from documentations:\n" +
                         missingGlossFreq.toString());
-            if (!glossFreq.isEmpty() && props.containsKey("gloss-stats") &&
+            if (!morphemeFreq.isEmpty() && !lexicalFreq.isEmpty() && props.containsKey("gloss-stats") &&
                     props.getProperty("gloss-stats").equalsIgnoreCase("true")) {
                 report.addNote(getFunction(), "Corpus data: Morphological glosses encountered in the corpus:\n" +
                         morphemeFreq.toString());
@@ -1627,32 +1656,36 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     mismatch = true;
                 }
                 if (mismatch && !token.isEmpty()) {
-                    try {
-                        if (skipLocations) {
-                            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                            "description", "howtoFix"},
-                                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+//                    try {
+//                        if (skipLocations) {
+//                            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                            "description", "howtoFix"},
+//                                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+//                                            "invalid character(s):\n" + token + " containing: [" +
+//                                            token.replaceAll(dictAlphabet, "") + "]",
+//                                            "Add all transcription characters to the documentation"}));
+//                        }
+//                        else {
+//                            List<CorpusData.Location> locations = getLocations((ELANData) cd, Collections.singletonList(tier), token);
+//                            for (CorpusData.Location l : locations) {
+//                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                                "description", "tier", "segment", "howtoFix"},
+//                                        new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
+//                                                "invalid character(s):\n" + token + " containing: [" +
+//                                                UnicodeTools.padCombining(token.replaceAll(dictAlphabet, "")) + "]",
+//                                                l.tier, l.segment, "Add all transcription characters to the documentation"}));
+//                            }
+//                        }
+//                    } catch (Exception e) {
+//                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                        "description", "exception"},
+//                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
+//                                        "locate token " + token, e}));
+//                    }
+                    addWarningWithLocation(cd,tier,token,"Transcription token contains " +
                                             "invalid character(s):\n" + token + " containing: [" +
                                             token.replaceAll(dictAlphabet, "") + "]",
-                                            "Add all transcription characters to the documentation"}));
-                        }
-                        else {
-                            List<CorpusData.Location> locations = getLocations((ELANData) cd, Collections.singletonList(tier), token);
-                            for (CorpusData.Location l : locations) {
-                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                                "description", "tier", "segment", "howtoFix"},
-                                        new Object[]{getFunction(), cd.getFilename(), "Corpus data: Transcription token contains " +
-                                                "invalid character(s):\n" + token + " containing: [" +
-                                                UnicodeTools.padCombining(token.replaceAll(dictAlphabet, "")) + "]",
-                                                l.tier, l.segment, "Add all transcription characters to the documentation"}));
-                            }
-                        }
-                    } catch (Exception e) {
-                        report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                        "description", "exception"},
-                                new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
-                                        "locate token " + token, e}));
-                    }
+                                            "Add all transcription characters to the documentation");
                 }
             }
         }
@@ -1802,6 +1835,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         for (Text t : text) {
             // Tokenize text
             for (String token : t.getText().split(tokenSeparator)) {
+                glossFreq.put(token);
                 ArrayList<String> segments = new ArrayList<>();
                 // if we can split the token we do that
                 if (!glossSeparator.isEmpty()) {
@@ -1816,14 +1850,42 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Check all the segments
                 for (String s : segments) {
                     if (sm.segmentWord(s,chunks)) {
-                        morphemeFreq.put(s);
+                        List<String> segmented = sm.getSegments();
+                        // TODO this is hacky
+                        // Remove e.g. digits and punctuation
+                        segmented.removeIf((sgm) -> sgm.length() == 1);
+                        morphemeFreq.putAll(segmented);
                         matched++;
                     }
                     else if (s.codePoints().anyMatch(Character::isLowerCase)) {
                         // TODO which punctuations marks are allowed here
                         if (Pattern.compile("[\\p{IsAlphabetic}_-]+").matcher(s).matches()) {
-                            lexicalFreq.put(s);
-                            matched++;
+                            // Check if we have a dictionary
+                            if (hasDict) {
+                                // TODO what to do on underscore, currently replace by space
+                                for (String tmpSegment : s.split("_")) {
+                                    // Check if word is in dictionary
+                                    if (dict.match(tmpSegment)) {
+                                        report.addNote(getFunction(),"Found word " + tmpSegment + " in dictionary");
+                                        lexicalFreq.put(tmpSegment);
+                                        matched++;
+                                    } else {
+                                        missing++;
+                                        // Keep track of the non-matched lexeme
+                                        missingLexicalFreq.put(tmpSegment);
+                                        // Check if we have any approximate matches
+                                        List<String> candidates = UniversalLevenshteinAutomatonK1.matchDictionary(tmpSegment, dict);
+                                        report.addNote(getFunction(),"Failed to find word " + tmpSegment + " in dictionary: " + candidates);
+                                        if (!candidates.isEmpty()) {
+                                            approximateMatches.put(tmpSegment, candidates);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                lexicalFreq.put(s);
+                                matched++;
+                            }
                         }
                         else {
                             report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
@@ -1864,6 +1926,62 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                             "locate token " + token,
                                             e}));
                         }
+                    }
+                }
+            }
+            // Check if we can disambiguate the approximate matches
+            if (!approximateMatches.isEmpty()) {
+                for (String lexeme : approximateMatches.keySet()) {
+                    int lexemeCount = missingLexicalFreq.get(lexeme);
+                    int maxCount = 0;
+                    String maxCandidate = null;
+                    for (String candidate : approximateMatches.get(lexeme)) {
+                        if (lexicalFreq.contains(candidate)) {
+                            if (lexicalFreq.get(candidate) > maxCount)
+                                maxCandidate = candidate;
+                        }
+                    }
+                    // TODO what is the threshold
+                    if (maxCount > 10 * lexemeCount && maxCandidate != null) {
+                        addWarningWithLocation(cd,tier,lexeme,
+                                "Potential typo detected in " + lexeme + ": best candidate " + maxCandidate + " with count " + maxCount,
+                                "Check if this actually is a typo and fix if necessary"
+                                );
+//                        try {
+//                            if (skipLocations) {
+//                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+//                                                "howtoFix"},
+//                                        new Object[]{getFunction(), cd.getFilename(),
+//                                                "Potential typo detected in " + lexeme + ": best candidate " + maxCandidate +
+//                                                " with count " + maxCount,
+//                                                "Check if this actually is a typo and fix if necessary"
+//                                        }));
+//                            }
+//                            else {
+//                                for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), lexeme)) {
+//                                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+//                                                    "howtoFix", "tier", "segment"},
+//                                            new Object[]{getFunction(), cd.getFilename(),
+//                                                    "Potential typo detected in " + lexeme + ": best candidate " + maxCandidate +
+//                                                    " with count " + maxCount,
+//                                                    "Check if this actually is a typo and fix if necessary",
+//                                                    l.tier, l.segment
+//                                            }));
+//                                }
+//                            }
+//                        } catch (Exception e) {
+//                            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                            "description", "exception"},
+//                                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
+//                                            "locate token " + lexeme,
+//                                            e}));
+//                        }
+                    }
+                    else {
+                        addWarningWithLocation(cd,tier,lexeme,
+                                "Word not in the dictionary and no similar words found: " + lexeme,
+                                "Check if this could be a typo and fix if necessary"
+                        );
                     }
                 }
             }
@@ -2183,6 +2301,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         params.put("skip-locations", "Flag to skip determining the location of an error");
         params.put("detailed-locations", "Flag to include details such as segment and time slot in location (takes a " +
                 "lot of time!)");
+        params.put("dict", "Dictionary to be used to check lexemes in gloss tiers");
         return params;
     }
 
@@ -2363,5 +2482,43 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         return files;
+    }
+
+    /***
+     * Adds a warning to the report and optionally adds a location
+     * @param cd the current corpus data
+     * @param tier the current tier
+     * @param item the item to be located
+     * @param message the warning message
+     * @param hint the hint
+     */
+    private void addWarningWithLocation(CorpusData cd, String tier, String item, String message, String hint) {
+        try {
+            if (skipLocations) {
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                "howtoFix"},
+                        new Object[]{getFunction(), cd.getFilename(),
+                                message,
+                                hint
+                        }));
+            }
+            else {
+                for (CorpusData.Location l : getLocations((ELANData) cd, Collections.singletonList(tier), item)) {
+                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
+                                    "howtoFix", "tier", "segment"},
+                            new Object[]{getFunction(), cd.getFilename(),
+                                    message,
+                                    hint,
+                                    l.tier, l.segment
+                            }));
+                }
+            }
+        } catch (Exception e) {
+            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+                            "description", "exception"},
+                    new Object[]{getFunction(), cd.getFilename(), "Corpus data: Exception when trying to " +
+                            "locate token " + item,
+                            e}));
+        }
     }
 }
