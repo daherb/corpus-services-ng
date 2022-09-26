@@ -39,6 +39,15 @@ public class FrequencyList {
     }
 
     /**
+     * Checks if a value is in the frequency list
+     * @param k the value
+     * @return if it is in the list
+     */
+    public boolean contains(Object k) {
+        return freqList.containsKey(k);
+    }
+
+    /**
      * Gets the internal map
      * @return the map
      */
