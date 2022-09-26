@@ -38,19 +38,39 @@ public class DictionaryAutomaton {
      * @return the list of lines in a file, empty if the file could not be read or is empty
      */
     public static List<String> readFileAsList(File f) {
-        List<String> lines = new ArrayList<>();
+//        List<String> lines = new ArrayList<>();
+//        try {
+//            // Open file
+//            BufferedReader br = new BufferedReader(new FileReader(f));
+//            // Read all lines and add to list
+//            lines.addAll(br.lines().collect(Collectors.toList()));
+//            // Return non-empty list if the file is not empty
+//            return lines;
+//        } catch (IOException e) {
+//            logger.log(Level.SEVERE,"Error reading file " + f + ": " + e);
+//            // Return empty list
+//            return lines ;
+//        }
         try {
-            // Open file
-            BufferedReader br = new BufferedReader(new FileReader(f));
-            // Read all lines and add to list
-            lines.addAll(br.lines().collect(Collectors.toList()));
-            // Return non-empty list if the file is not empty
-            return lines;
-        } catch (IOException e) {
+            return readInputStreamAsList(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
             logger.log(Level.SEVERE,"Error reading file " + f + ": " + e);
             // Return empty list
-            return lines ;
+            return new ArrayList<>() ;
         }
+    }
+
+    /**
+     * Function to read a file and return a list of lines
+     * @param is the input stream
+     * @return the list of lines in a file, empty if the file could not be read or is empty
+     */
+    public static List<String> readInputStreamAsList(InputStream is) {
+        // Open file
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        // Read all lines and add to list
+        // Return non-empty list if the file is not empty
+        return br.lines().collect(Collectors.toList());
     }
 
     /**
@@ -63,6 +83,15 @@ public class DictionaryAutomaton {
         this(readFileAsList(f));
     }
 
+    /**
+     * Constructor constructing the automaton based on a dictionary read from file
+     *
+     * @param is the dictionary file
+     */
+    public DictionaryAutomaton(InputStream is) {
+        // Read the file and call the other constructor
+        this(readInputStreamAsList(is));
+    }
     /**
      * Constructor constructing the automaton basedon a dictionary represented by a list of strings
      *
