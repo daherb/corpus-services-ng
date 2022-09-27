@@ -33,14 +33,16 @@ public class FileListChecker extends Checker implements CorpusFunction {
     Logger logger = Logger.getLogger(this.getClass().toString());
 
     /**
-     * Helper to read a file list from a file, one file name per line
+     * Helper to read a file list from a file, one file name per line (alternatively a comma-separated list)
      * @param filename the file name of the file list
      * @return the file list as a set of URIs
      * @throws FileNotFoundException if the file list does not exist
      */
     private static Set<URI> readFileList(URL baseDir, String filename) throws FileNotFoundException, URISyntaxException {
         Set<URI> uris = new HashSet<>();
-        for (String fname : new BufferedReader(new FileReader(filename)).lines().collect(Collectors.toSet())) {
+        for (String fname : new BufferedReader(new FileReader(filename)).lines().map((line) -> Arrays.asList(line.split("\\s*,\\s*")))
+                .collect(HashSet<String>::new, HashSet::addAll, HashSet::addAll))
+        {
             uris.add(Paths.get(Paths.get(baseDir.toURI()).toString(),fname).toFile().toURI().normalize());
         }
         return uris;
