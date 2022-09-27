@@ -35,11 +35,12 @@ public class EXMARaLDATierStructureChecker extends TierStructureChecker {
                         Lists.newArrayList(XPath.newInstance("//tier").selectNodes(((EXMARaLDATranscriptionData) cd).getJdom()));
                 for (Element e : tierElements) {
                     Map<String,String> tierAttribs = new HashMap<>();
-                    {
-                        Attribute id = e.getAttribute("id");
-                        if (id != null)
-                            tierAttribs.put("id", id.getValue());
-                    }
+                    // Including the idea leads to too many problems
+//                    {
+//                        Attribute id = e.getAttribute("id");
+//                        if (id != null)
+//                            tierAttribs.put("id", id.getValue());
+//                    }
                     {
                         Attribute name = e.getAttribute("name");
                         if (name != null)
