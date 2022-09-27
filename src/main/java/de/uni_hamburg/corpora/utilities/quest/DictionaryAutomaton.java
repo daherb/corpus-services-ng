@@ -70,7 +70,8 @@ public class DictionaryAutomaton {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         // Read all lines and add to list
         // Return non-empty list if the file is not empty
-        return br.lines().collect(Collectors.toList());
+        // trim removes spaces in the beginning or the end of the line
+        return br.lines().map(String::trim).collect(Collectors.toList());
     }
 
     /**
