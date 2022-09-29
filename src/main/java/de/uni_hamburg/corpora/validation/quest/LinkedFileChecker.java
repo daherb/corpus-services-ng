@@ -78,7 +78,7 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         // Also load all files referenced in the refco documentation
         if (props.containsKey("refco-file")) {
             RefcoChecker rc = new RefcoChecker(props);
-            rc.setRefcoFile(Paths.get(c.getBaseDirectory().getPath(),props.getProperty("refco-file")).toString());
+            rc.setRefcoFile(Paths.get(Paths.get(c.getBaseDirectory().toURI()).toString(),props.getProperty("refco-file")).toString());
             corpusFiles.addAll(rc.getDocumentedFiles().stream().map((f) -> Paths.get(c.getBaseDirectory().getPath(),
                     f).toFile().toURI()).collect(Collectors.toList()));
         }

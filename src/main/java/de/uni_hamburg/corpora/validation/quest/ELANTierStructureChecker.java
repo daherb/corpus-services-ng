@@ -41,7 +41,7 @@ public class ELANTierStructureChecker extends TierStructureChecker {
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         if (props.containsKey("refco-file")) {
             RefcoChecker rc = new RefcoChecker(props);
-            rc.setRefcoFile(Paths.get(c.getBaseDirectory().getPath(),props.getProperty("refco-file")).toString());
+            rc.setRefcoFile(Paths.get(Paths.get(c.getBaseDirectory().toURI()).toString(),props.getProperty("refco-file")).toString());
             speakers.addAll(rc.getDocumentedSpeakers());
         }
         return super.function(c, fix);
