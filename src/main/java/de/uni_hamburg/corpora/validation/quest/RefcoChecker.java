@@ -1939,11 +1939,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (!approximateMatches.isEmpty()) {
             for (String lexeme : approximateMatches.keySet()) {
                 int lexemeCount = missingLexicalFreq.get(lexeme);
-                int maxCount = 0;
+                int maxCount = -1;
                 String maxCandidate = null;
                 for (String candidate : approximateMatches.get(lexeme)) {
                     if (lexicalFreq.contains(candidate)) {
-                        if (lexicalFreq.get(candidate) > maxCount)
+                        if (lexicalFreq.get(candidate) > maxCount) {
+                            maxCount = lexicalFreq.get(candidate);
                             maxCandidate = candidate;
                     }
                 }
