@@ -1875,8 +1875,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                         missingLexicalFreq.put(tmpSegment);
                                         // Check if we have any approximate matches
                                         List<String> candidates = UniversalLevenshteinAutomatonK1.matchDictionary(tmpSegment, dict);
-                                        report.addNote(getFunction(),"Failed to find word " + tmpSegment + " in dictionary: " + candidates);
-                                        if (!candidates.isEmpty()) {
+                                        // Also add all candidates if we pad the segment
+                                        // candidates.addAll(UniversalLevenshteinAutomatonK1.matchDictionary(tmpSegment + "#", dict));
+                                        // report.addNote(getFunction(),"Failed to find word " + tmpSegment + " in dictionary: " + candidates);
+                                        int lenThreshold = 4;
+                                        if (!candidates.isEmpty() && tmpSegment.length() >= lenThreshold) {
                                             approximateMatches.put(tmpSegment, candidates);
                                         }
                                     }
@@ -1946,10 +1949,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         if (lexicalFreq.get(candidate) > maxCount) {
                             maxCount = lexicalFreq.get(candidate);
                             maxCandidate = candidate;
+                        }
                     }
                 }
                 // TODO what is the threshold
-                if (maxCount > 10 * lexemeCount && maxCandidate != null) {
+                int threshold = 1;
+                // if (maxCount >= threshold * lexemeCount && maxCandidate != null) {
+                if (maxCandidate != null) {
                     addWarningWithLocation(cd,tier,lexeme,
                             "Potential typo detected in " + lexeme + ": best candidate " + maxCandidate + " with count " + maxCount,
                             "Check if this actually is a typo and fix if necessary"
