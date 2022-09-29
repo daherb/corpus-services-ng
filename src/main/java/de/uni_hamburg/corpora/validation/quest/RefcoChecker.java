@@ -1695,7 +1695,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             ,"howtoFix"},
                     new Object[]{getFunction(), cd.getFilename(),
                             "Corpus data: Less than " + transcriptionCharactersValid + " percent of transcription " +
-                                    "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                    "characters are valid  in tier " + tier+ ".\nValid: " + matched + " Invalid: " + missing + " " +
                                     "Percentage: " +
                                     Math.round(percentValid * 1000)/10.0,
                     "Add documentation for all graphemes and punctuation marks used in transcription"}));
@@ -1705,13 +1705,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
                                 "howtoFix"},
                         new Object[]{getFunction(), cd.getFilename(),
-                                "Corpus data: All characters are valid" ,"Documentation cannot be improved"}));
+                                "Corpus data: All characters are valid in tier " + tier ,"Documentation cannot be improved"}));
             else
                 report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
                                 "howtoFix"},
                         new Object[]{getFunction(), cd.getFilename(),
                                 "Corpus data: More than " + transcriptionCharactersValid + " percent of transcription " +
-                                        "characters are valid.\nValid: " + matched + " Invalid: " + missing + " " +
+                                        "characters are valid in tier " + tier + ".\nValid: " + matched + " Invalid: " + missing + " " +
                                         "Percentage: " +
                                         Math.round(percentValid * 1000)/10.0,"Documentation can be improved but no fix necessary"}));
         }
@@ -1866,7 +1866,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 for (String tmpSegment : s.split("_")) {
                                     // Check if word is in dictionary
                                     if (dict.match(tmpSegment)) {
-                                        report.addNote(getFunction(),"Found word " + tmpSegment + " in dictionary");
+                                        // report.addNote(getFunction(),"Found word " + tmpSegment + " in dictionary");
                                         lexicalFreq.put(tmpSegment);
                                         matched++;
                                     } else {
@@ -1888,10 +1888,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             }
                         }
                         else {
-                            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
-                                            "description"},
-                                    new Object[]{getFunction(), cd.getFilename(), "Unexpected characters in lexical " +
-                                            "gloss " + s + ": " + s.replaceAll("[\\p{IsAlphabetic}_-]]","")}));
+                            addWarningWithLocation(cd, tier, s,
+                                    "Unexpected characters in lexical " +
+                                            "gloss " + s + ": " + s.replaceAll("[\\p{IsAlphabetic}_-]]",""),
+                                    "Check and fix your gloss tier"
+                                    );
+//                            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
+//                                            "description"},
+//                                    new Object[]{getFunction(), cd.getFilename(), "Unexpected characters in lexical " +
+//                                            "gloss " + s + ": " + s.replaceAll("[\\p{IsAlphabetic}_-]]","")}));
                         }
 
                     }
@@ -1992,7 +1997,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             "howtoFix"},
                     new Object[]{getFunction(), cd.getFilename(),
                             "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
-                                    " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                    " valid gloss morphemes in tier " + tier + ".\nValid: " + matched + " Invalid: " + missing +
                                     " Percentage valid: " + Math.round(percentValid * 1000) / 10.0,
                             "Improve the gloss documentation to cover more tokens"}));
         }
@@ -2000,14 +2005,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             if (Math.round(percentValid * 1000) / 10.0 == 100) {
                 report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
                         new Object[]{getFunction(), cd.getFilename(),
-                                "Corpus data: All tokens valid glosses",
+                                "Corpus data: All tokens valid glosses in tier " + tier,
                                 "Documentation cannot be improved"}));
             }
             else {
                 report.addCorrect(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
                         new Object[]{getFunction(), cd.getFilename(),
                                 "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
-                                        "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
+                                        "valid gloss morphemes in tier " + tier + ".\nValid: " + matched + " Invalid: " + missing +
                                         " Percentage valid: " + Math.round(percentValid * 1000) / 10.0,
                                 "Documentation can be improved but no fix necessary"}));
             }
