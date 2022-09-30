@@ -40,7 +40,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
      */
     private static Set<URI> readFileList(URL baseDir, String filename) throws FileNotFoundException, URISyntaxException {
         Set<URI> uris = new HashSet<>();
-        for (String fname : new BufferedReader(new FileReader(filename)).lines().map((line) -> Arrays.asList(line.split("\\s*,\\s*")))
+        for (String fname : new BufferedReader(new FileReader(filename)).lines().map((line) -> Arrays.asList(line.trim().split("\\s*,\\s*")))
                 .collect(HashSet<String>::new, HashSet::addAll, HashSet::addAll))
         {
             uris.add(Paths.get(Paths.get(baseDir.toURI()).toString(),fname).toFile().toURI().normalize());
@@ -55,7 +55,7 @@ public class FileListChecker extends Checker implements CorpusFunction {
      */
     private static Set<URI> splitFileList(URL baseDir, String fileList) throws URISyntaxException {
         Set<URI> uris = new HashSet<>();
-        for (String fname : fileList.split(",")) {
+        for (String fname : fileList.trim().split("\\s*,\\s*")) {
             if (Paths.get(fname).toFile().isAbsolute()) {
                 uris.add(Paths.get(fname).toUri());
             }
