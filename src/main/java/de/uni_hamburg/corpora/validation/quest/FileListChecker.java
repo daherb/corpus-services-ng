@@ -56,7 +56,12 @@ public class FileListChecker extends Checker implements CorpusFunction {
     private static Set<URI> splitFileList(URL baseDir, String fileList) throws URISyntaxException {
         Set<URI> uris = new HashSet<>();
         for (String fname : fileList.split(",")) {
-            uris.add(Paths.get(Paths.get(baseDir.toURI()).toString(),fname).toFile().toURI().normalize());
+            if (Paths.get(fname).toFile().isAbsolute()) {
+                uris.add(Paths.get(fname).toUri());
+            }
+            else {
+                uris.add(Paths.get(Paths.get(baseDir.toURI()).toString(), fname).toFile().toURI().normalize());
+            }
         }
         return uris;
     }
