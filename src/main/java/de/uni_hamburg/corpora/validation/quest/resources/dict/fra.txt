@@ -1,0 +1,3149 @@
+All reports
+SimpleGlossChecker:
+: Found glosses:
+. No known fixes. 
+: Found lemmas:
+être - 229
+aller - 155
+se - 57
+faire - 40
+en - 38
+manger - 34
+rester - 28
+dire - 26
+à - 25
+voir - 25
+venir - 24
+entendre - 22
+tenir - 22
+avoir - 21
+de - 20
+porter - 20
+C - 19
+couper - 18
+tirer - 17
+fermer - 17
+comme - 17
+chanter - 17
+courir - 16
+rentrer - 16
+chercher - 15
+debout - 15
+ne - 14
+déposer - 14
+vouloir - 14
+asseoir - 13
+haut - 13
+le - 13
+attacher - 13
+un - 13
+suivre - 13
+envoyer - 13
+trouver - 12
+savoir - 12
+mettre - 12
+détacher - 12
+prendre - 12
+frapper - 12
+tuer - 12
+tromper - 12
+rien - 11
+grimper - 11
+sur - 11
+jeter - 11
+bien - 11
+mort - 11
+apporter - 11
+atteindre - 10
+emporter - 10
+approcher - 10
+la - 10
+appeler - 10
+noir - 10
+revenir - 10
+penser - 9
+regarder - 9
+blesser - 9
+lever - 9
+cacher - 9
+dormir - 9
+arriver - 8
+poser - 8
+mentir - 8
+pour - 8
+fort - 8
+dos - 8
+parler - 8
+fini - 8
+chasser - 8
+chemin - 8
+ouvrir - 8
+sombre - 7
+l - 7
+pas - 7
+petit - 7
+mordre - 7
+grand - 7
+descendre - 7
+écouter - 7
+frère - 7
+pêcher - 7
+boire - 7
+enfant - 7
+donner - 7
+mère - 7
+tomber - 7
+sortir - 7
+là - 7
+emmener - 7
+père - 7
+rire - 7
+préparer - 7
+deux - 7
+travailler - 7
+maison - 7
+perdre - 7
+pierre - 6
+rapidement - 6
+V - 6
+seul - 6
+pagayer - 6
+terre - 6
+cuisiner - 6
+sentir - 6
+partir - 6
+cuit - 6
+propre - 6
+accoucher - 6
+bon - 6
+lancer - 6
+laisser - 6
+bloquer - 6
+lapider - 6
+épaule - 6
+jouer - 6
+brûler - 6
+fille - 6
+fait - 6
+dépêcher - 6
+peur - 6
+avaler - 6
+introduire - 5
+trembler - 5
+allonger - 5
+marron - 5
+fatigué - 5
+nettoyer - 5
+trancher - 5
+mal - 5
+mourir - 5
+rouler - 5
+fils - 5
+transformer - 5
+arbre - 5
+OP - 5
+aiguiser - 5
+piquer - 5
+tranquille - 5
+intérieur - 5
+remplir - 5
+ventre - 5
+assis - 5
+fleur - 5
+nager - 5
+cuire - 5
+pleurer - 5
+endroit - 5
+malade - 5
+tête - 5
+creuser - 5
+perdu - 4
+gros - 4
+I - 4
+enfanter - 4
+bouche - 4
+y - 4
+pareil - 4
+rapporter - 4
+blanc - 4
+ressentir - 4
+tisser - 4
+accourir - 4
+travers - 4
+abaisser - 4
+odeur - 4
+entrainer - 4
+chose - 4
+mer - 4
+derrière - 4
+aiguisé - 4
+où - 4
+voler - 4
+prêt - 4
+raconter - 4
+jour - 4
+révéler - 4
+pousser - 4
+nom - 4
+jambe - 4
+discuter - 4
+rejeton - 4
+déplacer - 4
+proche - 4
+rendre - 4
+continuer - 4
+sauver - 4
+transpercer - 4
+dernier - 4
+mûr - 3
+fond - 3
+souffler - 3
+avant - 3
+courant - 3
+sommet - 3
+coup - 3
+ramper - 3
+marcher - 3
+pouvoir - 3
+A - 3
+F - 3
+cochon - 3
+envelopper - 3
+femme - 3
+essayer - 3
+accrocher - 3
+bras - 3
+et - 3
+monsieur - 3
+respirer - 3
+colère - 3
+assombrir - 3
+souffrir - 3
+allongé - 3
+abattre - 3
+vain - 3
+égarer - 3
+premier - 3
+chauffer - 3
+oiseau - 3
+chaud - 3
+main - 3
+pigeon - 3
+dévoiler - 3
+crier - 3
+servir - 3
+monter - 3
+fruit - 3
+devoir - 3
+ensemble - 3
+devenir - 3
+broyer - 3
+rivière - 3
+loin - 3
+sœur - 3
+clair - 3
+entourer - 3
+nombreux - 3
+attendre - 3
+briser - 3
+casser - 3
+bois - 3
+couver - 3
+demander - 3
+surveiller - 3
+lit - 3
+tabou - 3
+difficile - 3
+morceau - 3
+jusqu'à - 3
+nourrir - 3
+que - 3
+qui - 3
+changer - 3
+nourriture - 3
+aligner - 3
+beaucoup - 3
+sauter - 3
+crue - 3
+arracher - 3
+déterrer - 3
+vivre - 3
+enrober - 3
+marier - 3
+dévorer - 3
+rincer - 3
+aider - 3
+terminer - 3
+nuire - 3
+grandir - 3
+fois - 3
+suspendre - 3
+banane - 3
+corps - 3
+village - 3
+élever - 3
+retourner - 2
+trois - 2
+sorte - 2
+laver - 2
+bas - 2
+court - 2
+enlever - 2
+soigner - 2
+émerger - 2
+au - 2
+quitter - 2
+poursuivre - 2
+D - 2
+sonner - 2
+soif - 2
+sec - 2
+fatiguer - 2
+ce - 2
+acéré - 2
+cinq - 2
+envoler - 2
+dit - 2
+cocotier - 2
+combien - 2
+dix - 2
+signifier - 2
+autour - 2
+siffler - 2
+séparer - 2
+sembler - 2
+conduire - 2
+enterrer - 2
+content - 2
+rugir - 2
+trou - 2
+passer - 2
+peau - 2
+capturer - 2
+visiter - 2
+protéger - 2
+affuter - 2
+couvrir - 2
+surplomber - 2
+découper - 2
+heurter - 2
+nouveau - 2
+croire - 2
+errer - 2
+répandre - 2
+langue - 2
+disputer - 2
+écoute - 2
+oublier - 2
+acheter - 2
+pendre - 2
+gaver - 2
+mai - 2
+crevette - 2
+rugissement - 2
+approche - 2
+natte - 2
+éclairer - 2
+placer - 2
+autre - 2
+baigner - 2
+chanceux - 2
+cou - 2
+infiltrer - 2
+sol - 2
+nez - 2
+personne - 2
+écrevisse - 2
+plus - 2
+panier - 2
+œil - 2
+homme - 2
+battre - 2
+enfermer - 2
+autres - 2
+devant - 2
+pirogue - 2
+os - 2
+rater - 2
+pleuvoir - 2
+chien - 2
+viande - 2
+PR - 2
+rompre - 2
+récupérer - 2
+étendu - 2
+observer - 2
+blessé - 2
+saute - 2
+installer - 2
+déféquer - 2
+long - 2
+vomir - 2
+ara - 2
+croquer - 2
+esquiver - 2
+balader - 2
+porte - 2
+inviter - 2
+durcir - 2
+clôture - 2
+refuser - 2
+fabriquer - 2
+face - 2
+noix - 2
+vendre - 2
+plein - 2
+médire - 2
+jeu - 2
+bondir - 2
+éclater - 2
+désirer - 2
+extérieur - 2
+esprit - 2
+neuf - 2
+râper - 2
+retirer - 2
+huit - 2
+quoi - 2
+disposer - 2
+rouge - 2
+enceinte - 2
+planter - 2
+écouler - 2
+lier - 2
+parcourir - 2
+remettre - 2
+saisir - 2
+longtemps - 2
+renifler - 2
+comment - 2
+danser - 2
+histoire - 2
+dresser - 2
+recommencer - 2
+puiser - 2
+tremper - 2
+réunir - 2
+faim - 2
+dégager - 2
+brisé - 2
+futur - 2
+branche - 2
+emballer - 2
+gorge - 2
+réchauffer - 2
+poil - 2
+place - 2
+ouvrer - 2
+briller - 2
+immobile - 2
+présent - 2
+progéniture - 2
+queue - 2
+passage - 2
+attraper - 2
+entrailles - 2
+chuter - 2
+rejoindre - 2
+prénom - 2
+côté - 2
+papa - 2
+beau - 2
+vagabonder - 2
+poindre - 2
+tressaillir - 2
+faucon - 2
+noircir - 2
+finir - 2
+maitre - 2
+avec - 2
+très - 2
+étendre - 2
+bourgeon - 2
+mauvais - 2
+part - 2
+rigoler - 2
+repousser - 2
+diriger - 2
+plonger - 2
+contraindre - 2
+éplucher - 2
+jeune - 2
+allumer - 2
+plage - 2
+réussir - 2
+sept - 2
+élaborer - 2
+viens - 2
+chef - 2
+cuisine - 2
+dépasser - 2
+tendre - 2
+vainement - 2
+herbe - 2
+demeurer - 2
+souhaiter - 2
+manquer - 2
+écorcer - 2
+lendemain - 1
+peut_être - 1
+certains - 1
+flèche - 1
+tailler - 1
+rat - 1
+épouse - 1
+chiot - 1
+former - 1
+à_travers - 1
+AP - 1
+cavité - 1
+trébucher - 1
+flottant - 1
+cime - 1
+gourdin - 1
+humain - 1
+après - 1
+e - 1
+falaise - 1
+p - 1
+vêtement - 1
+pique - 1
+fusil - 1
+désolé - 1
+pensée - 1
+vent - 1
+merci_beaucoup - 1
+vieux - 1
+peut-être - 1
+partage - 1
+oncle - 1
+maintenant - 1
+serpent - 1
+train - 1
+ramasser - 1
+par - 1
+matin - 1
+froid - 1
+vache - 1
+remède - 1
+nouer - 1
+voiture - 1
+feuille - 1
+à_mort - 1
+lequel - 1
+pendant - 1
+trainer - 1
+tigre - 1
+aussi - 1
+en_haut - 1
+hache - 1
+à_nouveau - 1
+vert - 1
+tortue - 1
+liane - 1
+en_vain - 1
+corde - 1
+peu - 1
+il - 1
+DOM - 1
+palme - 1
+masser - 1
+auparavant - 1
+presser - 1
+âge - 1
+parole - 1
+flotter - 1
+baluchon - 1
+encore - 1
+bâton - 1
+mettre_en_colère - 1
+milieu - 1
+semblant - 1
+cela - 1
+graine - 1
+coq - 1
+correctement - 1
+commencer - 1
+interdire - 1
+igname - 1
+pourquoi - 1
+lance - 1
+tribu - 1
+poisson - 1
+passereau - 1
+sort - 1
+éclore - 1
+lueur - 1
+joli - 1
+il_y_a - 1
+dépecer - 1
+gratter - 1
+ami - 1
+une_fois - 1
+tronc - 1
+arrière - 1
+sous - 1
+demain - 1
+colline - 1
+ou - 1
+mure - 1
+en_bas - 1
+âtre - 1
+dehors - 1
+coco - 1
+ravin - 1
+dodeliner - 1
+salive - 1
+quel - 1
+déchet - 1
+fenêtre - 1
+tout_le_temps - 1
+nid - 1
+ramener - 1
+démon - 1
+rassembler - 1
+benne - 1
+quelque - 1
+Aller - 1
+soleil - 1
+citrouille - 1
+près - 1
+bambou - 1
+ogre - 1
+en_tête - 1
+lézard - 1
+aujourd'hui - 1
+arc - 1
+si - 1
+ouvrier - 1
+écorce - 1
+plante - 1
+renverser - 1
+sentir_mal - 1
+tout - 1
+tous - 1
+couteau - 1
+forêt - 1
+carton - 1
+fracasser - 1
+papaye - 1
+pluie - 1
+foule - 1
+pousse - 1
+jusque - 1
+d'abord - 1
+régime - 1
+conque - 1
+chant - 1
+partout - 1
+adulte - 1
+sûrement - 1
+Grey - 1
+pain - 1
+avoir_envie - 1
+jardin - 1
+guetter - 1
+percer - 1
+amener - 1
+mari - 1
+ensuite - 1
+verser - 1
+rivage - 1
+envie - 1
+incendier - 1
+grossir - 1
+midi - 1
+gens - 1
+collecter - 1
+plan - 1
+effrayant - 1
+dans - 1
+force - 1
+ronger - 1
+énorme - 1
+racine - 1
+semaine - 1
+entièrement - 1
+tambour - 1
+repu - 1
+autrefois - 1
+eau - 1
+nouvelle - 1
+asperger - 1
+coque - 1
+cendre - 1
+assez - 1
+bout - 1
+ancêtre - 1
+bruit - 1
+vérifier - 1
+être_en_colère - 1
+grand_chemin - 1
+faire_attention - 1
+anguille - 1
+commander - 1
+précisément - 1
+presque - 1
+comme_ça - 1
+feu - 1
+un_peu - 1
+nuage - 1
+cueillir - 1
+ver - 1
+tas - 1
+affaire - 1
+important - 1
+brancher - 1
+boue - 1
+noix_de_coco - 1
+ailleurs - 1
+téter - 1
+doucement - 1
+espionner - 1
+mur - 1
+principal - 1
+sac - 1
+toute - 1
+cigale - 1
+quelque_chose - 1
+parvenir - 1
+chez - 1
+grappe - 1
+attention - 1
+repas - 1
+groupe - 1
+. No known fixes. 
+: Found lemmas (case-insensitive):
+être - 229
+aller - 155
+se - 57
+faire - 40
+en - 38
+manger - 34
+rester - 28
+dire - 26
+à - 25
+voir - 25
+venir - 24
+entendre - 22
+tenir - 22
+avoir - 21
+de - 20
+porter - 20
+C - 19
+couper - 18
+tirer - 17
+fermer - 17
+comme - 17
+chanter - 17
+courir - 16
+rentrer - 16
+chercher - 15
+debout - 15
+ne - 14
+déposer - 14
+vouloir - 14
+asseoir - 13
+haut - 13
+le - 13
+attacher - 13
+un - 13
+suivre - 13
+envoyer - 13
+trouver - 12
+savoir - 12
+mettre - 12
+détacher - 12
+prendre - 12
+frapper - 12
+tuer - 12
+tromper - 12
+rien - 11
+grimper - 11
+sur - 11
+jeter - 11
+bien - 11
+mort - 11
+apporter - 11
+atteindre - 10
+emporter - 10
+approcher - 10
+la - 10
+appeler - 10
+noir - 10
+revenir - 10
+penser - 9
+regarder - 9
+blesser - 9
+lever - 9
+cacher - 9
+dormir - 9
+arriver - 8
+poser - 8
+mentir - 8
+pour - 8
+fort - 8
+dos - 8
+parler - 8
+fini - 8
+chasser - 8
+chemin - 8
+ouvrir - 8
+sombre - 7
+l - 7
+pas - 7
+petit - 7
+mordre - 7
+grand - 7
+descendre - 7
+écouter - 7
+frère - 7
+pêcher - 7
+boire - 7
+enfant - 7
+donner - 7
+mère - 7
+tomber - 7
+sortir - 7
+là - 7
+emmener - 7
+père - 7
+rire - 7
+préparer - 7
+deux - 7
+travailler - 7
+maison - 7
+perdre - 7
+pierre - 6
+rapidement - 6
+V - 6
+seul - 6
+pagayer - 6
+terre - 6
+cuisiner - 6
+sentir - 6
+partir - 6
+cuit - 6
+propre - 6
+accoucher - 6
+bon - 6
+lancer - 6
+laisser - 6
+bloquer - 6
+lapider - 6
+épaule - 6
+jouer - 6
+brûler - 6
+fille - 6
+fait - 6
+dépêcher - 6
+peur - 6
+avaler - 6
+introduire - 5
+trembler - 5
+allonger - 5
+marron - 5
+fatigué - 5
+nettoyer - 5
+trancher - 5
+mal - 5
+mourir - 5
+rouler - 5
+fils - 5
+transformer - 5
+arbre - 5
+OP - 5
+aiguiser - 5
+piquer - 5
+tranquille - 5
+intérieur - 5
+remplir - 5
+ventre - 5
+assis - 5
+fleur - 5
+nager - 5
+cuire - 5
+pleurer - 5
+endroit - 5
+malade - 5
+tête - 5
+creuser - 5
+perdu - 4
+gros - 4
+I - 4
+enfanter - 4
+bouche - 4
+y - 4
+pareil - 4
+rapporter - 4
+blanc - 4
+ressentir - 4
+tisser - 4
+accourir - 4
+travers - 4
+abaisser - 4
+odeur - 4
+entrainer - 4
+chose - 4
+mer - 4
+derrière - 4
+aiguisé - 4
+où - 4
+voler - 4
+prêt - 4
+raconter - 4
+jour - 4
+révéler - 4
+pousser - 4
+nom - 4
+jambe - 4
+discuter - 4
+rejeton - 4
+déplacer - 4
+proche - 4
+rendre - 4
+continuer - 4
+sauver - 4
+transpercer - 4
+dernier - 4
+mûr - 3
+fond - 3
+souffler - 3
+avant - 3
+courant - 3
+sommet - 3
+coup - 3
+ramper - 3
+marcher - 3
+pouvoir - 3
+A - 3
+F - 3
+cochon - 3
+envelopper - 3
+femme - 3
+essayer - 3
+accrocher - 3
+bras - 3
+et - 3
+monsieur - 3
+respirer - 3
+colère - 3
+assombrir - 3
+souffrir - 3
+allongé - 3
+abattre - 3
+vain - 3
+égarer - 3
+premier - 3
+chauffer - 3
+oiseau - 3
+chaud - 3
+main - 3
+pigeon - 3
+dévoiler - 3
+crier - 3
+servir - 3
+monter - 3
+fruit - 3
+devoir - 3
+ensemble - 3
+devenir - 3
+broyer - 3
+rivière - 3
+loin - 3
+sœur - 3
+clair - 3
+entourer - 3
+nombreux - 3
+attendre - 3
+briser - 3
+casser - 3
+bois - 3
+couver - 3
+demander - 3
+surveiller - 3
+lit - 3
+tabou - 3
+difficile - 3
+morceau - 3
+jusqu'à - 3
+nourrir - 3
+que - 3
+qui - 3
+changer - 3
+nourriture - 3
+aligner - 3
+beaucoup - 3
+sauter - 3
+crue - 3
+arracher - 3
+déterrer - 3
+vivre - 3
+enrober - 3
+marier - 3
+dévorer - 3
+rincer - 3
+aider - 3
+terminer - 3
+nuire - 3
+grandir - 3
+fois - 3
+suspendre - 3
+banane - 3
+corps - 3
+village - 3
+élever - 3
+retourner - 2
+trois - 2
+sorte - 2
+laver - 2
+bas - 2
+court - 2
+enlever - 2
+soigner - 2
+émerger - 2
+au - 2
+quitter - 2
+poursuivre - 2
+D - 2
+sonner - 2
+soif - 2
+sec - 2
+fatiguer - 2
+ce - 2
+acéré - 2
+cinq - 2
+envoler - 2
+dit - 2
+cocotier - 2
+combien - 2
+dix - 2
+signifier - 2
+autour - 2
+siffler - 2
+séparer - 2
+sembler - 2
+conduire - 2
+enterrer - 2
+content - 2
+rugir - 2
+trou - 2
+passer - 2
+peau - 2
+capturer - 2
+visiter - 2
+protéger - 2
+affuter - 2
+couvrir - 2
+surplomber - 2
+découper - 2
+heurter - 2
+nouveau - 2
+croire - 2
+errer - 2
+répandre - 2
+langue - 2
+disputer - 2
+écoute - 2
+oublier - 2
+acheter - 2
+pendre - 2
+gaver - 2
+mai - 2
+crevette - 2
+rugissement - 2
+approche - 2
+natte - 2
+éclairer - 2
+placer - 2
+autre - 2
+baigner - 2
+chanceux - 2
+cou - 2
+infiltrer - 2
+sol - 2
+nez - 2
+personne - 2
+écrevisse - 2
+plus - 2
+panier - 2
+œil - 2
+homme - 2
+battre - 2
+enfermer - 2
+autres - 2
+devant - 2
+pirogue - 2
+os - 2
+rater - 2
+pleuvoir - 2
+chien - 2
+viande - 2
+PR - 2
+rompre - 2
+récupérer - 2
+étendu - 2
+observer - 2
+blessé - 2
+saute - 2
+installer - 2
+déféquer - 2
+long - 2
+vomir - 2
+ara - 2
+croquer - 2
+esquiver - 2
+balader - 2
+porte - 2
+inviter - 2
+durcir - 2
+clôture - 2
+refuser - 2
+fabriquer - 2
+face - 2
+noix - 2
+vendre - 2
+plein - 2
+médire - 2
+jeu - 2
+bondir - 2
+éclater - 2
+désirer - 2
+extérieur - 2
+esprit - 2
+neuf - 2
+râper - 2
+retirer - 2
+huit - 2
+quoi - 2
+disposer - 2
+rouge - 2
+enceinte - 2
+planter - 2
+écouler - 2
+lier - 2
+parcourir - 2
+remettre - 2
+saisir - 2
+longtemps - 2
+renifler - 2
+comment - 2
+danser - 2
+histoire - 2
+dresser - 2
+recommencer - 2
+puiser - 2
+tremper - 2
+réunir - 2
+faim - 2
+dégager - 2
+brisé - 2
+futur - 2
+branche - 2
+emballer - 2
+gorge - 2
+réchauffer - 2
+poil - 2
+place - 2
+ouvrer - 2
+briller - 2
+immobile - 2
+présent - 2
+progéniture - 2
+queue - 2
+passage - 2
+attraper - 2
+entrailles - 2
+chuter - 2
+rejoindre - 2
+prénom - 2
+côté - 2
+papa - 2
+beau - 2
+vagabonder - 2
+poindre - 2
+tressaillir - 2
+faucon - 2
+noircir - 2
+finir - 2
+maitre - 2
+avec - 2
+très - 2
+étendre - 2
+bourgeon - 2
+mauvais - 2
+part - 2
+rigoler - 2
+repousser - 2
+diriger - 2
+plonger - 2
+contraindre - 2
+éplucher - 2
+jeune - 2
+allumer - 2
+plage - 2
+réussir - 2
+sept - 2
+élaborer - 2
+viens - 2
+chef - 2
+cuisine - 2
+dépasser - 2
+tendre - 2
+vainement - 2
+herbe - 2
+demeurer - 2
+souhaiter - 2
+manquer - 2
+écorcer - 2
+lendemain - 1
+peut_être - 1
+certains - 1
+flèche - 1
+tailler - 1
+rat - 1
+épouse - 1
+chiot - 1
+former - 1
+à_travers - 1
+AP - 1
+cavité - 1
+trébucher - 1
+flottant - 1
+cime - 1
+gourdin - 1
+humain - 1
+après - 1
+e - 1
+falaise - 1
+p - 1
+vêtement - 1
+pique - 1
+fusil - 1
+désolé - 1
+pensée - 1
+vent - 1
+merci_beaucoup - 1
+vieux - 1
+peut-être - 1
+partage - 1
+oncle - 1
+maintenant - 1
+serpent - 1
+train - 1
+ramasser - 1
+par - 1
+matin - 1
+froid - 1
+vache - 1
+remède - 1
+nouer - 1
+voiture - 1
+feuille - 1
+à_mort - 1
+lequel - 1
+pendant - 1
+trainer - 1
+tigre - 1
+aussi - 1
+en_haut - 1
+hache - 1
+à_nouveau - 1
+vert - 1
+tortue - 1
+liane - 1
+en_vain - 1
+corde - 1
+peu - 1
+il - 1
+DOM - 1
+palme - 1
+masser - 1
+auparavant - 1
+presser - 1
+âge - 1
+parole - 1
+flotter - 1
+baluchon - 1
+encore - 1
+bâton - 1
+mettre_en_colère - 1
+milieu - 1
+semblant - 1
+cela - 1
+graine - 1
+coq - 1
+correctement - 1
+commencer - 1
+interdire - 1
+igname - 1
+pourquoi - 1
+lance - 1
+tribu - 1
+poisson - 1
+passereau - 1
+sort - 1
+éclore - 1
+lueur - 1
+joli - 1
+il_y_a - 1
+dépecer - 1
+gratter - 1
+ami - 1
+une_fois - 1
+tronc - 1
+arrière - 1
+sous - 1
+demain - 1
+colline - 1
+ou - 1
+mure - 1
+en_bas - 1
+âtre - 1
+dehors - 1
+coco - 1
+ravin - 1
+dodeliner - 1
+salive - 1
+quel - 1
+déchet - 1
+fenêtre - 1
+tout_le_temps - 1
+nid - 1
+ramener - 1
+démon - 1
+rassembler - 1
+benne - 1
+quelque - 1
+Aller - 1
+soleil - 1
+citrouille - 1
+près - 1
+bambou - 1
+ogre - 1
+en_tête - 1
+lézard - 1
+aujourd'hui - 1
+arc - 1
+si - 1
+ouvrier - 1
+écorce - 1
+plante - 1
+renverser - 1
+sentir_mal - 1
+tout - 1
+tous - 1
+couteau - 1
+forêt - 1
+carton - 1
+fracasser - 1
+papaye - 1
+pluie - 1
+foule - 1
+pousse - 1
+jusque - 1
+d'abord - 1
+régime - 1
+conque - 1
+chant - 1
+partout - 1
+adulte - 1
+sûrement - 1
+Grey - 1
+pain - 1
+avoir_envie - 1
+jardin - 1
+guetter - 1
+percer - 1
+amener - 1
+mari - 1
+ensuite - 1
+verser - 1
+rivage - 1
+envie - 1
+incendier - 1
+grossir - 1
+midi - 1
+gens - 1
+collecter - 1
+plan - 1
+effrayant - 1
+dans - 1
+force - 1
+ronger - 1
+énorme - 1
+racine - 1
+semaine - 1
+entièrement - 1
+tambour - 1
+repu - 1
+autrefois - 1
+eau - 1
+nouvelle - 1
+asperger - 1
+coque - 1
+cendre - 1
+assez - 1
+bout - 1
+ancêtre - 1
+bruit - 1
+vérifier - 1
+être_en_colère - 1
+grand_chemin - 1
+faire_attention - 1
+anguille - 1
+commander - 1
+précisément - 1
+presque - 1
+comme_ça - 1
+feu - 1
+un_peu - 1
+nuage - 1
+cueillir - 1
+ver - 1
+tas - 1
+affaire - 1
+important - 1
+brancher - 1
+boue - 1
+noix_de_coco - 1
+ailleurs - 1
+téter - 1
+doucement - 1
+espionner - 1
+mur - 1
+principal - 1
+sac - 1
+toute - 1
+cigale - 1
+quelque_chose - 1
+parvenir - 1
+chez - 1
+grappe - 1
+attention - 1
+repas - 1
+groupe - 1
+. No known fixes. 
+: Cannot match 1SG=attacher-INTR. No known fixes. 
+: Cannot match 3PL=ASP.EC=faire. No known fixes. 
+: Cannot match 1INCL=appeler. No known fixes. 
+: Cannot match 3PL=poser_un_tabou-INTR. No known fixes. 
+: Cannot match 3SG=s'asseoir-RED. No known fixes. 
+: Cannot match 3SG=tirer-INTR. No known fixes. 
+: Cannot match attacher-INTR. No known fixes. 
+: Cannot match rembu. No known fixes. 
+: Cannot match 1SG.OBJ. No known fixes. 
+: Cannot match 3PL=ASP.J=asseoir. No known fixes. 
+: Cannot match 3PL=aller=déposer. No known fixes. 
+: Cannot match 2PL.DU=aller. No known fixes. 
+: Cannot match DEI-INTR. No known fixes. 
+: Cannot match 2PL=jeter. No known fixes. 
+: Cannot match faire_du_laplap. No known fixes. 
+: Cannot match déposer_en_haut-INTR. No known fixes. 
+: Cannot match 1SG=??. No known fixes. 
+: Cannot match 1EXCL.DU. No known fixes. 
+: Cannot match 3PL=voir. No known fixes. 
+: Lemma only matches case-insensitive mac. No known fixes. 
+: Cannot match rester_à_l'écart. No known fixes. 
+: Cannot match 2SG=voir-INTR. No known fixes. 
+: Cannot match 2SG=apporter-INTR. No known fixes. 
+: Cannot match 2PL.ASP.EC=aller. No known fixes. 
+: Cannot match se_lever_d'un_coup. No known fixes. 
+: Cannot match 1INCL=ASP.J=comment. No known fixes. 
+: Lemma only matches case-insensitive a. No known fixes. 
+: Cannot match 1INCL=dormir. No known fixes. 
+: Cannot match poser_un_tabou-INTR. No known fixes. 
+: Cannot match 1INCL=ASP=aller. No known fixes. 
+: Cannot match aller=emmener-INTR. No known fixes. 
+: Cannot match 3PL=ASP.J=tenir. No known fixes. 
+: Cannot match s'endormir. No known fixes. 
+: Cannot match énever. No known fixes. 
+: Cannot match 1SG=tirer-INTR. No known fixes. 
+: Lemma only matches case-insensitive Emporter. No known fixes. 
+: Cannot match COO.NARR. No known fixes. 
+: Cannot match COO.VB=voir-INTR. No known fixes. 
+: Cannot match 1SG=enrober-INTR. No known fixes. 
+: Cannot match 3PL=attacher-RED. No known fixes. 
+: Cannot match 3PL=chasser. No known fixes. 
+: Cannot match mettre_à_l_intérieur-INTR. No known fixes. 
+: Cannot match 3PL=NEG=reconnaitre. No known fixes. 
+: Cannot match 3PL=rentrer-RED. No known fixes. 
+: Cannot match 2PL=chanter. No known fixes. 
+: Cannot match 2PL=RED-appeler. No known fixes. 
+: Cannot match 3PL=déposer. No known fixes. 
+: Cannot match OBJ. No known fixes. 
+: Cannot match pousser-INTR. No known fixes. 
+: Cannot match (3SG=s'embellir. No known fixes. 
+: Cannot match 3SG=porter_sur_épaule-INTR. No known fixes. 
+: Cannot match 3SG=énever. No known fixes. 
+: Cannot match 3PL=introduire. No known fixes. 
+: Cannot match NEG=voir-INTR. No known fixes. 
+: Cannot match bislama. No known fixes. 
+: Cannot match 3PL=donner. No known fixes. 
+: Cannot match 2PL.DU. No known fixes. 
+: Cannot match 3PL=lever. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Cannot match s'entasser_les_uns_sur_les_autres. No known fixes. 
+: Cannot match TAXON=DEI.P. No known fixes. 
+: Cannot match 3PL=tirer. No known fixes. 
+: Cannot match 3SG=s'épuiser. No known fixes. 
+: Cannot match 1SG=vendre-INTR. No known fixes. 
+: Cannot match être_étalé. No known fixes. 
+: Cannot match 3PL=cuire-INTR. No known fixes. 
+: Cannot match 3PL=sortir. No known fixes. 
+: Cannot match 3PL=détacher. No known fixes. 
+: Cannot match 3PL=s'enfermer-RED. No known fixes. 
+: Cannot match ??=INT. No known fixes. 
+: Cannot match 1INCL=poursuivre. No known fixes. 
+: Cannot match s'allonger. No known fixes. 
+: Cannot match COO.CAUS. No known fixes. 
+: Cannot match 2PL=ouvrir. No known fixes. 
+: Cannot match OBj.1SG. No known fixes. 
+: Lemma only matches case-insensitive Comme. No known fixes. 
+: Cannot match 3SG=chasser-INTR. No known fixes. 
+: Cannot match 3PL=être_présent. No known fixes. 
+: Cannot match 3PL=être. No known fixes. 
+: Cannot match 3PL=rendre_la_pareil-RED. No known fixes. 
+: Cannot match 3PL.ASP.EC=voir. No known fixes. 
+: Cannot match 3PL=faire-INTR. No known fixes. 
+: Cannot match 3SG=jeter-INTR. No known fixes. 
+: Cannot match 3PL.DU=être_noir. No known fixes. 
+: Cannot match croquer-INTR. No known fixes. 
+: Cannot match 3PL=suivre_derrière. No known fixes. 
+: Cannot match 3PL=servir-INTR. No known fixes. 
+: Cannot match 3PL=tenir_debout. No known fixes. 
+: Cannot match 3PL=être_deux. No known fixes. 
+: Cannot match 3PL=frapper. No known fixes. 
+: Cannot match 3PL=atteindre. No known fixes. 
+: Cannot match 3PL=dire-IRR. No known fixes. 
+: Cannot match aller=2PL=détacher-INTR. No known fixes. 
+: Cannot match 3PL=discuter-RED. No known fixes. 
+: Cannot match 3PL=aller=assoir. No known fixes. 
+: Cannot match 1INCL=envoyer-INTR. No known fixes. 
+: Cannot match histoire-NOMI. No known fixes. 
+: Cannot match 2PL=ouvrer. No known fixes. 
+: Cannot match 3PL=découper-INTR. No known fixes. 
+: Cannot match 3PL=couper. No known fixes. 
+: Cannot match PA.AFFEC. No known fixes. 
+: Cannot match 1SG=rire-INTR. No known fixes. 
+: Cannot match 1EXCL=être. No known fixes. 
+: Cannot match 3PL.ASP.EC=souffler. No known fixes. 
+: Cannot match RECI. No known fixes. 
+: Cannot match 2PL.ASP.EC=travailler. No known fixes. 
+: Cannot match 3PL=venir. No known fixes. 
+: Cannot match 3PL=préparer. No known fixes. 
+: Cannot match 3SG=??. No known fixes. 
+: Cannot match TAXON. No known fixes. 
+: Cannot match 3PL=fermer. No known fixes. 
+: Cannot match PAN=1INCL. No known fixes. 
+: Cannot match 3PL=pleurer-INTR. No known fixes. 
+: Cannot match 3PL=servir. No known fixes. 
+: Cannot match fermer-INTR. No known fixes. 
+: Cannot match COO.NM-INTR. No known fixes. 
+: Cannot match 2PL=NEG=travailler. No known fixes. 
+: Cannot match 3SG=s'assombrir-RED. No known fixes. 
+: Cannot match 3PL.DU=voir-INTR=INT. No known fixes. 
+: Cannot match 3PL=aller-RED. No known fixes. 
+: Cannot match Ptilope_de_Grey. No known fixes. 
+: Cannot match 3PL=vivre. No known fixes. 
+: Cannot match 3PL=IRR=aller. No known fixes. 
+: Cannot match 1INCL=manger. No known fixes. 
+: Cannot match 3PL=rapporter. No known fixes. 
+: Cannot match 1INCL=DIR. No known fixes. 
+: Cannot match 3PL=??. No known fixes. 
+: Cannot match ANIMAL. No known fixes. 
+: Cannot match 3SG=rester_à_l'écart. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Cannot match 2PL.ASP.EC=RED-être_fort. No known fixes. 
+: Cannot match être_bloqué. No known fixes. 
+: Cannot match 3SG=faire-INTR. No known fixes. 
+: Cannot match 3PL=ressentir. No known fixes. 
+: Cannot match 3PL.DU=aller. No known fixes. 
+: Cannot match écouter-INTR. No known fixes. 
+: Cannot match 2PL=bloquer. No known fixes. 
+: Cannot match 1INCL=manger-INTR. No known fixes. 
+: Cannot match 3PL=descendre. No known fixes. 
+: Cannot match 3PL=s'asseoir. No known fixes. 
+: Cannot match 1EXCL. No known fixes. 
+: Cannot match lancer_une_pierre-INTR. No known fixes. 
+: Cannot match le_long-INTR. No known fixes. 
+: Cannot match ART.P=3PL. No known fixes. 
+: Cannot match cuisiner_un_laplap. No known fixes. 
+: Cannot match 3PL=couvrir. No known fixes. 
+: Cannot match NARR. No known fixes. 
+: Cannot match grimper-INTR=venir. No known fixes. 
+: Cannot match 3SG=apporter-INTR. No known fixes. 
+: Cannot match être_mort-NOMI. No known fixes. 
+: Lemma only matches case-insensitive hui. No known fixes. 
+: Cannot match aujourd_hui. No known fixes. 
+: Cannot match détache. No known fixes. 
+: Cannot match 2PL=NEG=parler. No known fixes. 
+: Cannot match 1EXCL=aller. No known fixes. 
+: Cannot match 3PL=NEG=venir. No known fixes. 
+: Cannot match chasser-INTR. No known fixes. 
+: Cannot match 3PL=faire_du_laplap. No known fixes. 
+: Cannot match tenir-INTR. No known fixes. 
+: Cannot match écoute-INTR. No known fixes. 
+: Cannot match s'entasser. No known fixes. 
+: Cannot match broyer-INTR. No known fixes. 
+: Cannot match 3SG=porter-INTR. No known fixes. 
+: Cannot match manger-NOMI. No known fixes. 
+: Cannot match 2PL=NEG.ASP.EC=travailler. No known fixes. 
+: Cannot match AUTRE. No known fixes. 
+: Cannot match 2SG=fermer-INTR. No known fixes. 
+: Cannot match 3PL=dormir. No known fixes. 
+: Cannot match 1INCL=tuer-INTR. No known fixes. 
+: Cannot match bloquer-INTR. No known fixes. 
+: Cannot match 3PL=porter_sur_le_dos. No known fixes. 
+: Cannot match kenbi. No known fixes. 
+: Cannot match 3PL=dancer-RED. No known fixes. 
+: Cannot match 3PL=tuer. No known fixes. 
+: Cannot match PREP.CAUSE. No known fixes. 
+: Cannot match [toux]. No known fixes. 
+: Cannot match ARBRE. No known fixes. 
+: Cannot match 2PL=râper. No known fixes. 
+: Cannot match 3PL.ASP.EC=rester. No known fixes. 
+: Lemma only matches case-insensitive Il_y_a. No known fixes. 
+: Cannot match 3SG=brûler-INTR. No known fixes. 
+: Cannot match 3PL=nourrir. No known fixes. 
+: Cannot match 3PL.DU=trembler. No known fixes. 
+: Cannot match fruit_du_nagatambol. No known fixes. 
+: Cannot match RED-attacher-INTR. No known fixes. 
+: Cannot match 2SG-FUT=donner-INTR. No known fixes. 
+: Cannot match 2PL=travailer. No known fixes. 
+: Cannot match 2PL=rester-RED. No known fixes. 
+: Cannot match 3PL.DU=ensemble. No known fixes. 
+: Lemma only matches case-insensitive chen. No known fixes. 
+: Cannot match 3PL=être_allongé-INTR. No known fixes. 
+: Cannot match 2PL=penser. No known fixes. 
+: Cannot match ASP.A-INTR. No known fixes. 
+: Cannot match 1INCL=blesser-INTR. No known fixes. 
+: Cannot match 1SG=entendre-INTR. No known fixes. 
+: Cannot match 2PL=révéler-INTR. No known fixes. 
+: Cannot match PA-1INCL.DU. No known fixes. 
+: Cannot match 2PL=avoir_peur. No known fixes. 
+: Cannot match 3PL=ASP.EC=entrainer. No known fixes. 
+: Cannot match 3PL=envelopper. No known fixes. 
+: Cannot match déposer-INTR. No known fixes. 
+: Cannot match marier-NOMI. No known fixes. 
+: Cannot match PA.2PL. No known fixes. 
+: Cannot match 1INCL=NEG=savoir. No known fixes. 
+: Cannot match 1INCL=pagayer. No known fixes. 
+: Cannot match 3SG.ASP.EC-FUT=entendre-INTR. No known fixes. 
+: Cannot match 3SG=s'attacher-RED. No known fixes. 
+: Cannot match 3PL=dire. No known fixes. 
+: Cannot match ??-NOM. No known fixes. 
+: Cannot match 3PL=ouvrir. No known fixes. 
+: Cannot match 3PL=porter. No known fixes. 
+: Cannot match 3PL=fermer-INTR. No known fixes. 
+: Cannot match 3PL=dire-INTR. No known fixes. 
+: Cannot match 3PL=écouter-RED. No known fixes. 
+: Cannot match s'attacher. No known fixes. 
+: Cannot match IRR=1EXCL=aller. No known fixes. 
+: Lemma only matches case-insensitive a. No known fixes. 
+: Cannot match gilsse. No known fixes. 
+: Cannot match 2PL.ASP.EC=DIR. No known fixes. 
+: Cannot match 1INCL.DU. No known fixes. 
+: Cannot match 3PL=penser. No known fixes. 
+: Cannot match 3PL=dépasser. No known fixes. 
+: Cannot match 3PL=ASP.EC=rester. No known fixes. 
+: Cannot match DIR-maison. No known fixes. 
+: Cannot match 3PL=ASP. No known fixes. 
+: Cannot match ???. No known fixes. 
+: Cannot match 3SG=s'envoler. No known fixes. 
+: Cannot match s'embellir. No known fixes. 
+: Cannot match natangura. No known fixes. 
+: Cannot match 3PL-. No known fixes. 
+: Cannot match être_étalé-RED. No known fixes. 
+: Cannot match 1EXCL=tuer-INTR. No known fixes. 
+: Cannot match ASP.I-??. No known fixes. 
+: Cannot match 2PL=mettre-INT. No known fixes. 
+: Cannot match couper-RED-INTR. No known fixes. 
+: Cannot match 3PL=tisser. No known fixes. 
+: Lemma only matches case-insensitive grosse. No known fixes. 
+: Cannot match 3SG.ASP.EC=manger-INTR. No known fixes. 
+: Cannot match 1INCL=apporter. No known fixes. 
+: Cannot match navellier. No known fixes. 
+: Cannot match 3PL=cuire. No known fixes. 
+: Cannot match 3PL.DU=venir. No known fixes. 
+: Cannot match 3SG=??=être_noir-RED. No known fixes. 
+: Cannot match PA=1INCL. No known fixes. 
+: Cannot match 3PL=NEG. No known fixes. 
+: Cannot match continuer-INTR. No known fixes. 
+: Cannot match 2PL=asseoir. No known fixes. 
+: Cannot match 3SG=détache-INTR. No known fixes. 
+: Cannot match 3SG=aller=jeter-INTR. No known fixes. 
+: Cannot match s'écouler-RED. No known fixes. 
+: Cannot match 3PL=ASP.EC=couper-RED. No known fixes. 
+: Cannot match 2PL=NEG=entendre. No known fixes. 
+: Cannot match entendre-INTR. No known fixes. 
+: Cannot match 1INCL=aller_à_fond. No known fixes. 
+: Cannot match 3PL=être_grand-RED. No known fixes. 
+: Cannot match 3PL=NEG=avoir. No known fixes. 
+: Cannot match 3Sg=dire-INTR. No known fixes. 
+: Cannot match PA.AFFEC-1SG. No known fixes. 
+: Cannot match 3PL=rentrer. No known fixes. 
+: Cannot match 2SG-FUT=aller=manger-INTR. No known fixes. 
+: Cannot match 3PL=courir=aller. No known fixes. 
+: Cannot match 1INCL=frapper. No known fixes. 
+: Cannot match 1INCL=assoir. No known fixes. 
+: Cannot match 3PL=être_mort. No known fixes. 
+: Cannot match 2PL=révéler. No known fixes. 
+: Lemma only matches case-insensitive cadena. No known fixes. 
+: Cannot match s'épuiser. No known fixes. 
+: Cannot match 1INCL.DU=penser. No known fixes. 
+: Cannot match aller=s'asseoir-RED. No known fixes. 
+: Cannot match 3PL=cacher.. No known fixes. 
+: Cannot match arriver_en_courant-INTR. No known fixes. 
+: Cannot match 2PL=voir. No known fixes. 
+: Cannot match 1EXCL=s'asseoir. No known fixes. 
+: Cannot match PA-1INCL. No known fixes. 
+: Cannot match PN.2PL. No known fixes. 
+: Cannot match s'asseoir-RED. No known fixes. 
+: Cannot match aller-INTR. No known fixes. 
+: Cannot match grimper-INTR. No known fixes. 
+: Cannot match 1INCL=fermer-RED. No known fixes. 
+: Cannot match faire_laplap. No known fixes. 
+: Cannot match 2PL=abattre. No known fixes. 
+: Cannot match 3PL=RED-disputer. No known fixes. 
+: Cannot match FUT.POST. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Cannot match 3PL=suivre-INTR. No known fixes. 
+: Cannot match 3PL=ASP.EC=aller. No known fixes. 
+: Cannot match 3SG=s'envole. No known fixes. 
+: Cannot match ensemble-INTR. No known fixes. 
+: Cannot match apporter-INTR. No known fixes. 
+: Cannot match jeter-INTR. No known fixes. 
+: Cannot match 3SG=mettre-INTR. No known fixes. 
+: Cannot match 3PL=entendre-RED. No known fixes. 
+: Cannot match 3PL=ASP.EC=remplir. No known fixes. 
+: Cannot match 2PL. No known fixes. 
+: Cannot match 3PL.ASP.EC=aller-RED. No known fixes. 
+: Cannot match plante_médicinale. No known fixes. 
+: Cannot match 2SG=prendre-INTR. No known fixes. 
+: Cannot match prend. No known fixes. 
+: Cannot match 3PL=COO.VB. No known fixes. 
+: Cannot match 3PL=monter. No known fixes. 
+: Cannot match IRR=2PL=cacher. No known fixes. 
+: Cannot match 3PL=blesser. No known fixes. 
+: Cannot match 3PL=aller=attacher-RED. No known fixes. 
+: Cannot match 1INCL=??-RED. No known fixes. 
+: Cannot match 2PL.ASP.EC. No known fixes. 
+: Cannot match 3SG=avaler-INTR. No known fixes. 
+: Cannot match DIR=maison. No known fixes. 
+: Cannot match 3PL=ASP.C=??. No known fixes. 
+: Cannot match 3PL=brûler. No known fixes. 
+: Cannot match 3PL=dépécher. No known fixes. 
+: Cannot match 2PL=être. No known fixes. 
+: Cannot match 3PL.ASP.EC=cuisiner. No known fixes. 
+: Cannot match 1INCL=élever. No known fixes. 
+: Cannot match 3PL=aller=rester. No known fixes. 
+: Cannot match 1INCL=être_bloqué. No known fixes. 
+: Cannot match 1EXCL=couper-INTR. No known fixes. 
+: Cannot match 3PL=nettoyer-RED-INTR. No known fixes. 
+: Cannot match 3SG=révéler-INTR. No known fixes. 
+: Cannot match chercher-INTR. No known fixes. 
+: Cannot match 3SG=transpercer-INTR. No known fixes. 
+: Cannot match aller=attacher-INTR. No known fixes. 
+: Cannot match 3SG=broyer-INTR. No known fixes. 
+: Cannot match faire_le_laplap. No known fixes. 
+: Cannot match 1INCL=aller=déterrer. No known fixes. 
+: Cannot match 3SG=aller-INTR. No known fixes. 
+: Cannot match DESI. No known fixes. 
+: Cannot match kusve. No known fixes. 
+: Cannot match 2PL=aller. No known fixes. 
+: Cannot match 1SG=prendre-INTR. No known fixes. 
+: Cannot match dépécher. No known fixes. 
+: Cannot match 3PL=transformer. No known fixes. 
+: Cannot match ASP.C-INTR. No known fixes. 
+: Cannot match 1INCL=NEG=voir-INTR. No known fixes. 
+: Cannot match 2PL=partir-RED. No known fixes. 
+: Cannot match dans_le_nakamal. No known fixes. 
+: Cannot match 2PL=savoir. No known fixes. 
+: Cannot match 3PL=INT. No known fixes. 
+: Cannot match LIEU. No known fixes. 
+: Cannot match 3PL=être_nombreux. No known fixes. 
+: Cannot match 3PL=tirer_à_l'arc-INTR. No known fixes. 
+: Cannot match c'est_sûrement. No known fixes. 
+: Cannot match 3SG=détacher-INTR. No known fixes. 
+: Cannot match 3SG=ASP.EC=entendre-INTR. No known fixes. 
+: Cannot match frapper-INTR. No known fixes. 
+: Cannot match ??=couper. No known fixes. 
+: Cannot match 3PL.ASP.EC=parler. No known fixes. 
+: Cannot match 3PL=être_debout. No known fixes. 
+: Cannot match ??-INTR. No known fixes. 
+: Cannot match 1SG=apporter-INTR. No known fixes. 
+: Cannot match 3PL=NEG=manger-INTR. No known fixes. 
+: Cannot match 2PL=balader-RED. No known fixes. 
+: Cannot match 3PL=rester-RED. No known fixes. 
+: Cannot match 1EXCL=tirer-RED. No known fixes. 
+: Cannot match 3PL=suivre. No known fixes. 
+: Cannot match INSECTE. No known fixes. 
+: Cannot match 1INCL=creuser. No known fixes. 
+: Cannot match NARR,. No known fixes. 
+: Cannot match 3PL.ASP.EC=se_préparer_rapidement-RED. No known fixes. 
+: Cannot match NOMI. No known fixes. 
+: Cannot match 2PL=rire-RED. No known fixes. 
+: Cannot match autour-INTR. No known fixes. 
+: Cannot match OBJ.3SG). No known fixes. 
+: Cannot match 2PL=appeler. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Cannot match 3PL=séparer. No known fixes. 
+: Cannot match PN-1INCL. No known fixes. 
+: Cannot match 3PL=emporter-INTR. No known fixes. 
+: Cannot match 3PL=éplucher. No known fixes. 
+: Cannot match porter-INTR. No known fixes. 
+: Cannot match couver-INTR. No known fixes. 
+: Cannot match 3PL.ASP.EC=écouter. No known fixes. 
+: Cannot match 1INCL=devoir=protéger. No known fixes. 
+: Cannot match 3PL=rester. No known fixes. 
+: Cannot match entouré. No known fixes. 
+: Cannot match nanqaillier=DEI.P. No known fixes. 
+: Cannot match CORR. No known fixes. 
+: Cannot match ASP.F-INTR. No known fixes. 
+: Cannot match ART.P=kenbi. No known fixes. 
+: Cannot match 3PL=se_laver. No known fixes. 
+: Cannot match 2PL=??=couper. No known fixes. 
+: Cannot match 1INCL=aller. No known fixes. 
+: Cannot match 1INCL=entendre-RED. No known fixes. 
+: Cannot match 1SG=HESI. No known fixes. 
+: Cannot match 3PL=NEG=connaitre. No known fixes. 
+: Cannot match 3SG=chercher-INTR. No known fixes. 
+: Cannot match 3SG=couper-INTR. No known fixes. 
+: Cannot match 3PL=etre. No known fixes. 
+: Cannot match 2PL=descendre. No known fixes. 
+: Cannot match ??. No known fixes. 
+: Lemma only matches case-insensitive lianne. No known fixes. 
+: Lemma only matches case-insensitive vieille. No known fixes. 
+: Cannot match 3SG=arracher-INTR. No known fixes. 
+: Cannot match 1INCL=couper. No known fixes. 
+: Cannot match 2PL=NEG.ASP.EC=travailer. No known fixes. 
+: Cannot match 3PL=faire. No known fixes. 
+: Cannot match DET. No known fixes. 
+: Cannot match 3PL=voler. No known fixes. 
+: Cannot match 3SG=enrober-INTR. No known fixes. 
+: Cannot match OBJ.3PL. No known fixes. 
+: Cannot match 1EXCL=NEG=savoir. No known fixes. 
+: Cannot match penser-NOMI. No known fixes. 
+: Cannot match OISEAU. No known fixes. 
+: Cannot match 3PL=ne_rien_trouver. No known fixes. 
+: Cannot match d'un_coup. No known fixes. 
+: Cannot match 1SG=remettre-INTR. No known fixes. 
+: Cannot match 1SG=dire-INTR. No known fixes. 
+: Cannot match 3SG=dire-INTR. No known fixes. 
+: Cannot match HESI. No known fixes. 
+: Cannot match 1SG=détacher-INTR. No known fixes. 
+: Cannot match 3PL=pousser-INTR. No known fixes. 
+: Cannot match 3PL=penser=dire. No known fixes. 
+: Cannot match 3PL.ASP.EC=faire_laplap. No known fixes. 
+: Cannot match 3SG.ASP.EC=raper-INTR. No known fixes. 
+: Lemma only matches case-insensitive Voler. No known fixes. 
+: Cannot match 3PL.ASP.EC. No known fixes. 
+: Cannot match 2PL=ASP.EC=aller. No known fixes. 
+: Cannot match 1INCL=RED-jouer. No known fixes. 
+: Cannot match DESI-INTR. No known fixes. 
+: Cannot match suivre-INTR. No known fixes. 
+: Cannot match DIR. No known fixes. 
+: Cannot match 2PL=manger-INTR. No known fixes. 
+: Cannot match 3SG=voir-INTR. No known fixes. 
+: Cannot match dresser-INTR. No known fixes. 
+: Cannot match 1INCL=être. No known fixes. 
+: Cannot match 1SG=NEG=détacher-INTR. No known fixes. 
+: Cannot match 3PL=entendre. No known fixes. 
+: Cannot match 3PL=être_mort-RED. No known fixes. 
+: Cannot match 1INCL=savoir. No known fixes. 
+: Cannot match (3SG. No known fixes. 
+: Cannot match 3PL.ASP.EC=chanter. No known fixes. 
+: Cannot match 2PL=tuer. No known fixes. 
+: Cannot match 3PL=savoir. No known fixes. 
+: Cannot match 2SG=manger-INTR. No known fixes. 
+: Cannot match 3PL=envoyer. No known fixes. 
+: Cannot match aller=aller-INTR. No known fixes. 
+: Cannot match détacher-INTR. No known fixes. 
+: Cannot match ressentir-INTR. No known fixes. 
+: Cannot match 3SG=porter_sur_le_dos-INTR. No known fixes. 
+: Cannot match 3PL=regarder. No known fixes. 
+: Cannot match 3PL=trembler. No known fixes. 
+: Cannot match 2PL.ASP.EC=être_prêt. No known fixes. 
+: Cannot match s'asseoir. No known fixes. 
+: Cannot match 3PL=recommencer. No known fixes. 
+: Cannot match 2PL=pêcher_des_écrevisse. No known fixes. 
+: Cannot match jusqu'au_lendemain. No known fixes. 
+: Cannot match emmener-INTR. No known fixes. 
+: Cannot match 3SG=manger-INTR. No known fixes. 
+: Cannot match 3PL=être_en_colère. No known fixes. 
+: Cannot match tuer-INTR. No known fixes. 
+: Cannot match 1EXCL=dormic. No known fixes. 
+: Cannot match 3SG=prendre-INTR. No known fixes. 
+: Cannot match ??-3PL. No known fixes. 
+: Cannot match bûches. No known fixes. 
+: Cannot match 2PL=restez. No known fixes. 
+: Cannot match 3PL=rigoler-RED. No known fixes. 
+: Cannot match 1INCL. No known fixes. 
+: Cannot match 1SG=IRR=détacher-INTR. No known fixes. 
+: Cannot match 3PL=frapper-INTR. No known fixes. 
+: Cannot match 3SG.ASP.EC=emporter=RED-INTR. No known fixes. 
+: Cannot match 3PL=aller=manger. No known fixes. 
+: Cannot match ASP.I-INTR. No known fixes. 
+: Cannot match 3PL=ASP.J=HESI. No known fixes. 
+: Cannot match 1SG=manger-INTR. No known fixes. 
+: Cannot match poser-INTR. No known fixes. 
+: Cannot match 3PL=faire_le_laplap. No known fixes. 
+: Cannot match 3SG=faisander. No known fixes. 
+: Cannot match 3PL=manger-INTR. No known fixes. 
+: Cannot match 3SG=entendre-INTR. No known fixes. 
+: Cannot match 2PL=être_où. No known fixes. 
+: Cannot match 3PL=revenir. No known fixes. 
+: Cannot match 3SG=HESI. No known fixes. 
+: Cannot match 3PL.OP. No known fixes. 
+: Lemma only matches case-insensitive Herbe. No known fixes. 
+: Cannot match 2PL=laisser-INTR. No known fixes. 
+: Cannot match 2PL=dire. No known fixes. 
+: Cannot match 3PL. No known fixes. 
+: Cannot match 3SG=transpecter. No known fixes. 
+: Cannot match 3SG=s'asseoir. No known fixes. 
+: Cannot match 2PL=grimper. No known fixes. 
+: Cannot match MUL-INTR. No known fixes. 
+: Cannot match 1INCL=aiguiser-RED. No known fixes. 
+: Cannot match 3PL=pagayer. No known fixes. 
+: Cannot match 3PL=accoucher. No known fixes. 
+: Cannot match 3PL=prendre. No known fixes. 
+: Cannot match 3PL=RED-jouer. No known fixes. 
+: Cannot match 3SG=faire_du_laplap. No known fixes. 
+: Cannot match 2pl. No known fixes. 
+: Cannot match 3PL=arriver. No known fixes. 
+: Cannot match transpecter. No known fixes. 
+: Cannot match 2PL=dévoiler-INTR. No known fixes. 
+: Cannot match 1INCL=tuer. No known fixes. 
+: Cannot match 1INCL=s'allonger. No known fixes. 
+: Cannot match 3PL=lancer. No known fixes. 
+: Cannot match 3PL=écouter-INTR. No known fixes. 
+: Cannot match 3PL=aller=voir-INTR. No known fixes. 
+: Cannot match 3PL=courir. No known fixes. 
+: Lemma only matches case-insensitive Herbe. No known fixes. 
+: Cannot match 2PL=chanter-RED. No known fixes. 
+: Cannot match porter_sur_l_épaule-INTR. No known fixes. 
+: Cannot match (INTER). No known fixes. 
+: Cannot match atteindre-INTR. No known fixes. 
+: Cannot match PREP. No known fixes. 
+: Cannot match 1INCL=NEG=entendre. No known fixes. 
+: Cannot match PA-1EXCL.DU. No known fixes. 
+: Cannot match 3PL=dire-RED-INTR. No known fixes. 
+: Cannot match 1INCL=cuisiner. No known fixes. 
+: Cannot match IRR=2PL=aller. No known fixes. 
+: Cannot match 3PL.DU=tirer-RED. No known fixes. 
+: Cannot match 1EXCL.DU=DEI.P. No known fixes. 
+: Cannot match 3PL=aller_pour. No known fixes. 
+: Cannot match 1SG-FUT=s'allonger. No known fixes. 
+: Cannot match 1SG=boire-INTR. No known fixes. 
+: Cannot match 3PL=DIR. No known fixes. 
+: Cannot match 3SG=suivre-INTR. No known fixes. 
+: Cannot match 3PL=parler. No known fixes. 
+: Cannot match 3PL=NEG=vouloir. No known fixes. 
+: Cannot match s'envoler. No known fixes. 
+: Cannot match voir-INTR. No known fixes. 
+: Cannot match blesser-INTR. No known fixes. 
+: Cannot match 3PL.ASP.EC=crier. No known fixes. 
+: Cannot match 2PL=envoyer. No known fixes. 
+: Cannot match 3PL=sauter. No known fixes. 
+: Cannot match emporter-INTR. No known fixes. 
+: Cannot match 1INCL=NEG.ASP.EC=dormir. No known fixes. 
+: Cannot match 3SG=HESI-HESI. No known fixes. 
+: Cannot match 3PL=pendre. No known fixes. 
+: Cannot match récupérer-INTR. No known fixes. 
+: Cannot match 3PL=demander. No known fixes. 
+: Cannot match 2PL=être_là. No known fixes. 
+: Lemma only matches case-insensitive a. No known fixes. 
+: Cannot match manger-INTR. No known fixes. 
+: Cannot match 2SG-FUT=blesser-INTR. No known fixes. 
+: Cannot match 2PL=accrocher-RED. No known fixes. 
+: Cannot match 2SG=aller-INTR. No known fixes. 
+: Cannot match INDEF-INTR. No known fixes. 
+: Cannot match aller=DIR. No known fixes. 
+: Cannot match 3PL=accourir. No known fixes. 
+: Cannot match 3PL.DU. No known fixes. 
+: Cannot match 1EXCL=être_fini. No known fixes. 
+: Lemma only matches case-insensitive mac. No known fixes. 
+: Cannot match s'envole. No known fixes. 
+: Cannot match s'ennuyer. No known fixes. 
+: Cannot match 2PL=enfermer-RED. No known fixes. 
+: Cannot match 3PL=approcher. No known fixes. 
+: Cannot match fruit_du_namlecec. No known fixes. 
+: Cannot match 3PL=discuter. No known fixes. 
+: Cannot match 2SG=??. No known fixes. 
+: Cannot match 3PL=aller=envoyer. No known fixes. 
+: Cannot match 3PL=élever. No known fixes. 
+: Cannot match 1INCL=aller_pour. No known fixes. 
+: Cannot match 1EXCL=venir. No known fixes. 
+: Cannot match 2PL=faire. No known fixes. 
+: Cannot match manger_INTR. No known fixes. 
+: Cannot match 1EXCL=donner. No known fixes. 
+: Cannot match 1SG=venir-INTR. No known fixes. 
+: Cannot match 3PL=continuer. No known fixes. 
+: Cannot match REL-INTR. No known fixes. 
+: Cannot match 3SG=s'abaisser. No known fixes. 
+: Cannot match 3SG=boire-INTR. No known fixes. 
+: Cannot match s'écouler. No known fixes. 
+: Cannot match 2PL=monter. No known fixes. 
+: Cannot match prendre-INTR. No known fixes. 
+: Cannot match DIR=terre. No known fixes. 
+: Cannot match 3PL=cacher. No known fixes. 
+: Cannot match 1EXCL=FUT.POST=revenir-RED. No known fixes. 
+: Cannot match 1INCL=envoyer. No known fixes. 
+: Cannot match s'assombrir. No known fixes. 
+: Cannot match natagura. No known fixes. 
+: Cannot match aller=nourrir=OBJ. No known fixes. 
+: Cannot match chasser-NOMI. No known fixes. 
+: Cannot match couper-INTR. No known fixes. 
+: Cannot match 1SG=NEG=connâitre. No known fixes. 
+: Cannot match 3SG=déposer_en_haut-INTR. No known fixes. 
+: Cannot match 3PL=se_trouver. No known fixes. 
+: Cannot match surveiller-INTR. No known fixes. 
+: Cannot match rapporter-INTR. No known fixes. 
+: Cannot match 3SG.ASP.EC-FUT=voir-INTR. No known fixes. 
+: Cannot match 2PL=sortir. No known fixes. 
+: Cannot match ART.P=OISEAU. No known fixes. 
+: Cannot match 2PL=envoyer-INTR. No known fixes. 
+: Cannot match 3PL=être_propre-RED. No known fixes. 
+: Cannot match aller=voir-INTR. No known fixes. 
+: Lemma only matches case-insensitive a. No known fixes. 
+: Cannot match PA-3PL. No known fixes. 
+: Cannot match 3PL=debout. No known fixes. 
+: Cannot match à_nouveau-INTR. No known fixes. 
+: Cannot match 3PL=aller. No known fixes. 
+: Cannot match tirer-INTR. No known fixes. 
+: Cannot match 1INCL=faire. No known fixes. 
+: Cannot match 3PL=planter. No known fixes. 
+: Cannot match dernière_branche. No known fixes. 
+: Cannot match aligner-INTR. No known fixes. 
+: Cannot match laplap. No known fixes. 
+: Cannot match 3PL=repousser. No known fixes. 
+: Cannot match 3PL=voir-INTR. No known fixes. 
+: Cannot match OBJ-3SG. No known fixes. 
+: Cannot match 1INCL=ASP.J=dire-INTR. No known fixes. 
+: Cannot match 3PL=déposer-INTR. No known fixes. 
+: Cannot match 3PL=être_cassé. No known fixes. 
+: Cannot match 3SG=s'endormir. No known fixes. 
+: Cannot match bourbière. No known fixes. 
+: Cannot match 3SG=emporter-INTR. No known fixes. 
+: Lemma only matches case-insensitive vieille. No known fixes. 
+: Cannot match 3PL=assoir. No known fixes. 
+: Cannot match 1SG=aller=dire-INTR. No known fixes. 
+: Cannot match 1INCL=aller=manger. No known fixes. 
+: Cannot match 3PL=rincer. No known fixes. 
+: Cannot match 3SG=blesser-INTR. No known fixes. 
+: Cannot match mai-INTR. No known fixes. 
+: Cannot match mettre-INTR. No known fixes. 
+: Cannot match ARBRE.nanqailler. No known fixes. 
+: Cannot match 3PL=entendre-INTR. No known fixes. 
+: Cannot match réussur. No known fixes. 
+: Cannot match 3SG.ASP.EC=cuire-INTR. No known fixes. 
+: Cannot match dévoiler-INTR. No known fixes. 
+: Cannot match nakamel. No known fixes. 
+: Cannot match 2SG=laisser-INTR. No known fixes. 
+: Cannot match 3PL=enterrer-INTR. No known fixes. 
+: Cannot match 2PL=voir-INTR. No known fixes. 
+: Cannot match 3SG=lapider-INTR. No known fixes. 
+: Cannot match 3PL=déplacer. No known fixes. 
+: Cannot match connâitre. No known fixes. 
+: Cannot match 3SG=manger_INTR. No known fixes. 
+: Cannot match introduire-INTR. No known fixes. 
+: Cannot match 3PL.ASP.EC=travailler-RED. No known fixes. 
+: Cannot match 3PL=enfanter. No known fixes. 
+: Cannot match 3PL=acheter-INTR. No known fixes. 
+: Cannot match 3PL=fermer-RED. No known fixes. 
+: Cannot match aller=tuer-INTR. No known fixes. 
+: Cannot match 3PL=prendre-INTR. No known fixes. 
+: Cannot match DEF-INTR. No known fixes. 
+: Cannot match 3PL.ASP.EC=aller. No known fixes. 
+: Cannot match 3PL=élaborer. No known fixes. 
+: Cannot match 3PL=manger. No known fixes. 
+: Cannot match 1EXCL=faire. No known fixes. 
+: Cannot match 3PL=danser. No known fixes. 
+: Cannot match 3PL.ASP.EC=appeler. No known fixes. 
+: Cannot match 2PL=venir. No known fixes. 
+: Cannot match aller=s'asseoir. No known fixes. 
+: Cannot match 3PL=allonger. No known fixes. 
+: Cannot match nanqaillier. No known fixes. 
+: Cannot match regarder-INTR. No known fixes. 
+: Cannot match INSECT=PRO.DEI.P. No known fixes. 
+: Cannot match 3SG=se_lever_d'un_coup. No known fixes. 
+: Cannot match 3PL=emballer. No known fixes. 
+: Cannot match 3PL=transpercer. No known fixes. 
+: Cannot match 3PL=être_là. No known fixes. 
+: Cannot match 3PL=creuser. No known fixes. 
+: Cannot match se_dépécher. No known fixes. 
+: Cannot match entourer-INTR. No known fixes. 
+: Cannot match ASP.D-INTR. No known fixes. 
+: Cannot match cocoteraie. No known fixes. 
+: Cannot match nakamal. No known fixes. 
+: Lemma only matches case-insensitive a. No known fixes. 
+: Cannot match 3PL=apporter. No known fixes. 
+: Cannot match nakaml.. No known fixes. 
+: Cannot match avaler-INTR. No known fixes. 
+: Cannot match 3SG=NEG=manger-INTR. No known fixes. 
+: Cannot match 1INCL=être_fini. No known fixes. 
+: Cannot match 2PL=tuer-INTR. No known fixes. 
+: Cannot match 1INCL=introduire-INTR. No known fixes. 
+: Cannot match 3PL=abattre. No known fixes. 
+: Cannot match comme-INTR. No known fixes. 
+: Cannot match 2PL=IRR=ASP.EC. No known fixes. 
+: Cannot match 3PL=courir=venir. No known fixes. 
+: Cannot match PN-1INCL.DU. No known fixes. 
+: Cannot match 3PL=chasser-INTR. No known fixes. 
+: Cannot match 1INCL=ASP.C=chercher. No known fixes. 
+: Cannot match 2SG=NEG=voir-INTR. No known fixes. 
+: Cannot match 3SG=réussur. No known fixes. 
+: Cannot match 3SG=attacher-INTR. No known fixes. 
+: Cannot match PA-3PL.DU. No known fixes. 
+: Cannot match 3SG=NEG=entendre-INTR. No known fixes. 
+: Cannot match pierre_pour_laplap. No known fixes. 
+: Cannot match aller=déposer-INTR. No known fixes. 
+: Cannot match 3PL=aller=tuer. No known fixes. 
+: Cannot match NEG=2PL=appeler. No known fixes. 
+: Cannot match 1INCL=rester. No known fixes. 
+: Cannot match 3PL=grimper. No known fixes. 
+: Cannot match 2PL=tenir. No known fixes. 
+: Cannot match 3PL=nettoyer. No known fixes. 
+: Cannot match ARBRE=DEI.P. No known fixes. 
+: Cannot match 3PL=contraindre_à_sortir. No known fixes. 
+: Cannot match 3PL=discuter-INTR. No known fixes. 
+: Cannot match 3Sg=tirer-INTR. No known fixes. 
+: Cannot match 3PL=jouer-RED. No known fixes. 
+: Cannot match ART.P-OISEAU. No known fixes. 
+: Cannot match 3SG=saisir-INTR. No known fixes. 
+: Cannot match 3PL=disparaitre-RED. No known fixes. 
+: Cannot match 1SG=blesser-INTR. No known fixes. 
+: Cannot match 3PL.ASP.EC=se_préparer. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Lemma only matches case-insensitive les. No known fixes. 
+: Cannot match 3PL=s'entasser_les_uns_sur_les_autres. No known fixes. 
+: Cannot match COO.VB-INTR. No known fixes. 
+: Cannot match 2PL=ASP.V=revenir-RED. No known fixes. 
+: Cannot match s'occuper. No known fixes. 
+: Cannot match 1INCL=être_chanceux. No known fixes. 
+: Cannot match dire-INTR. No known fixes. 
+: Cannot match 3PL=être_assis. No known fixes. 
+: Cannot match 3PL=disposer. No known fixes. 
+: Cannot match 3PL=mettre-INTR. No known fixes. 
+: Lemma only matches case-insensitive Il. No known fixes. 
+: Lemma only matches case-insensitive a. No known fixes. 
+: Cannot match 3PL=se_lever-RED. No known fixes. 
+: Cannot match s'enrouler. No known fixes. 
+: Cannot match 3PL=inviter-RED. No known fixes. 
+: Cannot match observer-INTR. No known fixes. 
+: Cannot match INTR. No known fixes. 
+: Cannot match avec-INTR. No known fixes. 
+: Cannot match dire-RED-INTR. No known fixes. 
+: Cannot match entrendre-INTR. No known fixes. 
+: Cannot match 3PL=couper-INTR. No known fixes. 
+: Cannot match INST. No known fixes. 
+: Cannot match 3SG=LIEU. No known fixes. 
+: Cannot match aller=dire-INTR. No known fixes. 
+: Cannot match 3PL=attacher. No known fixes. 
+: Cannot match OBJ-PI.3SG. No known fixes. 
+: Cannot match 3SG=emmener-INTR. No known fixes. 
+: Cannot match 3PL=ASP.EC=réunir. No known fixes. 
+: Lemma only matches case-insensitive Qui. No known fixes. 
+: Cannot match 3PL=cuisiner. No known fixes. 
+: Cannot match 3SG=NEG=voir-INTR. No known fixes. 
+: Cannot match 1INCL=déposer. No known fixes. 
+: Cannot match 1INCL=allonger. No known fixes. 
+: Cannot match OBJ-fort. No known fixes. 
+: Cannot match cacher-INTR. No known fixes. 
+: Cannot match 3PL.ASP.EC=piquer. No known fixes. 
+: Cannot match 3PL=sortent. No known fixes. 
+: Cannot match 1INCL=entendre-INTR. No known fixes. 
+: Cannot match 3PL=allumer. No known fixes. 
+: Cannot match 2PL=dormir. No known fixes. 
+: Cannot match porter_à_l_épaule-INTR. No known fixes. 
+: Cannot match 3PL=aller=dire. No known fixes. 
+: Cannot match faire-INTR. No known fixes. 
+: Cannot match 3PL=emporter. No known fixes. 
+: Cannot match 1INCL=ne_pas_vouloir. No known fixes. 
+: Cannot match cuire-INTR. No known fixes. 
+: Cannot match DIR=cuisine. No known fixes. 
+: Cannot match 1INCL=rentrer. No known fixes. 
+: Cannot match 2PL=dourmir. No known fixes. 
+: Cannot match 2PL.ASP.EC=NEG=travailler. No known fixes. 
+: Cannot match 1INCL=venir. No known fixes. 
+: Cannot match 1INCL=dire. No known fixes. 
+: Cannot match 3PL=mourir-RED. No known fixes. 
+: Cannot match 3SG=fermer-INTR. No known fixes. 
+: Cannot match tirer_à_l'arc. No known fixes. 
+: Cannot match 1INCL=DESI=DEI. No known fixes. 
+: Cannot match 3PL.ASP.EC=pleurer. No known fixes. 
+: Cannot match lier-INTR. No known fixes. 
+: Cannot match 1INCL=avoir. No known fixes. 
+: Cannot match 2PL=vouloir. No known fixes. 
+: Cannot match 2SG=porter-INTR. No known fixes. 
+: Cannot match 2SG=lapider-INTR. No known fixes. 
+: Cannot match s'enfermer. No known fixes. 
+: Cannot match 3PL=jeter. No known fixes. 
+: Cannot match faisander. No known fixes. 
+: Cannot match 1INCL=porter_sur_le_dos-RED. No known fixes. 
+: Cannot match 3PL.ASP.EC=frapper. No known fixes. 
+: Cannot match POISSON. No known fixes. 
+: Cannot match 1INCL=tenir_debout. No known fixes. 
+: Cannot match 3PL=asseoir. No known fixes. 
+: Cannot match 3PL=aiguiser-RED. No known fixes. 
+: Cannot match 3PL=bloquer-RED. No known fixes. 
+: Cannot match 1INCL=ammer. No known fixes. 
+: Cannot match 1SG=envoyer-INTR. No known fixes. 
+: Cannot match ART.P=LIEU. No known fixes. 
+: Cannot match s'enfermer-RED. No known fixes. 
+: Cannot match 3PL=avoir_envie. No known fixes. 
+: Cannot match COO.TMP,. No known fixes. 
+: Cannot match 2SG=faire-INTR. No known fixes. 
+: Cannot match 3PL=désirer. No known fixes. 
+: Cannot match grandpère. No known fixes. 
+: Cannot match s'abaisser. No known fixes. 
+: Cannot match 1INCL=courir. No known fixes. 
+: Cannot match 3PL=NEG.ASP.EC=aller. No known fixes. 
+: Cannot match PA-2PL. No known fixes. 
+: Unknown tokens:
+DIR - 2
+OBJ - 2
+1SG=attacher-INTR - 1
+1INCL=appeler - 1
+3PL=ASP.EC=faire - 1
+3SG=enrober-INTR - 1
+3PL=poser_un_tabou-INTR - 1
+OBJ.3PL - 1
+1EXCL=NEG=savoir - 1
+penser-NOMI - 1
+reconnaitre - 1
+3SG=s'asseoir-RED - 1
+OISEAU - 1
+attacher-INTR - 1
+3SG=tirer-INTR - 1
+rembu - 1
+1SG.OBJ - 1
+3PL=ne_rien_trouver - 1
+3PL=ASP.J=asseoir - 1
+bougna - 1
+3PL=aller=déposer - 1
+DEI-INTR - 1
+2PL.DU=aller - 1
+2PL=jeter - 1
+faire_du_laplap - 1
+déposer_en_haut-INTR - 1
+1SG=?? - 1
+d'un_coup - 1
+1SG=remettre-INTR - 1
+1SG=dire-INTR - 1
+3SG=dire-INTR - 1
+HESI - 1
+1SG=détacher-INTR - 1
+1EXCL.DU - 1
+3PL=pousser-INTR - 1
+3PL=penser=dire - 1
+3PL.ASP.EC=faire_laplap - 1
+3PL=voir - 1
+3SG.ASP.EC=raper-INTR - 1
+rester_à_l'écart - 1
+2SG=voir-INTR - 1
+castré - 1
+coté - 1
+P - 1
+3PL.ASP.EC - 1
+2SG=apporter-INTR - 1
+2PL.ASP.EC=aller - 1
+se_lever_d'un_coup - 1
+2PL=ASP.EC=aller - 1
+1INCL=ASP.J=comment - 1
+1INCL=dormir - 1
+poser_un_tabou-INTR - 1
+1INCL=RED-jouer - 1
+suivre-INTR - 1
+DESI-INTR - 1
+feuilles - 1
+1INCL=ASP=aller - 1
+2PL=manger-INTR - 1
+dresser-INTR - 1
+3SG=voir-INTR - 1
+aller=emmener-INTR - 1
+1INCL=être - 1
+1SG=NEG=détacher-INTR - 1
+3PL=entendre - 1
+3PL=ASP.J=tenir - 1
+s'endormir - 1
+3PL=être_mort-RED - 1
+1INCL=savoir - 1
+(3SG - 1
+3PL.ASP.EC=chanter - 1
+DU - 1
+2PL=tuer - 1
+INTER - 1
+1SG=tirer-INTR - 1
+énever - 1
+3PL=savoir - 1
+EC - 1
+2SG=manger-INTR - 1
+abecquer - 1
+COO.NARR - 1
+COO.VB=voir-INTR - 1
+3PL=attacher-RED - 1
+1SG=enrober-INTR - 1
+aller=aller-INTR - 1
+3PL=envoyer - 1
+détacher-INTR - 1
+3PL=chasser - 1
+ressentir-INTR - 1
+3SG=porter_sur_le_dos-INTR - 1
+3PL=regarder - 1
+mettre_à_l_intérieur-INTR - 1
+3PL=NEG=reconnaitre - 1
+3PL=rentrer-RED - 1
+2PL=RED-appeler - 1
+2PL=chanter - 1
+3PL=trembler - 1
+2PL.ASP.EC=être_prêt - 1
+s'asseoir - 1
+cassé - 1
+3PL=déposer - 1
+3PL=recommencer - 1
+pousser-INTR - 1
+(3SG=s'embellir - 1
+2PL=pêcher_des_écrevisse - 1
+3SG=porter_sur_épaule-INTR - 1
+jusqu'au_lendemain - 1
+3SG=énever - 1
+emmener-INTR - 1
+coco, - 1
+3SG=manger-INTR - 1
+3PL=introduire - 1
+NEG=voir-INTR - 1
+3PL=être_en_colère - 1
+bislama - 1
+tuer-INTR - 1
+1EXCL=dormic - 1
+3PL=donner - 1
+3SG=prendre-INTR - 1
+??-3PL - 1
+2PL.DU - 1
+3PL=lever - 1
+bûches - 1
+s'entasser_les_uns_sur_les_autres - 1
+TAXON=DEI.P - 1
+3PL=tirer - 1
+3SG=s'épuiser - 1
+2PL=restez - 1
+aieux - 1
+3PL=rigoler-RED - 1
+1INCL - 1
+1SG=IRR=détacher-INTR - 1
+3PL=frapper-INTR - 1
+1SG=vendre-INTR - 1
+3SG.ASP.EC=emporter=RED-INTR - 1
+3PL=aller=manger - 1
+être_étalé - 1
+3PL=cuire-INTR - 1
+heuter - 1
+3PL=ASP.J=HESI - 1
+ASP.I-INTR - 1
+3PL=sortir - 1
+1SG=manger-INTR - 1
+poser-INTR - 1
+3PL=détacher - 1
+3PL=faire_le_laplap - 1
+3SG=faisander - 1
+3PL=s'enfermer-RED - 1
+3PL=manger-INTR - 1
+3SG=entendre-INTR - 1
+??=INT - 1
+2PL=être_où - 1
+3PL=revenir - 1
+3SG=HESI - 1
+1INCL=poursuivre - 1
+s'allonger - 1
+3PL.OP - 1
+COO.CAUS - 1
+2PL=ouvrir - 1
+OBj.1SG - 1
+3SG=chasser-INTR - 1
+FUT - 1
+2PL=laisser-INTR - 1
+3PL=être_présent - 1
+3PL=être - 1
+3PL - 1
+2PL=dire - 1
+3PL=rendre_la_pareil-RED - 1
+3SG=transpecter - 1
+3PL.ASP.EC=voir - 1
+3PL=faire-INTR - 1
+3PL.DU=être_noir - 1
+3SG=jeter-INTR - 1
+3SG=s'asseoir - 1
+2PL=grimper - 1
+croquer-INTR - 1
+3PL=suivre_derrière - 1
+3PL=servir-INTR - 1
+MUL-INTR - 1
+1INCL=aiguiser-RED - 1
+3PL=tenir_debout - 1
+3PL=pagayer - 1
+3PL=être_deux - 1
+3PL=accoucher - 1
+3PL=prendre - 1
+3PL=frapper - 1
+3PL=atteindre - 1
+3SG=faire_du_laplap - 1
+3PL=RED-jouer - 1
+3PL=dire-IRR - 1
+2pl - 1
+transpecter - 1
+3PL=arriver - 1
+2PL=dévoiler-INTR - 1
+aller=2PL=détacher-INTR - 1
+3PL=discuter-RED - 1
+1INCL=tuer - 1
+3PL=aller=assoir - 1
+NM - 1
+1INCL=envoyer-INTR - 1
+urun - 1
+3SG - 1
+1INCL=s'allonger - 1
+3PL=lancer - 1
+3PL=écouter-INTR - 1
+3PL=aller=voir-INTR - 1
+histoire-NOMI - 1
+3PL=courir - 1
+3PL=découper-INTR - 1
+2PL=ouvrer - 1
+sortent - 1
+3PL=couper - 1
+PA.AFFEC - 1
+1SG=rire-INTR - 1
+2PL=chanter-RED - 1
+3Sg - 1
+porter_sur_l_épaule-INTR - 1
+(INTER) - 1
+1EXCL=être - 1
+PA - 1
+3PL.ASP.EC=souffler - 1
+atteindre-INTR - 1
+PI - 1
+PL - 1
+PN - 1
+RECI - 1
+2PL.ASP.EC=travailler - 1
+3PL=venir - 1
+3PL=préparer - 1
+PREP - 1
+3SG=?? - 1
+TAXON - 1
+3PL=fermer - 1
+1INCL=NEG=entendre - 1
+PA-1EXCL.DU - 1
+3PL=dire-RED-INTR - 1
+1INCL=cuisiner - 1
+IRR=2PL=aller - 1
+importante - 1
+3PL.DU=tirer-RED - 1
+1EXCL.DU=DEI.P - 1
+PAN=1INCL - 1
+3PL=aller_pour - 1
+1SG - 1
+1SG-FUT=s'allonger - 1
+1SG=boire-INTR - 1
+3PL=pleurer-INTR - 1
+3PL=DIR - 1
+fruits - 1
+3PL=servir - 1
+3SG=suivre-INTR - 1
+3PL=parler - 1
+3PL=NEG=vouloir - 1
+fermer-INTR - 1
+COO.NM-INTR - 1
+2PL=NEG=travailler - 1
+s'envoler - 1
+crû - 1
+voir-INTR - 1
+3SG=s'assombrir-RED - 1
+fûmer - 1
+3PL.DU=voir-INTR=INT - 1
+blesser-INTR - 1
+2PL=envoyer - 1
+3PL.ASP.EC=crier - 1
+3PL=aller-RED - 1
+Ptilope_de_Grey - 1
+3PL=vivre - 1
+3PL=IRR=aller - 1
+3PL=sauter - 1
+emporter-INTR - 1
+1INCL=NEG.ASP.EC=dormir - 1
+3SG=HESI-HESI - 1
+3PL=pendre - 1
+3PL=rapporter - 1
+1INCL=manger - 1
+1INCL=DIR - 1
+récupérer-INTR - 1
+3PL=?? - 1
+ANIMAL - 1
+3SG=rester_à_l'écart - 1
+2PL.ASP.EC=RED-être_fort - 1
+3PL=demander - 1
+VB - 1
+être_bloqué - 1
+3PL=ressentir - 1
+3SG=faire-INTR - 1
+2PL=être_là - 1
+manger-INTR - 1
+3PL.DU=aller - 1
+2SG-FUT=blesser-INTR - 1
+2PL=accrocher-RED - 1
+2SG=aller-INTR - 1
+INDEF-INTR - 1
+écouter-INTR - 1
+2PL=bloquer - 1
+1INCL=manger-INTR - 1
+aller=DIR - 1
+3PL=accourir - 1
+3PL=descendre - 1
+1EXCL - 1
+3PL=s'asseoir - 1
+lancer_une_pierre-INTR - 1
+3PL.DU - 1
+1EXCL=être_fini - 1
+le_long-INTR - 1
+travailer - 1
+s'envole - 1
+s'ennuyer - 1
+ART.P=3PL - 1
+2PL=enfermer-RED - 1
+3PL=approcher - 1
+cuisiner_un_laplap - 1
+disparaitre - 1
+fruit_du_namlecec - 1
+3PL=discuter - 1
+entraille - 1
+2SG=?? - 1
+3PL=aller=envoyer - 1
+3PL=couvrir - 1
+NARR - 1
+3PL=élever - 1
+1EXCL=venir - 1
+1INCL=aller_pour - 1
+grimper-INTR=venir - 1
+2PL=faire - 1
+manger_INTR - 1
+3SG=apporter-INTR - 1
+être_mort-NOMI - 1
+aujourd_hui - 1
+détache - 1
+2PL=NEG=parler - 1
+1EXCL=donner - 1
+1EXCL=aller - 1
+1SG=venir-INTR - 1
+3PL=NEG=venir - 1
+chasser-INTR - 1
+3PL=continuer - 1
+REL-INTR - 1
+3PL=faire_du_laplap - 1
+3SG=s'abaisser - 1
+tenir-INTR - 1
+écoute-INTR - 1
+3SG=boire-INTR - 1
+s'entasser - 1
+broyer-INTR - 1
+s'écouler - 1
+3SG=porter-INTR - 1
+2PL=NEG.ASP.EC=travailler - 1
+manger-NOMI - 1
+2PL=monter - 1
+prendre-INTR - 1
+DIR=terre - 1
+AUTRE - 1
+2SG=fermer-INTR - 1
+3PL=cacher - 1
+3PL=dormir - 1
+burao - 1
+bloquer-INTR - 1
+1INCL=tuer-INTR - 1
+1EXCL=FUT.POST=revenir-RED - 1
+1INCL=envoyer - 1
+s'assombrir - 1
+3PL=porter_sur_le_dos - 1
+kenbi - 1
+natagura - 1
+3PL=dancer-RED - 1
+3PL=tuer - 1
+aller=nourrir=OBJ - 1
+chasser-NOMI - 1
+couper-INTR - 1
+3SG=déposer_en_haut-INTR - 1
+1SG=NEG=connâitre - 1
+3PL=se_trouver - 1
+PREP.CAUSE - 1
+[toux] - 1
+ARBRE - 1
+rapporter-INTR - 1
+surveiller-INTR - 1
+3SG.ASP.EC-FUT=voir-INTR - 1
+MUL - 1
+2PL=râper - 1
+assoir - 1
+2PL=sortir - 1
+MUS - 1
+ART.P=OISEAU - 1
+3PL.ASP.EC=rester - 1
+3SG=brûler-INTR - 1
+2PL=envoyer-INTR - 1
+aller=voir-INTR - 1
+3PL=être_propre-RED - 1
+3PL=nourrir - 1
+3PL.DU=trembler - 1
+fruit_du_nagatambol - 1
+IND - 1
+PA-3PL - 1
+3PL=debout - 1
+RED-attacher-INTR - 1
+2SG-FUT=donner-INTR - 1
+2PL=travailer - 1
+INT - 1
+2PL=rester-RED - 1
+à_nouveau-INTR - 1
+3PL=aller - 1
+3PL.DU=ensemble - 1
+1INCL=faire - 1
+tirer-INTR - 1
+3PL=être_allongé-INTR - 1
+3PL=planter - 1
+2PL=penser - 1
+ASP.A-INTR - 1
+dernière_branche - 1
+1INCL=blesser-INTR - 1
+1SG=entendre-INTR - 1
+2PL=révéler-INTR - 1
+PA-1INCL.DU - 1
+aligner-INTR - 1
+cîme - 1
+laplap - 1
+2PL=avoir_peur - 1
+3PL=repousser - 1
+quelques - 1
+3PL=voir-INTR - 1
+OBJ-3SG - 1
+3PL=ASP.EC=entrainer - 1
+1INCL=ASP.J=dire-INTR - 1
+3PL=déposer-INTR - 1
+3PL=envelopper - 1
+3PL=être_cassé - 1
+déposer-INTR - 1
+3SG=s'endormir - 1
+marier-NOMI - 1
+PA.2PL - 1
+1INCL=NEG=savoir - 1
+bourbière - 1
+1INCL=pagayer - 1
+3SG=emporter-INTR - 1
+3SG.ASP.EC-FUT=entendre-INTR - 1
+3PL=assoir - 1
+3PL=dire - 1
+3SG=s'attacher-RED - 1
+??-NOM - 1
+1SG=aller=dire-INTR - 1
+3PL=ouvrir - 1
+pattes - 1
+3PL=porter - 1
+3PL=fermer-INTR - 1
+1INCL=aller=manger - 1
+3PL=rincer - 1
+3PL=écouter-RED - 1
+3PL=dire-INTR - 1
+3SG=blesser-INTR - 1
+mai-INTR - 1
+s'attacher - 1
+IRR=1EXCL=aller - 1
+mettre-INTR - 1
+gilsse - 1
+IRR - 1
+2PL.ASP.EC=DIR - 1
+1INCL.DU - 1
+3PL=penser - 1
+3PL=dépasser - 1
+3PL=ASP.EC=rester - 1
+ARBRE.nanqailler - 1
+DIR-maison - 1
+3PL=entendre-INTR - 1
+3SG.ASP.EC=cuire-INTR - 1
+réussur - 1
+3PL=ASP - 1
+??? - 1
+3SG=s'envoler - 1
+dévoiler-INTR - 1
+s'embellir - 1
+nakamel - 1
+ACQ - 1
+RED - 1
+2SG=laisser-INTR - 1
+REL - 1
+(se - 1
+natangura - 1
+PAN - 1
+enorme - 1
+2PL=voir-INTR - 1
+3PL=enterrer-INTR - 1
+3PL- - 1
+être_étalé-RED - 1
+1EXCL=tuer-INTR - 1
+INDEF - 1
+3PL=déplacer - 1
+3SG=lapider-INTR - 1
+connâitre - 1
+3SG=manger_INTR - 1
+ASP.I-?? - 1
+introduire-INTR - 1
+3PL.ASP.EC=travailler-RED - 1
+2PL=mettre-INT - 1
+3PL=enfanter - 1
+couper-RED-INTR - 1
+affaires - 1
+3PL=acheter-INTR - 1
+3PL=tisser - 1
+3PL=fermer-RED - 1
+aller=tuer-INTR - 1
+1INCL=apporter - 1
+3SG.ASP.EC=manger-INTR - 1
+3PL=prendre-INTR - 1
+navellier - 1
+DEF-INTR - 1
+3PL.DU=venir - 1
+3PL=cuire - 1
+3PL.ASP.EC=aller - 1
+3SG=??=être_noir-RED - 1
+3PL=élaborer - 1
+3PL=manger - 1
+PA=1INCL - 1
+3PL=NEG - 1
+continuer-INTR - 1
+2PL=asseoir - 1
+1EXCL=faire - 1
+3PL=danser - 1
+3SG=détache-INTR - 1
+foc - 1
+3PL.ASP.EC=appeler - 1
+2PL=venir - 1
+aller=s'asseoir - 1
+3SG=aller=jeter-INTR - 1
+3PL=allonger - 1
+nanqaillier - 1
+3PL=ASP.EC=couper-RED - 1
+s'écouler-RED - 1
+regarder-INTR - 1
+3SG=se_lever_d'un_coup - 1
+INSECT=PRO.DEI.P - 1
+2PL=NEG=entendre - 1
+entendre-INTR - 1
+3PL=emballer - 1
+3PL=transpercer - 1
+rapé - 1
+3PL=être_là - 1
+1INCL=aller_à_fond - 1
+3PL=être_grand-RED - 1
+se_dépécher - 1
+3PL=creuser - 1
+ASP.D-INTR - 1
+entourer-INTR - 1
+cocoteraie - 1
+3PL=NEG=avoir - 1
+nakamal - 1
+PA.AFFEC-1SG - 1
+3Sg=dire-INTR - 1
+TMP - 1
+3PL=rentrer - 1
+èetre - 1
+3PL=apporter - 1
+crevettes - 1
+nakaml. - 1
+avaler-INTR - 1
+2SG-FUT=aller=manger-INTR - 1
+3SG=NEG=manger-INTR - 1
+3PL=courir=aller - 1
+quatree - 1
+1INCL=être_fini - 1
+1INCL=frapper - 1
+1INCL=assoir - 1
+2PL=tuer-INTR - 1
+3PL=être_mort - 1
+2PL=révéler - 1
+1INCL=introduire-INTR - 1
+3PL=abattre - 1
+comme-INTR - 1
+s'épuiser - 1
+1INCL.DU=penser - 1
+2PL=IRR=ASP.EC - 1
+3PL=courir=venir - 1
+aller=s'asseoir-RED - 1
+3PL=cacher. - 1
+2PL=voir - 1
+arriver_en_courant-INTR - 1
+PN-1INCL.DU - 1
+3PL=chasser-INTR - 1
+1INCL=ASP.C=chercher - 1
+3SG=réussur - 1
+2SG=NEG=voir-INTR - 1
+1EXCL=s'asseoir - 1
+PA-1INCL - 1
+3SG=attacher-INTR - 1
+PA-3PL.DU - 1
+PN.2PL - 1
+taro - 1
+3SG=NEG=entendre-INTR - 1
+pierre_pour_laplap - 1
+COO - 1
+aller=déposer-INTR - 1
+COP - 1
+s'asseoir-RED - 1
+aller-INTR - 1
+NEG - 1
+grimper-INTR - 1
+3PL=aller=tuer - 1
+1INCL=fermer-RED - 1
+faire_laplap - 1
+3PL=RED-disputer - 1
+2PL=abattre - 1
+NEG=2PL=appeler - 1
+FUT.POST - 1
+3PL=suivre-INTR - 1
+s'en - 1
+3PL=ASP.EC=aller - 1
+3SG=s'envole - 1
+ensemble-INTR - 1
+apporter-INTR - 1
+connaitre - 1
+1INCL=rester - 1
+3PL=grimper - 1
+jeter-INTR - 1
+3PL=entendre-RED - 1
+3SG=mettre-INTR - 1
+2PL=tenir - 1
+dry - 1
+3PL=nettoyer - 1
+3PL=ASP.EC=remplir - 1
+2PL - 1
+ARBRE=DEI.P - 1
+3PL=contraindre_à_sortir - 1
+3PL.ASP.EC=aller-RED - 1
+3PL=discuter-INTR - 1
+plante_médicinale - 1
+2SG=prendre-INTR - 1
+prend - 1
+3Sg=tirer-INTR - 1
+3PL=COO.VB - 1
+3PL=monter - 1
+IRR=2PL=cacher - 1
+3PL=blesser - 1
+3PL=jouer-RED - 1
+ART.P-OISEAU - 1
+3SG=saisir-INTR - 1
+3PL=disparaitre-RED - 1
+CSQ - 1
+1SG=blesser-INTR - 1
+foule, - 1
+3PL=aller=attacher-RED - 1
+1INCL=??-RED - 1
+EXC - 1
+3PL.ASP.EC=se_préparer - 1
+COO.VB-INTR - 1
+3PL=s'entasser_les_uns_sur_les_autres - 1
+2PL=ASP.V=revenir-RED - 1
+s'occuper - 1
+2PL.ASP.EC - 1
+3SG=avaler-INTR - 1
+1INCL=être_chanceux - 1
+2SG - 1
+DIR=maison - 1
+dire-INTR - 1
+3PL=ASP.C=?? - 1
+3PL=être_assis - 1
+3PL=brûler - 1
+bang - 1
+3PL=disposer - 1
+3PL=mettre-INTR - 1
+3PL=dépécher - 1
+2PL=être - 1
+3PL=se_lever-RED - 1
+3PL.ASP.EC=cuisiner - 1
+1INCL=élever - 1
+s'enrouler - 1
+POS - 1
+3PL=inviter-RED - 1
+3PL=aller=rester - 1
+observer-INTR - 1
+INTR - 1
+ART - 1
+avec-INTR - 1
+dire-RED-INTR - 1
+1INCL=être_bloqué - 1
+1EXCL=couper-INTR - 1
+3SG=révéler-INTR - 1
+3PL=nettoyer-RED-INTR - 1
+chercher-INTR - 1
+ASP - 1
+entrendre-INTR - 1
+3PL=couper-INTR - 1
+INST - 1
+3SG=transpercer-INTR - 1
+3SG=LIEU - 1
+3SG=broyer-INTR - 1
+aller=attacher-INTR - 1
+faire_le_laplap - 1
+stori - 1
+aller=dire-INTR - 1
+OBJ-PI.3SG - 1
+3PL=attacher - 1
+1INCL=aller=déterrer - 1
+3SG=aller-INTR - 1
+PRE - 1
+DESI - 1
+PRO - 1
+boubou - 1
+3SG=emmener-INTR - 1
+3PL=ASP.EC=réunir - 1
+kusve - 1
+3PL=cuisiner - 1
+2PL=aller - 1
+NOM - 1
+1SG=prendre-INTR - 1
+dépécher - 1
+3SG=NEG=voir-INTR - 1
+3PL=transformer - 1
+1INCL=déposer - 1
+1INCL=NEG=voir-INTR - 1
+ASP.C-INTR - 1
+2PL=partir-RED - 1
+dans_le_nakamal - 1
+2PL=savoir - 1
+1INCL=allonger - 1
+OBJ-fort - 1
+3PL=INT - 1
+LIEU - 1
+3PL.ASP.EC=piquer - 1
+cacher-INTR - 1
+3PL=sortent - 1
+3PL=être_nombreux - 1
+1INCL=entendre-INTR - 1
+3PL=allumer - 1
+2PL=dormir - 1
+3PL=tirer_à_l'arc-INTR - 1
+porter_à_l_épaule-INTR - 1
+c'est_sûrement - 1
+3PL=aller=dire - 1
+3SG=détacher-INTR - 1
+3SG=ASP.EC=entendre-INTR - 1
+faire-INTR - 1
+frapper-INTR - 1
+3PL.ASP.EC=parler - 1
+??=couper - 1
+3PL=être_debout - 1
+??-INTR - 1
+1SG=apporter-INTR - 1
+raper - 1
+3PL=emporter - 1
+3PL=NEG=manger-INTR - 1
+2PL=balader-RED - 1
+1EXCL=tirer-RED - 1
+3PL=rester-RED - 1
+1INCL=ne_pas_vouloir - 1
+LOC - 1
+banian - 1
+cuire-INTR - 1
+DIR=cuisine - 1
+1INCL=rentrer - 1
+2PL=dourmir - 1
+3PL=suivre - 1
+2PL.ASP.EC=NEG=travailler - 1
+INSECTE - 1
+NARR, - 1
+1INCL=creuser - 1
+navel - 1
+1INCL=venir - 1
+3PL.ASP.EC=se_préparer_rapidement-RED - 1
+NOMI - 1
+2PL=rire-RED - 1
+1INCL=dire - 1
+3PL=mourir-RED - 1
+autour-INTR - 1
+3SG=fermer-INTR - 1
+OBJ.3SG) - 1
+tirer_à_l'arc - 1
+1INCL=DESI=DEI - 1
+3PL.ASP.EC=pleurer - 1
+2PL=appeler - 1
+lier-INTR - 1
+PN-1INCL - 1
+3PL=séparer - 1
+2PL=vouloir - 1
+1INCL=avoir - 1
+2SG=porter-INTR - 1
+2SG=lapider-INTR - 1
+s'enfermer - 1
+3PL=emporter-INTR - 1
+3PL=jeter - 1
+faisander - 1
+1INCL=porter_sur_le_dos-RED - 1
+3PL=éplucher - 1
+porter-INTR - 1
+3PL.ASP.EC=frapper - 1
+couver-INTR - 1
+POISSON - 1
+1INCL=tenir_debout - 1
+3PL=asseoir - 1
+3PL=aiguiser-RED - 1
+ile - 1
+3PL.ASP.EC=écouter - 1
+ammer - 1
+1INCL=devoir=protéger - 1
+3PL=rester - 1
+entouré - 1
+1INCL=ammer - 1
+3PL=bloquer-RED - 1
+nanqaillier=DEI.P - 1
+s'enfermer-RED - 1
+ART.P=LIEU - 1
+1SG=envoyer-INTR - 1
+3PL=avoir_envie - 1
+CORR - 1
+ASP.F-INTR - 1
+COO.TMP, - 1
+ART.P=kenbi - 1
+2SG=faire-INTR - 1
+3PL=désirer - 1
+3PL=se_laver - 1
+grandpère - 1
+2PL=??=couper - 1
+champs - 1
+s'abaisser - 1
+1INCL=aller - 1
+1INCL=entendre-RED - 1
+1SG=HESI - 1
+3SG=chercher-INTR - 1
+3PL=NEG=connaitre - 1
+3SG=couper-INTR - 1
+3PL=etre - 1
+2PL=descendre - 1
+?? - 1
+DEF - 1
+3SG=arracher-INTR - 1
+DEI - 1
+1INCL=courir - 1
+2PL=NEG.ASP.EC=travailer - 1
+1INCL=couper - 1
+3PL=faire - 1
+DET - 1
+3PL=voler - 1
+quelle - 1
+3PL=NEG.ASP.EC=aller - 1
+PA-2PL - 1
+. No known fixes. 
+: Unknown glosses:
+3PL - 245
+INTR - 228
+2PL - 76
+1INCL - 69
+1EXCL - 18
+?? - 15
+NOMI - 7
+OBJ - 6
+DIR - 6
+HESI - 6
+DESI - 3
+LIEU - 3
+OISEAU - 3
+ARBRE - 3
+POST - 2
+PREP - 2
+(3SG - 2
+TAXON - 2
+NARR - 2
+AFFEC - 2
+POISSON - 1
+CAUSE - 1
+3SG) - 1
+??? - 1
+CAUS - 1
+INST - 1
+ANIMAL - 1
+MUL - 1
+(INTER) - 1
+AUTRE - 1
+INSECT - 1
+INSECTE - 1
+NARR, - 1
+TMP, - 1
+DET - 1
+CORR - 1
+RECI - 1
+. No known fixes. 
+: Unknown lemmas:
+laplap - 10
+s'asseoir - 8
+dépécher - 3
+d'un - 3
+s'allonger - 3
+s'entasser - 3
+s'enfermer - 3
+l'écart - 2
+s'assombrir - 2
+kenbi - 2
+s'endormir - 2
+connâitre - 2
+énever - 2
+étalé - 2
+bloqué - 2
+s'épuiser - 2
+l'arc - 2
+transpecter - 2
+détache - 2
+s'attacher - 2
+s'abaisser - 2
+nanqaillier - 2
+réussur - 2
+s'écouler - 2
+nakamal - 2
+s'envoler - 2
+s'embellir - 2
+faisander - 2
+s'envole - 2
+bislama - 1
+natagura - 1
+nakaml - 1
+bûches - 1
+dernière - 1
+[toux] - 1
+rembu - 1
+kusve - 1
+Ptilope - 1
+navellier - 1
+aujourd - 1
+bourbière - 1
+entouré - 1
+2pl - 1
+s'enrouler - 1
+grandpère - 1
+prend - 1
+gilsse - 1
+jusqu'au - 1
+namlecec - 1
+nanqailler - 1
+nagatambol - 1
+c'est - 1
+cocoteraie - 1
+nakamel - 1
+médicinale - 1
+travailer - 1
+OBj - 1
+s'ennuyer - 1
+s'occuper - 1
+natangura - 1
+. No known fixes. 
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:28 min
+[INFO] Finished at: 2022-05-30T18:43:52+02:00
+[INFO] ------------------------------------------------------------------------
