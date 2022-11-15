@@ -198,4 +198,9 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
     }
 
     public abstract String getTierText(CorpusData cd, String tierId) throws JDOMException;
+
+    @Override
+    public String getDescription() {
+        return "Checks the annotation tiers for coherency";
+    }
 }
