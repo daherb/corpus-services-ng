@@ -48,12 +48,12 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 
 /**
  * @author bba1792 Dr. Herbert Lange
- * @version 20220829
+ * @version 20221114
  * The checker for Refco set of criteria.
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 
-    private final String REFCO_CHECKER_VERSION="20220926";
+    private final String REFCO_CHECKER_VERSION="20221114";
 
     // The local logger that can be used for debugging
     private final Logger logger = Logger.getLogger(this.getClass().toString());
@@ -1181,11 +1181,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "description","howtoFix"},
                         new Object[]{getFunction(),refcoShortName,
                                 "Corpus composition: Speaker age is empty: " + s.getSpeakerNames(),"Add speaker age"}));
-            else if (!s.getSpeakerAges().matches("~?\\d{1,3}"))
-                report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
+            else if (!Arrays.stream(s.getSpeakerAges().split(valueSeparator)).allMatch(a -> a.equals("na") || a.matches("~?\\d{1,3}"))) {
+                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename",
                                 "description", "howtoFix"},
-                        new Object[]{getFunction(),refcoShortName,"Corpus composition: Speaker age does not match " +
+                        new Object[]{getFunction(), refcoShortName, "Corpus composition: Speaker age does not match " +
                                 "schema: " + s.getSpeakerAges(), "Check and fix speaker age"}));
+            }
             if (s.getSpeakerGender() == null || s.getSpeakerGender().isEmpty())
                 report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","filename",
                                 "description", "howtoFix"},
@@ -1755,11 +1756,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     // Add all of the punctuation's characters
                     // validTranscriptionCharacters.addAll(getChars(p.character));
                     validTranscriptionCharacters.add(p.getCharacter());
-                // TODO: does that work properly
+                // does that work properly? seems so
                 else if ((Arrays.asList(p.getTiers().split(valueSeparator)).contains(tierId)) ||
                         Arrays.stream(p.getTiers().split(valueSeparator))
                                 .anyMatch((t) -> tierId.startsWith(t + tierSpeakerSeparator))) {
-                    // Add all of the punctuation's characters
+                    // Add all the punctuation's characters
                     validTranscriptionCharacters.add(p.getCharacter());
                 }
             }
@@ -1903,7 +1904,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         }
 
                     }
-                    else {
+                    else if (!s.isEmpty()){
                         missingGlossFreq.put(s);
                         missing++;
                         // This leads to large amount of warnings
@@ -2232,14 +2233,24 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         int count = 0 ;
         List<String> tierList =
                 criteria.getTiers().stream().filter((t) -> t.getTierFunctions()
-                                .contains(tierFunction.toLowerCase())).map(RefcoCriteria.Tier::getTierName)
+                                .stream().anyMatch(f -> f.contains(tierFunction.toLowerCase())))
+                        .map(RefcoCriteria.Tier::getTierName)
                         .collect(Collectors.toList());
         for (String tierName :
                 tierList) {
             for (CorpusData cd : refcoCorpus.getCorpusData()) {
+                List<String> speakerList = getDocumentedSpeakers(cd.getFilename());
                 if (cd instanceof ELANData) {
                     // Get all texts from given annotation tier
-                    List<Text> texts = getTextsInTierByID(((ELANData) cd).getJdom(), tierName);
+                    List<Text> texts = new ArrayList<>();
+                    if (speakerList.isEmpty()) {
+                        texts.addAll(getTextsInTierByID(((ELANData) cd).getJdom(), tierName));
+                    }
+                    else {
+                        for (String speaker : speakerList) {
+                            texts.addAll(getTextsInTierByID(((ELANData) cd).getJdom(), tierName + tierSpeakerSeparator + speaker));
+                        }
+                    }
                     for (Text t : texts) {
                         // Word separation simply on spaces
                         count += t.getText().split(tokenSeparator).length;
@@ -2477,10 +2488,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @return the list of documented speakers
      */
     public List<String> getDocumentedSpeakers() {
+        return getDocumentedSpeakers("any");
+    }
+    /***
+     * Gets the list of all documented speakers
+     * @param fileName the name of the file the speakers should be documented for
+     * @return the list of documented speakers
+     */
+    public List<String> getDocumentedSpeakers(String fileName) {
         List<String> speakers = new ArrayList<>();
         if (criteria.getSessions() != null) {
             for (RefcoCriteria.Session s : criteria.getSessions()) {
-                speakers.addAll(Arrays.asList(s.speakerNames.split(valueSeparator)));
+                if (fileName.equals("any") || Arrays.stream(s.fileNames.split(valueSeparator)).anyMatch(m -> m.contains(fileName))) {
+                    speakers.addAll(Arrays.asList(s.speakerNames.split(valueSeparator)));
+                }
             }
         }
         return speakers;
