@@ -6,6 +6,7 @@ import de.uni_hamburg.corpora.*;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -113,5 +114,12 @@ public class ChildesGenericMetadataChecker extends GenericMetadataChecker implem
             }
         }
         return report ;
+    }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> p = super.getParameters();
+        p.put("childes-criteria-file", "The file for Childes generic metadata criteria");
+        return p;
     }
 }
