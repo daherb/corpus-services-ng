@@ -200,7 +200,7 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
         Map<String,String> params = super.getParameters();
         params.put("tier-list", "The list of all gloss tiers, separated by commas");
         params.put("gloss-list", "The list of all valid gloss components, separated by commas");
-        params.put("gloss-separators", "Ths list of all characters separating gloss components");
+        params.put("gloss-separators", "The list of all characters separating gloss components");
         return params;
     }
 }
