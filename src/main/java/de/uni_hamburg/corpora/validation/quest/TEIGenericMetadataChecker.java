@@ -115,4 +115,11 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
         Optional<String> optPath = path.stream().reduce((s1, s2) -> s1 + "/" + s2);
         return optPath.orElse("") ;
     }
+
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> p = super.getParameters();
+        p.put("tei-criteria-file", "The file for TEI generic metadata criteria");
+        return p;
+    }
 }
