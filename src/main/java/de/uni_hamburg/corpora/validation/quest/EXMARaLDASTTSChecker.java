@@ -74,7 +74,7 @@ public class EXMARaLDASTTSChecker extends Checker implements CorpusFunction  {
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         List<Class<? extends CorpusData>> usableFor = new ArrayList<>();
         usableFor.add(EXMARaLDATranscriptionData.class);
-        usableFor.add(EXMARaLDATranscriptionData.class);
+        usableFor.add(EXMARaLDASegmentedTranscriptionData.class);
         return usableFor;
     }
 }
