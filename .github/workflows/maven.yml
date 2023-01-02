@@ -29,10 +29,10 @@ jobs:
         cache: maven
     - name: Download depencencies
       run: cd lib && bash download.sh && cd ..
-    - name: Install dependency EXMARaLDA
-      run: mvn install:install-file -Dfile=lib/EXMARaLDA-Preview-20201130.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=Preview-20201130 -Dpackaging=jar  -DgeneratePom=true
-    - name: Install dependency EXMARaLDA
-      run: mvn install:install-file -Dfile=lib/elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
+#    - name: Install dependency EXMARaLDA
+#      run: mvn install:install-file -Dfile=lib/EXMARaLDA-Preview-20201130.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=Preview-20201130 -Dpackaging=jar  -DgeneratePom=true
+#    - name: Install dependency EXMARaLDA
+#      run: mvn install:install-file -Dfile=lib/elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
     - name: Build with Maven
 #      run: mvn -B package --file pom.xml
       run: mvn clean test compile assembly:single
