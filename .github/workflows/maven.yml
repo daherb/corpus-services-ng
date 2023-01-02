@@ -33,7 +33,7 @@ jobs:
       - run: bash download.sh
       - run: cd ..
       - run: mvn install:install-file -Dfile=lib/EXMARaLDA-Preview-20201130.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=Preview-20201130 -Dpackaging=jar  -DgeneratePom=true
-      - mvn:  install:install-file -Dfile=lib/elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
+      - run: mvn install:install-file -Dfile=lib/elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
       - run: mvn clean test compile assembly:single
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
