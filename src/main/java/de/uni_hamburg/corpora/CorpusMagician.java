@@ -45,6 +45,8 @@ import org.xml.sax.SAXException;
  * Corpus Function on a corpus in a main method.
  *
  * @author fsnv625
+ * @author Herbert Lange
+ * @version 20230105
  */
 public class CorpusMagician {
 

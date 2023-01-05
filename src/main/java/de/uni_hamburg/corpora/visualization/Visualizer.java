@@ -23,12 +23,13 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author Daniel Jettka
- *
  * This now should be a normal, not abstract class that has an implementation of
  * "Visualize" as its field (that would be e.g. ListHTML) which seems to make
  * things a lot easier
  *
+ * @author Daniel Jettka
+ * @author Herbert Lange
+ * @version 20230105
  */
 public abstract class Visualizer implements CorpusFunction {
 

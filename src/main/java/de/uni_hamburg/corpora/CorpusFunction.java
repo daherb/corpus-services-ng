@@ -11,6 +11,8 @@ import java.util.Map;
 /**
  *
  * @author fsnv625
+ * @author Herbert Lange
+ * @version 20230105
  */
 public interface CorpusFunction {
 

@@ -29,6 +29,9 @@ import org.xml.sax.SAXException;
  *
  * How to also put another file as input for an check?
  *
+ * @author ???
+ * @author Herbert Lange
+ * @version 20230105
  */
 public abstract class Checker implements CorpusFunction {
 

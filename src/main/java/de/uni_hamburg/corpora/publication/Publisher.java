@@ -22,6 +22,8 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author fsnv625
+ * @author Herbert Lange
+ * @version 20230105
  */
 public abstract class Publisher implements CorpusFunction {
 
