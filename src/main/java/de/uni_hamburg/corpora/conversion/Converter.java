@@ -5,10 +5,7 @@
  */
 package de.uni_hamburg.corpora.conversion;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.validation.ValidatorSettings;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -53,11 +50,11 @@ public abstract class Converter implements CorpusFunction {
         function = this.getClass().getSimpleName();
     }
 
-    public Report execute(CorpusData cd) {
+    public Result execute(CorpusData cd) {
         report = new Report();
         try {
             report = function(cd);
-            return report;
+            return new Result(report,cd);
         } catch (JexmaraldaException je) {
             report.addException(function, je, cd, "Unknown parsing error");
         } catch (JDOMException jdome) {
@@ -83,14 +80,14 @@ public abstract class Converter implements CorpusFunction {
         } catch (Exception ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return report;
+        return new Result(report,cd);
     }
 
-    public Report execute(Corpus c) {
+    public Result execute(Corpus c) {
         report = new Report();
         try {
             report = function(c);
-            return report;
+            return new Result(report,cd);
         } catch (JexmaraldaException je) {
             report.addException(function, je, cd, "Unknown parsing error");
         } catch (JDOMException jdome) {
@@ -116,14 +113,14 @@ public abstract class Converter implements CorpusFunction {
         } catch (Exception ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return report;
+        return new Result(report,cd);
     }
 
-    public Report execute(CorpusData cd, boolean fix) {
+    public Result execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
-    public Report execute(Corpus c, boolean fix) {
+    public Result execute(Corpus c, boolean fix) {
         return execute(c);
     }
 

@@ -799,7 +799,7 @@ public class CorpusMagician {
     //run one function on a corpus, that means all the files in the corpus
     //the funciton can run on
     public Report runCorpusFunction(Corpus c, CorpusFunction cf, boolean fix) {
-        return cf.execute(c,fix);
+        return cf.execute(c,fix).getReport();
     }
 
     //run one function on a corpus, that means all the files in the corpus
@@ -846,11 +846,11 @@ public class CorpusMagician {
     }
 
     public Report runCorpusFunction(CorpusData cd, CorpusFunction cf) {
-        return cf.execute(cd);
+        return cf.execute(cd).getReport();
     }
 
     public Report runCorpusFunction(CorpusData cd, CorpusFunction cf, boolean fix) {
-        return cf.execute(cd, fix);
+        return cf.execute(cd, fix).getReport();
     }
 
 //    public static Report runCorpusFunctions(CorpusData cd, Collection<CorpusFunction> cfc) {

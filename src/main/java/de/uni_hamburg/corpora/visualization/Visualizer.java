@@ -5,10 +5,8 @@
  */
 package de.uni_hamburg.corpora.visualization;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -123,7 +121,7 @@ public abstract class Visualizer implements CorpusFunction {
 
     }
 
-    public Report execute(CorpusData cd) {
+    public Result execute(CorpusData cd) {
         report = new Report();
         try {
             report = function(cd);
@@ -151,15 +149,15 @@ public abstract class Visualizer implements CorpusFunction {
             report.addException(function, ex, cd, "File reading error");
         }
 
-        return report;
+        return new Result(report,cd);
     }
 
     //no fix boolean needed
-    public Report execute(CorpusData cd, boolean fix) {
+    public Result execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
-    public Report execute(Corpus c) {
+    public Result execute(Corpus c) {
         report = new Report();
         try {
             report = function(c);
@@ -187,11 +185,11 @@ public abstract class Visualizer implements CorpusFunction {
             report.addException(function, ex, cd, "File reading error");
         }
 
-        return report;
+        return new Result(report,cd);
     }
 
     //no fix boolean needed
-    public Report execute(Corpus c, boolean fix) {
+    public Result execute(Corpus c, boolean fix) {
         return execute(c);
     }
 

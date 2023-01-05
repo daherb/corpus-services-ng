@@ -14,13 +14,13 @@ import java.util.Map;
  */
 public interface CorpusFunction {
 
-public Report execute(CorpusData cd);
+public Result execute(CorpusData cd);
  
-public Report execute(Corpus c);
+public Result execute(Corpus c);
 
-public Report execute(CorpusData cd, boolean fix);
+public Result execute(CorpusData cd, boolean fix);
 
-public Report execute(Corpus c, boolean fix);
+public Result execute(Corpus c, boolean fix);
 
 public Collection<Class<? extends CorpusData>> getIsUsableFor() ;
 

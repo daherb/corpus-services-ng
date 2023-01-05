@@ -6,10 +6,8 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -50,15 +48,15 @@ public abstract class Checker implements CorpusFunction {
     }
 
 
-    public Report execute(Corpus c) {
+    public Result execute(Corpus c) {
         return execute(c, false);
     }
 
-    public Report execute(CorpusData cd) {
+    public Result execute(CorpusData cd) {
         return execute(cd, false);
     }
 
-    public Report execute(CorpusData cd, boolean fix) {
+    public Result execute(CorpusData cd, boolean fix) {
         Report report = new Report();
         try {
             if (fix) {
@@ -71,7 +69,7 @@ public abstract class Checker implements CorpusFunction {
                     report = function(cd, false);
                 }
 
-                return report;
+                return new Result(report,cd);
             } else {
                 report = function(cd, fix);
             }
@@ -98,10 +96,10 @@ public abstract class Checker implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return report;
+        return new Result(report,cd);
     }
 
-    public Report execute(Corpus c, boolean fix) {
+    public Result execute(Corpus c, boolean fix) {
         Report report = new Report();
         try {
             if (fix) {
@@ -112,7 +110,7 @@ public abstract class Checker implements CorpusFunction {
                     report.addCritical(function,
                             "Automatic fix is not yet supported.");
                 }
-                return report;
+                return new Result(report,cd);
             } else {
                 report = function(c, fix);
             }
@@ -139,7 +137,7 @@ public abstract class Checker implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return report;
+        return new Result(report,cd);
     }
 
     //To implement in the class

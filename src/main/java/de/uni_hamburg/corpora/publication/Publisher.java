@@ -5,10 +5,8 @@
  */
 package de.uni_hamburg.corpora.publication;
 
-import de.uni_hamburg.corpora.Corpus;
-import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.CorpusFunction;
-import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.*;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +37,7 @@ public abstract class Publisher implements CorpusFunction {
         function = this.getClass().getSimpleName();
     }
 
-    public Report execute(Corpus c) {
+    public Result execute(Corpus c) {
             report = new Report();
         try {
 
@@ -67,10 +65,10 @@ public abstract class Publisher implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return report;
+        return new Result(report,cd);
     }
 
-    public Report execute(CorpusData cd) {
+    public Result execute(CorpusData cd) {
         report = new Report();
         try {
             report = function(cd);
@@ -97,16 +95,16 @@ public abstract class Publisher implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return report;
+        return new Result(report,cd);
     }
 
     //no fix boolean needed
-    public Report execute(CorpusData cd, boolean fix) {
+    public Result execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
     //no fix boolean needed
-    public Report execute(Corpus c, boolean fix) {
+    public Result execute(Corpus c, boolean fix) {
         return execute(c);
     }
 
