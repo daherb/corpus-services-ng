@@ -710,6 +710,7 @@ public class CorpusMagician {
                             String[] validPackages = {
                                     "de.uni_hamburg.corpora.conversion",
                                     "de.uni_hamburg.corpora.publication",
+                                    "de.uni_hamburg.corpora.publication.ids",
                                     "de.uni_hamburg.corpora.validation",
                                     "de.uni_hamburg.corpora.validation.quest",
                                     "de.uni_hamburg.corpora.visualization",
