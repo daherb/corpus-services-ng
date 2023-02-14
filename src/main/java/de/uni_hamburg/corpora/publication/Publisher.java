@@ -136,6 +136,6 @@ public abstract class Publisher implements CorpusFunction {
 
     @Override
     public Map<String, String> getParameters() {
-        return Collections.EMPTY_MAP;
+        return new HashMap<>();
     }
 }
