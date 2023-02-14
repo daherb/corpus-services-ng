@@ -213,7 +213,7 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 List<Element> transcriptionTiers = getTranscriptionTiers(cd);
                 if (transcriptionTiers.isEmpty()) {
                     report.addCritical(getFunction(),ReportItem.newParamMap(
-                            new String[]{"function","description","howtoFix"},
+                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description,ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), "No transcription tiers found in file: " + cd.getFilename(),
                                     "Check the definition of transcription tiers"}
                     ));
@@ -225,7 +225,8 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 }
                 if (transcriptionText.isEmpty()) {
                     report.addCritical(getFunction(),
-                            ReportItem.newParamMap(new String[]{"function", "description", "howtoFix"},
+                            ReportItem.newParamMap(
+                                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                                     new Object[]{getFunction(),
                                             "No transcription text found in file: " + cd.getFilename(),
                                             "Check the definition of transcription tiers"
@@ -255,7 +256,8 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                                 missing = missing.replaceAll(Pattern.quote(g), "");
                             }
                             report.addWarning(getFunction(),
-                                    ReportItem.newParamMap(new String[]{"function",  "description", "filename"},
+                                    ReportItem.newParamMap(
+                                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.Filename},
                                             new Object[]{getFunction(),
                                                     "Unknown graphemes in token " + token + ": " +
                                                             Arrays.asList(missing.split(""))
@@ -268,13 +270,14 @@ abstract class TranscriptionChecker extends Checker implements CorpusFunction {
                 }
             } catch (JDOMException e) {
                 report.addCritical(getFunction(),
-                        ReportItem.newParamMap(new String[]{"function", "exception", "description"},
+                        ReportItem.newParamMap(
+                                new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Exception, ReportItem.Field.Description},
                                 new Object[]{getFunction(), e, "Exception encountered while reading the transcription"}));
             }
         }
         else
             report.addCritical(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function", "description"},
+                    ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description},
                             new Object[]{getFunction(), "Checker not properly set up"}));
         return report;
     }

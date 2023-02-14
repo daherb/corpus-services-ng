@@ -51,7 +51,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         catch (JDOMException e) {
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function", "description","exception"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.Exception},
                     new Object[]{getFunction(),"Exception encountered while checking transcription convention", e}
             ));
         }
@@ -60,7 +60,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         catch (JDOMException e) {
              report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function", "description","exception"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.Exception},
                     new Object[]{getFunction(),"Exception encountered while checking language metadata", e}
             ));
         }
@@ -70,7 +70,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         catch (JDOMException e) {
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function", "description","exception"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.Exception},
                     new Object[]{getFunction(),"Exception encountered while checking language annotations", e}
             ));
         }
@@ -81,7 +81,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         catch (JDOMException e) {
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function", "description","exception"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.Exception},
                     new Object[]{getFunction(),"Exception encountered while checking translation annotations", e}
             ));
         }
@@ -94,7 +94,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
                 .getText();
         if (!conventions.contains(convention.toLowerCase())) {
             report.addWarning(getFunction(),ReportItem.newParamMap(
-                    new String[] {"function","filename","description","howtoFix"},
+                    new ReportItem.Field[] {ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(),cd.getFilename(),"Unexpected transcription convention: " + convention,
                     "Use and document one of the expected conventions: " + String.join(", ", conventions)}
             ));
@@ -111,7 +111,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
             List<Element> langs = Collections.checkedList(langUsed.getChildren("language"),Element.class);
             if (langs.isEmpty()) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function","filename","description","howtoFix"},
+                        new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                         new Object[]{getFunction(),cd.getFilename(),"Missing language information in metadata for " +
                                 "speaker " + langUsed.getParentElement().getAttributeValue("id"),
                         "Add description of languages used to the metadata"}
@@ -152,13 +152,13 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
                 String end = segment.getAttributeValue("end");
                 if (!slots.contains(start))
                     report.addCritical(getFunction(), ReportItem.newParamMap(
-                            new String[]{"function", "filename", "description", "howtoFix"},
+                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), cd.getFilename(),
                                     "Segment in " + category + " tier has invalid start time " + start,
                                     "Check the start time of all segments in tier " + category}));
                 if (!slots.contains(end))
                     report.addCritical(getFunction(), ReportItem.newParamMap(
-                            new String[]{"function", "filename", "description", "howtoFix"},
+                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), cd.getFilename(),
                                     "Segment in " + category + "tier has invalid end time " + end,
                                     "Check the end time of all segments in tier " + category}));
@@ -168,7 +168,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         }
         if (segments.isEmpty()) {
             report.addCritical(getFunction(), ReportItem.newParamMap(
-                    new String[]{"function", "filename", "description", "howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(), cd.getFilename(), "No segments in " + category + " tiers",
                             "Make sure that " + category + " tiers exist"}));
         }
@@ -179,7 +179,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
                     missingSlots.add(slots.get(i));
             }
             report.addCritical(getFunction(), ReportItem.newParamMap(
-                    new String[]{"function", "filename", "description", "howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(), cd.getFilename(), "Segments with undefined " + longcat + ": " +
                             String.join(",", missingSlots),"Make sure that all slots are covered"}));
         }

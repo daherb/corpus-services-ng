@@ -82,7 +82,7 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
             // Speaker for code is not defined
             if (speaker == null) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function", "filename","description","howtoFix"},
+                        new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename,ReportItem.Field.Description,ReportItem.Field.HowToFix},
                         new Object[]{getFunction(),cd.getFilename(),"Speaker " + code + " not defined in header",
                         "Define all speaker information in the header"}
                 ));
@@ -91,7 +91,7 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
                 String abbrev = speaker.getChildText("abbreviation");
                 if (abbrev == null) {
                     report.addWarning(getFunction(), ReportItem.newParamMap(
-                                new String[]{"function", "filename", "description", "howtoFix"},
+                                new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                                 new Object[]{getFunction(), cd.getFilename(), "Speaker does not have an abbreviation: "
                                         + code, "Document speaker completely in the metadata"}
                         ));
@@ -103,7 +103,7 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
                     speakerCount.put(abbrev);
                     if (!documentedSpeakers.contains(abbrev)) {
                         report.addWarning(getFunction(), ReportItem.newParamMap(
-                                new String[]{"function", "filename", "description", "howtoFix"},
+                                new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                                 new Object[]{getFunction(), cd.getFilename(), "Speaker is not documented in the metadata: "
                                         + abbrev, "Document all speakers in the metadata"}
                         ));
@@ -113,7 +113,7 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
         }
         if (!uncheckedSpeakerAbbrevs.isEmpty()) {
             report.addWarning(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function", "filename", "description", "howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(),cd.getFilename(),"Speakers defined in header are not used in the " +
                             "annotation tiers: " + String.join(", ", uncheckedSpeakerAbbrevs),
                             "Adjust header information to the annotations"

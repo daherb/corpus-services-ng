@@ -91,33 +91,37 @@ public class ReportItem {
         this.what = what;
     }
 
+    public enum Field { 
+        Function , Filename, Exception, Description, Columns, Lines, Tier, 
+        Segment, HowToFix };
+    
     /**
      * Creates a new report item based on parameters given in a mp
      * @param s the severity level
      * @param parameters a map containing all relevant parameters
      * @author bba1792, Dr. Herbert Lange
      */
-    public ReportItem(Severity s, Map<String,Object> parameters) {
+    public ReportItem(Severity s, Map<Field,Object> parameters) {
         this();
         severity = s;
-        if (parameters.containsKey("function"))
-            this.function = (String) parameters.get("function");
-        if (parameters.containsKey("filename"))
-            this.filename= (String) parameters.get("filename");
-        if (parameters.containsKey("exception"))
-            this.e = (Throwable) parameters.get("exception");
-        if (parameters.containsKey("description"))
-            this.what = (String) parameters.get("description");
-        if (parameters.containsKey("columns"))
-            this.columns = (String) parameters.get("columns");
-        if (parameters.containsKey("lines"))
-            this.lines = (String) parameters.get("lines");
-        if (parameters.containsKey("tier"))
-            this.lines = (String) parameters.get("tier");
-        if (parameters.containsKey("segment"))
-            this.columns = (String) parameters.get("segment");
-        if (parameters.containsKey("howtoFix"))
-            this.howto = (String) parameters.get("howtoFix");
+        if (parameters.containsKey(Field.Function))
+            this.function = (String) parameters.get(Field.Function);
+        if (parameters.containsKey(Field.Filename))
+            this.filename= (String) parameters.get(Field.Filename);
+        if (parameters.containsKey(Field.Exception))
+            this.e = (Throwable) parameters.get(Field.Exception);
+        if (parameters.containsKey(Field.Description))
+            this.what = (String) parameters.get(Field.Description);
+        if (parameters.containsKey(Field.Columns))
+            this.columns = (String) parameters.get(Field.Columns);
+        if (parameters.containsKey(Field.Lines))
+            this.lines = (String) parameters.get(Field.Lines);
+        if (parameters.containsKey(Field.Tier))
+            this.lines = (String) parameters.get(Field.Tier);
+        if (parameters.containsKey(Field.Segment))
+            this.columns = (String) parameters.get(Field.Segment);
+        if (parameters.containsKey(Field.HowToFix))
+            this.howto = (String) parameters.get(Field.HowToFix);
 
     }
 
@@ -693,21 +697,19 @@ public class ReportItem {
 
     /**
      * Creates a new map from a string array of keys and an object array of values.
-     * Only covers the shorter one completely
      * @param keys the keys
      * @param vals the values
      * @return the map
      */
-    public static Map<String,Object> newParamMap(String[] keys, Object[] vals) {
-        List<String> validKeys = Arrays.asList(new String[]{"function", "filename", "exception", "description",
-                "columns", "lines", "howtoFix", "tier", "segment"});
-           HashMap<String,Object> params = new HashMap<>();
-           for (int i = 0 ; i < Math.min(keys.length,vals.length); i++) {
-               if (validKeys.contains(keys[i]))
-                   params.put(keys[i],vals[i]);
-               else
-                   throw new IllegalArgumentException("Invalid key for parameter given");
-           }
-           return params;
-       }
+    public static Map<Field,Object> newParamMap(Field[] keys, Object[] vals) {
+        HashMap<Field,Object> params = new HashMap<>();
+        if (keys.length != vals.length)
+            throw new IllegalArgumentException("Invalid key for parameter given");
+        else {
+            for (int i = 0 ; i < keys.length; i++) {
+                params.put(keys[i],vals[i]);
+            }
+            return params;
+        }
+    }
 }

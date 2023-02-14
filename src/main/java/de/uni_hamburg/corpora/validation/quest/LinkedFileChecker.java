@@ -58,12 +58,13 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         }
         catch (JDOMException | MalformedURLException | URISyntaxException e) {
             report.addCritical(getFunction(), ReportItem.newParamMap(
-                    new String[]{"function", "exception", "description"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Exception, ReportItem.Field.Description},
                     new Object[]{getFunction(),e,
                             "Exception when trying to extract files from: " + cd.getFilename()}));
         }
         if (refFiles.isEmpty())
-            report.addWarning(getFunction(),ReportItem.newParamMap(new String[]{"function","description"},
+            report.addWarning(getFunction(),ReportItem.newParamMap(
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description},
                     new Object[]{getFunction(),"No linked files found in " + cd.getFilename()}));
         corpusFiles.addAll(refFiles);
         return report;

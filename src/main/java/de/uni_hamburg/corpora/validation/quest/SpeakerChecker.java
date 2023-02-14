@@ -66,7 +66,7 @@ public abstract class SpeakerChecker extends Checker implements CorpusFunction {
                 setUp = true;
             } catch (JDOMException e) {
                 report.addCritical(getFunction(), ReportItem.newParamMap(
-                        new String[]{"function", "description", "exception"},
+                        new ReportItem.Field[]{ReportItem.Field.HowToFix, ReportItem.Field.Exception},
                         new Object[]{getFunction(), "Exception when getting corpus speaker list", e}
                 ));
             }
@@ -82,7 +82,7 @@ public abstract class SpeakerChecker extends Checker implements CorpusFunction {
         if (!undocumentedSpeakers.isEmpty())
         {
             report.addWarning(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function", "description","howtoFix"},
+                        new ReportItem.Field[]{ReportItem.Field.HowToFix,ReportItem.Field.HowToFix},
                         new Object[]{getFunction(),"Speakers not defined in metadata/speaker list:" +
                                 String.join(", ", undocumentedSpeakers),
                         "Define all speaker information in the metadata"}
@@ -91,7 +91,7 @@ public abstract class SpeakerChecker extends Checker implements CorpusFunction {
         if (!irrelevantSpeakers.isEmpty())
         {
             report.addWarning(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function", "description","howtoFix"},
+                        new ReportItem.Field[]{ReportItem.Field.HowToFix,ReportItem.Field.HowToFix},
                         new Object[]{getFunction(),"Speakers defined in metadata/speaker list never used in " +
                                 "annotation: " + String.join(", ", irrelevantSpeakers),
                         "Only document relevant information in the metadata"}

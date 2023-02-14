@@ -81,8 +81,8 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
         if (setUp) {
             // Check if we actually have tiers
             if (tiers.isEmpty()) {
-                report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"
-                                , "howtoFix"},
+                report.addCritical(getFunction(), ReportItem.newParamMap(
+                        new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                         new Object[]{getFunction(), cd.getFilename(), "Corpus composition: No morphology tiers found",
                                 "Add documentation for tiers of type morphology gloss"}));
                 return report;
@@ -93,14 +93,15 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
                 List<Text> glossText = getTextsInTierByID(cd, tierId);
                 // Check if one of the relevant variables is empty and, if yes, skip the transcription test
                 if (validGlosses.isEmpty()) {
-                    report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+                    report.addWarning(getFunction(), ReportItem.newParamMap(
+                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), cd.getFilename(), "No valid glosses defined in tier " + tierId,
                                     "Add documentation for all gloss morphemes"}));
                     return report;
                 }
                 if (glossText.isEmpty()) {
-                    report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
-                                    "howtoFix"},
+                    report.addCritical(getFunction(), ReportItem.newParamMap(
+                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), cd.getFilename(), "No annotated text found in one of the expected tiers: " +
                                     String.join(", ", tiers),
                                     "Check the tier documentation to make sure that your morphology tiers are covered"}));
@@ -111,7 +112,7 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
         }
         else {
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function", "description","howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(),"Setup incomplete due to missing parameters",
                             "Call the checker with all necessary parameters"}));
         }
@@ -140,8 +141,9 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
                         // his would lead to large amount of warnings
 //                        try {
 //                            for (Location l : getLocations((ELANData) cd, Collections.singletonList(tier), token)) {
-                                report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description",
-                                                "howtoFix"}, //, "tier", "segment"},
+                                report.addWarning(getFunction(), ReportItem.newParamMap(
+                                        new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description,
+                                                ReportItem.Field.HowToFix}, //, "tier", "segment"},
                                         new Object[]{getFunction(), cd.getFilename(),
                                                 "Invalid morpheme in token: " + normalizedMorpheme + " in " + token,
                                                 "Add gloss to documentation or check for typo"
@@ -165,15 +167,16 @@ public abstract class GlossChecker extends Checker implements CorpusFunction {
         }
         float percentValid = (float)matched/(matched+missing) ;
         if (percentValid < glossMorphemesValid / 100.0)
-            report.addWarning(getFunction(), ReportItem.newParamMap(new String[]{"function","filename","description",
-                            "howtoFix"},
+            report.addWarning(getFunction(), ReportItem.newParamMap(
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), cd.getFilename(),
                                     "Corpus data: Less than " + glossMorphemesValid + " percent of tokens are" +
                                             " valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +
                                             " Percentage valid: " + Math.round(percentValid*1000)/10.0,
                                     "Improve the gloss documentation to cover more tokens"}));
         else
-            report.addCorrect(getFunction(),ReportItem.newParamMap(new String[]{"function", "filename", "description", "howtoFix"},
+            report.addCorrect(getFunction(),ReportItem.newParamMap(
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[] {getFunction(),cd.getFilename(),
                             "Corpus data: More than " + glossMorphemesValid + " percent of tokens are " +
                                     "valid gloss morphemes.\nValid: " + matched + " Invalid: " + missing +

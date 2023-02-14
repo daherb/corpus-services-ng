@@ -91,7 +91,7 @@ public class XsdChecker  extends Checker implements CorpusFunction {
         }
         catch (SAXParseException e) {
             report.addWarning(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function","filename","description","exception"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.Exception},
                     new Object[]{getFunction(),cd.getFilename(),"Exception when parsing XML file",e}));
         }
 

@@ -183,7 +183,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             logger.info("Format: " + format.formatInfo.name + " - Level: " + levels);
                             if (levels.contains("recommended")) {
                                 report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " recommended by " +
                                                                 "the archive " + intendedCenter
@@ -192,7 +192,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             }
                             else if (levels.contains("acceptable")) {
                                 report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " is acceptable for" +
                                                                 " the archive " + intendedCenter
@@ -201,7 +201,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             }
                             else if (levels.contains("deprecated")){
                                 report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " is " +
                                                                 "considered deprecated for the archive " + intendedCenter
@@ -210,7 +210,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             }
                             else {
                                 report.addCritical(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " is not recognized" +
                                                                 " by the archive " + intendedCenter
@@ -222,7 +222,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("recommended"))
                                     .reduce(Boolean::logicalOr).orElse(false)) {
                                 report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " recommended by " +
                                                                 "the archives " +
@@ -237,7 +237,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("acceptable"))
                                     .reduce(Boolean::logicalOr).orElse(false)) {
                                 report.addCorrect(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " is acceptable for" +
                                                                 " the archives " +
@@ -252,7 +252,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             else if (format.centerInfo.stream().map((c) -> c.level.equalsIgnoreCase("deprecated"))
                                     .reduce(Boolean::logicalOr).orElse(false)) {
                                 report.addWarning(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), fileUri.toString(), // new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + " is considered " +
                                                                 "deprecated at the archives " +
@@ -266,7 +266,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
                             // No center found at all
                             else {
                                 report.addCritical(getFunction(),
-                                        ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                                        ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                                                 new Object[]{getFunction(), new File(fileUri).getName(),
                                                         "File format " + format.formatInfo.name + "is not recognized " +
                                                                 "for any archive"}));
@@ -278,7 +278,7 @@ public class AnnotationFileFormatChecker extends Checker implements CorpusFuncti
         }
         if (!acceptableFiles) {
             report.addCritical(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function", "description"},
+                    ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description},
                             new Object[]{getFunction(),"No acceptable files for any archive found in corpus"}));
         }
         return report;

@@ -307,7 +307,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
             }
             if (!checked) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function", "description"},
+                        new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description},
                         new Object[]{getFunction(), "No metadata files found matching supported formats: " +
                         usable.stream().map(u -> u.getSimpleName())
                                 .collect(Collectors.joining(","))

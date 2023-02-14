@@ -67,7 +67,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
                 findTiers(cd, pattern);
                 if (tiers.isEmpty()) {
                     report.addWarning(getFunction(), ReportItem.newParamMap(
-                            new String[] {"function","description"},
+                            new ReportItem.Field[] {ReportItem.Field.Function, ReportItem.Field.Description},
                             new Object[]{getFunction(),
                                     "No tiers matching pattern " + pattern + " found in file: " + cd.getFilename()}
                     ));
@@ -76,14 +76,14 @@ abstract class TierFinder extends Checker implements CorpusFunction {
             catch (JDOMException e)
             {
                 report.addCritical(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function", "filename", "description", "exception"},
+                        new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.Exception},
                         new Object[]{getFunction(),cd.getFilename(),"Exception when trying to find tiers", e}
                 ));
             }
         }
         else
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function","description","howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(),"Missing pattern to find tiers", "Add tier-pattern parameter"}
             ));
         return report;
@@ -101,7 +101,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
             }
             if (tiers.isEmpty()) {
                 report.addWarning(getFunction(), ReportItem.newParamMap(
-                        new String[] {"function","description"},
+                        new ReportItem.Field[] {ReportItem.Field.Function, ReportItem.Field.Description},
                         new Object[]{getFunction(),"No tiers matching pattern found: " + pattern}
                 ));
             }
@@ -111,7 +111,7 @@ abstract class TierFinder extends Checker implements CorpusFunction {
         }
         else {
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function","description","howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description,ReportItem.Field.HowToFix},
                     new Object[]{getFunction(),"Missing pattern to find tiers", "Add tier-pattern parameter"}
             ));
         }

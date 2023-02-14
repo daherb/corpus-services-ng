@@ -138,7 +138,7 @@ public class Report {
      * @param statId the bucket the item has to be put into
      * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
      */
-    public void addCritical(String statId, Map<String,Object> params) {
+    public void addCritical(String statId, Map<ReportItem.Field,Object> params) {
         addReportItem(statId, new ReportItem(ReportItem.Severity.CRITICAL, params));
     }
 
@@ -222,7 +222,7 @@ public class Report {
      * @param statId the bucket the item has to be put into
      * @param params the map for all relevant parameters
      */
-    public void addWarning(String statId, Map<String,Object> params) {
+    public void addWarning(String statId, Map<ReportItem.Field,Object> params) {
         addReportItem(statId, new ReportItem(Severity.WARNING, params));
     }
 
@@ -247,7 +247,7 @@ public class Report {
      * @param statId the bucket the item has to be put into
      * @param params the map for all relevant parameters (use ReportItem.newParamMap to create it)
      */
-    public void addCorrect(String statId, Map<String,Object> params) {
+    public void addCorrect(String statId, Map<ReportItem.Field,Object> params) {
         addReportItem(statId, new ReportItem(Severity.CORRECT, params));
     }
 

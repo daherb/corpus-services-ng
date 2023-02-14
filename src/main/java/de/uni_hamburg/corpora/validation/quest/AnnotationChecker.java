@@ -107,7 +107,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
             logger.info("Checking " + cd.getFilename());
             if (tierIds.isEmpty()) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function","description","howtoFix","filename"},
+                        new ReportItem.Field[]{ReportItem.Field.Function,ReportItem.Field.Description,ReportItem.Field.HowToFix,ReportItem.Field.Filename},
                         new Object[]{getFunction(), "No annotations tiers found in file", "Check" +
                                 " the definition of annotation tiers",
                                 cd.getFilename()
@@ -125,7 +125,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                         if (!tags.isEmpty() && !tags.contains(token)) {
                             missingStats.put(token);
                             report.addWarning(getFunction(), ReportItem.newParamMap(
-                                    new String[]{"function", "filename", "description", "howtoFix"},
+                                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                                     new Object[]{getFunction(), cd.getFilename(),
                                             "Unexpected tag " + token + " in tier " + tier
                                             //        + ", context: " + tokens + " " +  "pos: " + tokens.indexOf(token)
@@ -138,7 +138,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
                 }
                 else {
                     report.addCritical(getFunction(),ReportItem.newParamMap(
-                            new String[]{"function","description","filename","howtoFix"},
+                            new ReportItem.Field[]{ReportItem.Field.Function,ReportItem.Field.Description,ReportItem.Field.Filename,ReportItem.Field.HowToFix},
                             new Object[]{getFunction(), "No annotations found in tier or tier missing in file: " + tier,
                                     cd.getFilename(),
                                     "Check the definition of annotation tiers"}
@@ -148,7 +148,7 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         }
         else
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function","description","howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function,ReportItem.Field.Description,ReportItem.Field.HowToFix},
                     new Object[]{getFunction(), "Checker not properly set up", "Give at least one tier identifier " +
                             "as a parameter"}
             ));
@@ -169,14 +169,14 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
             }
             if (!missingStats.isEmpty()) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function","description"},
+                        new ReportItem.Field[]{ReportItem.Field.Function,ReportItem.Field.Description},
                         new Object[]{getFunction(),"Missing tags:\n" + missingStats}
                 ));
             }
         }
         else
             report.addCritical(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function","description","howtoFix"},
+                    new ReportItem.Field[]{ReportItem.Field.Function,ReportItem.Field.Description,ReportItem.Field.HowToFix},
                     new Object[]{getFunction(), "Checker not properly set up", "Give at least one tier identifier " +
                             "as a parameter"}
             ));
