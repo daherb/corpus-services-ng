@@ -189,13 +189,20 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-        <dependency>
+<!--        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
-        </dependency>
+        </dependency>-->
+
 
         <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j testing using ini as configuration file format-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+        
         <dependency>
             <groupId>org.ini4j</groupId>
             <artifactId>ini4j</artifactId>
