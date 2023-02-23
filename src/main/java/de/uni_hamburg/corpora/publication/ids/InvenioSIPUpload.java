@@ -12,19 +12,22 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.ReportItem;
 import de.uni_hamburg.corpora.publication.Publisher;
 import de.uni_hamburg.corpora.utilities.publication.InvenioAPITools;
-import java.io.File;
+import de.uni_hamburg.corpora.utilities.publication.InvenioAPITools.InvenioSIP;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import org.apache.commons.lang3.time.StopWatch;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;
@@ -40,7 +43,7 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
     boolean publicFiles = false;
     boolean setUp = false;
     
-    public InvenioSIPUpload(Properties properties) throws IllegalAccessException {
+    public InvenioSIPUpload(Properties properties) throws IllegalAccessException, IOException {
         super(properties);
 //        LOG.info(properties.toString() + " - " + String.valueOf(properties.conta("invenio-host")) + " - "  + String.valueOf(properties.contains("invenio-host")));
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
@@ -58,7 +61,7 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
     
     @Override
     public Report function(CorpusData cd) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported for corpus data."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
@@ -66,10 +69,15 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
         try {
-            String id = tools.uploadDraftSip(new File("/home/herb/projekte/test-sips/wikipedia-mini-test-sips/wdd13").toPath(), false);
-            report.addNote(getFunction(), "Created new record " + id);
+            report.addNote(getFunction(), "Start SIP upload");
+            StopWatch watch = new StopWatch();
+            watch.start();
+            InvenioSIP sipIds = tools.uploadDraftSip(Path.of(c.getBaseDirectory().toURI()), publicFiles);
+            report.addNote(getFunction(), "Created new records " + sipIds);
+            watch.stop();
+            report.addNote(getFunction(), "Upload took " + watch.getTime(TimeUnit.SECONDS) + " seconds");
         }
-        catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException | org.jdom2.JDOMException e) {
+        catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException | org.jdom2.JDOMException | CloneNotSupportedException e) {
             report.addCritical(getFunction(), ReportItem.newParamMap(
                             new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Exception, ReportItem.Field.Description}, 
                             new Object[]{getFunction(), e, "Exception when uploading SIP"}
