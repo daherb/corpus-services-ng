@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import de.idsmannheim.lza.inveniojavaapi.API;
 import de.idsmannheim.lza.inveniojavaapi.Access;
 import de.idsmannheim.lza.inveniojavaapi.CMDI;
+import de.idsmannheim.lza.inveniojavaapi.ControlledVocabulary;
 import de.idsmannheim.lza.inveniojavaapi.DraftRecord;
 import de.idsmannheim.lza.inveniojavaapi.Record;
 import de.idsmannheim.lza.inveniojavaapi.Files;
@@ -26,13 +27,15 @@ import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.function.Function;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.io.filefilter.NameFileFilter;
+import org.apache.commons.io.filefilter.NotFileFilter;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
@@ -43,9 +46,69 @@ import org.jdom2.input.SAXBuilder;
  */
 public class InvenioAPITools {
     
+    // Information how to find the metadata file
+    static final String METADATA_DIR = "metadata";
+    static final String METADATA_FILE = "metadata.cmdi";
     // Path separator to be used instead of /
-    public static final String SEPARATOR = "-0-0-";
+    static final String SEPARATOR = "-0-0-";
+    ControlledVocabulary.LanguageIdFactory languageIdFactory;
+    
+    /**
+     * Class representing the SIP in Invenio based on the parent
+     * identifiers and the list of child identifiers 
+     * (i.e. the file records)
+     */
+    public static class InvenioSIP {
+        String id;
+        ArrayList<String> children = new ArrayList<>();
+
+        public InvenioSIP(String id) {
+            this.id = id;
+        }
+
+        public InvenioSIP addChildren(ArrayList<String> children) {
+            this.children.addAll(children);
+            return this;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 71 * hash + Objects.hashCode(this.id);
+            hash = 71 * hash + Objects.hashCode(this.children);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final InvenioSIP other = (InvenioSIP) obj;
+            if (!Objects.equals(this.id, other.id)) {
+                return false;
+            }
+            return Objects.equals(this.children, other.children);
+        }
+
+        
+        
+        @Override
+        public String toString() {
+            return "InvenioSIP{" + "id=" + id + ", children=" + children + '}';
+        }
+        
+        
+    }
+    
     API api;
+    String url;
     
     private static final Logger LOG = Logger.getLogger(InvenioAPITools.class.getName());
     
@@ -53,9 +116,12 @@ public class InvenioAPITools {
     /**
      * Default constructor
      * @param api The API object to be used
+     * @throws java.io.IOException
      */
-    public InvenioAPITools(API api) {
+    public InvenioAPITools(API api) throws IOException {
+        this.languageIdFactory = new ControlledVocabulary.LanguageIdFactory();
         this.api = api;
+        url = api.protocol + "://" + api.host + "/records/";
     }
     
     /**
@@ -72,49 +138,102 @@ public class InvenioAPITools {
      * @throws FileNotFoundException
      * @throws JsonProcessingException
      * @throws UnsupportedEncodingException
+     * @throws java.lang.CloneNotSupportedException
      */
-    public String uploadDraftSip(Path sipPath, boolean publicFiles) throws IOException, JDOMException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, FileNotFoundException, JsonProcessingException, UnsupportedEncodingException {
+    public InvenioSIP uploadDraftSip(Path sipPath, boolean publicFiles) throws IOException, JDOMException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, FileNotFoundException, JsonProcessingException, UnsupportedEncodingException, CloneNotSupportedException {
         ObjectMapper om = new ObjectMapper();
-        // add a trailing slash if missing
-        if (!sipPath.endsWith("/"))
-            sipPath = Path.of(sipPath.toString(), "/");
         om.findAndRegisterModules();
         om.enable(SerializationFeature.INDENT_OUTPUT);
-        
+        // Read metadata from CMDI file
         Metadata metadata = readSipMetadata(sipPath);
-        Access.AccessType fileAccess;
-        // Check if files should be public
-        if (publicFiles)
-            fileAccess = Access.AccessType.Public;
-        else
-            fileAccess = Access.AccessType.Restricted;
+        // File access to metadata file is currently always possible
+        Access.AccessType fileAccess = Access.AccessType.Public;
         DraftRecord draftRecord = new DraftRecord(
                 new Access(Access.AccessType.Public, fileAccess),
                 new FilesOptions(true),
                 metadata);
         Record created = api.createDraftRecord(draftRecord);
-        uploadSipFiles(created.getId(), sipPath);
-        LOG.log(Level.INFO, "New record id: {0}", created.getId());
+        // Upload CMDI file
+        api.startDraftFileUpload(created.getId(), new ArrayList<>(Collections.singletonList(new Files.FileEntry(METADATA_FILE))));
+        api.uploadDraftFile(created.getId(), METADATA_FILE, Path.of(sipPath.toString(), METADATA_DIR, METADATA_FILE).toFile());
+        api.completeDraftFileUpload(created.getId(), METADATA_FILE);
+        // Upload files and keep track of IDS 
+        InvenioSIP sip = new InvenioSIP(created.getId());
+        ArrayList<String> children = uploadSipFiles(created.getId(), (Metadata) metadata.clone(), sipPath, publicFiles);
+        sip.addChildren(children);
+        // Add file references
+        ArrayList<Metadata.RelatedIdentifier> fileIds = new ArrayList<>();
+        for (String id : children) {
+            fileIds.add(new Metadata.RelatedIdentifier(url + id, 
+                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart), 
+                            new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
+        }
+        metadata.addRelatedIdentifiers(fileIds);
+        draftRecord = new DraftRecord(
+                new Access(Access.AccessType.Public, fileAccess),
+                new FilesOptions(true),
+                metadata);
+        api.updateDraftRecord(created.getId(), draftRecord);
+        api.publishDraftRecord(created.getId());
+        return sip;
+    }
+    
+    public ArrayList<String> uploadSipFiles(String parentId, Metadata metadata, Path sipPath, boolean publicFile) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+        // TODO
+        ArrayList<String> fileIds = new ArrayList<>();
+        // Upload all files except for the metadata file as separate records
+        for (File f : FileUtils.listFiles(sipPath.toFile(), new NotFileFilter(new NameFileFilter(METADATA_FILE)), DirectoryFileFilter.DIRECTORY)) {
+            fileIds.add(uploadSipFile(parentId, metadata, sipPath, f, publicFile));
+        }
+//        ArrayList<Files.FileEntry> entries = new ArrayList();
+//        for (String fn :sipFiles.keySet()) {
+//            // entries.add(new Files.FileEntry(URLEncoder.encode(fn, StandardCharsets.UTF_8.toString())));
+//            entries.add(new Files.FileEntry(fn));
+//        }
+//        Files files = api.startDraftFileUpload(id, entries);
+//        for (HashMap.Entry<String, File> sipFile : sipFiles.entrySet()) {
+//            Files.FileEntry entry = api.uploadDraftFile(id, sipFile.getKey(), sipFile.getValue());
+//            Files.FileEntry completed = api.completeDraftFileUpload(id, sipFile.getKey());
+//        }
+        return fileIds;
+    }
+    
+    public String uploadSipFile(String parentId, Metadata metadata, Path sipPath, File file, boolean publicFile) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, FileNotFoundException, IOException, JsonProcessingException, InterruptedException, UnsupportedEncodingException {
+        // Check if files should be public
+        Access.AccessType fileAccess;
+        if (publicFile)
+            fileAccess = Access.AccessType.Public;
+        else
+            fileAccess = Access.AccessType.Restricted;
+        // Update title and add reference to parent
+        Metadata fileMetadata = new Metadata(
+                new Metadata.ResourceType(new ControlledVocabulary.ResourceType(ControlledVocabulary.ResourceType.EResourceType.Other)),
+                metadata.getCreators(),
+                file.toString().replace(sipPath.toString(), ""),
+                metadata.getPublicationDate()
+        );
+        fileMetadata.addRelatedIdentifiers(Collections.singletonList(
+                new Metadata.RelatedIdentifier(url + parentId,
+                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsPartOf),
+                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is part of"))))
+        );
+        DraftRecord draftRecord = new DraftRecord(
+                new Access(Access.AccessType.Public, fileAccess),
+                new FilesOptions(true),
+                fileMetadata);
+        // Create draft for file
+        Record created = api.createDraftRecord(draftRecord);
+        // Prepare and upload file
+        LOG.log(Level.INFO, "Upload file: {0}", file.toString());
+        api.startDraftFileUpload(created.getId(),new ArrayList<>(Collections.singletonList(new Files.FileEntry(file.getName()))));
+        api.uploadDraftFile(created.getId(), file.getName(), file);
+        api.completeDraftFileUpload(created.getId(), file.getName());
+        api.publishDraftRecord(created.getId());
         return created.getId();
     }
     
-    public void uploadSipFiles(String id, Path sipPath) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
-        HashMap<String,File> sipFiles = new HashMap<>();
-        for (File f : FileUtils.listFiles(sipPath.toFile(), FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY)) {
-            String fn = f.getAbsolutePath().replace(sipPath.toAbsolutePath().toString(), "").replaceAll("/", SEPARATOR);
-            sipFiles.put(fn, f);
-        }
-        ArrayList<Files.FileEntry> entries = new ArrayList();
-        for (String fn :sipFiles.keySet()) {
-            // entries.add(new Files.FileEntry(URLEncoder.encode(fn, StandardCharsets.UTF_8.toString())));
-            entries.add(new Files.FileEntry(fn));
-        }
-        Files files = api.startDraftFileUpload(id, entries);
-        for (HashMap.Entry<String, File> sipFile : sipFiles.entrySet()) {
-            Files.FileEntry entry = api.uploadDraftFile(id, sipFile.getKey(), sipFile.getValue());
-            Files.FileEntry completed = api.completeDraftFileUpload(id, sipFile.getKey());
-        }
-    }
     /**
      * Uploads all sips (i.e.subfolders) in a certain path
      * @param sipPath The path to the folder containing the sips
@@ -128,8 +247,9 @@ public class InvenioAPITools {
      * @throws java.io.FileNotFoundException
      * @throws com.fasterxml.jackson.core.JsonProcessingException
      * @throws java.security.KeyManagementException
+     * @throws java.lang.CloneNotSupportedException
      */
-    public void uploadDraftSips(Path sipPath, boolean publicFiles) throws IOException, JDOMException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, FileNotFoundException, JsonProcessingException, UnsupportedEncodingException {
+    public void uploadDraftSips(Path sipPath, boolean publicFiles) throws IOException, JDOMException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, FileNotFoundException, JsonProcessingException, UnsupportedEncodingException, CloneNotSupportedException {
         for (File sip : sipPath.toFile().listFiles()) {
             if (sip.isDirectory()) {
                 LOG.log(Level.INFO, "Uploading {0}", sip.toString());
@@ -257,18 +377,19 @@ public class InvenioAPITools {
      * @throws java.io.IOException
      * @throws org.jdom2.JDOMException
      */
-    public String updateSip(String id, Path sipPath) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, KeyManagementException, IOException, InterruptedException, JDOMException {
-        DraftRecord draft = api.createNewVersion(id);
-        if (draft.getId().isPresent()) {
-            draft.setMetadata(readSipMetadata(sipPath));
-            api.updateDraftRecord(draft.getId().get(), draft);
-            uploadSipFiles(draft.getId().get(), sipPath);
-            return draft.getId().get();
-        }
-        else {
-            throw new IOException("Error creating new draft");
-        }
-    }
+    // TODO fix
+//    public String updateSip(String id, Path sipPath) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, KeyManagementException, IOException, InterruptedException, JDOMException {
+//        DraftRecord draft = api.createNewVersion(id);
+//        if (draft.getId().isPresent()) {
+//            draft.setMetadata(readSipMetadata(sipPath));
+//            api.updateDraftRecord(draft.getId().get(), draft);
+//            uploadSipFiles(draft.getId().get(), sipPath);
+//            return draft.getId().get();
+//        }
+//        else {
+//            throw new IOException("Error creating new draft");
+//        }
+//    }
 
     /**
      * Read the sip metadata from the CMDI file in the sip
@@ -278,7 +399,7 @@ public class InvenioAPITools {
      * @throws JDOMException 
      */
     public Metadata readSipMetadata(Path sipPath) throws IOException, JDOMException {
-        // Look for all CMDI files in the metadata subfolder
+//        // Look for all CMDI files in the metadata subfolder
 //        ArrayList<File> cmdiFiles = new ArrayList<>(
 //                Arrays.asList(Path.of(sipPath.toString(), "metadata").toFile()
 //                        .listFiles()).stream()
@@ -288,6 +409,7 @@ public class InvenioAPITools {
 //            throw new IOException("Wrong number of cmid files. Should be 1 but was " + String.valueOf(cmdiFiles.size()));
 //        }
 //        Document document = new SAXBuilder().build(cmdiFiles.get(0));
+        // Read the CMDI file metadata/metadata.cmdi
         Document document = new SAXBuilder().build(Path.of(sipPath.toString(), "metadata","metadata.cmdi").toFile());
         return CMDI.readCmdiMetadata(document);
     }
