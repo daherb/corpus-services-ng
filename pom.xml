@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.uni_hamburg.corpora</groupId>
-    <artifactId>corpus-services</artifactId>
+    <artifactId>corpus-services-ng</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
