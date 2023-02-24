@@ -75,7 +75,9 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
             InvenioSIP sipIds = tools.uploadDraftSip(Path.of(c.getBaseDirectory().toURI()), publicFiles);
             report.addNote(getFunction(), "Created new records " + sipIds);
             watch.stop();
+            LOG.info("Done");
             report.addNote(getFunction(), "Upload took " + watch.getTime(TimeUnit.SECONDS) + " seconds");
+            
         }
         catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException | org.jdom2.JDOMException | CloneNotSupportedException e) {
             report.addCritical(getFunction(), ReportItem.newParamMap(
