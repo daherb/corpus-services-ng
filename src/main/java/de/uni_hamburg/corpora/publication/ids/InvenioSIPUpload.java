@@ -34,7 +34,7 @@ import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Class using the REST API to publish a corpus to Invenio
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
 public class InvenioSIPUpload extends Publisher implements CorpusFunction {
