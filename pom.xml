@@ -296,6 +296,12 @@
             <artifactId>jackson-module-jsonSchema</artifactId>
             <version>2.13.2</version>
         </dependency>
+        <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.13.3</version>
+            <type>jar</type>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-compiler -->
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -306,6 +312,11 @@
             <groupId>de.ids-mannheim.lza</groupId>
             <artifactId>invenio-java-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.ids-mannheim.lza</groupId>
+            <artifactId>xml-magic</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>
