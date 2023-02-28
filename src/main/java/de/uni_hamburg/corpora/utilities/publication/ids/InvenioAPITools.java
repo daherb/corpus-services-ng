@@ -17,6 +17,9 @@ import de.idsmannheim.lza.inveniojavaapi.Files;
 import de.idsmannheim.lza.inveniojavaapi.FilesOptions;
 import de.idsmannheim.lza.inveniojavaapi.Metadata;
 import de.idsmannheim.lza.inveniojavaapi.Records;
+import de.idsmannheim.lza.inveniojavaapi.cmdi.*;
+import de.idsmannheim.lza.xmlmagic.MimeType;
+import de.idsmannheim.lza.xmlmagic.XmlMagic;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -411,7 +414,27 @@ public class InvenioAPITools {
 //        Document document = new SAXBuilder().build(cmdiFiles.get(0));
         // Read the CMDI file metadata/metadata.cmdi
         Document document = new SAXBuilder().build(Path.of(sipPath.toString(), "metadata","metadata.cmdi").toFile());
-        return CMDI.readCmdiMetadata(document);
+        XmlMagic magic = new XmlMagic(document);
+        for (MimeType mt : magic.getMimeTypes()) {
+            // Find the CMDI mime type
+            if (mt.getSubtype().equals("x-cmdi")) {
+                
+                switch (mt.getParameters().get("profile")) {
+                    // Speech corpus profile
+                    case "clarin.eu:cr1:p_1527668176128":
+                        return CMDI.readCmdiMetadata(new SpeechCorpusProfileMapper(document));
+                    // Text corpus profile
+                    case "clarin.eu:cr1:p_1559563375778":
+                        return CMDI.readCmdiMetadata(new TextCorpusProfileMapper(document));
+                    // OLAC DCMI terms
+                    case "clarin.eu:cr1:p_1366895758244":
+                        return CMDI.readCmdiMetadata(new OLACDcmiTermsMapper(document));
+                    default:
+                        throw new IOException("Unsupported CMDI profile");
+                }
+            }
+        }
+        throw new IOException("Unrecognized CMDI file or profile");
     }
 
     /**
