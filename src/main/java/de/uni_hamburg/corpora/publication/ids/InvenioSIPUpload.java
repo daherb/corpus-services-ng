@@ -45,9 +45,7 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
     
     public InvenioSIPUpload(Properties properties) throws IllegalAccessException, IOException {
         super(properties);
-//        LOG.info(properties.toString() + " - " + String.valueOf(properties.conta("invenio-host")) + " - "  + String.valueOf(properties.contains("invenio-host")));
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
-            LOG.info(properties.toString());
             tools = new InvenioAPITools(new API(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
             setUp = true;
         }
