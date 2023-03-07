@@ -4,7 +4,12 @@
 */
 package de.uni_hamburg.corpora.utilities.publication.ids;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import de.idsmannheim.lza.inveniojavaapi.API;
@@ -32,6 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,10 +54,11 @@ import org.jdom2.input.SAXBuilder;
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
 public class InvenioAPITools {
-    
     // Information how to find the metadata file
     static final String METADATA_DIR = "metadata";
     static final String METADATA_FILE = "metadata.cmdi";
+    //static final String RECORD_MAP_FILE = "recordmap.xml";
+    static final String RECORD_MAP_FILE = "recordmap.json";
     // Path separator to be used instead of /
     static final String SEPARATOR = "-0-0-";
     ControlledVocabulary.LanguageIdFactory languageIdFactory;
@@ -100,14 +107,50 @@ public class InvenioAPITools {
             return Objects.equals(this.children, other.children);
         }
 
-        
-        
         @Override
         public String toString() {
             return "InvenioSIP{" + "id=" + id + ", children=" + children + '}';
         }
         
         
+    }
+    
+    /**
+     * Class for representing the mapping from files to Invenio records
+     */
+    @JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.ANY)
+    @JsonRootName("object")
+    static class DigiObject {
+        static class DigiRecord {
+            String name;
+            List<String> files;
+            
+            @JsonCreator
+            public DigiRecord(@JsonProperty("name") String name, @JsonProperty("file") List<String> files) {
+                this.name = name;
+                this.files = files;
+            }
+            
+            @Override
+            public String toString() {
+                return "DigiRecord{" + "name=" + name + ", files=" + files + '}';
+            }
+        }
+        String title;
+        List<DigiRecord> records;
+        @JsonCreator
+        public DigiObject(@JsonProperty("title") String title, @JsonProperty("record") List<DigiRecord> records) {
+            this.title = title;
+            this.records = records;
+        }
+
+        @Override
+        public String toString() {
+            return "DigiObject{" + "title=" + title + ", records=" + records + '}';
+        }
+        
+        
+
     }
     
     API api;
@@ -162,15 +205,25 @@ public class InvenioAPITools {
         api.completeDraftFileUpload(created.getId(), METADATA_FILE);
         // Upload files and keep track of IDS 
         InvenioSIP sip = new InvenioSIP(created.getId());
-        ArrayList<String> children = uploadSipFiles(created.getId(), (Metadata) metadata.clone(), sipPath, publicFiles);
-        sip.addChildren(children);
-        // Add file references
+        // Keep track of file references
         ArrayList<Metadata.RelatedIdentifier> fileIds = new ArrayList<>();
-        for (String id : children) {
-            fileIds.add(new Metadata.RelatedIdentifier(url + id, 
-                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
-                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart), 
-                            new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
+        File recordMapFile = Path.of(sipPath.toString(), METADATA_DIR, RECORD_MAP_FILE).toFile();
+        if (recordMapFile.exists()) {
+            ObjectMapper mapper = new ObjectMapper();
+            DigiObject map = mapper
+                    .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)
+                    .readValue(recordMapFile, DigiObject.class);
+        }
+        else {
+            ArrayList<String> children = uploadSipFiles(created.getId(), (Metadata) metadata.clone(), sipPath, publicFiles);
+            sip.addChildren(children);
+            // Add file references
+            for (String id : children) {
+                fileIds.add(new Metadata.RelatedIdentifier(url + id,
+                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart),
+                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
+            }
         }
         metadata.addRelatedIdentifiers(fileIds);
         draftRecord = new DraftRecord(
