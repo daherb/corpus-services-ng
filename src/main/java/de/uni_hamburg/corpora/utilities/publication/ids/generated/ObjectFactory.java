@@ -34,43 +34,43 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Record }
+     * Create an instance of {@link MapRecord }
      * 
      */
-    public Record createRecord() {
-        return new Record();
+    public MapRecord createRecord() {
+        return new MapRecord();
     }
 
     /**
-     * Create an instance of {@link Records }
+     * Create an instance of {@link MapRecords }
      * 
      */
-    public Records createRecords() {
-        return new Records();
+    public MapRecords createRecords() {
+        return new MapRecords();
     }
 
     /**
-     * Create an instance of {@link Files }
+     * Create an instance of {@link MapFiles }
      * 
      */
-    public Files createFiles() {
-        return new Files();
+    public MapFiles createFiles() {
+        return new MapFiles();
     }
 
     /**
-     * Create an instance of {@link File }
+     * Create an instance of {@link MapFile }
      * 
      */
-    public File createFile() {
-        return new File();
+    public MapFile createFile() {
+        return new MapFile();
     }
 
     /**
-     * Create an instance of {@link RootRecord }
+     * Create an instance of {@link MapRootRecord }
      * 
      */
-    public RootRecord createRootRecord() {
-        return new RootRecord();
+    public MapRootRecord createRootRecord() {
+        return new MapRootRecord();
     }
 
     /**

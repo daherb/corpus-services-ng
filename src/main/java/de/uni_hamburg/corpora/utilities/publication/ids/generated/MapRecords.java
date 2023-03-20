@@ -57,21 +57,15 @@ public class MapRecords {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Record }
+     * {@link MapRecord }
      * 
      * 
      */
     public List<MapRecord> getRecord() {
         if (record == null) {
-            record = new ArrayList<>();
+            record = new ArrayList<MapRecord>();
         }
         return this.record;
     }
 
-    @Override
-    public String toString() {
-        return "MapRecords{" + "record=" + record + '}';
-    }
-
-    
 }

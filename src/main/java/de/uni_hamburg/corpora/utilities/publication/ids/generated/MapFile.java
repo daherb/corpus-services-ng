@@ -90,10 +90,4 @@ public class MapFile {
         this._public = value;
     }
 
-    @Override
-    public String toString() {
-        return "MapFile{" + "value=" + value + ", _public=" + _public + '}';
-    }
-
-    
 }

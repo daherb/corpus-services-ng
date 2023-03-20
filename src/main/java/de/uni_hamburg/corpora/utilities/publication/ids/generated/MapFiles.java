@@ -63,7 +63,7 @@ public class MapFiles {
      */
     public List<MapFile> getFile() {
         if (file == null) {
-            file = new ArrayList<>();
+            file = new ArrayList<MapFile>();
         }
         return this.file;
     }
@@ -71,13 +71,4 @@ public class MapFiles {
     public void setFile(List<MapFile> file) {
         this.file = file;
     }
-
-    
-    @Override
-    public String toString() {
-        return "MapFiles{" + "file=" + file + '}';
-    }
-    
-    
-
 }

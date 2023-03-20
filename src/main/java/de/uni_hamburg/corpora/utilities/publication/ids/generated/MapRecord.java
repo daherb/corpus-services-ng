@@ -139,10 +139,4 @@ public class MapRecord {
         this.title = value;
     }
 
-    @Override
-    public String toString() {
-        return "MapRecord{" + "metadata=" + metadata + ", records=" + records + ", files=" + files + ", title=" + title + '}';
-    }
-
-    
 }
