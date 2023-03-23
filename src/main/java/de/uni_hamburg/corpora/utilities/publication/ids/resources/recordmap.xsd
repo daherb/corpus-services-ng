@@ -8,7 +8,7 @@
                 <xs:element minOccurs="0" maxOccurs="1" ref="records"/>
                 <xs:element minOccurs="0" maxOccurs="1" ref="files"/>
             </xs:all>
-            <xs:attribute name="title" use="required" type="xs:string"/>
+            <xs:attribute name="title" use="optional" type="xs:string"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="metadata" type="xs:string"/>
