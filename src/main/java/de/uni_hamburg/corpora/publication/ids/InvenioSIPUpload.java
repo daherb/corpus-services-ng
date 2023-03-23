@@ -12,7 +12,7 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.ReportItem;
 import de.uni_hamburg.corpora.publication.Publisher;
 import de.uni_hamburg.corpora.utilities.publication.ids.InvenioAPITools;
-import de.uni_hamburg.corpora.utilities.publication.ids.InvenioAPITools.InvenioSIP;
+//import de.uni_hamburg.corpora.utilities.publication.ids.InvenioAPITools.InvenioSIP;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -20,10 +20,13 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -66,23 +69,33 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
     public Report function(Corpus c) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (setUp) {
-        try {
+//        try {
             report.addNote(getFunction(), "Start SIP upload");
             StopWatch watch = new StopWatch();
             watch.start();
-            InvenioSIP sipIds = tools.uploadDraftSip(Path.of(c.getBaseDirectory().toURI()), publicFiles);
-            report.addNote(getFunction(), "Created new records " + sipIds);
+            try {
+                //List<String> sipIds = tools.uploadIP(Path.of(c.getBaseDirectory().toURI()), publicFiles);
+                Optional<String> id = tools.createObject(Path.of(c.getBaseDirectory().toURI()), publicFiles, report);
+                if (id.isPresent()) {
+                    report.addNote(getFunction(), "Created new record " + id.get());
+                }
+                else {
+                    report.addCritical(getFunction(), "No record created");
+                }
+            } catch (Exception e) {
+                report.addException(e, "Exception when uploading information package");
+            }
             watch.stop();
             LOG.info("Done");
             report.addNote(getFunction(), "Upload took " + watch.getTime(TimeUnit.SECONDS) + " seconds");
             
-        }
-        catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException | org.jdom2.JDOMException | CloneNotSupportedException e) {
-            report.addCritical(getFunction(), ReportItem.newParamMap(
-                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Exception, ReportItem.Field.Description}, 
-                            new Object[]{getFunction(), e, "Exception when uploading SIP"}
-                    ));
-        }
+//        }
+//        catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException | org.jdom2.JDOMException | CloneNotSupportedException e) {
+//            report.addCritical(getFunction(), ReportItem.newParamMap(
+//                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Exception, ReportItem.Field.Description}, 
+//                            new Object[]{getFunction(), e, "Exception when uploading SIP"}
+//                    ));
+//        }
         }
         else {
             report.addCritical(getFunction(),"Not set up properly");
