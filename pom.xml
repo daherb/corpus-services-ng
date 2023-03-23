@@ -318,5 +318,10 @@
             <artifactId>xml-magic</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>gov.loc</groupId>
+            <artifactId>bagit</artifactId>
+            <version>5.2.0</version>
+        </dependency>
     </dependencies>
 </project>
