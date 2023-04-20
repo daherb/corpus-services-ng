@@ -709,6 +709,7 @@ public class CorpusMagician {
                             // Here we can control which packages we want to include
                             String[] validPackages = {
                                     "de.uni_hamburg.corpora.conversion",
+                                    "de.uni_hamburg.corpora.conversion.ids",
                                     "de.uni_hamburg.corpora.publication",
                                     "de.uni_hamburg.corpora.publication.ids",
                                     "de.uni_hamburg.corpora.validation",
