@@ -35,6 +35,9 @@ public class MapRecord {
         this.title = Optional.of(title);
     }
 
+    public void setFiles(List<MapFile> files) {
+        this.files = files;
+    }
     
     public Optional<String> getMetadata() {
         return metadata;
@@ -51,4 +54,5 @@ public class MapRecord {
     public Optional<String> getTitle() {
         return title;
     }
+
 }

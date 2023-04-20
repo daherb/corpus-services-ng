@@ -11,6 +11,15 @@ public class MapFile {
     @JacksonXmlProperty(localName = "public", isAttribute = true)
     protected Boolean _public;
 
+    public MapFile() {
+        
+    }
+    
+    public MapFile(String name) {
+        this.name = name;
+        
+    }
+
     @Override
     public String toString() {
         return "MapFile{" + "name=" + name + ", _public=" + _public + '}';
