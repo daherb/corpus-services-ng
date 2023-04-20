@@ -147,11 +147,11 @@ public class InvenioAPITools {
                     }
                 }
                 else {
-                    report.addCritical("Failed to get lock");
+                    report.addCritical("InvenioAPI", "Failed to get lock");
                 }
             }
             catch (Exception e) {
-                report.addException(e, "Exception while creating object");
+                report.addException("InvenioAPI", e, "Exception while creating object");
             }
             System.out.println("Waiting for key press...");
             System.in.read();
@@ -161,9 +161,9 @@ public class InvenioAPITools {
         }
         else{
             if (!validBag)
-                report.addCritical("Validation of BagIt failed");
+                report.addCritical("InvenioAPI", "Validation of BagIt failed");
             if (!validMapping)
-                report.addCritical("Validation of mapping failed");
+                report.addCritical("InvenioAPI", "Validation of mapping failed");
         }
         // No success, so no new id
         return Optional.empty();
@@ -232,11 +232,11 @@ public class InvenioAPITools {
         else {
             // Check if all present files are expected
             if (!filesExpected.containsAll(filesPresent)) {
-                report.addCritical("Unexpected files in path: ", filesPresent.stream().filter((f) -> !filesExpected.contains(f)).map(File::toString).collect(Collectors.joining(", ")));
+                report.addCritical("InvenioAPI", "Unexpected files in path: ", filesPresent.stream().filter((f) -> !filesExpected.contains(f)).map(File::toString).collect(Collectors.joining(", ")));
             }
             // Check if all expected files are present
             if (!filesPresent.containsAll(filesExpected)) {
-                report.addCritical("Expected files missing in path: ", filesExpected.stream().filter((f) -> !filesPresent.contains(f)).map(File::toString).collect(Collectors.joining(", ")));
+                report.addCritical("InvenioAPI", "Expected files missing in path: ", filesExpected.stream().filter((f) -> !filesPresent.contains(f)).map(File::toString).collect(Collectors.joining(", ")));
             }
             return false;
         }
@@ -290,7 +290,7 @@ public class InvenioAPITools {
         }
         // If we encounter an exception the validation has failed
         catch (CorruptChecksumException | FileNotInPayloadDirectoryException | InvalidBagitFileFormatException | MaliciousPathException | MissingBagitFileException | MissingPayloadDirectoryException | MissingPayloadManifestException | UnparsableVersionException | UnsupportedAlgorithmException | VerificationException | IOException | InterruptedException e) {
-            report.addException(e, "Exception when checking BagIt " + path);
+            report.addException("InvenioAPI", e, "Exception when checking BagIt " + path);
             return false;
         }
     }
@@ -308,7 +308,7 @@ public class InvenioAPITools {
             metadata = readMetadata(Path.of(path.toString(),mapping.getMetadata().get()).toFile());
         }
         catch (IOException | JDOMException e) {
-            report.addException(e, "Exception while loading metadata");
+            report.addException("InvenioAPI", e, "Exception while loading metadata file " + mapping.getMetadata().get());
             throw e;
         }
         // Continue with uploade
@@ -343,7 +343,7 @@ public class InvenioAPITools {
                 currentMetadata = (Metadata) metadata.clone();
             }
             catch (CloneNotSupportedException e) {
-                report.addException(e, "Exception when cloning metadata");
+                report.addException("InvenioAPI", e, "Exception when cloning metadata");
                 throw e;
             }
         }
@@ -428,7 +428,7 @@ public class InvenioAPITools {
                     case "clarin.eu:cr1:p_1366895758244":
                         return CMDI.readCmdiMetadata(new OLACDcmiTermsMapper(document));
                     default:
-                        throw new IOException("Unsupported CMDI profile");
+                        throw new IOException("Unsupported CMDI profile " + mt.getParameters().get("profile"));
                 }
             }
         }
@@ -471,10 +471,10 @@ public class InvenioAPITools {
         }
         // Add info about results to the report
         if (result) {
-            report.addCorrect("", "Sucessfuly validated record " + id);
+            report.addCorrect("InvenioAPI", "Sucessfuly validated record " + id);
         }
         else {
-            report.addCritical("Failed to validate record " + id);
+            report.addCritical("InvenioAPI", "Failed to validate record " + id);
         }
         // Also validate all related records
         DraftRecord record = api.getDraftRecord(id);
