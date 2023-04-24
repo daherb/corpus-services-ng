@@ -498,8 +498,9 @@ public class InvenioAPITools {
         
     }
     
-    private void deleteDraftRecords() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+    public void deleteDraftRecords() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
         for (String id : listDraftRecords()) {
+            LOG.log(Level.INFO, "Deleting {0}", id);
             api.deleteDraftRecord(id);
         }
     }
