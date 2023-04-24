@@ -428,6 +428,8 @@ public class InvenioAPITools {
                     // OLAC DCMI terms
                     case "clarin.eu:cr1:p_1366895758244":
                         return CMDI.readCmdiMetadata(new OLACDcmiTermsMapper(document));
+                    case "clarin.eu:cr1:p_1659015263839":
+                        return CMDI.readCmdiMetadata(new CollectionProfileMapper(document));
                     default:
                         throw new IOException("Unsupported CMDI profile " + mt.getParameters().get("profile"));
                 }
