@@ -317,6 +317,11 @@ public class InvenioAPITools {
             report.addException("InvenioAPI", e, "Exception while loading metadata file " + mapping.getMetadata().get());
             throw e;
         }
+        // Add empty spare record for preservation management
+        // TODO test if that actually works
+        MapRecord preservationRecord = new MapRecord();
+        preservationRecord.setTitle("Preservation information");
+        mapping.getRecords().add(preservationRecord);
         // Continue with uploade
         return uploadRecord(path, mapping, metadata, report);
     }
