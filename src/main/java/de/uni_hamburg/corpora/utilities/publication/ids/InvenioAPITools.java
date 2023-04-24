@@ -438,6 +438,8 @@ public class InvenioAPITools {
     
     /**
      * Validates all draft records against the initial bag
+     * @param id the record id
+     * @param path the root of the file hierarchy
      * @param bag the initial bag
      * @param report the report to keep track of detailed information about the process
      * @return if the draft records match the input data
