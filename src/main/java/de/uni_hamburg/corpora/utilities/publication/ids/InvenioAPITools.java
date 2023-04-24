@@ -130,6 +130,7 @@ public class InvenioAPITools {
      * @throws java.lang.CloneNotSupportedException
      */
     public Optional<String> createObject(Path path, boolean filesArePublic, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
+        LOG.info("Validate data before ingest");
         // Get the mapping from files to Invenio records
         MapRootRecord mapping = getMapping(path, filesArePublic);
         // Validate the mapping
