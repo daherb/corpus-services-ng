@@ -160,6 +160,7 @@ public class InvenioAPITools {
                     report.addCritical("InvenioAPI", "Failed to get lock");
                 }
             }
+            // Catch all excepions to report them before role-back
             catch (Exception e) {
                 report.addException("InvenioAPI", e, "Exception while creating object");
             }
