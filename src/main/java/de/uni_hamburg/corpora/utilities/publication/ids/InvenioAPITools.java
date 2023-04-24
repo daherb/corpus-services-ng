@@ -297,8 +297,15 @@ public class InvenioAPITools {
     private boolean validateBag(Path path, Report report) {
         BagVerifier verifier = new BagVerifier();
         try {
+            Bag bag = new BagReader().read(path);
+            for (FetchItem item : bag.getItemsToFetch()) {
+                // Download file
+                item.getUrl().openStream().transferTo(new FileOutputStream(item.getPath().toFile()));
+                // Create blank file
+                // item.getPath().toFile().createNewFile();
+            }
             // Read the BagIt and validates it without ignoring hidden files (ignoreHidden is false)
-            verifier.isValid(new BagReader().read(path),false);
+            verifier.isValid(bag,false);
             // If validation completes without an exception we succeed
             return true;
         }
