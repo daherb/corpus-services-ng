@@ -504,13 +504,14 @@ public class InvenioAPITools {
         for (Map.Entry<String, String> entry : checksums.entrySet()) {
             String filename = entry.getKey().replaceAll(SEPARATOR, "/");
             File file = Path.of(path.toString(),filename).toFile().getAbsoluteFile();
-            String md5sum = entry.getValue();
-            // TODO match the digest algorithm with the one specified in the beginning of the provided checksum
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            String checksum = entry.getValue();
+            String[] parts = checksum.split(":");
+            // Match the digest algorithm with the one specified in the beginning of the provided checksum
+            MessageDigest md = MessageDigest.getInstance(parts[0]);
             md.reset();
             md.update(new FileInputStream(file).readAllBytes());
-            String newSum = "MD5:" + DatatypeConverter.printHexBinary(md.digest());
-            result = result && newSum.equalsIgnoreCase(md5sum);
+            String newSum = parts[0]+":" + DatatypeConverter.printHexBinary(md.digest());
+            result = result && newSum.equalsIgnoreCase(checksum);
         }
         // Add info about results to the report
         if (result) {
