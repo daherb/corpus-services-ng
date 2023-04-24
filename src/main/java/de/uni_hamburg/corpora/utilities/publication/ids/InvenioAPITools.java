@@ -394,6 +394,8 @@ public class InvenioAPITools {
         ArrayList<Files.FileEntry> entries = new ArrayList<>();
         HashMap<String,File> fileMap = new HashMap<>();
         ArrayList<String> candidates = new ArrayList<>();
+        // Potential default preview file
+        String defaultPreview = "";
         // Add metadata fie if it exists
         if (record.getMetadata().isPresent()) {
             candidates.add(record.getMetadata().get());
@@ -403,6 +405,10 @@ public class InvenioAPITools {
         for (String filename : candidates) {
             // Normalize filename and replace path separators
             String updatedName = filename.replaceAll("^./","").replaceAll("/", SEPARATOR);
+            // Set default preview if not set yet and file ends in cmdi
+            if (defaultPreview.isBlank() && updatedName.endsWith(".cmdi")) {
+                defaultPreview = updatedName;
+            }
             Files.FileEntry entry = new Files.FileEntry(updatedName);
             entries.add(entry);
             fileMap.put(updatedName, Path.of(path.toString(),filename).toFile().getAbsoluteFile().getCanonicalFile());
@@ -426,8 +432,11 @@ public class InvenioAPITools {
                                 new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
             
         }
-        // Add references
+        // Add references and potentially default preview
         currentMetadata.addRelatedIdentifiers(relatedIdentifiers);
+        if (!defaultPreview.isBlank()) {
+            draft.getFiles().setDefaultPreview(defaultPreview);
+        }
         api.updateDraftRecord(result.getId(), draft);
         return result.getId();
     }
