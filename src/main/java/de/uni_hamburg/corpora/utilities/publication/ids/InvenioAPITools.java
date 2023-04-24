@@ -509,10 +509,16 @@ public class InvenioAPITools {
      * Lists the id of all of the current users draft records
      * @return the list of draft record ids
      */
-    private List<String> listDraftRecords() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
-        Records records = api.listUserRecords();
+    public List<String> listDraftRecords() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        // First list records to get the number of all records
+        Records records = api.listUserRecords(Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+        // Now list all the records
+        records = api.listUserRecords(Optional.empty(),Optional.empty(), Optional.of(records.getHits().getTotal()), Optional.empty(), Optional.empty());
+        // Get all record ids
         ArrayList<String> ids = new ArrayList<>();
-        for (var hit : records.getHits().getHits()) {
+        Records.Hits hits = records.getHits();
+        // Only filter unpublished ones
+        for (Record hit : hits.getHits()) {
             // Check if it is unpublished -> draft
             if (!hit.isPublished()) {
                 ids.add(hit.getId());
