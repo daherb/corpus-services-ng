@@ -445,7 +445,6 @@ public class InvenioAPITools {
      * @return if the draft records match the input data
      */
     private boolean validateDraftRecords(String id, Path path, Bag bag, Report report) throws URISyntaxException, NoSuchAlgorithmException, IOException, JsonProcessingException, KeyManagementException, InterruptedException {
-        // TODO
         Files files = api.listDraftFiles(id);
         HashMap<String,String> checksums = new HashMap<>();
         if (files.getEntries() instanceof List) {
