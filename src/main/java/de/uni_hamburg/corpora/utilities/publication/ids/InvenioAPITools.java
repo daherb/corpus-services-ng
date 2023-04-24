@@ -80,7 +80,7 @@ import org.jdom2.input.SAXBuilder;
 public class InvenioAPITools {
     
     // Mutex to only allow one operation at a time
-    private static ReentrantLock mutex = new ReentrantLock();
+    private static final ReentrantLock mutex = new ReentrantLock();
     
     // Information how to find the metadata file if no record map exists
     static final String METADATA_DIR = "data/Metadata";
