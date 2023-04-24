@@ -261,10 +261,14 @@ public class InvenioAPITools {
     private Set<File> listMapRecordFiles(Path path, MapRecord record) {
         Set<File> files = new HashSet<>();
         // Add metadata file if present
-        record.getMetadata().ifPresent((s) -> files.add(Path.of(path.toString(),s).toFile().getAbsoluteFile()));
+        if (record.getMetadata().isPresent()) {
+            files.add(Path.of(path.toString(),record.getMetadata().get()).toFile().getAbsoluteFile().getCanonicalFile());
+        }
         // Add all files of this record as Strings
         if (record.getFiles() != null) {
-            files.addAll(record.getFiles().stream().map((mf) -> Path.of(path.toString(),mf.getName()).toFile().getAbsoluteFile()).toList());
+            for (MapFile mf: record.getFiles()) {
+                files.add(Path.of(path.toString(),mf.getName()).toFile().getAbsoluteFile().getCanonicalFile());
+            }
         }
         // Go through all child records and add their files
         if (record.getRecords() != null) {
@@ -306,7 +310,7 @@ public class InvenioAPITools {
         // Get the metadata
         Metadata metadata;
         try {
-            metadata = readMetadata(Path.of(path.toString(),mapping.getMetadata().get()).toFile());
+            metadata = readMetadata(Path.of(path.toString(),mapping.getMetadata().get()).toFile().getCanonicalFile());
         }
         catch (IOException | JDOMException e) {
             report.addException("InvenioAPI", e, "Exception while loading metadata file " + mapping.getMetadata().get());
@@ -332,7 +336,7 @@ public class InvenioAPITools {
         Metadata currentMetadata;
         if (!record.getMetadata().isEmpty() && !record.getMetadata().get().isEmpty()) {
             try {
-                currentMetadata = readMetadata(Path.of(path.toString(),record.getMetadata().get()).toFile());
+                currentMetadata = readMetadata(Path.of(path.toString(),record.getMetadata().get()).toFile().getCanonicalFile());
             }
             catch (IOException | JDOMException e) {
                 report.addException(e, "Exception while loading metadata");
@@ -374,10 +378,11 @@ public class InvenioAPITools {
         // Add all other files
         candidates.addAll(record.getFiles().stream().map(MapFile::getName).toList());
         for (String filename : candidates) {
-            String updatedName = filename.replaceAll("/", SEPARATOR);
+            // Normalize filename and replace path separators
+            String updatedName = filename.replaceAll("^./","").replaceAll("/", SEPARATOR);
             Files.FileEntry entry = new Files.FileEntry(updatedName);
             entries.add(entry);
-            fileMap.put(updatedName, Path.of(path.toString(),filename).toFile().getAbsoluteFile());
+            fileMap.put(updatedName, Path.of(path.toString(),filename).toFile().getAbsoluteFile().getCanonicalFile());
             
         }
         api.startDraftFileUpload(result.getId(), entries);
