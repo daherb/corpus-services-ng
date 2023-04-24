@@ -136,11 +136,14 @@ public class InvenioAPITools {
                 // Try to get the lock with a timeout
                 if (mutex.tryLock(10, TimeUnit.MINUTES)) {
                     // Upload the file according to the mapping
+                    LOG.info("Upload records");
                     String id = mappingToRecords(path, mapping, report);
                     // Double check if the upload was completely successful
+                    LOG.info("Validate uploaded data");
                     if (validateDraftRecords(id, path, bag, report)) {
                         // Publish all drafts
-                        publishDraftRecords();
+                        LOG.info("Publish records");
+                        publishDraftRecords(report);
                         // Release the mutex again
                         mutex.unlock();
                         // Return the first id which is the one of the main record
@@ -154,11 +157,9 @@ public class InvenioAPITools {
             catch (Exception e) {
                 report.addException("InvenioAPI", e, "Exception while creating object");
             }
-            System.out.println("Waiting for key press...");
-            System.in.read();
             // If we are here something went wrong and we have to revert to the initial state
+            LOG.severe("Rollback");
             deleteDraftRecords();
-            LOG.info("HERE 3");
         }
         else{
             if (!validBag)
@@ -339,7 +340,7 @@ public class InvenioAPITools {
                 currentMetadata = readMetadata(Path.of(path.toString(),record.getMetadata().get()).toFile().getCanonicalFile());
             }
             catch (IOException | JDOMException e) {
-                report.addException(e, "Exception while loading metadata");
+                report.addException("InvenioAPI", e, "Exception while loading metadata");
                 throw e;
             }
         }
@@ -363,7 +364,7 @@ public class InvenioAPITools {
             result = api.createDraftRecord(draft);
         }
         catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException e) {
-            report.addException(e, "Exception when creating new draft record");
+            report.addException("InvenioAPI", e, "Exception when creating new draft record");
             throw e;
         }
         // Upload files
@@ -389,6 +390,7 @@ public class InvenioAPITools {
         // For each file
         for (String key : fileMap.keySet()) {
             // Upload file
+            LOG.log(Level.INFO, "Uploading {0}", fileMap.get(key));
             api.uploadDraftFile(result.getId(), key, fileMap.get(key));
             api.completeDraftFileUpload(result.getId(), key);
         }
@@ -466,6 +468,7 @@ public class InvenioAPITools {
             }
         }
         boolean result = true;
+        LOG.log(Level.INFO, "Validating record {0}", id);
         // Check checksums for all files
         for (Map.Entry<String, String> entry : checksums.entrySet()) {
             String filename = entry.getKey().replaceAll(SEPARATOR, "/");
