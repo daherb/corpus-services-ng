@@ -84,13 +84,6 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
             LOG.info("Done");
             report.addNote(getFunction(), "Upload took " + watch.getTime(TimeUnit.SECONDS) + " seconds");
             
-//        }
-//        catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException | org.jdom2.JDOMException | CloneNotSupportedException e) {
-//            report.addCritical(getFunction(), ReportItem.newParamMap(
-//                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Exception, ReportItem.Field.Description}, 
-//                            new Object[]{getFunction(), e, "Exception when uploading SIP"}
-//                    ));
-//        }
         }
         else {
             report.addCritical(getFunction(),"Not set up properly");
