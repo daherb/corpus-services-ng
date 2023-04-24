@@ -35,13 +35,13 @@ import org.xml.sax.SAXException;
  * Class using the REST API to publish a corpus to Invenio
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
-public class InvenioSIPUpload extends Publisher implements CorpusFunction {
+public class InvenioIngest extends Publisher implements CorpusFunction {
 
     InvenioAPITools tools;
     boolean publicFiles = false;
     boolean setUp = false;
     
-    public InvenioSIPUpload(Properties properties) throws IllegalAccessException, IOException {
+    public InvenioIngest(Properties properties) throws IllegalAccessException, IOException {
         super(properties);
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
             tools = new InvenioAPITools(new API(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
@@ -52,7 +52,7 @@ public class InvenioSIPUpload extends Publisher implements CorpusFunction {
         }
     
     }
-    private static final Logger LOG = Logger.getLogger(InvenioSIPUpload.class.getName());
+    private static final Logger LOG = Logger.getLogger(InvenioIngest.class.getName());
 
     
     @Override
