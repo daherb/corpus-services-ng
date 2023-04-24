@@ -488,8 +488,10 @@ public class InvenioAPITools {
         return result;
     }
     
-    private void publishDraftRecords() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+    private void publishDraftRecords(Report report) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
         for (String id : listDraftRecords()) {
+            LOG.log(Level.INFO, "Publish record {0}", id);
+            report.addCorrect("InvenioAPI", "Published record " + id);
             DraftRecord result = api.publishDraftRecord(id);
             // TODO check result?
         }
