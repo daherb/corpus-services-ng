@@ -51,7 +51,9 @@ import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -335,10 +337,16 @@ public class InvenioAPITools {
             throw e;
         }
         // Add empty spare record for preservation management
-        // TODO test if that actually works
         MapRecord preservationRecord = new MapRecord();
-        preservationRecord.setTitle("Preservation information");
-        mapping.getRecords().add(preservationRecord);
+        Metadata preservationMetadata = new Metadata(new Metadata.ResourceType( new ControlledVocabulary.ResourceType(ControlledVocabulary.ResourceType.EResourceType.Other)), 
+                new ArrayList<>(List.of(new Metadata.Creator(new Metadata.PersonOrOrg("Leibniz-Institut für Deutsche Sprache (IDS)")))), 
+                "Preservation information", 
+                Metadata.ExtendedDateTimeFormat0.parseDateToExtended(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").format(new Date()))
+        );
+        String title = mapping.getTitle().orElse(metadata.getTitle());
+        preservationMetadata.setDescription("Record for storing preservation information for " + title);
+        uploadRecord(path, preservationRecord, preservationMetadata, report);
+        // Todo fix links between root record and preservation record
         // Continue with uploade
         return uploadRecord(path, mapping, metadata, report);
     }
