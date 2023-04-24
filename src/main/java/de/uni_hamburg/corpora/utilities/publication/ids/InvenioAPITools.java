@@ -122,8 +122,14 @@ public class InvenioAPITools {
      * @return the id of the main record if the operation was successful
      * @throws javax.xml.bind.JAXBException
      * @throws java.io.IOException
+     * @throws java.net.URISyntaxException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.KeyManagementException
+     * @throws java.lang.InterruptedException
+     * @throws org.jdom2.JDOMException
+     * @throws java.lang.CloneNotSupportedException
      */
-    public Optional<String> createObject(Path path, boolean filesArePublic, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException {
+    public Optional<String> createObject(Path path, boolean filesArePublic, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
         // Get the mapping from files to Invenio records
         MapRootRecord mapping = getMapping(path, filesArePublic);
         // Validate the mapping
@@ -220,8 +226,9 @@ public class InvenioAPITools {
      * @param mapping the mapping to records
      * @param report the report to keep track of detailed information about the process
      * @return if the path matches the mapping
+     * @throws IOException
      */
-    private boolean validateMapping(Path path, MapRootRecord mapping, Report report) {
+    private boolean validateMapping(Path path, MapRootRecord mapping, Report report) throws IOException {
         // Get a list of all files from the data directory of path
         Set<File> filesPresent = listFilesInPath(Path.of(path.toString(),"data"));
         // Get a list of all files in the map
@@ -258,8 +265,9 @@ public class InvenioAPITools {
      * @param path the root path of the files
      * @param record the root record
      * @return the set of all files below this record as strings
+     * @throws IOException
      */
-    private Set<File> listMapRecordFiles(Path path, MapRecord record) {
+    private Set<File> listMapRecordFiles(Path path, MapRecord record) throws IOException{
         Set<File> files = new HashSet<>();
         // Add metadata file if present
         if (record.getMetadata().isPresent()) {
