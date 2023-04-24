@@ -531,6 +531,15 @@ public class InvenioAPITools {
         return result;
     }
     
+    /**
+     * Publish all unpublished draft records
+     * @param report the corpus service report
+     * @throws URISyntaxException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     private void publishDraftRecords(Report report) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
         for (String id : listDraftRecords()) {
             LOG.log(Level.INFO, "Publish record {0}", id);
@@ -541,6 +550,14 @@ public class InvenioAPITools {
         
     }
     
+    /**
+     * Delete all unpublished draft records
+     * @throws URISyntaxException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     public void deleteDraftRecords() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
         for (String id : listDraftRecords()) {
             LOG.log(Level.INFO, "Deleting {0}", id);
@@ -551,6 +568,11 @@ public class InvenioAPITools {
     /**
      * Lists the id of all of the current users draft records
      * @return the list of draft record ids
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+     * @throws java.net.URISyntaxException
+     * @throws java.security.KeyManagementException
+     * @throws java.security.NoSuchAlgorithmException
      */
     public List<String> listDraftRecords() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         // First list records to get the number of all records
