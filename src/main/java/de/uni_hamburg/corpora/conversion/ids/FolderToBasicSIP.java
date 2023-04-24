@@ -116,7 +116,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
             outputPath = Path.of(props.getProperty("output-path"));
         }
         else {
-            outputPath = Path.of(path.toString(), "output");
+            outputPath = Path.of(path.toString(), "..", "output").toAbsolutePath();
         }
         // Try to create it if missing
         if (!outputPath.toFile().exists())
@@ -272,7 +272,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
     @Override
     public Map<String, String> getParameters() {
         Map<String,String> parameters = super.getParameters();
-        parameters.put("output-path", "The path where the BagIt SIP will be written. Defaults to the \"output\" subfolder");
+        parameters.put("output-path", "The path where the BagIt SIP will be written. Defaults to the \"../output\" subfolder");
         parameters.put("root-title", "The title of the root record. Defaults to corpus name");
         parameters.put("root-metadata-file", "Root-level metadata file. Defaults to the only metadata file not matching any content files");
         return parameters;
