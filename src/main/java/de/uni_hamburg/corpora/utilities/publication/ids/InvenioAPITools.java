@@ -336,17 +336,37 @@ public class InvenioAPITools {
         }
         // Add empty spare record for preservation management
         MapRecord preservationRecord = new MapRecord();
+        String title = metadata.getTitle();
         Metadata preservationMetadata = new Metadata(new Metadata.ResourceType( new ControlledVocabulary.ResourceType(ControlledVocabulary.ResourceType.EResourceType.Other)), 
                 new ArrayList<>(List.of(new Metadata.Creator(new Metadata.PersonOrOrg("Leibniz-Institut für Deutsche Sprache (IDS)")))), 
-                "Preservation information", 
+                title + ": Preservation information", 
                 Metadata.ExtendedDateTimeFormat0.parseDateToExtended(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").format(new Date()))
         );
-        String title = mapping.getTitle().orElse(metadata.getTitle());
+        
         preservationMetadata.setDescription("Record for storing preservation information for " + title);
-        uploadRecord(path, preservationRecord, preservationMetadata, report);
-        // Todo fix links between root record and preservation record
+        String preservationId = uploadRecord(path, preservationRecord, preservationMetadata, report);
         // Continue with uploade
-        return uploadRecord(path, mapping, metadata, report);
+        String rootId = uploadRecord(path, mapping, metadata, report);
+        // Fix links between root record and preservation record
+        DraftRecord preservationDraft = api.getDraftRecord(preservationId);
+        DraftRecord rootDraft = api.getDraftRecord(rootId);
+        preservationDraft.getMetadata().addRelatedIdentifiers(
+                new ArrayList<>(List.of(
+                        new Metadata.RelatedIdentifier(url + rootId,
+                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.Describes),
+                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Describes")))
+                )));
+        rootDraft.getMetadata().addRelatedIdentifiers(
+                new ArrayList<>(List.of(
+                        new Metadata.RelatedIdentifier(url + preservationId,
+                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsDescribedBy),
+                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is described by")))
+                )));
+        api.updateDraftRecord(preservationId, preservationDraft);
+        api.updateDraftRecord(rootId, rootDraft);
+        return rootId;
     }
     
     private String uploadRecord(Path path, MapRecord record, Metadata metadata, Report report) throws IOException, JDOMException, InterruptedException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, CloneNotSupportedException {
