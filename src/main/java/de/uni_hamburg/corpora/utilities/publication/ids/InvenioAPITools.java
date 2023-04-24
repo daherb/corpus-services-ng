@@ -5,8 +5,6 @@
 package de.uni_hamburg.corpora.utilities.publication.ids;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.idsmannheim.lza.inveniojavaapi.API;
 import de.idsmannheim.lza.inveniojavaapi.Access;
