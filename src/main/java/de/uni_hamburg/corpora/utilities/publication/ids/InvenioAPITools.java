@@ -541,13 +541,21 @@ public class InvenioAPITools {
      * @throws InterruptedException 
      */
     private void publishDraftRecords(Report report) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+        ArrayList<String> failed = new ArrayList<>();
         for (String id : listDraftRecords()) {
-            LOG.log(Level.INFO, "Publish record {0}", id);
-            report.addCorrect("InvenioAPI", "Published record " + id);
             DraftRecord result = api.publishDraftRecord(id);
-            // TODO check result?
+            if (result.getIsPublished().orElse(Boolean.FALSE)) {
+                report.addCorrect("InvenioAPI", "Published record " + id);
+                LOG.log(Level.INFO, "Publish record {0}", id);
+            }
+            else {
+                LOG.log(Level.SEVERE, "Failed to publish {0}", id);
+                failed.add(id);
+            }
         }
-        
+        if (!failed.isEmpty()) {
+            report.addCritical("Failed to publish records " + failed.toString());
+        }
     }
     
     /**
