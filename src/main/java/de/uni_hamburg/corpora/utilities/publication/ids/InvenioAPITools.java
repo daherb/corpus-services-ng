@@ -42,8 +42,10 @@ import gov.loc.repository.bagit.reader.BagReader;
 import gov.loc.repository.bagit.verify.BagVerifier;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.security.KeyManagementException;
@@ -619,6 +621,92 @@ public class InvenioAPITools {
             }
         }
         return ids;
+    }
+
+    /**
+     * Gets the record id for the record matching the title
+     * @param recordTitle the record title
+     * @return the record id
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+     * @throws java.net.URISyntaxException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.KeyManagementException
+     */
+    public String getRecordIdForTitle(String recordTitle) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        Records matches = api.listUserRecords(Optional.of("title:" + recordTitle), Optional.empty(), Optional.of(1), Optional.empty(), Optional.of(false));
+        if (matches.getHits().getHits().size() == 1) {
+            return matches.getHits().getHits().get(0).getId();
+        }
+        else {
+            throw new IllegalArgumentException("Title matches no record: " + recordTitle);
+        }
+    }
+
+    /** *  Download an Invenio object. This can consist of one or several records
+     * 
+     * @param recordId The record id of the root record
+     * @param outputPath the path where the files will be stored
+     * @param report report for logging
+     * @throws java.net.URISyntaxException
+     * @throws java.io.IOException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.KeyManagementException
+     * @throws com.fasterxml.jackson.core.JsonProcessingException
+     * @throws java.lang.InterruptedException
+     * @throws java.io.UnsupportedEncodingException
+     */
+    public void downloadObject(String recordId, Path outputPath, Report report) throws URISyntaxException, NoSuchAlgorithmException, NoSuchAlgorithmException, KeyManagementException, JsonProcessingException, IOException, InterruptedException, UnsupportedEncodingException {
+        // First download all files
+        Files files = api.listRecordFiles(recordId);
+        // File list can either be a map or a simple list
+        if (files.getEntries() instanceof HashMap) {
+            HashMap<String, Files.FileEntry> fileMap = (HashMap<String, Files.FileEntry>) files.getEntries();
+            for (String key : fileMap.keySet()) {
+                downloadFile(recordId, fileMap.get(key), outputPath, report);
+            }
+        }
+        else {
+            ArrayList<Files.FileEntry> fileList = (ArrayList<Files.FileEntry>) files.getEntries();
+            for (Files.FileEntry entry : fileList) {
+                downloadFile(recordId, entry, outputPath, report);
+            }
+        }
+        Record root = api.getRecord(recordId);
+        List<Metadata.RelatedIdentifier> references = root.getMetadata().getRelatedIdentifiers();
+        for (Metadata.RelatedIdentifier reference : references) {
+            if (reference.getRelationType().getId().equals(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart))) {
+                String id = reference.getIdentifier().replace(url, "");
+                downloadObject(id, outputPath, report);
+            }
+        }
+    }
+
+    /**
+     * Download one specific file from a record to an output path
+     * 
+     * @param recordId the record id
+     * @param fileEntry the file entry
+     * @param outputPath the output path
+     */
+    private void downloadFile(String recordId, Files.FileEntry fileEntry, Path outputPath, Report report) {
+        try {
+        String fileName = fileEntry.getKey();
+        File outputFile = Path.of(outputPath.toString(), fileName.replaceAll(SEPARATOR, "/")).toFile();
+        // Create directories if necessary
+        outputFile.getParentFile().mkdirs();
+        // Download file
+        api.getRecordFileContent(recordId, fileName).transferTo(new FileOutputStream(outputFile));
+        if (validateChecksum(outputFile, fileEntry.getChecksum())) {
+            report.addCorrect("InvenioAPI", "Downloaded file " + outputFile);
+        }
+        else {
+            report.addCritical("InvenioAPI", "Failed to download " + outputFile);
+        }
+        }
+        catch (Exception e) {
+            report.addException("InvenioAPI", e, "Exception when downloading file " + fileEntry.getKey());
+        }
     }
 
     /**
