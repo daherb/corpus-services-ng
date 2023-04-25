@@ -531,13 +531,8 @@ public class InvenioAPITools {
             String filename = entry.getKey().replaceAll(SEPARATOR, "/");
             File file = Path.of(path.toString(),filename).toFile().getAbsoluteFile();
             String checksum = entry.getValue();
-            String[] parts = checksum.split(":");
-            // Match the digest algorithm with the one specified in the beginning of the provided checksum
-            MessageDigest md = MessageDigest.getInstance(parts[0]);
-            md.reset();
-            md.update(new FileInputStream(file).readAllBytes());
-            String newSum = parts[0]+":" + DatatypeConverter.printHexBinary(md.digest());
-            result = result && newSum.equalsIgnoreCase(checksum);
+            
+            result = result && validateChecksum(file, checksum); //newSum.equalsIgnoreCase(checksum);
         }
         // Add info about results to the report
         if (result) {
@@ -624,5 +619,24 @@ public class InvenioAPITools {
             }
         }
         return ids;
+    }
+
+    /**
+     * Computes the checksum for a file and compares it to a given checksum
+     * @param file the file
+     * @param checksum the checksum of the form `algorithm:checksum`
+     * @return if the checksums match
+     * @throws NoSuchAlgorithmException
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    private boolean validateChecksum(File file, String checksum) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
+        String[] parts = checksum.split(":");
+        // Match the digest algorithm with the one specified in the beginning of the provided checksum
+        MessageDigest md = MessageDigest.getInstance(parts[0]);
+        md.reset();
+        md.update(new FileInputStream(file).readAllBytes());
+        String newSum = parts[0]+":" + DatatypeConverter.printHexBinary(md.digest());
+        return newSum.equalsIgnoreCase(checksum);
     }
 }
