@@ -64,12 +64,10 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
     public Report function(Corpus c) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (setUp) {
-//        try {
-            report.addNote(getFunction(), "Start SIP upload");
+            LOG.info("Start SIP upload");
             StopWatch watch = new StopWatch();
             watch.start();
             try {
-                //List<String> sipIds = tools.uploadIP(Path.of(c.getBaseDirectory().toURI()), publicFiles);
                 Optional<String> id = tools.createObject(Path.of(c.getBaseDirectory().toURI()), publicFiles, report);
                 if (id.isPresent()) {
                     report.addNote(getFunction(), "Created new record " + id.get());
