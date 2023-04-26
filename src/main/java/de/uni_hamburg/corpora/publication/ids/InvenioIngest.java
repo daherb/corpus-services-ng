@@ -68,7 +68,8 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
             StopWatch watch = new StopWatch();
             watch.start();
             try {
-                Optional<String> id = tools.createObject(Path.of(c.getBaseDirectory().toURI()), publicFiles, report);
+                boolean update = props.getProperty("update-object", "false").equalsIgnoreCase("true");
+                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()), publicFiles, update, report);
                 if (id.isPresent()) {
                     report.addNote(getFunction(), "Created new record " + id.get());
                 }
@@ -106,6 +107,7 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
         params.put("invenio-host", "The host providing Invenio API access");
         params.put("invenio-token", "The API token used for the access");
         params.put("invenio-public-files", "Optional flag if files will be publicly accessible");
+        params.put("update-object", "Optional flag if existing records with the same name should be updated. Otherwise the process is stopped as soon as a record already exists");
         return params;
     }
     
