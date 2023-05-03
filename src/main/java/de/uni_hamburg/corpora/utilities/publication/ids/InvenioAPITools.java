@@ -16,6 +16,7 @@ import de.idsmannheim.lza.inveniojavaapi.FilesOptions;
 import de.idsmannheim.lza.inveniojavaapi.Metadata;
 import de.idsmannheim.lza.inveniojavaapi.Record;
 import de.idsmannheim.lza.inveniojavaapi.Records;
+import de.idsmannheim.lza.inveniojavaapi.cmdi.CmdiProfileMapping;
 import de.idsmannheim.lza.inveniojavaapi.cmdi.CollectionProfileMapper;
 import de.idsmannheim.lza.inveniojavaapi.cmdi.OLACDcmiTermsMapper;
 import de.idsmannheim.lza.inveniojavaapi.cmdi.SpeechCorpusProfileMapper;
@@ -64,6 +65,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBException;
@@ -332,8 +335,11 @@ public class InvenioAPITools {
     private String mappingToRecords(Path path, MapRootRecord mapping, boolean update, Report report) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, JDOMException, CloneNotSupportedException {
         // Get the metadata
         Metadata metadata;
+        CmdiProfileMapping metadataMapping;
         try {
-            metadata = readMetadata(Path.of(path.toString(),mapping.getMetadata().get()).toFile().getCanonicalFile());
+            metadataMapping = createCmdiProfileMapping(Path.of(path.toString(),mapping.getMetadata().get()).toFile().getCanonicalFile());
+            metadata = readMetadata(metadataMapping);
+            
         }
         catch (IOException | JDOMException e) {
             report.addException("InvenioAPI", e, "Exception while loading metadata file " + mapping.getMetadata().get());
@@ -404,9 +410,11 @@ public class InvenioAPITools {
         Access access = new Access(Access.AccessType.Public, fileAccess);
         // Update metadata if necessary
         Metadata currentMetadata;
+        CmdiProfileMapping currentMetadataMapping = null;
         if (!record.getMetadata().isEmpty() && !record.getMetadata().get().isEmpty()) {
             try {
-                currentMetadata = readMetadata(Path.of(path.toString(),record.getMetadata().get()).toFile().getCanonicalFile());
+                currentMetadataMapping = createCmdiProfileMapping(Path.of(path.toString(),record.getMetadata().get()).toFile().getCanonicalFile());
+                currentMetadata = readMetadata(currentMetadataMapping);
             }
             catch (IOException | JDOMException e) {
                 report.addException("InvenioAPI", e, "Exception while loading metadata");
@@ -497,19 +505,53 @@ public class InvenioAPITools {
             if (!defaultPreview.isBlank()) {
                 draft.getFiles().setDefaultPreview(defaultPreview);
             }
+            // Add external pids as additional identifiers
+            
+//            HashMap<String, ExternalPid> pids = new HashMap<>();
+            List<Metadata.AlternateIdentifier> pids = new ArrayList<>();
+            if (currentMetadataMapping != null && currentMetadataMapping.getSelfLink().isPresent()) {
+                String selfLink = currentMetadataMapping.getSelfLink().get();
+                if (selfLink.contains("handle.org")) {
+                    Matcher m = Pattern.compile("https://hdl.handle.net/(.*)").matcher(selfLink);
+                    if (m.matches()) {
+                        String pid = m.group(0);
+                        pids.add(new Metadata.AlternateIdentifier("hdl:/" + pid, 
+                                new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.Handle)));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Unable to extract pid from " + selfLink);
+                    }
+                }
+                else if (selfLink.contains("hdl:")) {
+                    pids.add(new Metadata.AlternateIdentifier(selfLink, 
+                                new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.Handle)));
+                }
+                else if (selfLink.contains("ark:")) {
+                    Matcher m = Pattern.compile(".*ark:/?(.*)").matcher(selfLink);
+                    if (m.matches()) {
+                        String pid = m.group(1);
+                        pids.add(new Metadata.AlternateIdentifier("ark:/" + pid,
+                            new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.ARK)));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Unable to extract pid from " + selfLink);
+                    }
+                }
+                currentMetadata.addAlternativeIdentifiers(pids);
+            }
             api.updateDraftRecord(result.getId(), draft);
             return result.getId();
         }
     }
     
     /**
-     * Read the Invenio metadata from a CMDI file
-     * @param metadataFile the metadata file
-     * @return the Invenio metadata
-     * @throws IOException
-     * @throws JDOMException 
+     * Create a CMDI metadata mapping suitable for the metadata file
+     * @param metadataFile the file to be mapped
+     * @return the CMDI metadata mapping
+     * @throws JDOMException
+     * @throws IOException 
      */
-    private Metadata readMetadata(File metadataFile) throws IOException, JDOMException {
+    private CmdiProfileMapping createCmdiProfileMapping(File metadataFile) throws JDOMException, IOException {
         // Read the CMDI file
         Document document = new SAXBuilder().build(metadataFile);
         XmlMagic magic = new XmlMagic(document);
@@ -520,21 +562,32 @@ public class InvenioAPITools {
                 switch (mt.getParameters().get("profile")) {
                     // Speech corpus profile
                     case "clarin.eu:cr1:p_1527668176128":
-                        return CMDI.readCmdiMetadata(new SpeechCorpusProfileMapper(document));
+                        return new SpeechCorpusProfileMapper(document);
                     // Text corpus profile
                     case "clarin.eu:cr1:p_1559563375778":
-                        return CMDI.readCmdiMetadata(new TextCorpusProfileMapper(document));
+                        return new TextCorpusProfileMapper(document);
                     // OLAC DCMI terms
                     case "clarin.eu:cr1:p_1366895758244":
-                        return CMDI.readCmdiMetadata(new OLACDcmiTermsMapper(document));
+                        return new OLACDcmiTermsMapper(document);
                     case "clarin.eu:cr1:p_1659015263839":
-                        return CMDI.readCmdiMetadata(new CollectionProfileMapper(document));
+                        return new CollectionProfileMapper(document);
                     default:
                         throw new IOException("Unsupported CMDI profile " + mt.getParameters().get("profile"));
                 }
             }
         }
         throw new IOException("Unrecognized CMDI file or profile");
+    }
+    /**
+     * Read the Invenio metadata from a CMDI file
+     * @param metadataMapping the metadata file
+     * @return the Invenio metadata
+     * @throws IOException
+     * @throws JDOMException 
+     */
+    private Metadata readMetadata(CmdiProfileMapping metadataMapping) throws IOException, JDOMException {
+        // Read the CMDI file
+        return CMDI.readCmdiMetadata(metadataMapping);
     }
     
     /**
