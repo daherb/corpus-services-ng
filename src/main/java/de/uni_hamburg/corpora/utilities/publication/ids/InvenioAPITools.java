@@ -434,7 +434,8 @@ public class InvenioAPITools {
             currentMetadata.setTitle(metadata.getTitle() + ": " + record.getTitle().get());
         }
         // Check if title is already used
-        if (checkRecordExists(currentMetadata.getTitle())) {
+        Optional<String> potentiallyExistingRecordId = findRecordByTitle(currentMetadata.getTitle());
+        if (potentiallyExistingRecordId.isPresent()) {
             if (update) {
                 // Todo
                 LOG.info("Update");
@@ -813,18 +814,27 @@ public class InvenioAPITools {
     }
 
     /**
-     * Checks if a record with a given title exists
+     * Finds a unique record with a given title
      * @param title the record title
-     * @return if it exists in the list of user records
+     * @return the record id if it exists
      * @throws IOException
      * @throws InterruptedException
      * @throws URISyntaxException
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    private boolean checkRecordExists(String title) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
-        Records matches = api.listUserRecords(Optional.of("title:" +title), Optional.empty(), Optional.of(1), Optional.empty(), Optional.empty());
-        return matches.getHits().getHits().size() >= 1;
+    private Optional<String> findRecordByTitle(String title) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        Records matches = api.listUserRecords(Optional.of("metadata.title:\"" +title+ "\""), Optional.empty(), Optional.of(1), Optional.empty(), Optional.empty());
+        if (matches.getHits().getHits().size() == 1) {
+            return Optional.of(matches.getHits().getHits().get(0).getId());
+        }
+        else if (matches.getHits().getHits().isEmpty()) {
+            return Optional.empty();
+        }
+        else {
+            throw new IllegalArgumentException("More than one record found matching title");
+        }
+    }
 
     /**
      * Creates a map from filename to checksum given a record or draft file list
