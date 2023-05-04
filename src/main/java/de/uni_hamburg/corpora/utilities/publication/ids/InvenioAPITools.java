@@ -185,6 +185,80 @@ public class InvenioAPITools {
         return Optional.empty();
     }
     
+    /**
+     * Delete all unpublished draft records
+     * @throws URISyntaxException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws IOException
+     * @throws InterruptedException 
+     */
+    public void deleteDraftRecords() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+        for (String id : listDraftRecords()) {
+            LOG.log(Level.INFO, "Deleting {0}", id);
+            api.deleteDraftRecord(id);
+        }
+    }
+    
+    /** *  Download an Invenio object. This can consist of one or several records
+     * 
+     * @param recordId The record id of the root record
+     * @param outputPath the path where the files will be stored
+     * @param report report for logging
+     * @throws java.net.URISyntaxException
+     * @throws java.io.IOException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.KeyManagementException
+     * @throws com.fasterxml.jackson.core.JsonProcessingException
+     * @throws java.lang.InterruptedException
+     * @throws java.io.UnsupportedEncodingException
+     */
+    public void downloadObject(String recordId, Path outputPath, Report report) throws URISyntaxException, NoSuchAlgorithmException, NoSuchAlgorithmException, KeyManagementException, JsonProcessingException, IOException, InterruptedException, UnsupportedEncodingException {
+        // First download all files
+        Files files = api.listRecordFiles(recordId);
+        // File list can either be a map or a simple list
+        if (files.getEntries() instanceof HashMap) {
+            HashMap<String, Files.FileEntry> fileMap = (HashMap<String, Files.FileEntry>) files.getEntries();
+            for (String key : fileMap.keySet()) {
+                downloadFile(recordId, fileMap.get(key), outputPath, report);
+            }
+        }
+        else {
+            ArrayList<Files.FileEntry> fileList = (ArrayList<Files.FileEntry>) files.getEntries();
+            for (Files.FileEntry entry : fileList) {
+                downloadFile(recordId, entry, outputPath, report);
+            }
+        }
+        Record root = api.getRecord(recordId);
+        List<Metadata.RelatedIdentifier> references = root.getMetadata().getRelatedIdentifiers();
+        for (Metadata.RelatedIdentifier reference : references) {
+            if (reference.getRelationType().getId().equals(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart))) {
+                String id = reference.getIdentifier().replace(url, "");
+                downloadObject(id, outputPath, report);
+            }
+        }
+    }
+    
+    /**
+     * Gets the record id for the record matching the title
+     * @param recordTitle the record title
+     * @return the record id
+     * @throws java.io.IOException
+     * @throws java.lang.InterruptedException
+     * @throws java.net.URISyntaxException
+     * @throws java.security.NoSuchAlgorithmException
+     * @throws java.security.KeyManagementException
+     */
+    public String getRecordIdForTitle(String recordTitle) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        Records matches = api.listUserRecords(Optional.of("title:" + recordTitle), Optional.empty(), Optional.of(1), Optional.empty(), Optional.of(false));
+        if (matches.getHits().getHits().size() == 1) {
+            return matches.getHits().getHits().get(0).getId();
+        }
+        else {
+            throw new IllegalArgumentException("Title matches no record: " + recordTitle);
+        }
+    }
+    
     //------------------------------------------------------------------------//
     //                                                                        //
     // Private helper functions                                               //
@@ -669,21 +743,6 @@ public class InvenioAPITools {
     }
     
     /**
-     * Delete all unpublished draft records
-     * @throws URISyntaxException
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     * @throws IOException
-     * @throws InterruptedException 
-     */
-    public void deleteDraftRecords() throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
-        for (String id : listDraftRecords()) {
-            LOG.log(Level.INFO, "Deleting {0}", id);
-            api.deleteDraftRecord(id);
-        }
-    }
-    
-    /**
      * Lists the id of all of the current users draft records
      * @return the list of draft record ids
      * @throws java.io.IOException
@@ -708,65 +767,6 @@ public class InvenioAPITools {
             }
         }
         return ids;
-    }
-
-    /**
-     * Gets the record id for the record matching the title
-     * @param recordTitle the record title
-     * @return the record id
-     * @throws java.io.IOException
-     * @throws java.lang.InterruptedException
-     * @throws java.net.URISyntaxException
-     * @throws java.security.NoSuchAlgorithmException
-     * @throws java.security.KeyManagementException
-     */
-    public String getRecordIdForTitle(String recordTitle) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
-        Records matches = api.listUserRecords(Optional.of("title:" + recordTitle), Optional.empty(), Optional.of(1), Optional.empty(), Optional.of(false));
-        if (matches.getHits().getHits().size() == 1) {
-            return matches.getHits().getHits().get(0).getId();
-        }
-        else {
-            throw new IllegalArgumentException("Title matches no record: " + recordTitle);
-        }
-    }
-
-    /** *  Download an Invenio object. This can consist of one or several records
-     * 
-     * @param recordId The record id of the root record
-     * @param outputPath the path where the files will be stored
-     * @param report report for logging
-     * @throws java.net.URISyntaxException
-     * @throws java.io.IOException
-     * @throws java.security.NoSuchAlgorithmException
-     * @throws java.security.KeyManagementException
-     * @throws com.fasterxml.jackson.core.JsonProcessingException
-     * @throws java.lang.InterruptedException
-     * @throws java.io.UnsupportedEncodingException
-     */
-    public void downloadObject(String recordId, Path outputPath, Report report) throws URISyntaxException, NoSuchAlgorithmException, NoSuchAlgorithmException, KeyManagementException, JsonProcessingException, IOException, InterruptedException, UnsupportedEncodingException {
-        // First download all files
-        Files files = api.listRecordFiles(recordId);
-        // File list can either be a map or a simple list
-        if (files.getEntries() instanceof HashMap) {
-            HashMap<String, Files.FileEntry> fileMap = (HashMap<String, Files.FileEntry>) files.getEntries();
-            for (String key : fileMap.keySet()) {
-                downloadFile(recordId, fileMap.get(key), outputPath, report);
-            }
-        }
-        else {
-            ArrayList<Files.FileEntry> fileList = (ArrayList<Files.FileEntry>) files.getEntries();
-            for (Files.FileEntry entry : fileList) {
-                downloadFile(recordId, entry, outputPath, report);
-            }
-        }
-        Record root = api.getRecord(recordId);
-        List<Metadata.RelatedIdentifier> references = root.getMetadata().getRelatedIdentifiers();
-        for (Metadata.RelatedIdentifier reference : references) {
-            if (reference.getRelationType().getId().equals(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart))) {
-                String id = reference.getIdentifier().replace(url, "");
-                downloadObject(id, outputPath, report);
-            }
-        }
     }
 
     /**
