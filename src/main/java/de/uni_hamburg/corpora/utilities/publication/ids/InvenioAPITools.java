@@ -751,7 +751,7 @@ public class InvenioAPITools {
      * @throws java.security.KeyManagementException
      * @throws java.security.NoSuchAlgorithmException
      */
-    public List<String> listDraftRecords() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    private List<String> listDraftRecords() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         // First list records to get the number of all records
         Records records = api.listUserRecords(Optional.empty(),Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
         // Now list all the records
