@@ -506,16 +506,15 @@ public class InvenioAPITools {
                 draft.getFiles().setDefaultPreview(defaultPreview);
             }
             // Add external pids as additional identifiers
-            
-//            HashMap<String, ExternalPid> pids = new HashMap<>();
             List<Metadata.AlternateIdentifier> pids = new ArrayList<>();
             if (currentMetadataMapping != null && currentMetadataMapping.getSelfLink().isPresent()) {
                 String selfLink = currentMetadataMapping.getSelfLink().get();
-                if (selfLink.contains("handle.org")) {
+                LOG.info(selfLink);
+                if (selfLink.contains("handle.net")) {
                     Matcher m = Pattern.compile("https://hdl.handle.net/(.*)").matcher(selfLink);
                     if (m.matches()) {
-                        String pid = m.group(0);
-                        pids.add(new Metadata.AlternateIdentifier("hdl:/" + pid, 
+                        String pid = m.group(1);
+                        pids.add(new Metadata.AlternateIdentifier(pid, 
                                 new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.Handle)));
                     }
                     else {
@@ -523,14 +522,21 @@ public class InvenioAPITools {
                     }
                 }
                 else if (selfLink.contains("hdl:")) {
-                    pids.add(new Metadata.AlternateIdentifier(selfLink, 
+                    Matcher m = Pattern.compile("hdl:/(.*)").matcher(selfLink);
+                    if (m.matches()) {
+                        String pid = m.group(1);
+                        pids.add(new Metadata.AlternateIdentifier(pid, 
                                 new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.Handle)));
+                    }
+                    else {
+                        throw new IllegalArgumentException("Unable to extract pid from " + selfLink);
+                    }
                 }
                 else if (selfLink.contains("ark:")) {
                     Matcher m = Pattern.compile(".*ark:/?(.*)").matcher(selfLink);
                     if (m.matches()) {
                         String pid = m.group(1);
-                        pids.add(new Metadata.AlternateIdentifier("ark:/" + pid,
+                        pids.add(new Metadata.AlternateIdentifier(pid,
                             new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.ARK)));
                     }
                     else {
