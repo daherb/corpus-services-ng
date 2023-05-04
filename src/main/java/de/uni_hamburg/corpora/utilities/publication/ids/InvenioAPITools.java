@@ -359,24 +359,26 @@ public class InvenioAPITools {
         // Continue with uploade
         String rootId = uploadRecord(path, mapping, metadata, update, report);
         // Fix links between root record and preservation record
-        DraftRecord preservationDraft = api.getDraftRecord(preservationId);
-        DraftRecord rootDraft = api.getDraftRecord(rootId);
-        preservationDraft.getMetadata().addRelatedIdentifiers(
-                new ArrayList<>(List.of(
-                        new Metadata.RelatedIdentifier(url + rootId,
-                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
-                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.Describes),
-                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Describes")))
-                )));
-        rootDraft.getMetadata().addRelatedIdentifiers(
-                new ArrayList<>(List.of(
-                        new Metadata.RelatedIdentifier(url + preservationId,
-                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
-                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsDescribedBy),
-                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is described by")))
-                )));
-        api.updateDraftRecord(preservationId, preservationDraft);
-        api.updateDraftRecord(rootId, rootDraft);
+        if (preservationId != null && rootId != null) {
+            DraftRecord preservationDraft = api.getDraftRecord(preservationId);
+            DraftRecord rootDraft = api.getDraftRecord(rootId);
+            preservationDraft.getMetadata().addRelatedIdentifiers(
+                    new ArrayList<>(List.of(
+                            new Metadata.RelatedIdentifier(url + rootId,
+                                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.Describes),
+                                            new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Describes")))
+                    )));
+            rootDraft.getMetadata().addRelatedIdentifiers(
+                    new ArrayList<>(List.of(
+                            new Metadata.RelatedIdentifier(url + preservationId,
+                                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsDescribedBy),
+                                            new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is described by")))
+                    )));
+            api.updateDraftRecord(preservationId, preservationDraft);
+            api.updateDraftRecord(rootId, rootDraft);
+        }
         return rootId;
     }
     
