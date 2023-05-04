@@ -112,7 +112,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         // Copy files to output
         // First find output path
         Path outputPath;
-        if (props.contains("output-path")) {
+        if (props.containsKey("output-path")) {
             outputPath = Path.of(props.getProperty("output-path"));
         }
         else {
