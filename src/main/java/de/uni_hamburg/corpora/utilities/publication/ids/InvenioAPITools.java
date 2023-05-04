@@ -605,24 +605,16 @@ public class InvenioAPITools {
      * @return if the draft records match the input data
      */
     private boolean validateDraftRecords(String id, Path path, Bag bag, Report report) throws URISyntaxException, NoSuchAlgorithmException, IOException, JsonProcessingException, KeyManagementException, InterruptedException {
+        // null id means non-existent record
+        if (id == null)
+            return false;
         Files files = api.listDraftFiles(id);
-        HashMap<String,String> checksums = new HashMap<>();
-        if (files.getEntries() instanceof List) {
-            for (Files.FileEntry entry : (List<Files.FileEntry>) files.getEntries()) {
-                checksums.put(entry.getKey(), entry.getChecksum());
-            }
-        }
-        else {
-            for (String key : ((Map<String,Files.FileEntry>) files.getEntries()).keySet()) {
-                Files.FileEntry entry = ((Map<String,Files.FileEntry>) files.getEntries()).get(key);
-                checksums.put(entry.getKey(), entry.getChecksum());
-            }
-        }
+        HashMap<String,String> checksums = getFileChecksums(files);
         boolean result = true;
         LOG.log(Level.INFO, "Validating record {0}", id);
         // Check checksums for all files
         for (Map.Entry<String, String> entry : checksums.entrySet()) {
-            String filename = entry.getKey().replaceAll(SEPARATOR, "/");
+            String filename = entry.getKey();
             File file = Path.of(path.toString(),filename).toFile().getAbsoluteFile();
             String checksum = entry.getValue();
             
@@ -833,5 +825,25 @@ public class InvenioAPITools {
     private boolean checkRecordExists(String title) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         Records matches = api.listUserRecords(Optional.of("title:" +title), Optional.empty(), Optional.of(1), Optional.empty(), Optional.empty());
         return matches.getHits().getHits().size() >= 1;
+
+    /**
+     * Creates a map from filename to checksum given a record or draft file list
+     * @param files the file list
+     * @return the map from filename to checksum
+     */
+    private HashMap<String, String> getFileChecksums(Files files) {
+        HashMap<String, String> checksums = new HashMap<>();
+        if (files.getEntries() instanceof List) {
+            for (Files.FileEntry entry : (List<Files.FileEntry>) files.getEntries()) {
+                checksums.put(entry.getKey().replaceAll(SEPARATOR, "/"), entry.getChecksum());
+            }
+        }
+        else {
+            for (String key : ((Map<String,Files.FileEntry>) files.getEntries()).keySet()) {
+                Files.FileEntry entry = ((Map<String,Files.FileEntry>) files.getEntries()).get(key);
+                checksums.put(entry.getKey().replaceAll(SEPARATOR, "/"), entry.getChecksum());
+            }
+        }
+        return checksums;
     }
 }
