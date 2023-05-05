@@ -54,6 +54,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,6 +69,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.io.FileUtils;
@@ -514,11 +516,78 @@ public class InvenioAPITools {
         if (potentiallyExistingRecordId.isPresent()) {
             if (update) {
                 // Todo
-                LOG.info("Update");
-                return null;
+                LOG.info("Update record " + potentiallyExistingRecordId.get());
+                boolean changed = false;
+                HashMap<String,String> checksums = getFileChecksums(api.listRecordFiles(potentiallyExistingRecordId.get()));
+                // Add all files from recordmap to potentially new files
+                Set<String> newFiles = new HashSet<>();
+                // Add metadata if available
+                record.getMetadata().ifPresent(newFiles::add);
+                // Add all other files
+                newFiles.addAll(record.getFiles().stream().map((mf) -> mf.getName()).collect(Collectors.toSet()));
+                Set<String> deletedFiles = new HashSet<>();
+                Set<String> updatedFiles = new HashSet<>();
+                // Check if the record has changed. Only update if necessary. Alternatively we could always create a new version
+                for (String filename : checksums.keySet()) {
+                    if (newFiles.contains(filename)) {
+                        // If the checksum does not match we know that the record
+                        // has been changed
+                        if (!validateChecksum(Path.of(path.toString(),filename).toFile().getAbsoluteFile(), checksums.get(filename))) {
+                            changed = true;
+                            updatedFiles.add(filename);
+                            
+                        }
+                        newFiles.remove(filename);
+                    }
+                    // If the file is not present it must have been deleted
+                    else {
+                        deletedFiles.add(filename);
+                        // This of course means that the record has been changed
+                        changed = true;
+                    }
+                }
+                // If we have new or deleted files we also know that the record has been changed
+                changed = changed || !newFiles.isEmpty() || !deletedFiles.isEmpty();
+                // Create updated record if the record has been changed
+                if (changed) {
+                    ObjectMapper om = new ObjectMapper();
+                    om.findAndRegisterModules().enable(SerializationFeature.INDENT_OUTPUT);
+                    // If update needed first create the new draft with all previous files
+                    // First create a new version as a draft
+                    DraftRecord newDraft = api.createNewVersion(potentiallyExistingRecordId.get());
+                    String newDraftId = newDraft.getId().get();
+                    // Import previous files if possible
+                    api.draftImportFiles(newDraftId);
+                    // Remove files that are missing or updated in the new version
+                    for (String filename : Stream.concat(deletedFiles.stream(), updatedFiles.stream()).toList()) {
+                        String fileKey = filename.replaceAll("/", SEPARATOR);
+                        api.deleteDraftFile(newDraftId, fileKey);
+                    }
+                    // (re-)upload new version if the file has been changed or added
+                    for (String filename : Stream.concat(newFiles.stream(), updatedFiles.stream()).toList()) {
+                        String fileKey = filename.replaceAll("/", SEPARATOR);
+                        api.startDraftFileUpload(newDraftId, new ArrayList<>(List.of(new Files.FileEntry(fileKey))));
+                        api.uploadDraftFile(newDraftId, fileKey, Path.of(path.toString(),filename).toFile());
+                        api.completeDraftFileUpload(newDraftId, fileKey);
+                    }
+                    // Update publication date
+                    newDraft = api.getDraftRecord(newDraftId);
+                    newDraft.getMetadata().setPublicationDate(
+                            new Metadata.ExtendedDateTimeFormat0(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)))
+                            .addStartMonth(String.format("%02d", Calendar.getInstance().get(Calendar.MONTH)+1))
+                            .addStartDay(String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))));
+                    api.updateDraftRecord(newDraftId, newDraft);
+                    return newDraftId;
+                }
+                // Otherwise just return the existing id
+                else {
+                    report.addCorrect("InvenioAPI", "Object " + potentiallyExistingRecordId.get() + " already up-to-date");
+                    LOG.log(Level.INFO, "Object {0} already up-to-date", potentiallyExistingRecordId.get());
+                    return null;
+                }
             }
             else {
-                LOG.severe("Record with title already exist: " + currentMetadata.getTitle());
+                LOG.log(Level.SEVERE, "Record with title already exist: {0}", currentMetadata.getTitle());
                 throw new IllegalArgumentException("Record with title already exist: " + currentMetadata.getTitle());
             }
         }
