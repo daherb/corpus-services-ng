@@ -898,10 +898,10 @@ public class InvenioAPITools {
      */
     private Optional<String> findRecordByTitle(String title) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         Records matches = api.listUserRecords(Optional.of("metadata.title:\"" +title+ "\""), Optional.empty(), Optional.of(1), Optional.empty(), Optional.empty());
-        if (matches.getHits().getHits().size() == 1) {
+        if (matches.getHits().getHits().size() == 1 && matches.getHits().getHits().get(0).getMetadata().getTitle().equals(title)) {
             return Optional.of(matches.getHits().getHits().get(0).getId());
         }
-        else if (matches.getHits().getHits().isEmpty()) {
+        else if (matches.getHits().getHits().isEmpty() || !matches.getHits().getHits().get(0).getMetadata().getTitle().equals(title)) {
             return Optional.empty();
         }
         else {
