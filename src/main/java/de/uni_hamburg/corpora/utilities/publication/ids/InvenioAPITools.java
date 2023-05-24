@@ -550,8 +550,10 @@ public class InvenioAPITools {
                 changed = changed || !newFiles.isEmpty() || !deletedFiles.isEmpty();
                 // Create updated record if the record has been changed
                 if (changed) {
-                    ObjectMapper om = new ObjectMapper();
-                    om.findAndRegisterModules().enable(SerializationFeature.INDENT_OUTPUT);
+                    LOG.log(Level.INFO, "New files:\n{0} Updated files:\n{1} Removed files:\n{2}", 
+                            new Object[]{newFiles.stream().collect(Collectors.joining(", ")), 
+                                updatedFiles.stream().collect(Collectors.joining(", ")), 
+                                deletedFiles.stream().collect(Collectors.joining(", "))});
                     // If update needed first create the new draft with all previous files
                     // First create a new version as a draft
                     DraftRecord newDraft = api.createNewVersion(potentiallyExistingRecordId.get());
@@ -655,7 +657,6 @@ public class InvenioAPITools {
             List<Metadata.AlternateIdentifier> pids = new ArrayList<>();
             if (currentMetadataMapping != null && currentMetadataMapping.getSelfLink().isPresent()) {
                 String selfLink = currentMetadataMapping.getSelfLink().get();
-                LOG.info(selfLink);
                 if (selfLink.contains("handle.net")) {
                     Matcher m = Pattern.compile("https://hdl.handle.net/(.*)").matcher(selfLink);
                     if (m.matches()) {
@@ -690,6 +691,7 @@ public class InvenioAPITools {
                     }
                 }
                 currentMetadata.addAlternativeIdentifiers(pids);
+                
             }
             api.updateDraftRecord(result.getId(), draft);
             return result.getId();
