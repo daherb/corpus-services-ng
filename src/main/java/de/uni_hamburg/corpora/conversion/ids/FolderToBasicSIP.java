@@ -129,10 +129,10 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         LOG.info("Copy files to output");
         for (File file : FileUtils.listFiles(path.toFile(), FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY)) {
             if (props.getProperty("create-hard-links", "False").equalsIgnoreCase("true")) {
-                Files.createLink(file.toPath(), Path.of(file.toString().replace(path.toString(), outputPath.toString())));
+                Files.createLink(file.toPath().toAbsolutePath(), Path.of(file.toString().replace(path.toString(), outputPath.toString())).toAbsolutePath());
             }
             else {
-                FileUtils.copyFile(file, Path.of(file.toString().replace(path.toString(), outputPath.toString())).toFile());
+                FileUtils.copyFile(file, Path.of(file.toString().replace(path.toString(), outputPath.toString())).toAbsolutePath().toFile());
             }
         }
         // Create a bag inplace
