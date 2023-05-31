@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -127,7 +128,12 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         // Copy all files
         LOG.info("Copy files to output");
         for (File file : FileUtils.listFiles(path.toFile(), FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY)) {
-            FileUtils.copyFile(file, Path.of(file.toString().replace(path.toString(), outputPath.toString())).toFile());
+            if (props.getOrDefault("create-hard-links", "False").equals("True")) {
+                Files.createLink(file.toPath(), Path.of(file.toString().replace(path.toString(), outputPath.toString())));
+            }
+            else {
+                FileUtils.copyFile(file, Path.of(file.toString().replace(path.toString(), outputPath.toString())).toFile());
+            }
         }
         // Create a bag inplace
         LOG.info("Create bag");
@@ -275,6 +281,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         parameters.put("output-path", "The path where the BagIt SIP will be written. Defaults to the \"../output\" subfolder");
         parameters.put("root-title", "The title of the root record. Defaults to corpus name");
         parameters.put("root-metadata-file", "Root-level metadata file. Defaults to the only metadata file not matching any content files");
+        parameters.put("create-hard-links", "Flag to create hard links instead of copying files");
         return parameters;
     }
     
