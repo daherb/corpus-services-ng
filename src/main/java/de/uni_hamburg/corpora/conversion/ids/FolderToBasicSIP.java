@@ -128,7 +128,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         // Copy all files
         LOG.info("Copy files to output");
         for (File file : FileUtils.listFiles(path.toFile(), FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY)) {
-            if (props.getOrDefault("create-hard-links", "False").equals("True")) {
+            if (props.getProperty("create-hard-links", "False").equalsIgnoreCase("true")) {
                 Files.createLink(file.toPath(), Path.of(file.toString().replace(path.toString(), outputPath.toString())));
             }
             else {
