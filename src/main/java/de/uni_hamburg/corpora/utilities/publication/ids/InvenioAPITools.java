@@ -998,7 +998,10 @@ public class InvenioAPITools {
         public String getId() {
             return id;
         }
-        
-        
+
+        @Override
+        public String toString() {
+            return "RecordId{" + "draft=" + draft + ", id=" + id + '}';
+        }
     }
 }
