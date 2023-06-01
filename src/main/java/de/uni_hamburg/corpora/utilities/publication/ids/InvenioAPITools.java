@@ -431,13 +431,13 @@ public class InvenioAPITools {
         );
         
         preservationMetadata.setDescription("Record for storing preservation information for " + title);
-        String preservationId = uploadRecord(path, preservationRecord, preservationMetadata, update, report);
+        RecordId preservationId = uploadRecord(path, preservationRecord, preservationMetadata, update, report);
         // Continue with uploade
-        String rootId = uploadRecord(path, mapping, metadata, update, report);
+        RecordId rootId = uploadRecord(path, mapping, metadata, update, report);
         // Fix links between root record and preservation record
-        if (preservationId != null && rootId != null) {
-            DraftRecord preservationDraft = api.getDraftRecord(preservationId);
-            DraftRecord rootDraft = api.getDraftRecord(rootId);
+        if (preservationId.isDraft() && rootId.isDraft()) {
+            DraftRecord preservationDraft = api.getDraftRecord(preservationId.getId());
+            DraftRecord rootDraft = api.getDraftRecord(rootId.getId());
             preservationDraft.getMetadata().addRelatedIdentifiers(
                     new ArrayList<>(List.of(
                             new Metadata.RelatedIdentifier(url + rootId,
@@ -452,10 +452,10 @@ public class InvenioAPITools {
                                     new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsDescribedBy),
                                             new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is described by")))
                     )));
-            api.updateDraftRecord(preservationId, preservationDraft);
-            api.updateDraftRecord(rootId, rootDraft);
+            api.updateDraftRecord(preservationId.getId(), preservationDraft);
+            api.updateDraftRecord(rootId.getId(), rootDraft);
         }
-        return rootId;
+        return rootId.getId();
     }
     
     /**
@@ -474,7 +474,7 @@ public class InvenioAPITools {
      * @throws NoSuchAlgorithmException
      * @throws CloneNotSupportedException 
      */
-    private String uploadRecord(Path path, MapRecord record, Metadata metadata, boolean update, Report report) throws IOException, JDOMException, InterruptedException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, CloneNotSupportedException {
+    private RecordId uploadRecord(Path path, MapRecord record, Metadata metadata, boolean update, Report report) throws IOException, JDOMException, InterruptedException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, CloneNotSupportedException {
         // Create draft record
         // Set access. Metadata is always public and file access depends
         // If all files are explicitly public or no information is given they are considered public
@@ -579,13 +579,13 @@ public class InvenioAPITools {
                             .addStartMonth(String.format("%02d", Calendar.getInstance().get(Calendar.MONTH)+1))
                             .addStartDay(String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))));
                     api.updateDraftRecord(newDraftId, newDraft);
-                    return newDraftId;
+                    return RecordId.newDraft(newDraftId);
                 }
                 // Otherwise just return the existing id
                 else {
                     report.addCorrect("InvenioAPI", "Object " + potentiallyExistingRecordId.get() + " already up-to-date");
                     LOG.log(Level.INFO, "Object {0} already up-to-date", potentiallyExistingRecordId.get());
-                    return potentiallyExistingRecordId.get();
+                    return RecordId.newRecord(potentiallyExistingRecordId.get());
                 }
             }
             else {
@@ -641,8 +641,8 @@ public class InvenioAPITools {
             ArrayList<Metadata.RelatedIdentifier> relatedIdentifiers = new ArrayList<>();
             // Upload child records
             for (MapRecord child : record.getRecords()) {
-                String id = uploadRecord(path, child, metadata, update, report);
-                relatedIdentifiers.add(new Metadata.RelatedIdentifier(url + id,
+                RecordId id = uploadRecord(path, child, metadata, update, report);
+                relatedIdentifiers.add(new Metadata.RelatedIdentifier(url + id.getId(),
                         new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
                         new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart),
                                 new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
@@ -694,7 +694,7 @@ public class InvenioAPITools {
                 
             }
             api.updateDraftRecord(result.getId(), draft);
-            return result.getId();
+            return RecordId.newDraft(result.getId());
         }
     }
     
@@ -928,5 +928,53 @@ public class InvenioAPITools {
             }
         }
         return checksums;
+    }
+
+    /**
+     * Class keeping track if the id is a draft or an already published record
+     */
+    private static class RecordId {
+        // Flag if the ID is for a record
+        boolean draft;
+        // The ID itself
+        private String id;
+
+        /***
+         * Private constructor, use static method instead
+         * @param draft
+         * @param id 
+         */ 
+        private RecordId(boolean draft, String id) {
+            this.draft = draft;
+            this.id = id;
+        }
+        
+        /***
+         * Create a new draft record id
+         * @param id the new id as string
+         * @return the id object
+         */
+        public static RecordId newDraft(String id) {
+            return new RecordId(true, id);
+        }
+        
+        /***
+         * Create a new record id
+         * @param id the new id as string
+         * @return  the id object
+         */
+        public static RecordId newRecord(String id) {
+            return new RecordId(false, id);
+        }
+
+        public boolean isDraft() {
+            return draft;
+        }
+
+        public String getId() {
+            return id;
+        }
+        
+        
     }
 }
