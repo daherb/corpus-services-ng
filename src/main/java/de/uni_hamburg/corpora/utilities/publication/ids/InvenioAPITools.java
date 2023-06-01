@@ -930,6 +930,20 @@ public class InvenioAPITools {
         return checksums;
     }
 
+    /***
+     * Helper to check if an id is a draft
+     * @param id the id of the record
+     * @return if it is a draft
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException 
+     */
+    private boolean isDraft(String id) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        return listDraftRecords().contains(id);
+    }
+
     /**
      * Class keeping track if the id is a draft or an already published record
      */
