@@ -155,7 +155,7 @@ public class InvenioAPITools {
                     RecordId id = mappingToRecords(path, mapping, update, report);
                     // Double check if the upload was completely successful
                     LOG.info("Validate uploaded data");
-                    if (validateDraftRecords(id, path, bag, report)) {
+                    if (validateRecords(id, path, bag, report)) {
                         // Publish all drafts
                         LOG.info("Publish records");
                         publishDraftRecords(report);
@@ -752,16 +752,18 @@ public class InvenioAPITools {
      * @param report the report to keep track of detailed information about the process
      * @return if the draft records match the input data
      */
-    private boolean validateDraftRecords(RecordId id, Path path, Bag bag, Report report) throws URISyntaxException, NoSuchAlgorithmException, IOException, JsonProcessingException, KeyManagementException, InterruptedException {
-        // If it is already published, we do not need to validate,
+    private boolean validateRecords(RecordId id, Path path, Bag bag, Report report) throws URISyntaxException, NoSuchAlgorithmException, IOException, JsonProcessingException, KeyManagementException, InterruptedException {
         // if id is null it means non-existent record and we know that something went wrong
-        if (!id.isDraft()) {
-            return true;
-        }
-        else if (id == null) {
+        if (id == null) {
             return false;
         }
-        Files files = api.listDraftFiles(id.getId());
+        Files files;
+        if (id.isDraft()) {
+            files = api.listDraftFiles(id.getId());
+        }
+        else {
+            files = api.listRecordFiles(id.getId());
+        }
         HashMap<String,String> checksums = getFileChecksums(files);
         boolean result = true;
         LOG.log(Level.INFO, "Validating record {0}", id);
@@ -781,16 +783,17 @@ public class InvenioAPITools {
             report.addCritical("InvenioAPI", "Failed to validate record " + id);
         }
         // Also validate all related records
-        DraftRecord record = api.getDraftRecord(id.getId());
-        for (Metadata.RelatedIdentifier relatedId : record.getMetadata().getRelatedIdentifiers()) {
+        List<Metadata.RelatedIdentifier> idList;
+        if (id.isDraft()) {
+            idList = api.getDraftRecord(id.getId()).getMetadata().getRelatedIdentifiers();
+        }
+        else {
+            idList = api.getRecord(url).getMetadata().getRelatedIdentifiers();
+        }
+        for (Metadata.RelatedIdentifier relatedId : idList) {
             if (relatedId.getRelationType().getId().toString().equalsIgnoreCase("haspart")) {
                 String relId = relatedId.getIdentifier().replace(url, "");
-                if (isDraft(relId)) {
-                    result = result && validateDraftRecords(RecordId.newDraft(relId), path, bag, report);
-                }
-                else {
-                    result = result && validateDraftRecords(RecordId.newRecord(relId), path, bag, report);
-                }
+                result = result && validateRecords(new RecordId(isDraft(relId),relId), path, bag, report);
             }
         }
         return result;
