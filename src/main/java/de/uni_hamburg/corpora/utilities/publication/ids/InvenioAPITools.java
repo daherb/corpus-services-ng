@@ -152,7 +152,7 @@ public class InvenioAPITools {
                 if (mutex.tryLock(10, TimeUnit.MINUTES)) {
                     // Upload the file according to the mapping
                     LOG.info("Upload records");
-                    String id = mappingToRecords(path, mapping, update, report);
+                    RecordId id = mappingToRecords(path, mapping, update, report);
                     // Double check if the upload was completely successful
                     LOG.info("Validate uploaded data");
                     if (validateDraftRecords(id, path, bag, report)) {
@@ -162,7 +162,7 @@ public class InvenioAPITools {
                         // Release the mutex again
                         mutex.unlock();
                         // Return the first id which is the one of the main record
-                        return Optional.of(id);
+                        return Optional.of(id.getId());
                     }
                 }
                 else {
@@ -408,7 +408,7 @@ public class InvenioAPITools {
 
      * @return the id of the root node
      */
-    private String mappingToRecords(Path path, MapRootRecord mapping, boolean update, Report report) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, JDOMException, CloneNotSupportedException {
+    private RecordId mappingToRecords(Path path, MapRootRecord mapping, boolean update, Report report) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, JDOMException, CloneNotSupportedException {
         // Get the metadata
         Metadata metadata;
         CmdiProfileMapping metadataMapping;
@@ -455,7 +455,7 @@ public class InvenioAPITools {
             api.updateDraftRecord(preservationId.getId(), preservationDraft);
             api.updateDraftRecord(rootId.getId(), rootDraft);
         }
-        return rootId.getId();
+        return RecordId.newDraft(rootId.getId());
     }
     
     /**
@@ -752,11 +752,16 @@ public class InvenioAPITools {
      * @param report the report to keep track of detailed information about the process
      * @return if the draft records match the input data
      */
-    private boolean validateDraftRecords(String id, Path path, Bag bag, Report report) throws URISyntaxException, NoSuchAlgorithmException, IOException, JsonProcessingException, KeyManagementException, InterruptedException {
-        // null id means non-existent record
-        if (id == null)
+    private boolean validateDraftRecords(RecordId id, Path path, Bag bag, Report report) throws URISyntaxException, NoSuchAlgorithmException, IOException, JsonProcessingException, KeyManagementException, InterruptedException {
+        // If it is already published, we do not need to validate,
+        // if id is null it means non-existent record and we know that something went wrong
+        if (!id.isDraft()) {
+            return true;
+        }
+        else if (id == null) {
             return false;
-        Files files = api.listDraftFiles(id);
+        }
+        Files files = api.listDraftFiles(id.getId());
         HashMap<String,String> checksums = getFileChecksums(files);
         boolean result = true;
         LOG.log(Level.INFO, "Validating record {0}", id);
@@ -776,11 +781,16 @@ public class InvenioAPITools {
             report.addCritical("InvenioAPI", "Failed to validate record " + id);
         }
         // Also validate all related records
-        DraftRecord record = api.getDraftRecord(id);
+        DraftRecord record = api.getDraftRecord(id.getId());
         for (Metadata.RelatedIdentifier relatedId : record.getMetadata().getRelatedIdentifiers()) {
             if (relatedId.getRelationType().getId().toString().equalsIgnoreCase("haspart")) {
                 String relId = relatedId.getIdentifier().replace(url, "");
-                result = result && validateDraftRecords(relId, path, bag, report);
+                if (isDraft(relId)) {
+                    result = result && validateDraftRecords(RecordId.newDraft(relId), path, bag, report);
+                }
+                else {
+                    result = result && validateDraftRecords(RecordId.newRecord(relId), path, bag, report);
+                }
             }
         }
         return result;
