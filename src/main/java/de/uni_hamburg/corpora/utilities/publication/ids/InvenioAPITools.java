@@ -585,7 +585,7 @@ public class InvenioAPITools {
                 else {
                     report.addCorrect("InvenioAPI", "Object " + potentiallyExistingRecordId.get() + " already up-to-date");
                     LOG.log(Level.INFO, "Object {0} already up-to-date", potentiallyExistingRecordId.get());
-                    return null;
+                    return potentiallyExistingRecordId.get();
                 }
             }
             else {
