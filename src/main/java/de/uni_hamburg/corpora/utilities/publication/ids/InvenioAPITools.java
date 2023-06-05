@@ -757,24 +757,33 @@ public class InvenioAPITools {
         if (id == null) {
             return false;
         }
-        Files files;
-        if (id.isDraft()) {
-            files = api.listDraftFiles(id.getId());
-        }
-        else {
-            files = api.listRecordFiles(id.getId());
-        }
-        HashMap<String,String> checksums = getFileChecksums(files);
         boolean result = true;
         LOG.log(Level.INFO, "Validating record {0}", id);
-        // Check checksums for all files
-        for (Map.Entry<String, String> entry : checksums.entrySet()) {
-            String filename = entry.getKey();
-            File file = Path.of(path.toString(),filename).toFile().getAbsoluteFile();
-            String checksum = entry.getValue();
-            
-            result = result && validateChecksum(file, checksum); //newSum.equalsIgnoreCase(checksum);
+//        Files files = new Files(false);
+        if (id.isDraft()) {
+            Files files = api.listDraftFiles(id.getId());
+            HashMap<String,String> checksums = getFileChecksums(files);
+            // Check checksums for all files
+            for (Map.Entry<String, String> entry : checksums.entrySet()) {
+                String filename = entry.getKey();
+                File file = Path.of(path.toString(),filename).toFile().getAbsoluteFile();
+                String checksum = entry.getValue();
+                
+                result = result && validateChecksum(file, checksum);
+            }
         }
+        /*else {
+            files = api.listRecordFiles(id.getId());
+        }*/
+//        HashMap<String,String> checksums = getFileChecksums(files);
+//        // Check checksums for all files
+//        for (Map.Entry<String, String> entry : checksums.entrySet()) {
+//            String filename = entry.getKey();
+//            File file = Path.of(path.toString(),filename).toFile().getAbsoluteFile();
+//            String checksum = entry.getValue();
+//            
+//            result = result && validateChecksum(file, checksum);
+//        }
         // Add info about results to the report
         if (result) {
             report.addCorrect("InvenioAPI", "Sucessfuly validated record " + id);
