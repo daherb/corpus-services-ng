@@ -788,7 +788,7 @@ public class InvenioAPITools {
             idList = api.getDraftRecord(id.getId()).getMetadata().getRelatedIdentifiers();
         }
         else {
-            idList = api.getRecord(url).getMetadata().getRelatedIdentifiers();
+            idList = api.getRecord(id.getId()).getMetadata().getRelatedIdentifiers();
         }
         for (Metadata.RelatedIdentifier relatedId : idList) {
             if (relatedId.getRelationType().getId().toString().equalsIgnoreCase("haspart")) {
