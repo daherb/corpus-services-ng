@@ -772,6 +772,7 @@ public class InvenioAPITools {
                 result = result && validateChecksum(file, checksum);
             }
         }
+        LOG.info("done");
         /*else {
             files = api.listRecordFiles(id.getId());
         }*/
