@@ -553,8 +553,8 @@ public class InvenioAPITools {
                         changed = true;
                     }
                 }
-                // If we have new or deleted files we also know that the record has been changed
-                changed = changed || !newFiles.isEmpty() || !deletedFiles.isEmpty();
+                // If we have new  files we also know that the record has been changed
+                changed = changed || !newFiles.isEmpty();
                 // Create updated record if the record has been changed
                 if (changed) {
                     LOG.log(Level.INFO, "New files:\n{0} Updated files:\n{1} Removed files:\n{2}", 
