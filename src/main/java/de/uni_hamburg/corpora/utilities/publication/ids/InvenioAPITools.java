@@ -101,6 +101,8 @@ public class InvenioAPITools {
     String url;
     
     private static final Logger LOG = Logger.getLogger(InvenioAPITools.class.getName());
+    // Internal list keeping track of drafts
+    private ArrayList<String> draftList = new ArrayList<>();
     
     
     //------------------------------------------------------------------------//
@@ -954,7 +956,8 @@ public class InvenioAPITools {
     }
 
     /***
-     * Helper to check if an id is a draft
+     * Helper to check if an id is a draft based on an internal draft list 
+     * which can be updated using updateDraftList
      * @param id the id of the record
      * @return if it is a draft
      * @throws IOException
@@ -964,7 +967,10 @@ public class InvenioAPITools {
      * @throws KeyManagementException 
      */
     private boolean isDraft(String id) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
-        return listDraftRecords().contains(id);
+        if (draftList.isEmpty()) {
+            updateDraftList();
+        }
+        return draftList.contains(id);
     }
 
     /**
