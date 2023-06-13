@@ -423,6 +423,8 @@ public class InvenioAPITools {
             report.addException("InvenioAPI", e, "Exception while loading metadata file " + mapping.getMetadata().get());
             throw e;
         }
+        // Start with the root
+        RecordId rootId = uploadRecord(path, mapping, metadata, Optional.empty(), update, report);
         // Add empty spare record for preservation management
         MapRecord preservationRecord = new MapRecord();
         String title = metadata.getTitle();
@@ -433,9 +435,8 @@ public class InvenioAPITools {
         );
         
         preservationMetadata.setDescription("Record for storing preservation information for " + title);
-        RecordId preservationId = uploadRecord(path, preservationRecord, preservationMetadata, update, report);
-        // Continue with uploade
-        RecordId rootId = uploadRecord(path, mapping, metadata, update, report);
+        RecordId preservationId = uploadRecord(path, preservationRecord, preservationMetadata, Optional.empty(), update, report);
+        // Continue with upload
         // Fix links between root record and preservation record
         if (preservationId.isDraft() && rootId.isDraft()) {
             DraftRecord preservationDraft = api.getDraftRecord(preservationId.getId());
