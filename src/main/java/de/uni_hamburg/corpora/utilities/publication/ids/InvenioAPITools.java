@@ -438,7 +438,7 @@ public class InvenioAPITools {
         RecordId preservationId = uploadRecord(path, preservationRecord, preservationMetadata, Optional.empty(), update, report);
         // Continue with upload
         // Fix links between root record and preservation record
-        if (preservationId.isDraft() && rootId.isDraft()) {
+        if (rootId.isDraft()) {
             DraftRecord preservationDraft = api.getDraftRecord(preservationId.getId());
             DraftRecord rootDraft = api.getDraftRecord(rootId.getId());
             preservationDraft.getMetadata().addRelatedIdentifiers(
