@@ -479,6 +479,9 @@ public class InvenioAPITools {
      */
     private RecordId uploadRecord(Path path, MapRecord record, Metadata metadata, boolean update, Report report) throws IOException, JDOMException, InterruptedException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, CloneNotSupportedException {
         // Create draft record
+        DraftRecord draft;
+        String draftId;
+        // Set access. Metadata is always public and file access depends:
         // Set access. Metadata is always public and file access depends
         // If all files are explicitly public or no information is given they are considered public
         Access.AccessType fileAccess;
@@ -559,36 +562,40 @@ public class InvenioAPITools {
                                 deletedFiles.stream().collect(Collectors.joining(", "))});
                     // If update needed first create the new draft with all previous files
                     // First create a new version as a draft
-                    DraftRecord newDraft = api.createNewVersion(potentiallyExistingRecordId.get());
-                    String newDraftId = newDraft.getId().get();
+                    // DraftRecord newDraft = api.createNewVersion(potentiallyExistingRecordId.get());
+                    //String newDraftId = newDraft.getId().get();
+                    draft = api.createNewVersion(potentiallyExistingRecordId.get());
+                    draftId = draft.getId().get();
                     // Import previous files if possible
-                    api.draftImportFiles(newDraftId);
+                    api.draftImportFiles(draftId);
                     // Remove files that are missing or updated in the new version
                     for (String filename : Stream.concat(deletedFiles.stream(), updatedFiles.stream()).toList()) {
                         String fileKey = filename.replaceAll("/", SEPARATOR);
-                        api.deleteDraftFile(newDraftId, fileKey);
+                        api.deleteDraftFile(draftId, fileKey);
                     }
                     // (re-)upload new version if the file has been changed or added
                     for (String filename : Stream.concat(newFiles.stream(), updatedFiles.stream()).toList()) {
                         String fileKey = filename.replaceAll("/", SEPARATOR);
-                        api.startDraftFileUpload(newDraftId, new ArrayList<>(List.of(new Files.FileEntry(fileKey))));
-                        api.uploadDraftFile(newDraftId, fileKey, Path.of(path.toString(),filename).toFile());
-                        api.completeDraftFileUpload(newDraftId, fileKey);
+                        api.startDraftFileUpload(draftId, new ArrayList<>(List.of(new Files.FileEntry(fileKey))));
+                        api.uploadDraftFile(draftId, fileKey, Path.of(path.toString(),filename).toFile());
+                        api.completeDraftFileUpload(draftId, fileKey);
                     }
                     // Update publication date
-                    newDraft = api.getDraftRecord(newDraftId);
-                    newDraft.getMetadata().setPublicationDate(
+//                    newDraft = api.getDraftRecord(newDraftId);
+                    draft.getMetadata().setPublicationDate(
                             new Metadata.ExtendedDateTimeFormat0(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)))
                             .addStartMonth(String.format("%02d", Calendar.getInstance().get(Calendar.MONTH)+1))
                             .addStartDay(String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))));
-                    api.updateDraftRecord(newDraftId, newDraft);
-                    return RecordId.newDraft(newDraftId);
+//                    api.updateDraftRecord(newDraftId, newDraft);
+//                    return RecordId.newDraft(newDraftId);
                 }
                 // Otherwise just return the existing id
                 else {
                     report.addCorrect("InvenioAPI", "Object " + potentiallyExistingRecordId.get() + " already up-to-date");
                     LOG.log(Level.INFO, "Object {0} already up-to-date", potentiallyExistingRecordId.get());
-                    return RecordId.newRecord(potentiallyExistingRecordId.get());
+                    // return RecordId.newRecord(potentiallyExistingRecordId.get());
+                    draft = api.createDraftFromPublished(potentiallyExistingRecordId.get());
+                    draftId = draft.getId().get();
                 }
             }
             else {
@@ -599,7 +606,8 @@ public class InvenioAPITools {
         else {
             // Files are only added if necessary, i.e. if either metadata or files are part of the record
             FilesOptions files = new FilesOptions(!record.getFiles().isEmpty() || record.getMetadata().isPresent());
-            DraftRecord draft = new DraftRecord(access, files, currentMetadata);
+            // DraftRecord draft = new DraftRecord(access, files, currentMetadata);
+            draft = new DraftRecord(access, files, currentMetadata);
             Record result;
             try {
                 result = api.createDraftRecord(draft);
@@ -641,18 +649,7 @@ public class InvenioAPITools {
                 api.uploadDraftFile(result.getId(), key, fileMap.get(key));
                 api.completeDraftFileUpload(result.getId(), key);
             }
-            ArrayList<Metadata.RelatedIdentifier> relatedIdentifiers = new ArrayList<>();
-            // Upload child records
-            for (MapRecord child : record.getRecords()) {
-                RecordId id = uploadRecord(path, child, metadata, update, report);
-                relatedIdentifiers.add(new Metadata.RelatedIdentifier(url + id.getId(),
-                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
-                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart),
-                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
-                
-            }
-            // Add references and potentially default preview
-            currentMetadata.addRelatedIdentifiers(relatedIdentifiers);
+            // Potentially add default preview
             if (!defaultPreview.isBlank()) {
                 draft.getFiles().setDefaultPreview(defaultPreview);
             }
@@ -696,9 +693,30 @@ public class InvenioAPITools {
                 currentMetadata.addAlternativeIdentifiers(pids);
                 
             }
-            api.updateDraftRecord(result.getId(), draft);
-            return RecordId.newDraft(result.getId());
+            draftId = result.getId();
+//            api.updateDraftRecord(result.getId(), draft);
+//            return RecordId.newDraft(result.getId());
         }
+        // Upload child records and add links between the records
+        ArrayList<Metadata.RelatedIdentifier> relatedIdentifiers = new ArrayList<>();
+        
+        for (MapRecord child : record.getRecords()) {
+            RecordId id = uploadRecord(path, child, metadata, Optional.of(RecordId.newDraft(draftId)), update, report);
+            relatedIdentifiers.add(new Metadata.RelatedIdentifier(url + id.getId(),
+                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart),
+                            new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Has part"))));
+            
+        }
+        if (parentId.isPresent()) {
+            relatedIdentifiers.add(new Metadata.RelatedIdentifier(url + parentId.get().getId(),
+                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsPartOf),
+                            new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is part of"))));
+        }
+        draft.getMetadata().setRelatedIdentifiers(relatedIdentifiers);
+        api.updateDraftRecord(draftId, draft);
+        return RecordId.newDraft(draftId);
     }
     
     /**
