@@ -483,7 +483,6 @@ public class InvenioAPITools {
         DraftRecord draft;
         String draftId;
         // Set access. Metadata is always public and file access depends:
-        // Set access. Metadata is always public and file access depends
         // If all files are explicitly public or no information is given they are considered public
         Access.AccessType fileAccess;
         if (record.getFiles().stream().allMatch(MapFile::isPublic)) {
@@ -496,6 +495,7 @@ public class InvenioAPITools {
         // Update metadata if necessary
         Metadata currentMetadata;
         CmdiProfileMapping currentMetadataMapping = null;
+        // Get the metadata file from the record mapping
         if (!record.getMetadata().isEmpty() && !record.getMetadata().get().isEmpty()) {
             try {
                 currentMetadataMapping = createCmdiProfileMapping(Path.of(path.toString(),record.getMetadata().get()).toFile().getCanonicalFile());
@@ -506,6 +506,7 @@ public class InvenioAPITools {
                 throw e;
             }
         }
+        // Otherwise clone the current metadata
         else {
             try {
                 currentMetadata = (Metadata) metadata.clone();
@@ -515,26 +516,32 @@ public class InvenioAPITools {
                 throw e;
             }
         }
+        // Update the record title if one is given in the record map
         if (record.getTitle().isPresent() && !record.getTitle().get().isEmpty()) {
             currentMetadata.setTitle(metadata.getTitle() + ": " + record.getTitle().get());
         }
         // Check if title is already used
         Optional<String> potentiallyExistingRecordId = findRecordByTitle(currentMetadata.getTitle());
         if (potentiallyExistingRecordId.isPresent()) {
+            // The title already exists and we want to update records
             if (update) {
-                // Todo
-                LOG.info("Update record " + potentiallyExistingRecordId.get());
+                LOG.log(Level.INFO, "Update record {0}", potentiallyExistingRecordId.get());
+                // Check if the record has changed, i.e. if either new files are
+                // added or we have files where the checksum has changed
                 boolean changed = false;
                 HashMap<String,String> checksums = getFileChecksums(api.listRecordFiles(potentiallyExistingRecordId.get()));
                 // Add all files from recordmap to potentially new files
                 Set<String> newFiles = new HashSet<>();
-                // Add metadata if available
+                // Add metadata file to file listif available
                 record.getMetadata().ifPresent(newFiles::add);
                 // Add all other files
                 newFiles.addAll(record.getFiles().stream().map((mf) -> mf.getName()).collect(Collectors.toSet()));
+                // Keep track of updated or deleted files
                 Set<String> deletedFiles = new HashSet<>();
                 Set<String> updatedFiles = new HashSet<>();
-                // Check if the record has changed. Only update if necessary. Alternatively we could always create a new version
+                // Check if the record has changed. Only update if necessary.
+                // Alternatively we could always create a new version but we
+                // want to keep the number of versions down
                 for (String filename : checksums.keySet()) {
                     if (newFiles.contains(filename)) {
                         // If the checksum does not match we know that the record
@@ -544,9 +551,11 @@ public class InvenioAPITools {
                             updatedFiles.add(filename);
                             
                         }
+                        // But it is not a new file
                         newFiles.remove(filename);
                     }
-                    // If the file is not present it must have been deleted
+                    // If the file is not present in the new file list it must
+                    // have been deleted
                     else {
                         deletedFiles.add(filename);
                         // This of course means that the record has been changed
@@ -590,7 +599,7 @@ public class InvenioAPITools {
 //                    api.updateDraftRecord(newDraftId, newDraft);
 //                    return RecordId.newDraft(newDraftId);
                 }
-                // Otherwise just return the existing id
+                // Otherwise just create a new draft
                 else {
                     report.addCorrect("InvenioAPI", "Object " + potentiallyExistingRecordId.get() + " already up-to-date");
                     LOG.log(Level.INFO, "Object {0} already up-to-date", potentiallyExistingRecordId.get());
