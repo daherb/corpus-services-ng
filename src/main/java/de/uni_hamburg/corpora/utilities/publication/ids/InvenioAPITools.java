@@ -466,6 +466,7 @@ public class InvenioAPITools {
      * @param path the file path
      * @param record the record map
      * @param metadata the metadata
+     * @param parentId the optional id of a parent record
      * @param update flag if an existing record should be updated
      * @param report report to keep track of the process
      * @return the id of the resulting record
@@ -477,7 +478,7 @@ public class InvenioAPITools {
      * @throws NoSuchAlgorithmException
      * @throws CloneNotSupportedException 
      */
-    private RecordId uploadRecord(Path path, MapRecord record, Metadata metadata, boolean update, Report report) throws IOException, JDOMException, InterruptedException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, CloneNotSupportedException {
+    private RecordId uploadRecord(Path path, MapRecord record, Metadata metadata, Optional<RecordId> parentId, boolean update, Report report) throws IOException, JDOMException, InterruptedException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException, CloneNotSupportedException {
         // Create draft record
         DraftRecord draft;
         String draftId;
