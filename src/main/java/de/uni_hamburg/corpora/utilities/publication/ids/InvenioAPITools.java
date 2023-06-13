@@ -442,14 +442,14 @@ public class InvenioAPITools {
             DraftRecord rootDraft = api.getDraftRecord(rootId.getId());
             preservationDraft.getMetadata().addRelatedIdentifiers(
                     new ArrayList<>(List.of(
-                            new Metadata.RelatedIdentifier(url + rootId,
+                            new Metadata.RelatedIdentifier(url + rootId.getId(),
                                     new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
                                     new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.Describes),
                                             new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Describes")))
                     )));
             rootDraft.getMetadata().addRelatedIdentifiers(
                     new ArrayList<>(List.of(
-                            new Metadata.RelatedIdentifier(url + preservationId,
+                            new Metadata.RelatedIdentifier(url + preservationId.getId(),
                                     new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
                                     new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsDescribedBy),
                                             new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is described by")))
