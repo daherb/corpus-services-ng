@@ -974,6 +974,18 @@ public class InvenioAPITools {
         return draftList.contains(id);
     }
 
+    /***
+     * Updates the internal draft list used by isDraft
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws URISyntaxException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException 
+     */
+    private void updateDraftList() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        draftList = new ArrayList<>(listDraftRecords());
+    }
+    
     /**
      * Class keeping track if the id is a draft or an already published record
      */
