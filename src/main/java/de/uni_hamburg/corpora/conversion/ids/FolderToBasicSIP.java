@@ -4,6 +4,7 @@
  */
 package de.uni_hamburg.corpora.conversion.ids;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.uni_hamburg.corpora.Corpus;
@@ -94,20 +95,27 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         Set<File> metadataFiles = listMetadataFiles(path);
         Set<File> contentFiles = listContentFiles(path);
         MapRootRecord record;
-        try {
-            LOG.info("Create record map");
-            String title;
-            if (props.containsKey("root-title")) {
-                title = props.getProperty("root-title");
-            }
-            else {
-                title = c.getCorpusName();
-            }
-            record = bundleFiles(path, title, metadataFiles,contentFiles);
+        if (props.containsKey("record-map-file")) {
+            ObjectMapper om = new ObjectMapper();
+            om.findAndRegisterModules();
+            record = om.readValue(new File(props.getProperty("record-map-file")), MapRootRecord.class);
         }
-        catch (IOException e) {
-            report.addException(getFunction(), e, "Exception when creating record map");
-            return  report;
+        else {
+            try {
+                LOG.info("Create record map");
+                String title;
+                if (props.containsKey("root-title")) {
+                    title = props.getProperty("root-title");
+                }
+                else {
+                    title = c.getCorpusName();
+                }
+                record = bundleFiles(path, title, metadataFiles,contentFiles);
+            }
+            catch (IOException e) {
+                report.addException(getFunction(), e, "Exception when creating record map");
+                return report;
+            }
         }
         LOG.info("Check and/or create output");
         // Copy files to output
@@ -283,6 +291,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
         parameters.put("output-path", "The path where the BagIt SIP will be written. Defaults to the \"../output\" subfolder");
         parameters.put("root-title", "The title of the root record. Defaults to corpus name");
         parameters.put("root-metadata-file", "Root-level metadata file. Defaults to the only metadata file not matching any content files");
+        parameters.put("record-map-file", "Filename of the already existing record map file");
         parameters.put("create-hard-links", "Flag to create hard links instead of copying files");
         return parameters;
     }
