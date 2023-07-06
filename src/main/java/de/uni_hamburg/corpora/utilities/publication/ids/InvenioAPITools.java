@@ -604,6 +604,7 @@ public class InvenioAPITools {
                     report.addCorrect("InvenioAPI", "Object " + potentiallyExistingRecordId.get() + " already up-to-date");
                     LOG.log(Level.INFO, "Object {0} already up-to-date", potentiallyExistingRecordId.get());
                     // return RecordId.newRecord(potentiallyExistingRecordId.get());
+                    LOG.log(Level.INFO, "Create new draft from {0}", potentiallyExistingRecordId.get());
                     draft = api.createDraftFromPublished(potentiallyExistingRecordId.get());
                     draftId = draft.getId().get();
                 }
@@ -851,7 +852,9 @@ public class InvenioAPITools {
      */
     private void publishDraftRecords(Report report) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
         ArrayList<String> failed = new ArrayList<>();
-        for (String id : listDraftRecords()) {
+        List<String> draftRecords = listDraftRecords();
+        LOG.log(Level.INFO, "Draft records to be published: {0}", draftRecords);
+        for (String id : draftRecords) {
             DraftRecord result = api.publishDraftRecord(id);
             if (result.getIsPublished().orElse(Boolean.FALSE)) {
                 report.addCorrect("InvenioAPI", "Published record " + id);
