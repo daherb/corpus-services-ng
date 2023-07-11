@@ -435,11 +435,21 @@ public class InvenioAPITools {
         );
         
         preservationMetadata.setDescription("Record for storing preservation information for " + title);
-        RecordId preservationId = uploadRecord(path, preservationRecord, preservationMetadata, Optional.empty(), update, report);
+        Optional<String> potentiallyExistingPreservationRecord = findRecordByTitle(preservationMetadata.getTitle());
+        RecordId preservationId;
+        DraftRecord preservationDraft;
+        if (potentiallyExistingPreservationRecord.isEmpty()) {
+            preservationId = uploadRecord(path, preservationRecord, preservationMetadata, Optional.empty(), update, report);
+            preservationDraft = api.getDraftRecord(preservationId.getId());
+        }
+        else {
+            preservationDraft = api.createDraftFromPublished(potentiallyExistingPreservationRecord.get());
+            preservationId = new RecordId(true, preservationDraft.getId().get());
+        }
         // Continue with upload
         // Fix links between root record and preservation record
         if (rootId.isDraft()) {
-            DraftRecord preservationDraft = api.getDraftRecord(preservationId.getId());
+            
             DraftRecord rootDraft = api.getDraftRecord(rootId.getId());
             preservationDraft.getMetadata().addRelatedIdentifiers(
                     new ArrayList<>(List.of(
@@ -457,6 +467,7 @@ public class InvenioAPITools {
                     )));
             api.updateDraftRecord(preservationId.getId(), preservationDraft);
             api.updateDraftRecord(rootId.getId(), rootDraft);
+            api.publishDraftRecord(preservationId.getId());
         }
         return RecordId.newDraft(rootId.getId());
     }
