@@ -1021,7 +1021,7 @@ public class InvenioAPITools {
      * Class keeping track if the id is a draft or an already published record
      */
     private static class RecordId {
-        // Flag if the ID is for a record
+        // Flag if the ID is for a draft record
         boolean draft;
         // The ID itself
         private String id;
