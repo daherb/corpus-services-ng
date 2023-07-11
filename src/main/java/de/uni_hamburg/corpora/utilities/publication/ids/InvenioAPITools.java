@@ -259,7 +259,7 @@ public class InvenioAPITools {
             return matches.getHits().getHits().get(0).getId();
         }
         else {
-            throw new IllegalArgumentException("Title matches no record: " + recordTitle);
+            throw new IllegalArgumentException("Title matches no or multiple records: " + recordTitle);
         }
     }
     
