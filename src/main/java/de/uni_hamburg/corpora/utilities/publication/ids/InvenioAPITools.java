@@ -446,6 +446,7 @@ public class InvenioAPITools {
             preservationDraft = api.createDraftFromPublished(potentiallyExistingPreservationRecord.get());
             preservationId = new RecordId(true, preservationDraft.getId().get());
         }
+        
         // Continue with upload
         // Fix links between root record and preservation record
         if (rootId.isDraft()) {
