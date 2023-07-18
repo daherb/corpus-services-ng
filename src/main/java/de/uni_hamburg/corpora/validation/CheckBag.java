@@ -106,6 +106,7 @@ public class CheckBag extends Checker implements CorpusFunction{
         Report report = new Report();
         try {
             verifier.isValid(bag, false);
+            report.addCorrect(getFunction(), "Success: bag is valid");
         }
         catch (CorruptChecksumException e) {
             // - when
@@ -142,6 +143,7 @@ public class CheckBag extends Checker implements CorpusFunction{
         Report report = new Report();
         try {
             verifier.isComplete(bag, false);
+            report.addCorrect(getFunction(), "Success: bag is complete");
         }
         catch(MissingPayloadManifestException e) {
             report.addCritical(getFunction(), e, "There is not at least one payload manifest");
