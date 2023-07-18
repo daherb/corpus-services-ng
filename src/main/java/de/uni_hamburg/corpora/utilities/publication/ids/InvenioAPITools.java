@@ -600,7 +600,8 @@ public class InvenioAPITools {
                     for (String filename : Stream.concat(newFiles.stream(), updatedFiles.stream()).toList()) {
                         String fileKey = filename.replaceAll("/", SEPARATOR);
                         api.startDraftFileUpload(draftId, new ArrayList<>(List.of(new Files.FileEntry(fileKey))));
-                        api.uploadDraftFile(draftId, fileKey, Path.of(path.toString(),filename).toFile());
+                        // TODO change to using file url
+                        api.uploadDraftFile(draftId, fileKey, Path.of(path.toString(),filename).toFile().toURI());
                         api.completeDraftFileUpload(draftId, fileKey);
                     }
                     draft.getFiles().setDefaultPreview(defaultPreview);
@@ -679,7 +680,8 @@ public class InvenioAPITools {
             for (String key : fileMap.keySet()) {
                 // Upload file
                 LOG.log(Level.INFO, "Uploading {0}", fileMap.get(key));
-                api.uploadDraftFile(result.getId(), key, fileMap.get(key));
+                // TODO change to using file url
+                api.uploadDraftFile(result.getId(), key, fileMap.get(key).toURI());
                 api.completeDraftFileUpload(result.getId(), key);
             }
             // Potentially add default preview
