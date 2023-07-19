@@ -1050,7 +1050,7 @@ public class InvenioAPITools {
         // Flag if the ID is for a draft record
         boolean draft;
         // The ID itself
-        private String id;
+        private final String id;
 
         /***
          * Private constructor, use static method instead
