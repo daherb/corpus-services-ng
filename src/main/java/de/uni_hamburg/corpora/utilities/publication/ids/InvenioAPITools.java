@@ -23,10 +23,12 @@ import de.idsmannheim.lza.inveniojavaapi.cmdi.SpeechCorpusProfileMapper;
 import de.idsmannheim.lza.inveniojavaapi.cmdi.TextCorpusProfileMapper;
 import de.idsmannheim.lza.xmlmagic.MimeType;
 import de.idsmannheim.lza.xmlmagic.XmlMagic;
+import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapFile;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRecord;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRootRecord;
+import de.uni_hamburg.corpora.validation.CheckBag;
 import gov.loc.repository.bagit.domain.Bag;
 import gov.loc.repository.bagit.domain.FetchItem;
 import gov.loc.repository.bagit.exceptions.CorruptChecksumException;
@@ -47,6 +49,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.security.KeyManagementException;
@@ -72,12 +75,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
+import org.exmaralda.partitureditor.fsm.FSMException;
+import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -144,7 +153,13 @@ public class InvenioAPITools {
         // Get the mapping from files to Invenio records
         MapRootRecord mapping = getMapping(path, filesArePublic);
         // Validate the mapping
-        boolean validBag = validateBag(path, report);
+        boolean validBag = false;
+        try {
+            validBag = validateBag(path, report);
+        }
+        catch (Exception e) {
+            report.addException("InvenioAPI", e, "Unexpected exception when validating bag");
+        }
         boolean validMapping = validateMapping(path, mapping, report);
         if (validBag && validMapping) {
             try {
@@ -380,26 +395,12 @@ public class InvenioAPITools {
      * @param report the report to keep track of detailed information about the process
      * @return if it is a valid BagIt
      */
-    private boolean validateBag(Path path, Report report) {
-        BagVerifier verifier = new BagVerifier();
-        try {
-            Bag bag = new BagReader().read(path);
-            for (FetchItem item : bag.getItemsToFetch()) {
-                // Download file
-                item.getUrl().openStream().transferTo(new FileOutputStream(item.getPath().toFile()));
-                // Create blank file
-                // item.getPath().toFile().createNewFile();
-            }
-            // Read the BagIt and validates it without ignoring hidden files (ignoreHidden is false)
-            verifier.isValid(bag,false);
-            // If validation completes without an exception we succeed
-            return true;
-        }
-        // If we encounter an exception the validation has failed
-        catch (CorruptChecksumException | FileNotInPayloadDirectoryException | InvalidBagitFileFormatException | MaliciousPathException | MissingBagitFileException | MissingPayloadDirectoryException | MissingPayloadManifestException | UnparsableVersionException | UnsupportedAlgorithmException | VerificationException | IOException | InterruptedException e) {
-            report.addException("InvenioAPI", e, "Exception when checking BagIt " + path);
-            return false;
-        }
+    private boolean validateBag(Path path, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, org.jdom.JDOMException {
+        Report r = new Report();
+        CheckBag bagChecker = new CheckBag();
+        r.merge(bagChecker.function(new Corpus(path.toUri().toURL()), Boolean.FALSE));
+        report.merge(r);
+        return r.getErrorStatistics().isEmpty();
     }
     
     /**
