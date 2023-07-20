@@ -121,7 +121,7 @@ public class InvenioAPITools {
     
     /**
      * Adds files from a path to a new Invenio object.This will result in one or several
- new records
+     * new records
      * @param path the path to the files to be added
      * @param filesArePublic flag if files should be public if no specific information is present
      * @param update flag if existing records with the same title should be updated
