@@ -631,7 +631,6 @@ public class InvenioAPITools {
         else {
             // Files are only added if necessary, i.e. if either metadata or files are part of the record
             FilesOptions files = new FilesOptions(!record.getFiles().isEmpty() || record.getMetadata().isPresent());
-            // DraftRecord draft = new DraftRecord(access, files, currentMetadata);
             draft = new DraftRecord(access, files, currentMetadata);
             Record result;
             try {
@@ -720,8 +719,6 @@ public class InvenioAPITools {
                 
             }
             draftId = result.getId();
-//            api.updateDraftRecord(result.getId(), draft);
-//            return RecordId.newDraft(result.getId());
         }
         // Upload child records and add links between the records
         ArrayList<Metadata.RelatedIdentifier> relatedIdentifiers = new ArrayList<>();
