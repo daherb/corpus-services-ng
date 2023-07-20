@@ -124,6 +124,7 @@ public class InvenioAPITools {
      * new records
      * @param path the path to the files to be added
      * @param filesArePublic flag if files should be public if no specific information is present
+     * @param separatePrivateRecords flag if private files should be stored in a separate record
      * @param update flag if existing records with the same title should be updated
      * @param report the report to keep track of detailed information about the process
      * @return the id of the main record if the operation was successful
@@ -136,10 +137,10 @@ public class InvenioAPITools {
      * @throws org.jdom2.JDOMException
      * @throws java.lang.CloneNotSupportedException
      */
-    public Optional<String> createOrUpdateObject(Path path, boolean filesArePublic, boolean update, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
+    public Optional<String> createOrUpdateObject(Path path, boolean filesArePublic, boolean separatePrivateRecords, boolean update, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
         LOG.info("Validate data before ingest");
         // Get the mapping from files to Invenio records
-        MapRootRecord mapping = getMapping(path, filesArePublic);
+        MapRootRecord mapping = getMapping(path, filesArePublic, separatePrivateRecords);
         // Validate the mapping
         boolean validBag = false;
         try {
@@ -276,10 +277,11 @@ public class InvenioAPITools {
      * Gets a mapping from a path, either by reading the mapping specification or
      * by creating one ad-hoc
      * @param path the input path
-     * @param filesArePublic flags if files should be public when creating a new mapping. Ignored when a mapping is present
+     * @param filesArePublic flag if files should be public by default when creating a new mapping. Ignored when a explicitly stated
+     * @param separatePrivateRecords flag if private files should be stored in a separate record
      * @return the mapping
      */
-    private MapRootRecord getMapping(Path path, boolean filesArePublic) throws JAXBException, IOException {
+    private MapRootRecord getMapping(Path path, boolean filesArePublic, boolean separatePrivateRecords) throws JAXBException, IOException {
         MapRootRecord mapping;
         File recordMapFile = Path.of(path.toString(),RECORD_MAP_FILE).toFile();
         if (recordMapFile.exists()) {
@@ -304,7 +306,9 @@ public class InvenioAPITools {
             mapping.setFiles(fileList);
             // Initialize records
             mapping.setRecords(new ArrayList<>());
-            
+        }
+        if (separatePrivateRecords) {
+            mapping = (MapRootRecord) MapRecord.separatePrivateFiles(mapping);
         }
         return mapping;
     }
