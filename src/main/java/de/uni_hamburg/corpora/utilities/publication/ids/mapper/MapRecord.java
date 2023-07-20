@@ -106,7 +106,7 @@ public class MapRecord {
             newMap.setFiles(map.getFiles());
         }
         newMap.getRecords().addAll(map.getRecords().stream()
-                .map(this::separatePrivateFiles).toList());
+                .map(MapRecord::separatePrivateFiles).toList());
         return newMap;
     }
     
