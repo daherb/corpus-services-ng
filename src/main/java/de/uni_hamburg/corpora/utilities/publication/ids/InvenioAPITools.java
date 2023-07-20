@@ -91,8 +91,8 @@ public class InvenioAPITools {
     static final String METADATA_FILE = "metadata.cmdi";
     static final String RECORD_MAP_FILE = "recordmap.xml";
     //static final String RECORD_MAP_FILE = "recordmap.json";
-    // Path separator to be used instead of /
-    static final String SEPARATOR = "-0-0-";
+    // Path separator to be used instead of / which causes problems in URLs
+    static final String SEPARATOR = ">";
     ControlledVocabulary.LanguageIdFactory languageIdFactory;
     API api;
     String url;
