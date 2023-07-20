@@ -584,17 +584,11 @@ public class InvenioAPITools {
                     api.draftImportFiles(draftId);
                     // Remove files that are missing or updated in the new version
                     for (String filename : Stream.concat(deletedFiles.stream(), updatedFiles.stream()).toList()) {
-                        String fileKey = filename.replaceAll("/", SEPARATOR);
+                        String fileKey = normalizeFilename(filename);
                         api.deleteDraftFile(draftId, fileKey);
                     }
                     // (re-)upload new version if the file has been changed or added
-                    for (String filename : Stream.concat(newFiles.stream(), updatedFiles.stream()).toList()) {
-                        String fileKey = filename.replaceAll("/", SEPARATOR);
-                        api.startDraftFileUpload(draftId, new ArrayList<>(List.of(new Files.FileEntry(fileKey))));
-                        // TODO change to using file url
-                        api.uploadDraftFile(draftId, fileKey, Path.of(path.toString(),filename).toFile().toURI());
-                        api.completeDraftFileUpload(draftId, fileKey);
-                    }
+                    uploadDraftFiles(draftId, path, new ArrayList<>(Stream.concat(newFiles.stream(), updatedFiles.stream()).toList()));
                     draft.getFiles().setDefaultPreview(defaultPreview);
                     // Update publication date
 //                    newDraft = api.getDraftRecord(newDraftId);
@@ -642,38 +636,19 @@ public class InvenioAPITools {
             }
             // Upload files
             // Prepare file entries
-            ArrayList<Files.FileEntry> entries = new ArrayList<>();
-            HashMap<String,File> fileMap = new HashMap<>();
-            ArrayList<String> candidates = new ArrayList<>();
+            ArrayList<String> fileNames = new ArrayList<>();
             // Potential default preview file
             String defaultPreview = "";
             // Add metadata fie if it exists
             if (record.getMetadata().isPresent()) {
-                candidates.add(record.getMetadata().get());
+                String metadataFile = record.getMetadata().get();
+                defaultPreview = normalizeFilename(metadataFile);
+                fileNames.add(metadataFile);
             }
-            // Add all other files
-            candidates.addAll(record.getFiles().stream().map(MapFile::getName).toList());
-            for (String filename : candidates) {
-                // Normalize filename and replace path separators
-                String updatedName = filename.replaceAll("^./","").replaceAll("/", SEPARATOR);
-                // Set default preview if not set yet and file ends in cmdi
-                if (defaultPreview.isBlank() && updatedName.endsWith(".cmdi")) {
-                    defaultPreview = updatedName;
-                }
-                Files.FileEntry entry = new Files.FileEntry(updatedName);
-                entries.add(entry);
-                fileMap.put(updatedName, Path.of(path.toString(),filename).toFile().getAbsoluteFile().getCanonicalFile());
-                
-            }
-            api.startDraftFileUpload(result.getId(), entries);
-            // For each file
-            for (String key : fileMap.keySet()) {
-                // Upload file
-                LOG.log(Level.INFO, "Uploading {0}", fileMap.get(key));
-                // TODO change to using file url
-                api.uploadDraftFile(result.getId(), key, fileMap.get(key).toURI());
-                api.completeDraftFileUpload(result.getId(), key);
-            }
+            // Add all other public files
+            fileNames.addAll(record.getFiles().stream().filter(MapFile::isPublic).map(MapFile::getName).toList());
+            // Upload all public files to the draft
+            uploadDraftFiles(result.getId(),path,fileNames);
             // Potentially add default preview
             if (!defaultPreview.isBlank()) {
                 draft.getFiles().setDefaultPreview(defaultPreview);
@@ -1027,6 +1002,45 @@ public class InvenioAPITools {
      */
     private void updateDraftList() throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         draftList = new ArrayList<>(listDraftRecords());
+    }
+
+    /***
+     * Upload files to a draft record
+     * @param id the draft record id
+     * @param path the path the files are located in
+     * @param fileNames the names of the files to be uploaded
+     */
+    private void uploadDraftFiles(String id, Path path, ArrayList<String> fileNames) throws URISyntaxException, NoSuchAlgorithmException, NoSuchAlgorithmException, KeyManagementException, KeyManagementException, JsonProcessingException, IOException, InterruptedException, UnsupportedEncodingException {
+        ArrayList<Files.FileEntry> entries = new ArrayList<>();
+        HashMap<String,File> fileMap = new HashMap<>();
+        for (String filename : fileNames) {
+                // Normalize filename and replace path separators
+                String updatedName = normalizeFilename(filename);
+                Files.FileEntry entry = new Files.FileEntry(updatedName);
+                entries.add(entry);
+                fileMap.put(updatedName, Path.of(path.toString(),filename).toFile().getAbsoluteFile().getCanonicalFile());
+                
+            }
+            api.startDraftFileUpload(id, entries);
+            // For each file
+            for (String key : fileMap.keySet()) {
+                // Upload file
+                LOG.log(Level.INFO, "Uploading {0}", fileMap.get(key));
+                // TODO change to using file url
+                api.uploadDraftFile(id, key, fileMap.get(key).toURI());
+                api.completeDraftFileUpload(id, key);
+            }
+    }
+
+    /***
+     * Normalizes a filename before upload
+     * @param filename the original filename
+     * @return the filename used in Invenio
+     */
+    private String normalizeFilename(String filename) {
+        // Remove leading ./ (path relative to current location) from the filename 
+        // and replace path separators by the SEPARATOR string
+        return filename.replaceAll("^./","").replaceAll("/", SEPARATOR);
     }
     
     /**
