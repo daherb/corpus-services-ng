@@ -574,8 +574,6 @@ public class InvenioAPITools {
                                 deletedFiles.stream().collect(Collectors.joining(", "))});
                     // If update needed first create the new draft with all previous files
                     // First create a new version as a draft
-                    // DraftRecord newDraft = api.createNewVersion(potentiallyExistingRecordId.get());
-                    //String newDraftId = newDraft.getId().get();
                     draft = api.createNewVersion(potentiallyExistingRecordId.get());
                     // This just copies the previous default previewer but replaces
                     // it with a new metadata file if the filename is different
@@ -595,13 +593,10 @@ public class InvenioAPITools {
                     uploadDraftFiles(draftId, path, new ArrayList<>(Stream.concat(newFiles.stream(), updatedFiles.stream()).toList()));
                     draft.getFiles().setDefaultPreview(defaultPreview);
                     // Update publication date
-//                    newDraft = api.getDraftRecord(newDraftId);
                     draft.getMetadata().setPublicationDate(
                             new Metadata.ExtendedDateTimeFormat0(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)))
                             .addStartMonth(String.format("%02d", Calendar.getInstance().get(Calendar.MONTH)+1))
                             .addStartDay(String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH))));
-//                    api.updateDraftRecord(newDraftId, newDraft);
-//                    return RecordId.newDraft(newDraftId);
                 }
                 // Otherwise just create a new draft
                 else {
