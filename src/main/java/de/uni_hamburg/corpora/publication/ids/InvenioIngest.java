@@ -110,7 +110,7 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
         Map<String,String> params = super.getParameters();
         params.put("invenio-host", "The host providing Invenio API access");
         params.put("invenio-token", "The API token used for the access");
-        params.put("invenio-public-files", "Optional flag if files will be publicly accessible");
+        params.put("invenio-public-files", "Optional flag if files will be publicly accessible by default if not specified as private");
         params.put("invenio-separate-private-records", "Optional flag if private files should be stored in a seprate record");
         params.put("update-object", "Optional flag if existing records with the same name should be updated. Otherwise the process is stopped as soon as a record already exists");
         return params;
