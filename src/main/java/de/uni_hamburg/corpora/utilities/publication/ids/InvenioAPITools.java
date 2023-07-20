@@ -577,8 +577,12 @@ public class InvenioAPITools {
                     // DraftRecord newDraft = api.createNewVersion(potentiallyExistingRecordId.get());
                     //String newDraftId = newDraft.getId().get();
                     draft = api.createNewVersion(potentiallyExistingRecordId.get());
-                    // This just copies the previous default previewer. This could not always be intended
+                    // This just copies the previous default previewer but replaces
+                    // it with a new metadata file if the filename is different
                     String defaultPreview = draft.getFiles().getDefaultPreview();
+                    if (record.getMetadata().isPresent() && !defaultPreview.equals(normalizeFilename(record.getMetadata().get()))) {
+                        defaultPreview = normalizeFilename(record.getMetadata().get());
+                    }
                     draftId = draft.getId().get();
                     // Import previous files if possible
                     api.draftImportFiles(draftId);
