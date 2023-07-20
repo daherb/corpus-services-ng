@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @JacksonXmlRootElement(localName = "record")
 public class MapRecord {
@@ -68,4 +69,45 @@ public class MapRecord {
         }
     }
 
+    /***
+     * Modifies a record map to store private files in separate records from 
+     * the public ones
+     * @param map The original record map
+     * @return A modified copy of the original map or null if anything went wrong
+     */
+    public static MapRecord separatePrivateFiles(MapRecord map) {
+        MapRecord newMap;
+        if (map instanceof MapRootRecord) {
+            newMap = new MapRootRecord();
+        }
+        else {
+            newMap = new MapRecord();
+        }
+        // Set the metadata in newMap if it is present in map
+        map.getMetadata().ifPresent(newMap::setMetadata);
+        // Same with title
+        map.getTitle().ifPresent(newMap::setTitle);
+        // Split file list into private and public files
+        ArrayList<MapFile> privateFiles = new ArrayList<>(map.getFiles().stream()
+                .filter(Predicate.not(MapFile::isPublic)).toList());
+        ArrayList<MapFile> publicFiles = new ArrayList<>(map.getFiles().stream()
+                .filter(MapFile::isPublic).toList());
+        // If we have private files we create a new record for them
+        if (!privateFiles.isEmpty()) {
+            MapRecord privateRecord = new MapRecord();
+            map.getMetadata().ifPresent(privateRecord::setMetadata);
+            map.getTitle().ifPresent((t) -> privateRecord.setTitle(t + " - Private files"));
+            privateRecord.setFiles(privateFiles);
+            newMap.getRecords().add(privateRecord);
+            newMap.setFiles(publicFiles);
+        }
+        // Otherwise just add all the files
+        else {
+            newMap.setFiles(map.getFiles());
+        }
+        newMap.getRecords().addAll(map.getRecords().stream()
+                .map(this::separatePrivateFiles).toList());
+        return newMap;
+    }
+    
 }
