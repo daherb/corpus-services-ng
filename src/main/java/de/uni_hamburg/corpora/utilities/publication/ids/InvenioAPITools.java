@@ -388,6 +388,7 @@ public class InvenioAPITools {
         CheckBag bagChecker = new CheckBag();
         r.merge(bagChecker.function(new Corpus(path.toUri().toURL()), Boolean.FALSE));
         report.merge(r);
+        // If we encountered no problems then the Bag is valid
         return r.getErrorStatistics().isEmpty();
     }
     
