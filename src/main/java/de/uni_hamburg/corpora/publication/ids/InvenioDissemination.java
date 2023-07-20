@@ -18,7 +18,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -38,7 +37,6 @@ import org.xml.sax.SAXException;
 public class InvenioDissemination extends Publisher implements CorpusFunction {
 
     InvenioAPITools tools;
-    boolean publicFiles = false;
     boolean setUp = false;
     String recordId;
     String recordTitle;
@@ -52,9 +50,6 @@ public class InvenioDissemination extends Publisher implements CorpusFunction {
             recordTitle = properties.getProperty("invenio-record-title", null);
             if (recordId != null || recordTitle != null)
                 setUp = true;
-        }
-        if (properties.contains("invenio-public-files")) {
-            publicFiles = properties.getProperty("invenio-public-files").equalsIgnoreCase("true");
         }
     
     }
