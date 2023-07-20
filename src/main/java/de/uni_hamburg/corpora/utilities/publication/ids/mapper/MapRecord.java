@@ -1,6 +1,8 @@
 
 package de.uni_hamburg.corpora.utilities.publication.ids.mapper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -53,6 +55,17 @@ public class MapRecord {
 
     public Optional<String> getTitle() {
         return title;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        ObjectMapper om = new ObjectMapper();
+        om.findAndRegisterModules();
+        try {
+            return om.readValue(om.writeValueAsString(this), MapRecord.class);
+        } catch (JsonProcessingException ex) {
+            throw new CloneNotSupportedException(ex.toString());
+        }
     }
 
 }
