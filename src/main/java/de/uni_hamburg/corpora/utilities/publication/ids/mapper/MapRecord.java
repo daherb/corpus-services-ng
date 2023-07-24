@@ -95,7 +95,7 @@ public class MapRecord {
         // If we have private files we create a new record for them
         if (!privateFiles.isEmpty()) {
             MapRecord privateRecord = new MapRecord();
-            map.getMetadata().ifPresent(privateRecord::setMetadata);
+            // map.getMetadata().ifPresent(privateRecord::setMetadata);
             map.getTitle().ifPresent((t) -> privateRecord.setTitle(t + " - Private files"));
             privateRecord.setFiles(privateFiles);
             newMap.getRecords().add(privateRecord);
