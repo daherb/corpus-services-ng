@@ -649,7 +649,9 @@ public class InvenioAPITools {
                 fileNames.add(metadataFile);
             }
             // Add all other public files
-            fileNames.addAll(record.getFiles().stream().filter(MapFile::isPublic).map(MapFile::getName).toList());
+            // fileNames.addAll(record.getFiles().stream().filter(MapFile::isPublic).map(MapFile::getName).toList());
+            // Add all other files
+            fileNames.addAll(record.getFiles().stream().map(MapFile::getName).toList());
             // Upload all public files to the draft
             uploadDraftFiles(result.getId(),path,fileNames);
             // Potentially add default preview
