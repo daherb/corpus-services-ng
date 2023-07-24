@@ -48,10 +48,10 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
             tools = new InvenioAPITools(new API(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
             setUp = true;
         }
-        if (properties.contains("invenio-public-files")) {
+        if (properties.containsKey("invenio-public-files")) {
             publicFiles = properties.getProperty("invenio-public-files").equalsIgnoreCase("true");
         }
-        if (properties.contains("invenio-separate-private-records")) {
+        if (properties.containsKey("invenio-separate-private-records")) {
             privateRecords = properties.getProperty("invenio-separate-private-records").equalsIgnoreCase("true");
         }
     
