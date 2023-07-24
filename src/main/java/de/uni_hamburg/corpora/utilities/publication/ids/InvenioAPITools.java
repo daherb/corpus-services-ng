@@ -609,12 +609,14 @@ public class InvenioAPITools {
                     // return RecordId.newRecord(potentiallyExistingRecordId.get());
                     LOG.log(Level.INFO, "Create new draft from {0}", potentiallyExistingRecordId.get());
                     draft = api.createDraftFromPublished(potentiallyExistingRecordId.get());
-                    draft.getMetadata().addRelatedIdentifiers(List.of(
-                            new Metadata.RelatedIdentifier(url + parentId.get().getId(), 
-                                    new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
-                                    new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsPartOf),
-                                        new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is part of")))
-                    ));
+                    if (parentId.isPresent()) {
+                        draft.getMetadata().addRelatedIdentifiers(List.of(
+                                new Metadata.RelatedIdentifier(url + parentId.get().getId(),
+                                        new ControlledVocabulary.RelatedRecordIdentifierScheme(ControlledVocabulary.RelatedRecordIdentifierScheme.ERelatedRecordIdentifierScheme.URL),
+                                        new Metadata.RelatedIdentifier.RelationType(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.IsPartOf),
+                                                new Metadata.LocalizedStrings().add(new Metadata.Language(languageIdFactory.usingId2("en")), "Is part of")))
+                        ));
+                    }
                     draftId = draft.getId().get();
                     api.updateDraftRecord(draftId, draft);
                     return new RecordId(false, api.publishDraftRecord(draftId).getId().get());
