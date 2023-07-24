@@ -1,14 +1,16 @@
 package de.uni_hamburg.corpora;
 
-import de.uni_hamburg.corpora.publication.ZipCorpus;
-import de.uni_hamburg.corpora.conversion.EXB2HIATISOTEI;
+import de.uni_hamburg.corpora.data.CorpusData;
+import de.uni_hamburg.corpora.data.meta.ComaData;
+import de.uni_hamburg.corpora.functions.CorpusFunction;
+import de.uni_hamburg.corpora.functions.conversion.EXB2HIATISOTEI;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
-import de.uni_hamburg.corpora.validation.*;
-import de.uni_hamburg.corpora.validation.quest.*;
+import de.uni_hamburg.corpora.validation.ComaChartsGeneration;
+import de.uni_hamburg.corpora.validation.ComaFileCoverageChecker;
+import de.uni_hamburg.corpora.validation.ComaOverviewGeneration;
+import de.uni_hamburg.corpora.validation.XSLTChecker;
 import de.uni_hamburg.corpora.visualization.ListHTML;
 import de.uni_hamburg.corpora.visualization.ScoreHTML;
-import de.uni_hamburg.corpora.conversion.AddCSVMetadataToComa;
-import de.uni_hamburg.corpora.publication.HandlePidRegistration;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 
 import java.io.File;

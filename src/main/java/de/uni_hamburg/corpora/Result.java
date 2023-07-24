@@ -1,5 +1,7 @@
 package de.uni_hamburg.corpora;
 
+import de.uni_hamburg.corpora.data.CorpusData;
+
 /***
  * @author Herbert Lange
  * @version 20230103

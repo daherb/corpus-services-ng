@@ -13,6 +13,13 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import de.uni_hamburg.corpora.data.*;
+import de.uni_hamburg.corpora.data.content.ELANData;
+import de.uni_hamburg.corpora.data.content.EXMARaLDASegmentedTranscriptionData;
+import de.uni_hamburg.corpora.data.content.EXMARaLDATranscriptionData;
+import de.uni_hamburg.corpora.data.content.FlextextData;
+import de.uni_hamburg.corpora.data.meta.CmdiData;
+import de.uni_hamburg.corpora.data.meta.ComaData;
 import org.apache.commons.lang.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;

@@ -1,5 +1,8 @@
 package de.uni_hamburg.corpora;
 
+import de.uni_hamburg.corpora.data.AnnotationSpecification;
+import de.uni_hamburg.corpora.data.CorpusData;
+import de.uni_hamburg.corpora.data.meta.CmdiData;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 

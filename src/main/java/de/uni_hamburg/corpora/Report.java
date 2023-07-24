@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
+import de.uni_hamburg.corpora.data.CorpusData;
 import org.jdom.JDOMException;
 
 /**
