@@ -128,7 +128,7 @@ public class CheckBag extends Checker implements CorpusFunction{
             report.addCritical(getFunction(), e, "There is path that is referenced in the manifest that is outside the bag root directory");
         }
         catch (VerificationException e) {
-            report.addCritical(getFunction(), e, "Some other exception happened during processing so capture it here.");
+            report.addCritical(getFunction(), e, "Some other exception happened during processing so capture it here");
         }
         catch (UnsupportedAlgorithmException e) {
             report.addCritical(getFunction(), e, "The manifest uses a algorithm that isn't supported");
