@@ -4,14 +4,15 @@
  */
 package de.uni_hamburg.corpora.publication.ids;
 
-import de.idsmannheim.lza.inveniojavaapi.API;
+import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
+import de.idsmannheim.lza.inveniojavaapi.InvenioAPITools;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.publication.Publisher;
 
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.utilities.publication.ids.InvenioAPITools;
+import de.uni_hamburg.corpora.utilities.publication.ids.InvenioTools;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -33,13 +34,17 @@ import org.xml.sax.SAXException;
  */
 public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
 
-    InvenioAPITools tools;
+    InvenioTools tools;
+    InvenioAPI api;
+    InvenioAPITools apiTools;
     boolean setUp = false;
     
     public InvenioDeleteDrafts(Properties properties) throws IOException {
         super(properties);
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
-            tools = new InvenioAPITools(new API(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
+            api = new InvenioAPI(properties.getProperty("invenio-host"), properties.getProperty("invenio-token"));
+            apiTools = new InvenioAPITools(api);
+            tools = new InvenioTools(api);
             setUp = true;
         }
     }
@@ -55,7 +60,7 @@ public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
             try {
-                tools.deleteDraftRecords();
+                apiTools.deleteDraftRecords();
             }
             catch (Exception e) {
                 e.printStackTrace();

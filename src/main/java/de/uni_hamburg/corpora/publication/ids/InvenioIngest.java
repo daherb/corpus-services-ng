@@ -4,13 +4,13 @@
  */
 package de.uni_hamburg.corpora.publication.ids;
 
-import de.idsmannheim.lza.inveniojavaapi.API;
+import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.publication.Publisher;
-import de.uni_hamburg.corpora.utilities.publication.ids.InvenioAPITools;
+import de.uni_hamburg.corpora.utilities.publication.ids.InvenioTools;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
  */
 public class InvenioIngest extends Publisher implements CorpusFunction {
 
-    InvenioAPITools tools;
+    InvenioTools tools;
     boolean publicFiles = false;
     boolean privateRecords = false;
     boolean setUp = false;
@@ -45,7 +45,7 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
     public InvenioIngest(Properties properties) throws IllegalAccessException, IOException {
         super(properties);
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
-            tools = new InvenioAPITools(new API(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
+            tools = new InvenioTools(new InvenioAPI(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
             setUp = true;
         }
         if (properties.containsKey("invenio-public-files")) {
