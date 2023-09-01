@@ -866,11 +866,112 @@ public class InvenioTools {
 
     /***
      * 
-     * @param id the id of the root record of the object
+     * Update all CMDI files found in draft records fixing self and resource links
      * @param report to keep track of the process
      */
-    private void updateCmdis(RecordId id, Report report) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void updateCmdis(Report report) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, JDOMException {
+        List<String> draftRecords = tools.listDraftRecords();
+        for (String id : draftRecords) {
+            // Get draft record
+            DraftRecord draftRecord = api.getDraftRecord(id);
+            // Get alternative identifiers for the record
+            List<Metadata.AlternateIdentifier> alternateIdentifiers = draftRecord.getMetadata().getAlternateIdentifiers();
+            // Check if the record contains CMDI
+            boolean hasCmdi = draftRecord.getFiles().getDefaultPreview() != null && 
+                    draftRecord.getFiles().getDefaultPreview().toLowerCase().endsWith(".cmdi");
+            if (hasCmdi) {
+                LOG.info("Updating CMDI for " + id);
+                Document cmdi = new SAXBuilder().build(
+                        api.getDraftFileContent(id, draftRecord.getFiles().getDefaultPreview()));
+                // TODO
+                Element root = cmdi.getRootElement();
+                // Set the self link in the header to the first DOI found in alternate identifiers 
+                // if it exists
+                Element selfLink = root.getChild("Header",root.getNamespace()).getChild("MdSelfLink",root.getNamespace());
+                alternateIdentifiers.stream().filter((i) -> i.getScheme().equals(new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.DOI)))
+                        .findFirst()
+                        // Add DOI url if missing
+                        .ifPresent((Metadata.AlternateIdentifier i) -> {
+                            if (i.getIdentifier().startsWith("http")) {
+                                selfLink.setText(i.getIdentifier());
+                            }
+                            else {
+                                selfLink.setText("https://doi.org/" + i.getIdentifier());
+                            }
+                });
+                // Update resource proxy list
+                Element resourceProxyList = root.getChild("Resources", root.getNamespace()).getChild("ResourceProxyList", root.getNamespace());
+                // First remove all items
+                resourceProxyList.removeChildren("ResourceProxy", root.getNamespace());
+                // Add landing page
+                Element landingPage = new Element("ResourceProxy", root.getNamespace())
+                        .setAttribute("id","landingPage-"+ id)
+                        .addContent(new Element("ResourceType", root.getNamespace())
+                                .setAttribute("mimetype", "text/html")
+                                .setText("LandingPage")
+                        )
+                        .addContent(new Element("ResourceRef", root.getNamespace())
+                                .setText(draftRecord.getLinks().get("record_html"))
+                        );
+                resourceProxyList.addContent(landingPage);
+                // Add metadata file
+                Element metadataFile = new Element("ResourceProxy", root.getNamespace())
+                        .setAttribute("id","metadataFile-"+id)
+                        .addContent(new Element("ResourceType", root.getNamespace())
+                                .setAttribute("mimetype", "application/x-cmdi+xml")
+                                .setText("Metadata")
+                        )
+                        .addContent(new Element("ResourceRef", root.getNamespace())
+                                .setText(
+                                        url + id + "/files/" + draftRecord.getFiles().getDefaultPreview() + "?download=1"
+                                        // api.protocol+ "://" + api.host + "/oai2d/verb=GetRecord&identifier=oai:ids-repos2.ids-mannheim.de:" + id
+                                )
+                        );
+                resourceProxyList.addContent(metadataFile);
+                // Add all related resources
+                for (Metadata.RelatedIdentifier relatedIdentifier : draftRecord.getMetadata().getRelatedIdentifiers()) {
+                    if (relatedIdentifier.getRelationType().getId()
+                            .equals(new ControlledVocabulary.RelationTypeId(ControlledVocabulary.RelationTypeId.ERelationTypeId.HasPart))) {
+                        String relatedId = relatedIdentifier.getIdentifier().replace(url, "");
+                        DraftRecord relatedRecord = api.getDraftRecord(relatedId);
+                        resourceProxyList.addContent(new Element("ResourceProxy")
+                                .setAttribute("id", "resource-" + relatedRecord.getId().orElse(""))
+                                .addContent(new Element("ResourceType", root.getNamespace())
+                                        .setAttribute("mimetype", "application/xml")
+                                        .setText("Resource")
+                                )
+                                // Set the reference to the first doi listed as alternate identifier
+                                .addContent(new Element("ResourceRef", root.getNamespace())
+                                        .setText(
+                                                relatedRecord.getMetadata().getAlternateIdentifiers().stream()
+                                                        .filter((i) -> i.getScheme().equals(new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.DOI)))
+                                                        .findFirst()
+                                                        // Add DOI url if missing
+                                                        .map((Metadata.AlternateIdentifier i) -> {
+                                                            if (i.getIdentifier().startsWith("http")) {
+                                                                return i.getIdentifier();
+                                                            }
+                                                            else {
+                                                                return "https://doi.org/" + i.getIdentifier();
+                                                            }
+                        })
+                                                        .orElse("")
+                                        )
+                                )
+                        );
+                    }
+                }
+                // Write Cmdi to temp file and upload to invenio
+                File tmpCmdi = File.createTempFile("cmdi", ".cmdi");
+                
+                new XMLOutputter(Format.getPrettyFormat()).output(cmdi, new FileOutputStream(tmpCmdi));
+                api.deleteDraftFile(id, draftRecord.getFiles().getDefaultPreview());
+                api.startDraftFileUpload(id, new ArrayList<>(List.of(new Files.FileEntry(draftRecord.getFiles().getDefaultPreview()))));
+                api.uploadDraftFile(id, draftRecord.getFiles().getDefaultPreview(), tmpCmdi.toURI());
+                api.completeDraftFileUpload(id, draftRecord.getFiles().getDefaultPreview());
+                tmpCmdi.delete();
+            }
+        }
     }
 
     /***
