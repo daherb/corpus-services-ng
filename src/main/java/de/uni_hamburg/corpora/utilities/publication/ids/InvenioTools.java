@@ -816,12 +816,52 @@ public class InvenioTools {
     }
 
     /***
-     * Mints DOIs for all Invenio records of an object containing CMDIs
-     * @param id the id of the root record of the object
+     * Mints DOIs for all draft records containing CMDIs
      * @param report to keep track of the process
      */
-    private void mintDois(RecordId id, Report report) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void mintDois(DataciteAPI datacite, String prefix, Report report) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, ApiException {
+        List<String> draftRecords = tools.listDraftRecords();
+        for (String id : draftRecords) {
+            // Get draft record
+            DraftRecord draftRecord = api.getDraftRecord(id);
+            // Check if the record contains CMDI
+            boolean hasCmdi = draftRecord.getFiles().getDefaultPreview() != null && 
+                    draftRecord.getFiles().getDefaultPreview().toLowerCase().endsWith(".cmdi");
+            // Get alternative identifiers for the record
+            List<Metadata.AlternateIdentifier> alternateIdentifiers = draftRecord.getMetadata().getAlternateIdentifiers();
+            if (hasCmdi) {
+                // Mint DOI
+                Doi doi = datacite.createDraftDOI(prefix, Optional.empty());
+                // Start updating draft record
+                // Check if we actually have a doi
+                if (doi != null && doi.getData() != null && doi.getData().getAttributes() != null && doi.getData().getAttributes().getSuffix() != null) {
+                    String doiId = doi.getData().getId();
+                    String doiSuffix = doi.getData().getAttributes().getSuffix();
+                    LOG.info("Minted doi " + doiSuffix);
+                    // Update DOI identifier in Invenio metadata
+                    for (Metadata.AlternateIdentifier identifier : alternateIdentifiers) {
+                        if (identifier.getScheme().equals(new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.DOI)) &&
+                                identifier.getIdentifier().matches(PID_PLACEHOLDER)) {
+                            identifier.setIdentifier(doi.getData().getId());
+                        }
+                    }
+//                draftRecord.getMetadata().setAlternateIdentifiers(alternateIdentifiers);
+                    // Update DOI metadata
+                    DataciteAPITools dataciteTools = new DataciteAPITools(datacite);
+                    Doi dataciteMetadata = dataciteTools.convertInvenioMetadata(draftRecord.getMetadata());
+                    dataciteMetadata.getData().getAttributes().setUrl(draftRecord.getLinks().get("record_html"));
+                    datacite.updateDOI(doiId, dataciteMetadata);
+                }
+            }
+            else {
+                // Cleanup DOI placeholder
+                alternateIdentifiers.removeAll(alternateIdentifiers.stream().filter((i) -> 
+                        i.getScheme().equals(new ControlledVocabulary.RecordIdentifierScheme(ControlledVocabulary.RecordIdentifierScheme.ERecordItentifierScheme.DOI)) &&
+                                i.getIdentifier().matches(PID_PLACEHOLDER)).toList());
+            }
+            // Upload updated Invenio record
+            api.updateDraftRecord(id, draftRecord);
+        }
     }
 
     /***
