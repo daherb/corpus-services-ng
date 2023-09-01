@@ -173,7 +173,7 @@ public class InvenioTools {
             }
             // If we are here something went wrong and we have to revert to the initial state
             LOG.severe("Rollback");
-            tools.deleteDraftRecords();
+            rollback(datacite, datacitePrefix);
         }
         else{
             if (!validBag)
@@ -851,6 +851,18 @@ public class InvenioTools {
                         return i;
                     }
                 }).toList());
+    }
+
+    private void rollback(Optional<DataciteAPI> datacite, Optional<String> datacitePrefix) throws URISyntaxException, NoSuchAlgorithmException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+        tools.deleteDraftRecords();
+        // Potentially delete draft DOIs
+        datacite.ifPresent((dc) -> datacitePrefix.ifPresent((prefix) -> {
+            try {
+                new DataciteAPITools(dc).deleteAllDraftDOIs(prefix);
+            } catch (ApiException ex) {
+                Logger.getLogger(InvenioTools.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }));
     }
 
     
