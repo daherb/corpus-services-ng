@@ -544,7 +544,7 @@ public class InvenioTools {
                     // This just copies the previous default previewer but replaces
                     // it with a new metadata file if the filename is different
                     String defaultPreview = draft.getFiles().getDefaultPreview();
-                    if (record.getMetadata().isPresent() && !defaultPreview.equals(tools.normalizeFilename(record.getMetadata().get(),SEPARATOR))) {
+                    if (record.getMetadata().isPresent() && defaultPreview != null && !defaultPreview.equals(tools.normalizeFilename(record.getMetadata().get(),SEPARATOR))) {
                         defaultPreview = tools.normalizeFilename(record.getMetadata().get(),SEPARATOR);
                     }
                     draftId = draft.getId().get();
