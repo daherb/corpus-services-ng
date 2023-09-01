@@ -760,7 +760,8 @@ public class InvenioTools {
     }
     
     /**
-     * Publish all unpublished draft records
+     * Publish all given records
+     * @param recordIds List of records to be published
      * @param report the corpus service report
      * @throws URISyntaxException
      * @throws NoSuchAlgorithmException
@@ -768,18 +769,23 @@ public class InvenioTools {
      * @throws IOException
      * @throws InterruptedException 
      */
-    public void publishDraftRecords(Report report) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, InterruptedException {
+    public void publishRecords(List<String> recordIds, Report report) throws IOException, InterruptedException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         ArrayList<String> failed = new ArrayList<>();
-        List<String> draftRecords = tools.listDraftRecords();
-        LOG.log(Level.INFO, "Draft records to be published: {0}", draftRecords);
-        for (String id : draftRecords) {
-            DraftRecord result = api.publishDraftRecord(id);
-            if (result.getIsPublished().orElse(Boolean.FALSE)) {
-                report.addCorrect("InvenioAPI", "Published record " + id);
-                LOG.log(Level.INFO, "Publish record {0}", id);
+        LOG.log(Level.INFO, "Records to be published: {0}", recordIds);
+        for (String id : recordIds) {
+            try {
+                DraftRecord result = api.publishDraftRecord(id);
+                if (result.getIsPublished().orElse(Boolean.FALSE)) {
+                    report.addCorrect("InvenioAPI", "Published record " + id);
+                    LOG.log(Level.INFO, "Publish record {0}", id);
+                }
+                else {
+                    LOG.log(Level.SEVERE, "Failed to publish {0}", id);
+                    failed.add(id);
+                }
             }
-            else {
-                LOG.log(Level.SEVERE, "Failed to publish {0}", id);
+            catch (IOException | InterruptedException | URISyntaxException | KeyManagementException | NoSuchAlgorithmException e) {
+                LOG.log(Level.SEVERE, "Exception when publishing {0}", id);
                 failed.add(id);
             }
         }

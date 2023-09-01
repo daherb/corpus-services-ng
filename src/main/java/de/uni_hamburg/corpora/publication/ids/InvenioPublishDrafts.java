@@ -60,7 +60,7 @@ public class InvenioPublishDrafts extends Publisher implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
             try {
-                tools.publishDraftRecords(report);
+                tools.publishRecords(apiTools.listDraftRecords(),report);
             }
             catch (Exception e) {
                 e.printStackTrace();
