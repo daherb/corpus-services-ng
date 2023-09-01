@@ -4,6 +4,7 @@
  */
 package de.uni_hamburg.corpora.publication.ids;
 
+import de.idsmannheim.lza.datacitejavaapi.DataciteAPI;
 import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
@@ -12,6 +13,7 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.publication.Publisher;
 import de.uni_hamburg.corpora.utilities.publication.ids.InvenioTools;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
@@ -38,22 +40,45 @@ import org.xml.sax.SAXException;
 public class InvenioIngest extends Publisher implements CorpusFunction {
 
     InvenioTools tools;
+    DataciteAPI datacite;
     boolean publicFiles = false;
     boolean privateRecords = false;
     boolean setUp = false;
+    // This is the base Uri
+    // Either for testing
+    private final String dataciteBaseUri = "https://api.test.datacite.org/";
+    // Or for productive use
+    // private final String dataciteBaseUri = "https://api.datacite.org/";
+    private String datacitePrefix;
     
-    public InvenioIngest(Properties properties) throws IllegalAccessException, IOException {
+    public InvenioIngest(Properties properties) throws IllegalAccessException, IOException, URISyntaxException {
         super(properties);
+        boolean dataciteSetUp = false;
+        boolean invenioSetUp = false;
+        // Setup datacite api and prefix
+        if (properties.containsKey("datacite-repository-id") && 
+                properties.containsKey("datacite-repository-password") && 
+                properties.containsKey("datacite-prefix")) {
+            String repositoryId = properties.getProperty("datacite-repository-id");
+            String password = properties.getProperty("datacite-repository-password");
+            datacite = new DataciteAPI(new URI(dataciteBaseUri), repositoryId, password);
+            datacitePrefix = properties.getProperty("datacite-prefix");
+            dataciteSetUp = true;
+        }
+        // Setup invenio tools
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
             tools = new InvenioTools(new InvenioAPI(properties.getProperty("invenio-host"), properties.getProperty("invenio-token")));
-            setUp = true;
+            invenioSetUp = true;
         }
+        // Additional invenio flags
         if (properties.containsKey("invenio-public-files")) {
             publicFiles = properties.getProperty("invenio-public-files").equalsIgnoreCase("true");
         }
         if (properties.containsKey("invenio-separate-private-records")) {
             privateRecords = properties.getProperty("invenio-separate-private-records").equalsIgnoreCase("true");
         }
+        // Check if we are all set up
+        setUp = dataciteSetUp && invenioSetUp;
     
     }
     private static final Logger LOG = Logger.getLogger(InvenioIngest.class.getName());
@@ -73,7 +98,7 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
             watch.start();
             try {
                 boolean update = props.getProperty("update-object", "false").equalsIgnoreCase("true");
-                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()), publicFiles, privateRecords, update, report);
+                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()),Optional.of(datacite), Optional.of(datacitePrefix), publicFiles, privateRecords, update, report);
                 if (id.isPresent()) {
                     report.addNote(getFunction(), "Created new record " + id.get());
                 }
@@ -113,6 +138,8 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
         params.put("invenio-public-files", "Optional flag if files will be publicly accessible by default if not specified as private");
         params.put("invenio-separate-private-records", "Optional flag if private files should be stored in a seprate record");
         params.put("update-object", "Optional flag if existing records with the same name should be updated. Otherwise the process is stopped as soon as a record already exists");
+        params.put("datacite-repository-id", "Repository ID for Datacite DOIs");
+        params.put("datacite-repository-password", "Repository password for Datacite DOIs");
         return params;
     }
     
