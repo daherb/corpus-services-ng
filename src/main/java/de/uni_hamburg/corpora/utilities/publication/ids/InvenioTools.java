@@ -154,8 +154,10 @@ public class InvenioTools {
                     LOG.info("Validate uploaded data");
                     if (validateRecords(id, path, bag, report)) {
                         // Mint DOIs and update CMDIs
-                        mintDois(id, report);
-                        updateCmdis(id, report);
+                        if (datacite.isPresent() && datacitePrefix.isPresent()) {
+                            mintDois(datacite.get(), datacitePrefix.get(), report);
+                            updateCmdis(report);
+                        }
                         // Publish all drafts
                         LOG.info("Publish records");
                         publishDraftRecords(report);
