@@ -6,6 +6,8 @@ package de.uni_hamburg.corpora.utilities.publication.ids;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import de.idsmannheim.lza.datacitejavaapi.DataciteAPI;
+import de.idsmannheim.lza.datacitejavaapi.DataciteAPITools;
 import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
 import de.idsmannheim.lza.inveniojavaapi.Access;
 import de.idsmannheim.lza.inveniojavaapi.CMDI;
@@ -110,6 +112,8 @@ public class InvenioTools {
      * Adds files from a path to a new Invenio object.This will result in one or several
      * new records
      * @param path the path to the files to be added
+     * @param datacite the optional DataciteAPI object for handling DOI minting
+     * @param datacitePrefix the optional Datacite prefix for DOI minting
      * @param filesArePublic flag if files should be public if no specific information is present
      * @param separatePrivateRecords flag if private files should be stored in a separate record
      * @param update flag if existing records with the same title should be updated
@@ -124,7 +128,7 @@ public class InvenioTools {
      * @throws org.jdom2.JDOMException
      * @throws java.lang.CloneNotSupportedException
      */
-    public Optional<String> createOrUpdateObject(Path path, boolean filesArePublic, boolean separatePrivateRecords, boolean update, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
+    public Optional<String> createOrUpdateObject(Path path, Optional<DataciteAPI> datacite, Optional<String> datacitePrefix, boolean filesArePublic, boolean separatePrivateRecords, boolean update, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
         LOG.info("Validate data before ingest");
         // Get the mapping from files to Invenio records
         MapRootRecord mapping = getMapping(path, filesArePublic, separatePrivateRecords);
