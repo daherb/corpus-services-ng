@@ -2,7 +2,7 @@
 * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
 */
-package de.uni_hamburg.corpora.utilities.publication.ids;
+package de.idsmannheim.lza.publication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -171,7 +171,7 @@ public class InvenioTools {
                         // Publish all records that have been changed
                         publishRecords(tools.listEditedRecords(),report);
                         LOG.info("Publish DOIs");
-                        publishDois(id, report);
+                        // publishDois(id, report);
                         // Release the mutex again
                         mutex.unlock();
                         // Return the first id which is the one of the main record
@@ -991,11 +991,15 @@ public class InvenioTools {
     }
 
     /***
-     * Publish all draft DOIs related to an Invenio object
-     * @param id the id of the root record of the object
+     * Publish all draft DOIs
+     * @param datacite the Datacite API to be used
+     * @param prefix the DOI prefix for the DOIs
      * @param report to keep track of the process
+     * @throws ApiException
      */
-    private void publishDois(RecordId id, Report report) {
+    private void publishDois(DataciteAPI datacite, String prefix, Report report) throws ApiException {
+        DataciteAPITools dataciteTools = new DataciteAPITools(datacite);
+        dataciteTools.publishAllDraftDois(prefix);
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

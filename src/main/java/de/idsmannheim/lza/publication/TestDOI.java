@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package de.uni_hamburg.corpora.publication.ids;
+package de.idsmannheim.lza.publication;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;

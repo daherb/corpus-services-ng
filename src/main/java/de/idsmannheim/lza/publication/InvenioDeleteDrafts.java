@@ -2,49 +2,50 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package de.uni_hamburg.corpora.publication.ids;
+package de.idsmannheim.lza.publication;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import de.idsmannheim.lza.datacitejavaapi.DataciteAPI;
-import de.idsmannheim.lza.datacitejavaapi.DataciteAPITools;
+import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
+import de.idsmannheim.lza.inveniojavaapi.InvenioAPITools;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
+import de.uni_hamburg.corpora.publication.Publisher;
+
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.publication.Publisher;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.xml.sax.SAXException;
 
 /**
- *
+ * Simple function to delete all unpublished drafts
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
-public class TestCmdi extends Publisher implements CorpusFunction {
+public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
 
-    public TestCmdi(Properties properties) {
+    InvenioTools tools;
+    InvenioAPI api;
+    InvenioAPITools apiTools;
+    boolean setUp = false;
+    
+    public InvenioDeleteDrafts(Properties properties) throws IOException {
         super(properties);
+        if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
+            api = new InvenioAPI(properties.getProperty("invenio-host"), properties.getProperty("invenio-token"));
+            apiTools = new InvenioAPITools(api);
+            tools = new InvenioTools(api);
+            setUp = true;
+        }
     }
 
     
@@ -56,30 +57,37 @@ public class TestCmdi extends Publisher implements CorpusFunction {
     @Override
     public Report function(Corpus c) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        try {
-            Document document = new SAXBuilder().build(new File("/tmp/test.cmdi"));
-            Element root = document.getRootElement();
-            Element header = root.getChild("Header",root.getNamespace());
-            LOG.info(new XMLOutputter(Format.getPrettyFormat()).outputString(header));
-            header.getChild("MdSelfLink",root.getNamespace()).setText("Test");
-            LOG.info(new XMLOutputter(Format.getPrettyFormat()).outputString(header));
-//            Element resourceProxyList = root.getChild("Resources", root.getNamespace()).getChild("ResourceProxyList", root.getNamespace());
-//            LOG.info(new XMLOutputter(Format.getPrettyFormat()).outputString(resources));
-        } catch (org.jdom2.JDOMException ex) {
-            Logger.getLogger(TestCmdi.class.getName()).log(Level.SEVERE, null, ex);
+        if (setUp) {
+            try {
+                apiTools.deleteDraftRecords();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        else {
+            report.addCritical(getFunction(),"Not set up properly");
+        } 
         return report;
     }
-    private static final Logger LOG = Logger.getLogger(TestCmdi.class.getName());
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return new ArrayList<>();
+        
+        // We only work on complete corpora, not separate corpus data
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public String getDescription() {
-        return "Tests Cmdi stuff";
+        return "Delete all pending drafts";
     }
     
+    @Override
+    public Map<String, String> getParameters() {
+        Map<String,String> params = super.getParameters();
+        params.put("invenio-host", "The host providing Invenio API access");
+        params.put("invenio-token", "The API token used for the access");
+        return params;
+    }
 }

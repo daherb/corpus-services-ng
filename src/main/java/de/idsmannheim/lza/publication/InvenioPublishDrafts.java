@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package de.uni_hamburg.corpora.publication.ids;
+package de.idsmannheim.lza.publication;
 
 import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
 import de.idsmannheim.lza.inveniojavaapi.InvenioAPITools;
@@ -12,7 +12,7 @@ import de.uni_hamburg.corpora.publication.Publisher;
 
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.utilities.publication.ids.InvenioTools;
+import de.idsmannheim.lza.publication.InvenioTools;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
@@ -29,17 +29,17 @@ import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
- * Simple function to delete all unpublished drafts
+ * Simple function to publish all unpublished drafts
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
-public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
+public class InvenioPublishDrafts extends Publisher implements CorpusFunction {
 
     InvenioTools tools;
     InvenioAPI api;
     InvenioAPITools apiTools;
     boolean setUp = false;
     
-    public InvenioDeleteDrafts(Properties properties) throws IOException {
+    public InvenioPublishDrafts(Properties properties) throws IOException {
         super(properties);
         if (properties.containsKey("invenio-host") && properties.containsKey("invenio-token")) {
             api = new InvenioAPI(properties.getProperty("invenio-host"), properties.getProperty("invenio-token"));
@@ -60,7 +60,7 @@ public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
         Report report = new Report();
         if (setUp) {
             try {
-                apiTools.deleteDraftRecords();
+                tools.publishRecords(apiTools.listDraftRecords(),report);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -81,7 +81,7 @@ public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
 
     @Override
     public String getDescription() {
-        return "Delete all pending drafts";
+        return "Publish all pending drafts";
     }
     
     @Override
