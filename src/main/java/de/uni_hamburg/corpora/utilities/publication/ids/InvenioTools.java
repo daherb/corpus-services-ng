@@ -160,7 +160,8 @@ public class InvenioTools {
                         }
                         // Publish all drafts
                         LOG.info("Publish records");
-                        publishDraftRecords(report);
+                        // Publish all records that have been changed
+                        publishRecords(tools.listEditedRecords(),report);
                         LOG.info("Publish DOIs");
                         publishDois(id, report);
                         // Release the mutex again
