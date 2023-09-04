@@ -170,6 +170,8 @@ public class InvenioTools {
             // Catch all excepions to report them before role-back
             catch (Exception e) {
                 report.addException("InvenioAPI", e, "Exception while creating object");
+                LOG.info(e.getMessage());
+                e.printStackTrace();
             }
             // If we are here something went wrong and we have to revert to the initial state
             LOG.severe("Rollback");
