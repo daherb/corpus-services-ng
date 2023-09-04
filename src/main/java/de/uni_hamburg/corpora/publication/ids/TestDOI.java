@@ -6,14 +6,13 @@ package de.uni_hamburg.corpora.publication.ids;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
+import de.idsmannheim.lza.datacitejavaapi.DataciteAPI;
+import de.idsmannheim.lza.datacitejavaapi.DataciteAPITools;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.publication.Publisher;
-import de.uni_hamburg.corpora.utilities.publication.ids.DataciteAPITools;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,9 +36,14 @@ import org.xml.sax.SAXException;
  */
 public class TestDOI extends Publisher implements CorpusFunction {
 
+    // Datacite user and passwords
     private String user = "";
     private String password = "";
-    private String baseUrl = "https://api.test.datacite.org/";
+    // This is the base Uri
+    // Either for testing
+    private final String baseUrl = "https://api.test.datacite.org/";
+    // Or for productive use
+    // private final String baseUrl = "https://api.datacite.org/";
     private boolean setup = false;
     
     public TestDOI(Properties properties) {
@@ -67,56 +71,56 @@ public class TestDOI extends Publisher implements CorpusFunction {
     public Report function(Corpus c) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (setup) {
-            DataciteAPITools api = new DataciteAPITools(new URI(baseUrl), user, password);
+            DataciteAPITools api = new DataciteAPITools(new DataciteAPI(new URI(baseUrl), user, password));
             String prefix = "10.82744";
             String newSuffix = "";
-            try {
-                JsonElement result = api.createDraftDOI(prefix, Optional.empty());
-                newSuffix = result.getAsJsonObject().getAsJsonObject("data")
-                                                    .getAsJsonObject("attributes")
-                                                    .getAsJsonPrimitive("suffix").getAsString();
-                
-                LOG.info(prettyPrintJson(result));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                LOG.info(prettyPrintJson(api.createDraftDOI(prefix, Optional.of("foobar"))));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("Press any key");
-            System.in.read();
-            try {
-                LOG.info(prettyPrintJson(api.ListAllDOIs(prefix)));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            System.out.println("Press any key");
-            System.in.read();
-            try {
-                LOG.info(String.valueOf(api.deleteDraftDOI(prefix, newSuffix)));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-                                    try {
-                LOG.info(String.valueOf(api.deleteDraftDOI(prefix, "foobar")));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-                                                System.out.println("Press any key");
-            System.in.read();
-            try {
-                LOG.info(prettyPrintJson(api.ListAllDOIs(prefix)));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                JsonElement result = api.createDraftDOI(prefix, Optional.empty());
+//                newSuffix = result.getAsJsonObject().getAsJsonObject("data")
+//                                                    .getAsJsonObject("attributes")
+//                                                    .getAsJsonPrimitive("suffix").getAsString();
+//                
+//                LOG.info(prettyPrintJson(result));
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                LOG.info(prettyPrintJson(api.createDraftDOI(prefix, Optional.of("foobar"))));
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("Press any key");
+//            System.in.read();
+//            try {
+//                LOG.info(prettyPrintJson(api.ListAllDOIs(prefix)));
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("Press any key");
+//            System.in.read();
+//            try {
+//                LOG.info(String.valueOf(api.deleteDraftDOI(prefix, newSuffix)));
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//                                    try {
+//                LOG.info(String.valueOf(api.deleteDraftDOI(prefix, "foobar")));
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//                                    System.out.println("Press any key");
+//            System.in.read();
+//            try {
+//                LOG.info(prettyPrintJson(api.ListAllDOIs(prefix)));
+//            }
+//            catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
         else {
             report.addCritical("Function not properly set up");
