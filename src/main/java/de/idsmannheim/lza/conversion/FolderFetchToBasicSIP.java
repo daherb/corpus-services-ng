@@ -290,7 +290,11 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
         Set<File> noMetadataContent = contentFiles.stream().collect(Collectors.toSet());
         for (File mf : metadataFiles) {
             // Convert metadata filename into content file prefix
-            String mfName = mf.toString().replace("/Metadata/","/Content/").replace(".cmdi","");
+            String mfName = mf.toString()
+                    .replace(metadataPath.toString(),contentFilePath.toString())
+                    .replace("Metadata","Content")
+                    .replace(".cmdi","");
+            LOG.info(mfName);
             // Find all content files starting with this prefix
             Set<File> recordFiles = contentFiles.stream().filter((cf) -> cf.toString().startsWith(mfName)).collect(Collectors.toSet());
             noMetadataContent.removeAll(recordFiles);
