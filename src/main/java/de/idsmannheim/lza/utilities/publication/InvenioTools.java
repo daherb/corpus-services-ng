@@ -23,7 +23,7 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapFile;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRecord;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRootRecord;
-import de.uni_hamburg.corpora.validation.CheckBag;
+import de.idsmannheim.lza.validation.CheckBag;
 import gov.loc.repository.bagit.domain.Bag;
 import gov.loc.repository.bagit.reader.BagReader;
 import java.io.File;
@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -370,7 +371,12 @@ public class InvenioTools {
      */
     private boolean validateBag(Path path, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, org.jdom.JDOMException {
         Report r = new Report();
-        CheckBag bagChecker = new CheckBag();
+        // Create new properties to pass the parameter
+        Properties props = new Properties();
+        props.setProperty("fetch-files", "true");
+        // Create checker
+        CheckBag bagChecker = new CheckBag(props);
+        // Run the checker and merge reports
         r.merge(bagChecker.function(new Corpus(path.toUri().toURL()), Boolean.FALSE));
         report.merge(r);
         // If we encountered no problems then the Bag is valid
