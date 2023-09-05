@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package de.uni_hamburg.corpora.validation;
+package de.idsmannheim.lza.validation;
 
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
+import de.uni_hamburg.corpora.validation.Checker;
 import gov.loc.repository.bagit.domain.Bag;
 import gov.loc.repository.bagit.domain.FetchItem;
 import gov.loc.repository.bagit.exceptions.CorruptChecksumException;
