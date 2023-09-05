@@ -17,23 +17,33 @@ import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapFile;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRecord;
 import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRootRecord;
 import gov.loc.repository.bagit.creator.BagCreator;
+import gov.loc.repository.bagit.creator.CreatePayloadManifestsVistor;
+import gov.loc.repository.bagit.creator.CreateTagManifestsVistor;
 import gov.loc.repository.bagit.domain.Bag;
+import gov.loc.repository.bagit.domain.FetchItem;
 import gov.loc.repository.bagit.domain.Manifest;
 import gov.loc.repository.bagit.hash.Hasher;
 import gov.loc.repository.bagit.hash.StandardSupportedAlgorithms;
+import gov.loc.repository.bagit.hash.SupportedAlgorithm;
+import gov.loc.repository.bagit.writer.BagWriter;
 import gov.loc.repository.bagit.writer.ManifestWriter;
+import gov.loc.repository.bagit.writer.PayloadWriter;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -81,90 +91,139 @@ import org.xml.sax.SAXException;
  * ```
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
-public class FolderToBasicSIP extends Converter implements CorpusFunction {
+public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
 
-    public FolderToBasicSIP(Properties props) {
+    Path metadataPath;
+    Path contentFilePath;
+    boolean setUp = false;
+    public FolderFetchToBasicSIP(Properties props) {
         super(props);
+        if (props.containsKey("metadata-path")) {
+            metadataPath = Path.of(props.getProperty("metadata-path"));
+            setUp = true;
+        }
     }
     
     @Override
     public Report function(Corpus c) throws Exception, NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
-        Path path = Path.of(c.getBaseDirectory().toURI());
-        
-        Set<File> metadataFiles = listMetadataFiles(path);
-        Set<File> contentFiles = listContentFiles(path);
-        MapRootRecord record;
-        if (props.containsKey("record-map-file")) {
-            ObjectMapper om = new ObjectMapper();
-            om.findAndRegisterModules();
-            record = om.readValue(new File(props.getProperty("record-map-file")), MapRootRecord.class);
-        }
-        else {
-            try {
-                LOG.info("Create record map");
-                String title;
-                if (props.containsKey("root-title")) {
-                    title = props.getProperty("root-title");
-                }
-                else {
-                    title = c.getCorpusName();
-                }
-                record = bundleFiles(path, title, metadataFiles,contentFiles);
-            }
-            catch (IOException e) {
-                report.addException(getFunction(), e, "Exception when creating record map");
-                return report;
-            }
-        }
-        LOG.info("Check and/or create output");
-        // Copy files to output
-        // First find output path
-        Path outputPath;
-        if (props.containsKey("output-path")) {
-            outputPath = Path.of(props.getProperty("output-path"));
-        }
-        else {
-            outputPath = Path.of(path.toString(), "..", "output").toAbsolutePath();
-        }
-        // Try to create it if missing
-        if (!outputPath.toFile().exists())
-            if (!outputPath.toFile().mkdir()) {
-                report.addCritical("Error creating output");
-                return report;
-            }
-        // Copy all files
-        LOG.info("Copy files to output");
-        for (File file : FileUtils.listFiles(path.toFile(), FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY)) {
-            if (props.getProperty("create-hard-links", "False").equalsIgnoreCase("true")) {
-                Path link = Path.of(file.toString().replace(path.toString(), outputPath.toString())).normalize().toAbsolutePath();
-                Files.createDirectories(link.getParent());
-                Files.createLink(link, file.toPath().toAbsolutePath());
+        if (setUp) {
+            contentFilePath = Path.of(c.getBaseDirectory().toURI());
+            Set<File> metadataFiles = listMetadataFiles(metadataPath);
+            Set<File> contentFiles = listContentFiles(contentFilePath);
+            MapRootRecord record;
+            if (props.containsKey("record-map-file")) {
+                ObjectMapper om = new ObjectMapper();
+                om.findAndRegisterModules();
+                record = om.readValue(new File(props.getProperty("record-map-file")), MapRootRecord.class);
             }
             else {
-                FileUtils.copyFile(file, Path.of(file.toString().replace(path.toString(), outputPath.toString())).toAbsolutePath().normalize().toFile());
+                try {
+                    LOG.info("Create record map");
+                    String title;
+                    if (props.containsKey("root-title")) {
+                        title = props.getProperty("root-title");
+                    }
+                    else {
+                        title = c.getCorpusName();
+                    }
+                    record = bundleFiles(metadataPath, contentFilePath, title, metadataFiles,contentFiles);
+                }
+                catch (IOException e) {
+                    report.addException(getFunction(), e, "Exception when creating record map");
+                    return report;
+                }
             }
+            LOG.info("Check and/or create output");
+            // Copy files to output
+            // First find output path
+            Path outputPath;
+            if (props.containsKey("output-path")) {
+                outputPath = Path.of(props.getProperty("output-path"));
+            }
+            else {
+                outputPath = Path.of(metadataPath.toString(), "..", "output").toAbsolutePath();
+            }
+            // Try to create it if missing
+            if (!outputPath.toFile().exists()) {
+                if (!outputPath.toFile().mkdir()) {
+                    report.addCritical("Error creating output");
+                    return report;
+                }
+            }
+            // Copy all files
+            LOG.info("Copy files to output");
+            for (File file : FileUtils.listFiles(metadataPath.toFile(), FileFileFilter.FILE, DirectoryFileFilter.DIRECTORY)) {
+                File newFile = Path.of(file.toString().replace(metadataPath.toString(), Path.of(outputPath.toString(),"data","Metadata").toString()))
+                        .toAbsolutePath().normalize().toFile();
+                LOG.info(newFile.toString());
+                try {
+                    FileUtils.copyFile(file, newFile);
+                }
+                catch (IOException e) { 
+                    e.getStackTrace();
+                }
+            }
+            // Create a bag
+            LOG.info("Create bag");
+            //BagCreator.bagInPlace(outputPath, Collections.singleton(StandardSupportedAlgorithms.SHA512), false);
+            Bag bag = new Bag();
+            bag.setRootDir(outputPath);
+            // Create file manifest
+            Collection<SupportedAlgorithm> algorithms = Collections.singleton(StandardSupportedAlgorithms.SHA512);
+            // Create payload manifest
+            final Map<Manifest, MessageDigest> payloadFilesMap = Hasher.createManifestToMessageDigestMap(algorithms);
+            final CreatePayloadManifestsVistor payloadVisitor = new CreatePayloadManifestsVistor(payloadFilesMap, false);
+            Files.walkFileTree(Path.of(outputPath.toString(),"data"), payloadVisitor);
+            bag.getPayLoadManifests().addAll(payloadFilesMap.keySet());
+            // Create fetch file
+            List<FetchItem> itemsToFetch = new ArrayList<>();
+            for (File f : contentFiles) {
+                try {
+                    Path payloadFile = Path.of(f.toString().replace(contentFilePath.toString(), Path.of(outputPath.toString(),"data","Content").toString()));
+                    // Add file to fetch list
+                    itemsToFetch.add(new FetchItem(f.toURI().toURL(), f.length(), payloadFile));
+                    // Also add it to payload
+                    for (Manifest m : bag.getPayLoadManifests().stream().toList()) {
+                        m.getFileToChecksumMap().put(payloadFile,
+                        Hasher.hash(f.toPath(), MessageDigest.getInstance(m.getAlgorithm().getMessageDigestName())));
+            }
+                }
+                catch (MalformedURLException e) {
+                    report.addCritical(this.getFunction(), e, "Exception when generating URL from file");
+                }
+            }
+            bag.setItemsToFetch(itemsToFetch);
+            BagWriter.write(bag, outputPath);
+            // Write payload manifest
+            ManifestWriter.writePayloadManifests(bag.getPayLoadManifests(), outputPath, bag.getRootDir(), bag.getFileEncoding());
+            // Write record map and add it to tag manifest
+            LOG.info("Write record map");
+            XmlMapper mapper = new XmlMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.findAndRegisterModules();
+            Path recordmapPath = Path.of(outputPath.toString(), "recordmap.xml");
+            mapper.writeValue(recordmapPath.toFile(), record);
+            // Create tag manifest
+            final Map<Manifest, MessageDigest> tagFilesMap = Hasher.createManifestToMessageDigestMap(algorithms);
+            final CreateTagManifestsVistor tagVistor = new CreateTagManifestsVistor(tagFilesMap, true);
+            Files.walkFileTree(outputPath, tagVistor);
+            bag.getTagManifests().addAll(tagFilesMap.keySet());
+            ManifestWriter.writeTagManifests(bag.getTagManifests(), outputPath, bag.getRootDir(), bag.getFileEncoding());
+//            // Update bag
+//            LOG.info("Update bag");
+//            for (Manifest tm : bag.getTagManifests().stream().toList()) {
+//                tm.getFileToChecksumMap().put(recordmapPath,
+//                        Hasher.hash(recordmapPath, MessageDigest.getInstance(tm.getAlgorithm().getMessageDigestName())));
+//            }
+//            ManifestWriter.writeTagManifests(bag.getTagManifests(), outputPath, outputPath, Charset.forName("utf-8"));
         }
-        // Create a bag inplace
-        LOG.info("Create bag");
-        Bag bag = BagCreator.bagInPlace(outputPath, Collections.singleton(StandardSupportedAlgorithms.SHA512), false);
-        // Write record map and add it to tag manifest
-        LOG.info("Write record map");
-        XmlMapper mapper = new XmlMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.findAndRegisterModules();
-        Path recordmapPath = Path.of(outputPath.toString(), "recordmap.xml");
-        mapper.writeValue(recordmapPath.toFile(), record);
-        // Update bag
-        LOG.info("Update bag");
-        for (Manifest tm : bag.getTagManifests().stream().toList()) {
-            tm.getFileToChecksumMap().put(recordmapPath, 
-                    Hasher.hash(recordmapPath, MessageDigest.getInstance(tm.getAlgorithm().getMessageDigestName())));
+        else {
+            report.addCritical("Not set up");
         }
-        ManifestWriter.writeTagManifests(bag.getTagManifests(), outputPath, outputPath, Charset.forName("utf-8"));
         return report;
     }
-    private static final Logger LOG = Logger.getLogger(FolderToBasicSIP.class.getName());
+    private static final Logger LOG = Logger.getLogger(FolderFetchToBasicSIP.class.getName());
 
     @Override
     public Report function(CorpusData cd) throws Exception, NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
@@ -218,14 +277,15 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
 
     /**
      * Bundles the files into records and creates a record map
-     * @param path The path containing all files
+     * @param metadataPath The path containing all metadata files
+     * @param contentFilePath The path containing all content files
      * @param title The title of the root record
      * @param metadataFiles All metadata files to be included
      * @param contentFiles All content files to be included
      * @return The record map
      * @throws IOException 
      */
-    private MapRootRecord bundleFiles(Path path, String title, Set<File> metadataFiles, Set<File> contentFiles) throws IOException {
+    private MapRootRecord bundleFiles(Path metadataPath, Path contentFilePath, String title, Set<File> metadataFiles, Set<File> contentFiles) throws IOException {
         
         Map<File, Set<File>> records = new HashMap<>();
         // Set of all metadata files that don't have matching content files
@@ -268,17 +328,17 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
             }
             // Set metadata to the first (and only metadata file without a content file
             else {
-                recordMap.setMetadata(noContentMetadata.iterator().next().toString().replace(path.toString(),"data"));
+                recordMap.setMetadata(noContentMetadata.iterator().next().toString().replace(metadataPath.toString(),"data/Metadata"));
             }
             // Set top-level files, i.e. files without separate metadata
-            recordMap.setFiles(noMetadataContent.stream().map((f) -> new MapFile(f.toString().replace(path.toString(), "data"))).toList());
+            recordMap.setFiles(noMetadataContent.stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(), "data/Content"))).toList());
             // Create all record bundles by iterating over all metadata files
             recordMap.setRecords(records.keySet().stream().map((mf) -> {
                 MapRecord r = new MapRecord();
-                r.setMetadata(mf.toString().replace(path.toString(),"data"));
+                r.setMetadata(mf.toString().replace(metadataPath.toString(),"data/Metadata"));
                 // Get the common prefix as a bundle title
                 r.setTitle(FilenameUtils.getBaseName(mf.toString()));
-                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(path.toString(),"data"))).toList());
+                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(metadataPath.toString(),"data/Metadata"))).toList());
                 return r;
             }).toList());
             return recordMap;
@@ -288,11 +348,12 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
     @Override
     public Map<String, String> getParameters() {
         Map<String,String> parameters = super.getParameters();
-        parameters.put("output-path", "The path where the BagIt SIP will be written. Defaults to the \"../output\" subfolder");
-        parameters.put("root-title", "The title of the root record. Defaults to corpus name");
-        parameters.put("root-metadata-file", "Root-level metadata file. Defaults to the only metadata file not matching any content files");
-        parameters.put("record-map-file", "Filename of the already existing record map file");
-        parameters.put("create-hard-links", "Flag to create hard links instead of copying files");
+        parameters.put("metadata-path", "The path where the metadata is located");
+        parameters.put("file-path", "The path where the files are located");
+        parameters.put("output-path", "Optional path where the BagIt SIP will be written. Defaults to the \"../output\" subfolder relative to the metadata location");
+        parameters.put("root-title", "Optional title of the root record. Defaults to corpus name");
+        parameters.put("root-metadata-file", "Optional root-level metadata file. Defaults to the only metadata file not matching any content files");
+        parameters.put("record-map-file", "Optional filename of the already existing record map file");
         return parameters;
     }
     
