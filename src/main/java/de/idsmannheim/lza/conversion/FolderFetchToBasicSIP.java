@@ -344,7 +344,7 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
                 r.setMetadata(mf.toString().replace(metadataPath.toString(),"data/Metadata"));
                 // Get the common prefix as a bundle title
                 r.setTitle(FilenameUtils.getBaseName(mf.toString()));
-                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(metadataPath.toString(),"data/Metadata"))).toList());
+                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(),"data/Content"))).toList());
                 return r;
             }).toList());
             return recordMap;
