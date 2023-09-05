@@ -168,6 +168,7 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
             // Create file manifest
             Collection<SupportedAlgorithm> algorithms = Collections.singleton(StandardSupportedAlgorithms.SHA512);
             // Create payload manifest
+            LOG.info("Create payload manifest");
             final Map<Manifest, MessageDigest> payloadFilesMap = Hasher.createManifestToMessageDigestMap(algorithms);
             final CreatePayloadManifestsVistor payloadVisitor = new CreatePayloadManifestsVistor(payloadFilesMap, false);
             Files.walkFileTree(Path.of(outputPath.toString(),"data"), payloadVisitor);
@@ -181,6 +182,7 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
                     itemsToFetch.add(new FetchItem(f.toURI().toURL(), f.length(), payloadFile));
                     // Also add it to payload
                     for (Manifest m : bag.getPayLoadManifests().stream().toList()) {
+                        LOG.info("Compute checksum for " + f.toString());
                         m.getFileToChecksumMap().put(payloadFile,
                         Hasher.hash(f.toPath(), MessageDigest.getInstance(m.getAlgorithm().getMessageDigestName())));
             }
@@ -190,8 +192,10 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
                 }
             }
             bag.setItemsToFetch(itemsToFetch);
+            LOG.info("Write bag");
             BagWriter.write(bag, outputPath);
             // Write payload manifest
+            LOG.info("Write payload manifest");
             ManifestWriter.writePayloadManifests(bag.getPayLoadManifests(), outputPath, bag.getRootDir(), bag.getFileEncoding());
             // Write record map and add it to tag manifest
             LOG.info("Write record map");
@@ -201,10 +205,12 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
             Path recordmapPath = Path.of(outputPath.toString(), "recordmap.xml");
             mapper.writeValue(recordmapPath.toFile(), record);
             // Create tag manifest
+            LOG.info("Create tag file");
             final Map<Manifest, MessageDigest> tagFilesMap = Hasher.createManifestToMessageDigestMap(algorithms);
             final CreateTagManifestsVistor tagVistor = new CreateTagManifestsVistor(tagFilesMap, true);
             Files.walkFileTree(outputPath, tagVistor);
             bag.getTagManifests().addAll(tagFilesMap.keySet());
+            LOG.info("Write tag manifest");
             ManifestWriter.writeTagManifests(bag.getTagManifests(), outputPath, bag.getRootDir(), bag.getFileEncoding());
 //            // Update bag
 //            LOG.info("Update bag");
