@@ -714,6 +714,7 @@ public class CorpusMagician {
                                     "de.uni_hamburg.corpora.visualization",
                                     "de.idsmannheim.lza.conversion",
                                     "de.idsmannheim.lza.publication",
+                                    "de.idsmannheim.lza.validation",
                             };
                         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(validPackages));
                         boolean checkFunctionName = false;
