@@ -174,7 +174,12 @@ public class CheckBag extends Checker implements CorpusFunction{
         Report report = new Report();
         for (FetchItem item : bag.getItemsToFetch()) {
             try {
+                // Create parent directories if missing`
+                if (!item.getPath().getParent().toFile().exists()) {
+                    item.getPath().getParent().toFile().mkdirs();
+                }
                 // Download file
+                
                 item.getUrl().openStream().transferTo(new FileOutputStream(item.getPath().toFile()));
                 // Create blank file
                 // item.getPath().toFile().createNewFile();
