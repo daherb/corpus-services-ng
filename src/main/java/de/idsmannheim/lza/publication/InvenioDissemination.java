@@ -4,6 +4,7 @@
  */
 package de.idsmannheim.lza.publication;
 
+import de.idsmannheim.lza.utilities.publication.InvenioTools;
 import de.idsmannheim.lza.inveniojavaapi.InvenioAPI;
 import de.idsmannheim.lza.inveniojavaapi.InvenioAPITools;
 import de.uni_hamburg.corpora.Corpus;

@@ -12,7 +12,7 @@ import de.uni_hamburg.corpora.publication.Publisher;
 
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.idsmannheim.lza.publication.InvenioTools;
+import de.idsmannheim.lza.utilities.publication.InvenioTools;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
