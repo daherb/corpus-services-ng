@@ -172,7 +172,9 @@ public class InvenioTools {
                         // Publish all records that have been changed
                         publishRecords(tools.listEditedRecords(),report);
                         LOG.info("Publish DOIs");
-                        // publishDois(id, report);
+//                        if (datacite.isPresent() && datacitePrefix.isPresent()) {
+//                        publishDois(id, report);
+//                        }
                         // Release the mutex again
                         mutex.unlock();
                         // Return the first id which is the one of the main record
