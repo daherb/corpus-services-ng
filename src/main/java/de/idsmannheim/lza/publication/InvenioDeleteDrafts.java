@@ -37,7 +37,7 @@ import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
- * Simple function to delete all unpublished drafts
+ * Simple function to delete all unpublished drafts (and all draft DOIs if Datacite credentials are give)
  * @author Herbert Lange <lange@ids-mannheim.de>
  */
 public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
