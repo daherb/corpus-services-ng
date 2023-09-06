@@ -98,7 +98,8 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
             watch.start();
             try {
                 boolean update = props.getProperty("update-object", "false").equalsIgnoreCase("true");
-                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()),Optional.of(datacite), Optional.of(datacitePrefix), publicFiles, privateRecords, update, report);
+                boolean publishDois = props.getProperty("publish-dois-i-know-what-i-am-doing-trust-me", "false").equals("IKNOWWHATIAMDOING");
+                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()),Optional.of(datacite), Optional.of(datacitePrefix), publicFiles, privateRecords, update, publishDois, report);
                 if (id.isPresent()) {
                     report.addNote(getFunction(), "Created new record " + id.get());
                 }
@@ -140,6 +141,7 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
         params.put("update-object", "Optional flag if existing records with the same name should be updated. Otherwise the process is stopped as soon as a record already exists");
         params.put("datacite-repository-id", "Repository ID for Datacite DOIs");
         params.put("datacite-repository-password", "Repository password for Datacite DOIs");
+        params.put("publish-dois-i-know-what-i-am-doing-trust-me", "Flag to publish draft DOIs by registering them. The value must be IKNOWWHATIAMDOING");
         return params;
     }
     
