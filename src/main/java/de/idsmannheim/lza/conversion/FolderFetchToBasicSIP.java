@@ -13,9 +13,9 @@ import de.uni_hamburg.corpora.conversion.Converter;
 
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapFile;
-import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRecord;
-import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRootRecord;
+import de.idsmannheim.lza.utilities.publication.mapper.MapFile;
+import de.idsmannheim.lza.utilities.publication.mapper.MapRecord;
+import de.idsmannheim.lza.utilities.publication.mapper.MapRootRecord;
 import gov.loc.repository.bagit.creator.CreatePayloadManifestsVistor;
 import gov.loc.repository.bagit.creator.CreateTagManifestsVistor;
 import gov.loc.repository.bagit.domain.Bag;
@@ -104,9 +104,10 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
     public Report function(Corpus c) throws Exception, NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         if (setUp) {
+            FolderToBasicSIP folderToBasicSIP = new FolderToBasicSIP(new Properties());
             contentFilePath = Path.of(c.getBaseDirectory().toURI());
-            Set<File> metadataFiles = listMetadataFiles(metadataPath);
-            Set<File> contentFiles = listContentFiles(contentFilePath);
+            Set<File> metadataFiles = folderToBasicSIP.listMetadataFiles(metadataPath);
+            Set<File> contentFiles = folderToBasicSIP.listContentFiles(contentFilePath);
             MapRootRecord record;
             if (props.containsKey("record-map-file")) {
                 ObjectMapper om = new ObjectMapper();
@@ -114,21 +115,15 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
                 record = om.readValue(new File(props.getProperty("record-map-file")), MapRootRecord.class);
             }
             else {
-                try {
-                    LOG.info("Create record map");
-                    String title;
-                    if (props.containsKey("root-title")) {
-                        title = props.getProperty("root-title");
-                    }
-                    else {
-                        title = c.getCorpusName();
-                    }
-                    record = bundleFiles(metadataPath, contentFilePath, title, metadataFiles,contentFiles);
+                LOG.info("Create record map");
+                String title;
+                if (props.containsKey("root-title")) {
+                    title = props.getProperty("root-title");
                 }
-                catch (IOException e) {
-                    report.addException(getFunction(), e, "Exception when creating record map");
-                    return report;
+                else {
+                    title = c.getCorpusName();
                 }
+                record = folderToBasicSIP.bundleFiles(metadataPath, contentFilePath, title, metadataFiles,contentFiles);
             }
             LOG.info("Check and/or create output");
             // Copy files to output
@@ -243,113 +238,113 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
         return "Creates a IDS SIP from a folder";
     }
 
-    /**
-     * List all CMDI files, preferably in a Metadata subfolder
-     * @param path The path containing all files
-     * @return a set of all found CMDI files
-     */
-    private Set<File> listMetadataFiles(Path path) {
-        Path metadataPath;
-        if (Path.of(path.toString(),"data","Metadata").toFile().exists()) {
-            metadataPath = Path.of(path.toString(),"data","Metadata");
-        }
-        else if (Path.of(path.toString(),"Metadata").toFile().exists()) {
-            metadataPath = Path.of(path.toString(),"Metadata");
-        }
-        else {
-            metadataPath = path;
-        }
-        return new HashSet<>(
-                FileUtils.listFiles(metadataPath.toFile(), 
-                    new SuffixFileFilter(".cmdi"), DirectoryFileFilter.INSTANCE)
-        );
-    }
+//    /**
+//     * List all CMDI files, preferably in a Metadata subfolder
+//     * @param path The path containing all files
+//     * @return a set of all found CMDI files
+//     */
+//    private Set<File> listMetadataFiles(Path path) {
+//        Path metadataPath;
+//        if (Path.of(path.toString(),"data","Metadata").toFile().exists()) {
+//            metadataPath = Path.of(path.toString(),"data","Metadata");
+//        }
+//        else if (Path.of(path.toString(),"Metadata").toFile().exists()) {
+//            metadataPath = Path.of(path.toString(),"Metadata");
+//        }
+//        else {
+//            metadataPath = path;
+//        }
+//        return new HashSet<>(
+//                FileUtils.listFiles(metadataPath.toFile(), 
+//                    new SuffixFileFilter(".cmdi"), DirectoryFileFilter.INSTANCE)
+//        );
+//    }
 
-    /**
-     * Lists all content files, i.e. all files that are not CMDI files
-     * @param path The path containing all files
-     * @return The set of all content files
-     */
-    private Set<File> listContentFiles(Path path) {
-        return new HashSet<>(
-                FileUtils.listFiles(path.toFile(), 
-                    new NotFileFilter(new SuffixFileFilter(".cmdi")), DirectoryFileFilter.INSTANCE)
-        );
-    }
+//    /**
+//     * Lists all content files, i.e. all files that are not CMDI files
+//     * @param path The path containing all files
+//     * @return The set of all content files
+//     */
+//    private Set<File> listContentFiles(Path path) {
+//        return new HashSet<>(
+//                FileUtils.listFiles(path.toFile(), 
+//                    new NotFileFilter(new SuffixFileFilter(".cmdi")), DirectoryFileFilter.INSTANCE)
+//        );
+//    }
 
-    /**
-     * Bundles the files into records and creates a record map
-     * @param metadataPath The path containing all metadata files
-     * @param contentFilePath The path containing all content files
-     * @param title The title of the root record
-     * @param metadataFiles All metadata files to be included
-     * @param contentFiles All content files to be included
-     * @return The record map
-     * @throws IOException 
-     */
-    private MapRootRecord bundleFiles(Path metadataPath, Path contentFilePath, String title, Set<File> metadataFiles, Set<File> contentFiles) throws IOException {
-        
-        Map<File, Set<File>> records = new HashMap<>();
-        // Set of all metadata files that don't have matching content files
-        Set<File> noContentMetadata = new HashSet<>();
-        // Set of all content files that don't have matching metadata
-        Set<File> noMetadataContent = contentFiles.stream().collect(Collectors.toSet());
-        for (File mf : metadataFiles) {
-            // Convert metadata filename into content file prefix
-            String mfName = mf.toString()
-                    .replace(metadataPath.toString(),contentFilePath.toString())
-                    .replace("Metadata","Content")
-                    .replace(".cmdi","");
-            LOG.info(mfName);
-            // Find all content files starting with this prefix
-            Set<File> recordFiles = contentFiles.stream().filter((cf) -> cf.toString().startsWith(mfName)).collect(Collectors.toSet());
-            noMetadataContent.removeAll(recordFiles);
-            // If we have content files 
-            if (!recordFiles.isEmpty()) {
-                records.put(mf, 
-                    recordFiles
-                    );
-            }
-            else {
-                noContentMetadata.add(mf);
-            }
-        }
-        if (props.containsKey("root-metadata-file") && !noContentMetadata.stream().allMatch((f) -> f.getName().endsWith(props.getProperty("root-metadata-file")))) {
-            throw new IOException("Root metadata file not found " + props.getProperty("root-metadata-file"));
-        }
-        else if (noContentMetadata.size() > 1) {
-            throw new IOException("Too many candidates for root metadata file found " + noContentMetadata.toString());
-        }
-        else if (noContentMetadata.isEmpty()) {
-            throw new IOException("No candidate for root metadata file found");
-        }
-        else
-        {
-            MapRootRecord recordMap = new MapRootRecord();
-            // Set title
-            recordMap.setTitle(title);
-            // If we have been given a metadata file use it
-            if (props.containsKey("root-metadata-file")) {
-                recordMap.setMetadata(props.getProperty("root-metadata-file"));
-            }
-            // Set metadata to the first (and only metadata file without a content file
-            else {
-                recordMap.setMetadata(noContentMetadata.iterator().next().toString().replace(metadataPath.toString(),"data/Metadata"));
-            }
-            // Set top-level files, i.e. files without separate metadata
-            recordMap.setFiles(noMetadataContent.stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(), "data/Content"))).toList());
-            // Create all record bundles by iterating over all metadata files
-            recordMap.setRecords(records.keySet().stream().map((mf) -> {
-                MapRecord r = new MapRecord();
-                r.setMetadata(mf.toString().replace(metadataPath.toString(),"data/Metadata"));
-                // Get the common prefix as a bundle title
-                r.setTitle(FilenameUtils.getBaseName(mf.toString()));
-                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(),"data/Content"))).toList());
-                return r;
-            }).toList());
-            return recordMap;
-        }
-    }
+//    /**
+//     * Bundles the files into records and creates a record map
+//     * @param metadataPath The path containing all metadata files
+//     * @param contentFilePath The path containing all content files
+//     * @param title The title of the root record
+//     * @param metadataFiles All metadata files to be included
+//     * @param contentFiles All content files to be included
+//     * @return The record map
+//     * @throws IOException 
+//     */
+//    private MapRootRecord bundleFiles(Path metadataPath, Path contentFilePath, String title, Set<File> metadataFiles, Set<File> contentFiles) throws IOException {
+//        
+//        Map<File, Set<File>> records = new HashMap<>();
+//        // Set of all metadata files that don't have matching content files
+//        Set<File> noContentMetadata = new HashSet<>();
+//        // Set of all content files that don't have matching metadata
+//        Set<File> noMetadataContent = contentFiles.stream().collect(Collectors.toSet());
+//        for (File mf : metadataFiles) {
+//            // Convert metadata filename into content file prefix
+//            String mfName = mf.toString()
+//                    .replace(metadataPath.toString(),contentFilePath.toString())
+//                    .replace("Metadata","Content")
+//                    .replace(".cmdi","");
+//            LOG.info(mfName);
+//            // Find all content files starting with this prefix
+//            Set<File> recordFiles = contentFiles.stream().filter((cf) -> cf.toString().startsWith(mfName)).collect(Collectors.toSet());
+//            noMetadataContent.removeAll(recordFiles);
+//            // If we have content files 
+//            if (!recordFiles.isEmpty()) {
+//                records.put(mf, 
+//                    recordFiles
+//                    );
+//            }
+//            else {
+//                noContentMetadata.add(mf);
+//            }
+//        }
+//        if (props.containsKey("root-metadata-file") && !noContentMetadata.stream().allMatch((f) -> f.getName().endsWith(props.getProperty("root-metadata-file")))) {
+//            throw new IOException("Root metadata file not found " + props.getProperty("root-metadata-file"));
+//        }
+//        else if (noContentMetadata.size() > 1) {
+//            throw new IOException("Too many candidates for root metadata file found " + noContentMetadata.toString());
+//        }
+//        else if (noContentMetadata.isEmpty()) {
+//            throw new IOException("No candidate for root metadata file found");
+//        }
+//        else
+//        {
+//            MapRootRecord recordMap = new MapRootRecord();
+//            // Set title
+//            recordMap.setTitle(title);
+//            // If we have been given a metadata file use it
+//            if (props.containsKey("root-metadata-file")) {
+//                recordMap.setMetadata(props.getProperty("root-metadata-file"));
+//            }
+//            // Set metadata to the first (and only metadata file without a content file
+//            else {
+//                recordMap.setMetadata(noContentMetadata.iterator().next().toString().replace(metadataPath.toString(),"data/Metadata"));
+//            }
+//            // Set top-level files, i.e. files without separate metadata
+//            recordMap.setFiles(noMetadataContent.stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(), "data/Content"))).toList());
+//            // Create all record bundles by iterating over all metadata files
+//            recordMap.setRecords(records.keySet().stream().map((mf) -> {
+//                MapRecord r = new MapRecord();
+//                r.setMetadata(mf.toString().replace(metadataPath.toString(),"data/Metadata"));
+//                // Get the common prefix as a bundle title
+//                r.setTitle(FilenameUtils.getBaseName(mf.toString()));
+//                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(),"data/Content"))).toList());
+//                return r;
+//            }).toList());
+//            return recordMap;
+//        }
+//    }
 
     @Override
     public Map<String, String> getParameters() {

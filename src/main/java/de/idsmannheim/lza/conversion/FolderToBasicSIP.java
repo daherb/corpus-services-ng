@@ -13,9 +13,9 @@ import de.uni_hamburg.corpora.conversion.Converter;
 
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapFile;
-import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRecord;
-import de.uni_hamburg.corpora.utilities.publication.ids.mapper.MapRootRecord;
+import de.idsmannheim.lza.utilities.publication.mapper.MapFile;
+import de.idsmannheim.lza.utilities.publication.mapper.MapRecord;
+import de.idsmannheim.lza.utilities.publication.mapper.MapRootRecord;
 import gov.loc.repository.bagit.creator.BagCreator;
 import gov.loc.repository.bagit.domain.Bag;
 import gov.loc.repository.bagit.domain.Manifest;
@@ -32,9 +32,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -91,7 +93,26 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
     public Report function(Corpus c) throws Exception, NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         Path path = Path.of(c.getBaseDirectory().toURI());
-        
+        Path metadataPath;
+        if (Path.of(path.toString(),"data","Metadata").toFile().exists()) {
+            metadataPath = Path.of(path.toString(),"data","Metadata");
+        }
+        else if (Path.of(path.toString(),"Metadata").toFile().exists()) {
+            metadataPath = Path.of(path.toString(),"Metadata");
+        }
+        else {
+            metadataPath = path;
+        }
+        Path contentPath;
+        if (Path.of(path.toString(),"data","Content").toFile().exists()) {
+            contentPath = Path.of(path.toString(),"data","Content");
+        }
+        else if (Path.of(path.toString(),"Content").toFile().exists()) {
+            contentPath = Path.of(path.toString(),"Content");
+        }
+        else {
+            contentPath = path;
+        }
         Set<File> metadataFiles = listMetadataFiles(path);
         Set<File> contentFiles = listContentFiles(path);
         MapRootRecord record;
@@ -110,7 +131,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
                 else {
                     title = c.getCorpusName();
                 }
-                record = bundleFiles(path, title, metadataFiles,contentFiles);
+                record = bundleFiles(metadataPath, contentPath, title, metadataFiles,contentFiles);
             }
             catch (IOException e) {
                 report.addException(getFunction(), e, "Exception when creating record map");
@@ -187,17 +208,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
      * @param path The path containing all files
      * @return a set of all found CMDI files
      */
-    private Set<File> listMetadataFiles(Path path) {
-        Path metadataPath;
-        if (Path.of(path.toString(),"data","Metadata").toFile().exists()) {
-            metadataPath = Path.of(path.toString(),"data","Metadata");
-        }
-        else if (Path.of(path.toString(),"Metadata").toFile().exists()) {
-            metadataPath = Path.of(path.toString(),"Metadata");
-        }
-        else {
-            metadataPath = path;
-        }
+    Set<File> listMetadataFiles(Path metadataPath) {
         return new HashSet<>(
                 FileUtils.listFiles(metadataPath.toFile(), 
                     new SuffixFileFilter(".cmdi"), DirectoryFileFilter.INSTANCE)
@@ -209,7 +220,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
      * @param path The path containing all files
      * @return The set of all content files
      */
-    private Set<File> listContentFiles(Path path) {
+    Set<File> listContentFiles(Path path) {
         return new HashSet<>(
                 FileUtils.listFiles(path.toFile(), 
                     new NotFileFilter(new SuffixFileFilter(".cmdi")), DirectoryFileFilter.INSTANCE)
@@ -225,27 +236,47 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
      * @return The record map
      * @throws IOException 
      */
-    private MapRootRecord bundleFiles(Path path, String title, Set<File> metadataFiles, Set<File> contentFiles) throws IOException {
-        
+    MapRootRecord bundleFiles(Path metadataPath, Path contentFilePath, String title, Set<File> metadataFiles, Set<File> contentFiles) throws IOException {
         Map<File, Set<File>> records = new HashMap<>();
         // Set of all metadata files that don't have matching content files
         Set<File> noContentMetadata = new HashSet<>();
         // Set of all content files that don't have matching metadata
         Set<File> noMetadataContent = contentFiles.stream().collect(Collectors.toSet());
-        for (File mf : metadataFiles) {
-            // Convert metadata filename into content file prefix
-            String mfName = mf.toString().replace("/Metadata/","/Content/").replace(".cmdi","");
-            // Find all content files starting with this prefix
-            Set<File> recordFiles = contentFiles.stream().filter((cf) -> cf.toString().startsWith(mfName)).collect(Collectors.toSet());
-            noMetadataContent.removeAll(recordFiles);
-            // If we have content files 
-            if (!recordFiles.isEmpty()) {
-                records.put(mf, 
-                    recordFiles
-                    );
+        // A hash map from record name (extracted from metadata file names) to the metadata file itself
+        HashMap<String,File> recordMetadata = new HashMap<>();
+        // A hash map from record name to content files to be contained
+        HashMap<String,Set<File>> recordFiles = new HashMap<>();
+        for (File metadataFile : metadataFiles.stream().toList()) {
+            String prefix = metadataFile.getName().replace(".cmdi", "");
+            recordMetadata.put(prefix, metadataFile);
+            
+        }
+        for (File contentFile : contentFiles) {
+            String fileName = contentFile.getName();
+            // Find all record names that are a prefix of the current file name
+            Optional<String> recordName = recordMetadata.keySet().stream()
+                    .filter((prefix) -> fileName.startsWith(prefix))
+                    // Sort by longest firts
+                    .sorted(Comparator.comparing(String::length).reversed())
+                    // Only get the first one if it exixts
+                    .findFirst();
+            if (recordName.isPresent()) {
+                // Put the content file into set of record files (create set if necessary)
+                recordFiles.putIfAbsent(recordName.get(), new HashSet<>());
+                recordFiles.get(recordName.get()).add(contentFile);
+                // Remove from list of files without matching metadata
+                noMetadataContent.remove(contentFile);
+                }
+        }
+        // For all metadata files check if they have content files
+        for (String recordName : recordMetadata.keySet()) {
+            // If not keep track of problematic metadata files
+            if (!recordFiles.containsKey(recordName) || recordFiles.get(recordName).isEmpty()) {
+                noContentMetadata.add(recordMetadata.get(recordName));
             }
+            // Otherwise build record
             else {
-                noContentMetadata.add(mf);
+                records.put(recordMetadata.get(recordName), recordFiles.get(recordName));
             }
         }
         if (props.containsKey("root-metadata-file") && !noContentMetadata.stream().allMatch((f) -> f.getName().endsWith(props.getProperty("root-metadata-file")))) {
@@ -268,17 +299,17 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
             }
             // Set metadata to the first (and only metadata file without a content file
             else {
-                recordMap.setMetadata(noContentMetadata.iterator().next().toString().replace(path.toString(),"data"));
+                recordMap.setMetadata(noContentMetadata.iterator().next().toString().replace(metadataPath.toString() ,Path.of("data","Metadata").toString()));
             }
             // Set top-level files, i.e. files without separate metadata
-            recordMap.setFiles(noMetadataContent.stream().map((f) -> new MapFile(f.toString().replace(path.toString(), "data"))).toList());
+            recordMap.setFiles(noMetadataContent.stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(), Path.of("data","Content").toString()))).toList());
             // Create all record bundles by iterating over all metadata files
             recordMap.setRecords(records.keySet().stream().map((mf) -> {
                 MapRecord r = new MapRecord();
-                r.setMetadata(mf.toString().replace(path.toString(),"data"));
+                r.setMetadata(mf.toString().replace(metadataPath.toString(),Path.of("data","Metadata").toString()));
                 // Get the common prefix as a bundle title
                 r.setTitle(FilenameUtils.getBaseName(mf.toString()));
-                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(path.toString(),"data"))).toList());
+                r.setFiles(records.get(mf).stream().map((f) -> new MapFile(f.toString().replace(contentFilePath.toString(), Path.of("data","Content").toString()))).toList());
                 return r;
             }).toList());
             return recordMap;
