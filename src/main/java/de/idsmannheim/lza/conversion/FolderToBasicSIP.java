@@ -258,7 +258,7 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
                     .filter((prefix) -> fileName.startsWith(prefix))
                     // Sort by longest firts
                     .sorted(Comparator.comparing(String::length).reversed())
-                    // Only get the first one if it exixts
+                    // Only get the first one if it exists
                     .findFirst();
             if (recordName.isPresent()) {
                 // Put the content file into set of record files (create set if necessary)
