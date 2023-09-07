@@ -641,7 +641,10 @@ public class InvenioTools {
             if (record.getMetadata().isPresent()) {
                 metadataFile = record.getMetadata().get();
                 defaultPreview = tools.normalizeFilename(metadataFile,SEPARATOR);
-                fileNames.add(metadataFile);
+                // Skip CMDI file in record for private files
+                if (!record.getTitle().orElse("").endsWith(" - Private files")) {
+                    fileNames.add(metadataFile);
+                }
             }
             // Add all other public files
             // fileNames.addAll(record.getFiles().stream().filter(MapFile::isPublic).map(MapFile::getName).toList());
