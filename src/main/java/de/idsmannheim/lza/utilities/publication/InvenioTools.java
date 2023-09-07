@@ -638,7 +638,7 @@ public class InvenioTools {
             // Potential default preview file
             String defaultPreview = "";
             String metadataFile = "";
-            // Add metadata fie if it exists
+            // Add metadata file if it exists
             if (record.getMetadata().isPresent()) {
                 metadataFile = record.getMetadata().get();
                 defaultPreview = tools.normalizeFilename(metadataFile,SEPARATOR);
