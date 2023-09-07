@@ -1,5 +1,5 @@
 
-package de.uni_hamburg.corpora.utilities.publication.ids.mapper;
+package de.idsmannheim.lza.utilities.publication.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

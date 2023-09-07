@@ -1,5 +1,5 @@
 
-package de.uni_hamburg.corpora.utilities.publication.ids.mapper;
+package de.idsmannheim.lza.utilities.publication.mapper;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
