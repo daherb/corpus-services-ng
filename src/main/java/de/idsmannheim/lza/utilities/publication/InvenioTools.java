@@ -174,6 +174,7 @@ public class InvenioTools {
                         // Publish all records that have been changed
                         if (publishRecords) {
                             publishRecords(tools.listEditedRecords(),report);
+                        }
                         LOG.info("Publish DOIs");
                         if (datacite.isPresent() && datacitePrefix.isPresent() && publishDois) {
                             publishDois(datacite.get(), datacitePrefix.get(), report);
