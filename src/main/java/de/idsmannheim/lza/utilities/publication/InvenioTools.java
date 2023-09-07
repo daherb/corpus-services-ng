@@ -126,6 +126,7 @@ public class InvenioTools {
      * @param filesArePublic flag if files should be public if no specific information is present
      * @param separatePrivateRecords flag if private files should be stored in a separate record
      * @param update flag if existing records with the same title should be updated
+     * @param publishRecords Flag if Invenio records should be published. This should usually be true except for testsing
      * @param publishDois flag if DOIs should be published, i.e. set to registered
      * @param report the report to keep track of detailed information about the process
      * @return the id of the main record if the operation was successful
@@ -138,7 +139,7 @@ public class InvenioTools {
      * @throws org.jdom2.JDOMException
      * @throws java.lang.CloneNotSupportedException
      */
-    public Optional<String> createOrUpdateObject(Path path, Optional<DataciteAPI> datacite, Optional<String> datacitePrefix, boolean filesArePublic, boolean separatePrivateRecords, boolean update, boolean publishDois, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
+    public Optional<String> createOrUpdateObject(Path path, Optional<DataciteAPI> datacite, Optional<String> datacitePrefix, boolean filesArePublic, boolean separatePrivateRecords, boolean update, boolean publishRecords, boolean publishDois, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
         LOG.info("Validate data before ingest");
         // Get the mapping from files to Invenio records
         MapRootRecord mapping = getMapping(path, filesArePublic, separatePrivateRecords);
@@ -171,7 +172,8 @@ public class InvenioTools {
                         // Publish all drafts
                         LOG.info("Publish records");
                         // Publish all records that have been changed
-                        publishRecords(tools.listEditedRecords(),report);
+                        if (publishRecords) {
+                            publishRecords(tools.listEditedRecords(),report);
                         LOG.info("Publish DOIs");
                         if (datacite.isPresent() && datacitePrefix.isPresent() && publishDois) {
                             publishDois(datacite.get(), datacitePrefix.get(), report);

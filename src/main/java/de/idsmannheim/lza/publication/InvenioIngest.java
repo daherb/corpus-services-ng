@@ -99,7 +99,9 @@ public class InvenioIngest extends Publisher implements CorpusFunction {
             try {
                 boolean update = props.getProperty("update-object", "false").equalsIgnoreCase("true");
                 boolean publishDois = props.getProperty("publish-dois-i-know-what-i-am-doing-trust-me", "false").equals("IKNOWWHATIAMDOING");
-                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()),Optional.of(datacite), Optional.of(datacitePrefix), publicFiles, privateRecords, update, publishDois, report);
+                // "hidden" flag to not publish records
+                boolean publishRecords = !props.getProperty("do-not-publish", "false").equalsIgnoreCase("true");
+                Optional<String> id = tools.createOrUpdateObject(Path.of(c.getBaseDirectory().toURI()),Optional.of(datacite), Optional.of(datacitePrefix), publicFiles, privateRecords, update, publishRecords, publishDois, report);
                 if (id.isPresent()) {
                     report.addNote(getFunction(), "Created new record " + id.get());
                 }
