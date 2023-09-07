@@ -207,13 +207,6 @@ public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
             bag.getTagManifests().addAll(tagFilesMap.keySet());
             LOG.info("Write tag manifest");
             ManifestWriter.writeTagManifests(bag.getTagManifests(), outputPath, bag.getRootDir(), bag.getFileEncoding());
-//            // Update bag
-//            LOG.info("Update bag");
-//            for (Manifest tm : bag.getTagManifests().stream().toList()) {
-//                tm.getFileToChecksumMap().put(recordmapPath,
-//                        Hasher.hash(recordmapPath, MessageDigest.getInstance(tm.getAlgorithm().getMessageDigestName())));
-//            }
-//            ManifestWriter.writeTagManifests(bag.getTagManifests(), outputPath, outputPath, Charset.forName("utf-8"));
         }
         else {
             report.addCritical("Not set up");
