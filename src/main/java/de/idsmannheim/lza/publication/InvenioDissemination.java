@@ -12,6 +12,9 @@ import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.publication.Publisher;
+import gov.loc.repository.bagit.creator.BagCreator;
+import gov.loc.repository.bagit.domain.Bag;
+import gov.loc.repository.bagit.hash.StandardSupportedAlgorithms;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -76,10 +79,13 @@ public class InvenioDissemination extends Publisher implements CorpusFunction {
                 if (recordId == null) {
                     recordId = apiTools.getRecordIdForTitle(recordTitle);
                 }
+                // Download object. This already validates the checksum
                 tools.downloadObject(recordId, Path.of(c.getBaseDirectory().toURI()), report);
             } catch (Exception e) {
                 report.addException(e, "Exception when downloading information package");
             }
+            // Create bagit
+            Bag bag = BagCreator.bagInPlace(Path.of(c.getBaseDirectory().toURI()), Collections.singleton(StandardSupportedAlgorithms.SHA512), false);
             watch.stop();
             LOG.info("Done");
             report.addNote(getFunction(), "Download took " + watch.getTime(TimeUnit.SECONDS) + " seconds");
