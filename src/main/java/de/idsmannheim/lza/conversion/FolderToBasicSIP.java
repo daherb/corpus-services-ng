@@ -251,9 +251,6 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
             recordMetadata.put(prefix, metadataFile);
             
         }
-        LOG.info("Record names: " + recordMetadata.keySet().stream()
-                    .sorted(Comparator.comparing(String::length).reversed())
-        .toList().toString());
         for (File contentFile : contentFiles) {
             String fileName = contentFile.getName();
             // Find all record names that are a prefix of the current file name
@@ -263,7 +260,6 @@ public class FolderToBasicSIP extends Converter implements CorpusFunction {
                     .sorted(Comparator.comparing(String::length).reversed())
                     // Only get the first one if it exists
                     .findFirst();
-            LOG.info(recordName.toString() + " - " + contentFile.toString());
             if (recordName.isPresent()) {
                 // Put the content file into set of record files (create set if necessary)
                 recordFiles.putIfAbsent(recordName.get(), new HashSet<>());
