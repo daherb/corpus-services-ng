@@ -120,7 +120,7 @@ public class InvenioTools {
     /**
      * Adds files from a path to a new Invenio object.This will result in one or several
      * new records
-     * @param path the path to the files to be added
+     * @param c the Corpus object to be added
      * @param datacite the optional DataciteAPI object for handling DOI minting
      * @param datacitePrefix the optional Datacite prefix for DOI minting
      * @param filesArePublic flag if files should be public if no specific information is present
@@ -139,14 +139,15 @@ public class InvenioTools {
      * @throws org.jdom2.JDOMException
      * @throws java.lang.CloneNotSupportedException
      */
-    public Optional<String> createOrUpdateObject(Path path, Optional<DataciteAPI> datacite, Optional<String> datacitePrefix, boolean filesArePublic, boolean separatePrivateRecords, boolean update, boolean publishRecords, boolean publishDois, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
+    public Optional<String> createOrUpdateObject(Corpus c, Optional<DataciteAPI> datacite, Optional<String> datacitePrefix, boolean filesArePublic, boolean separatePrivateRecords, boolean update, boolean publishRecords, boolean publishDois, Report report) throws JAXBException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, InterruptedException, KeyManagementException, JDOMException, CloneNotSupportedException {
+        Path path = Path.of(c.getBaseDirectory().toURI());
         LOG.info("Validate data before ingest");
         // Get the mapping from files to Invenio records
         MapRootRecord mapping = getMapping(path, filesArePublic, separatePrivateRecords);
         // Validate the mapping
         boolean validBag = false;
         try {
-            validBag = validateBag(path, report);
+            validBag = validateBag(c, report);
         }
         catch (Exception e) {
             report.addException("InvenioAPI", e, "Unexpected exception when validating bag");
@@ -371,11 +372,11 @@ public class InvenioTools {
     
     /**
      * Validates the input as a BagIt container
-     * @param path The path to the input
+     * @param c The Corpus object containing the SIP
      * @param report the report to keep track of detailed information about the process
      * @return if it is a valid BagIt
      */
-    private boolean validateBag(Path path, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, org.jdom.JDOMException {
+    private boolean validateBag(Corpus c, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, org.jdom.JDOMException {
         Report r = new Report();
         // Create new properties to pass the parameter
         Properties props = new Properties();
@@ -383,7 +384,7 @@ public class InvenioTools {
         // Create checker
         CheckBag bagChecker = new CheckBag(props);
         // Run the checker and merge reports
-        r.merge(bagChecker.function(new Corpus(path.toUri().toURL()), Boolean.FALSE));
+        r.merge(bagChecker.function(c, Boolean.FALSE));
         report.merge(r);
         // If we encountered no problems then the Bag is valid
         return r.getErrorStatistics().isEmpty();
