@@ -564,7 +564,7 @@ public class InvenioTools {
                 changed = changed || !newFiles.isEmpty();
                 // Create updated record if the record has been changed
                 if (changed) {
-                    LOG.log(Level.INFO, "New files:\n{0} Updated files:\n{1} Removed files:\n{2}", 
+                    LOG.log(Level.INFO, "New files:\n{0} \nUpdated files:\n{1} \nRemoved files:\n{2}", 
                             new Object[]{newFiles.stream().collect(Collectors.joining(", ")), 
                                 updatedFiles.stream().collect(Collectors.joining(", ")), 
                                 deletedFiles.stream().collect(Collectors.joining(", "))});
