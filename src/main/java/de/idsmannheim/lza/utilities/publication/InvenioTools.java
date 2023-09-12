@@ -1016,7 +1016,6 @@ public class InvenioTools {
     private void publishDois(DataciteAPI datacite, String prefix, Report report) throws ApiException {
         DataciteAPITools dataciteTools = new DataciteAPITools(datacite);
         dataciteTools.publishAllDraftDois(prefix);
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /***
