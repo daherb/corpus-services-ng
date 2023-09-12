@@ -25,6 +25,7 @@ import gov.loc.repository.bagit.reader.BagReader;
 import gov.loc.repository.bagit.verify.BagVerifier;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
@@ -179,8 +180,11 @@ public class CheckBag extends Checker implements CorpusFunction{
                     item.getPath().getParent().toFile().mkdirs();
                 }
                 // Download file
-                
-                item.getUrl().openStream().transferTo(new FileOutputStream(item.getPath().toFile()));
+                InputStream inStream = item.getUrl().openStream();
+                FileOutputStream outStream = new FileOutputStream(item.getPath().toFile());
+                inStream.transferTo(outStream);
+                inStream.close();
+                outStream.close();
                 // Create blank file
                 // item.getPath().toFile().createNewFile();
             } catch (IOException ex) {
