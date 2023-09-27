@@ -3,11 +3,11 @@ package de.uni_hamburg.corpora;
 import de.uni_hamburg.corpora.data.CorpusData;
 
 /***
- * @author Herbert Lange
- * @version 20230103
- *
  * Class representing the result of a corpus function, i.e. the report and the resulting corpus data.
  * Can be used to build pipelines of corpus functions
+ *
+ *  @author Herbert Lange
+ *  @version 20230105
  */
 public class Result {
     Report report ;
