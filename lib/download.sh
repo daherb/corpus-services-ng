@@ -3,3 +3,9 @@ curl -o - https://www.mpi.nl/tools/elan/ELAN_6-2_linux.tar.gz | tar xzv ELAN_6-2
 mvn install:install-file -Dfile=elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
 curl -o - https://www.exmaralda.org/files/officialDL/EXMARaLDA_linux.tar.gz | tar xzv exmaralda1.13/lib/EXMARaLDA.jar  --transform='s#exmaralda1.13/lib/##'
 mvn install:install-file -Dfile=EXMARaLDA.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=1.0 -Dpackaging=jar  -DgeneratePom=true
+git clone https://github.com/daherb/xml-magic
+bash xml-magic/install-pom.sh
+git clone https://github.com/daherb/invenio-java-api
+bash invenio-java-api/install-pom.sh
+https://github.com/daherb/datacite-java-api
+bash datacite-java-api/install-pom.sh
