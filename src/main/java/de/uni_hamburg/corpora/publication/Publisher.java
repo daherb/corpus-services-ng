@@ -32,7 +32,7 @@ public abstract class Publisher implements CorpusFunction {
     Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<Class<? extends CorpusData>>();
     final String function;
     Boolean canfix = false;
-    private Properties props;
+    protected Properties props;
 
     public Publisher(Properties properties){
         props = properties;

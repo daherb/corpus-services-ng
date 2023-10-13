@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
-import org.apache.commons.lang.time.DurationFormatUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;

@@ -165,7 +165,7 @@ public class Report {
      */
     // todo extrablah
     public void addCritical(String statId, Throwable e, String description) {
-        addCritical(statId, description + e.getStackTrace()[0]);
+        addCritical(statId, description + ": " + e.getMessage() + " in " + e.getStackTrace()[0]);
     }
 
     /**

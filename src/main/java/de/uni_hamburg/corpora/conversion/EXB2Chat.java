@@ -86,7 +86,7 @@ public class EXB2Chat extends Converter implements CorpusFunction {
             String basicTranscription = cod.toSaveableString();
             BasicTranscription bt = TypeConverter.String2BasicTranscription(basicTranscription);
             String data = exportCHATTranscript(bt, "UTF-8");
-            URL targeturl = new URL(cd.getParentURL() + cd.getFilenameWithoutFileEnding() + ".chat");
+            URL targeturl = new URL(cod.getParentURL() + cod.getFilenameWithoutFileEnding() + ".chat");
             CorpusIO cio = new CorpusIO();
             cio.write(data, targeturl);
             stats.addCorrect(EXB2CHAT, cod, "Conversion of file was successfully saved at " + targeturl);

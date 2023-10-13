@@ -43,14 +43,15 @@ public abstract class Converter implements CorpusFunction {
     //I will keep the settings for now, so they can stay as they are for the Moment 
     //and we know where to refactor when we change them 
     ValidatorSettings settings;
-    CorpusData cd;
     Report report;
     Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<Class<? extends CorpusData>>();
     final String function;
     Boolean canfix = false;
+    protected Properties props;
 
-    Converter(Properties properties) {
+    public Converter(Properties properties) {
         function = this.getClass().getSimpleName();
+        props = properties;
     }
 
     public Report execute(CorpusData cd) {
@@ -92,27 +93,27 @@ public abstract class Converter implements CorpusFunction {
             report = function(c);
             return report;
         } catch (JexmaraldaException je) {
-            report.addException(function, je, cd, "Unknown parsing error");
+            report.addException(function, je, "Unknown parsing error");
         } catch (JDOMException jdome) {
-            report.addException(function, jdome, cd, "Unknown parsing error");
+            report.addException(function, jdome, "Unknown parsing error");
         } catch (SAXException saxe) {
-            report.addException(function, saxe, cd, "Unknown parsing error");
+            report.addException(function, saxe, "Unknown parsing error");
         } catch (IOException ioe) {
-            report.addException(function, ioe, cd, "File reading error");
+            report.addException(function, ioe, "File reading error");
         } catch (FSMException ex) {
-            report.addException(function, ex, cd, "File reading error");
+            report.addException(function, ex, "File reading error");
         } catch (URISyntaxException ex) {
-            report.addException(function, ex, cd, "File reading erro");
+            report.addException(function, ex, "File reading erro");
         } catch (ParserConfigurationException ex) {
-            report.addException(function, ex, cd, "File reading error");
+            report.addException(function, ex, "File reading error");
         } catch (TransformerException ex) {
-            report.addException(function, ex, cd, "File reading error");
+            report.addException(function, ex, "File reading error");
         } catch (XPathExpressionException ex) {
-            report.addException(function, ex, cd, "File reading error");
+            report.addException(function, ex, "File reading error");
         } catch (ClassNotFoundException ex) {
-            report.addException(function, ex, cd, "File reading error");
+            report.addException(function, ex, "File reading error");
         } catch (NoSuchAlgorithmException ex) {
-            report.addException(function, ex, cd, "File reading error");
+            report.addException(function, ex, "File reading error");
         } catch (Exception ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -155,6 +156,6 @@ public abstract class Converter implements CorpusFunction {
 
     @Override
     public Map<String, String> getParameters() {
-        return Collections.EMPTY_MAP;
+        return new HashMap<>();
     }
 }

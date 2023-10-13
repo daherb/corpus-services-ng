@@ -38,6 +38,7 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.reflections.Reflections;
+import org.reflections.util.ConfigurationBuilder;
 import org.xml.sax.SAXException;
 
 /**
@@ -702,18 +703,24 @@ public class CorpusMagician {
                     // Try to cast the name to a corpus function anyway
                     try {
                         // Use reflections to get all corpus data classes
-                        Reflections reflections = new Reflections("de.uni_hamburg.corpora");
-                        boolean checkFunctionName = false;
-                        // Get all classes derived from CorpusData
-                        for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
-                            // Here we can control which packages we want to include
+                        //Reflections reflections = new Reflections("de.uni_hamburg.corpora");
+                        // Reflections reflections = new Reflections("");
+                        // Here we can control which packages we want to include
                             String[] validPackages = {
                                     "de.uni_hamburg.corpora.conversion",
                                     "de.uni_hamburg.corpora.publication",
                                     "de.uni_hamburg.corpora.validation",
                                     "de.uni_hamburg.corpora.validation.quest",
                                     "de.uni_hamburg.corpora.visualization",
+                                    "de.idsmannheim.lza.conversion",
+                                    "de.idsmannheim.lza.publication",
+                                    "de.idsmannheim.lza.validation",
                             };
+                        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(validPackages));
+                        boolean checkFunctionName = false;
+                        // Get all classes derived from CorpusData
+                        for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
+                            
                             if (cf.getName().toLowerCase().endsWith(function.toLowerCase()) &&
                                     Arrays.asList(validPackages).contains(cf.getPackage().getName())) {
                                 try {

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xs:element name="record">
+        <xs:complexType>
+            <xs:all>
+                <xs:element minOccurs="0" maxOccurs="1" ref="metadata"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="records"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="files"/>
+            </xs:all>
+            <xs:attribute name="title" use="optional" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="metadata" type="xs:string"/>
+    <xs:element name="records">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="record"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="files">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="file"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="file">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="public" type="xs:boolean" use="optional" default="false"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rootRecord">
+        <xs:complexType>
+            <xs:all>
+                <xs:element minOccurs="1" maxOccurs="1" ref="metadata"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="records"/>
+                <xs:element minOccurs="0" maxOccurs="1" ref="files"/>
+            </xs:all>
+            <xs:attribute name="title" use="optional" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
