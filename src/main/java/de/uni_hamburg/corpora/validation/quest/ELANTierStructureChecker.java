@@ -106,14 +106,14 @@ public class ELANTierStructureChecker extends TierStructureChecker {
                 }
             } catch (JDOMException e) {
                 report.addCritical(getFunction(),ReportItem.newParamMap(
-                        new String[]{"function","description","exception"},
+                        new ReportItem.Field[]{ReportItem.Field.Function,ReportItem.Field.Description,ReportItem.Field.Exception},
                         new Object[]{getFunction(),"Exception when extracting tiers from " + cd.getFilename(), e}
                 ));
             }
         }
         else
             report.addCritical(getFunction(), ReportItem.newParamMap(
-                    new String[]{"function", "description"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description},
                     new Object[]{getFunction(),"Not an ELAN file: " + cd.getFilename()}));
         return tiers;
     }

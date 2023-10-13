@@ -65,7 +65,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         if (duplicateTranscriptionTiers.length > 0) {
             problem = true;
             report.addCritical(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                    ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                             new String[]{getFunction(), cd.getFilename(), "Duplicate transcription tiers: " + String.join(
                             ",", duplicateTranscriptionTiers)}));
         }
@@ -73,7 +73,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         if (orphanedTranscriptionTiers.length > 0) {
             problem = true;
             report.addWarning(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                    ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                             new String[]{getFunction(), cd.getFilename(), "Orphaned transcription tiers: " + String.join(
                             ",", orphanedTranscriptionTiers)}));
         }
@@ -81,7 +81,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         if (orphanedAnnotationTiers.length > 0) {
             problem = true;
             report.addWarning(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                    ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                             new String[]{getFunction(), cd.getFilename(), "Orphaned annotation tiers: " + String.join(
                             ",", orphanedAnnotationTiers)}));
         }
@@ -89,7 +89,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         if (inconsistencies.length > 0) {
             problem = true;
             report.addCritical(getFunction(),
-                    ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                    ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                             new String[]{getFunction(), cd.getFilename(),
                                     "Inconsistencies in common timeline: " + String.join(
                             ",", inconsistencies)}));
@@ -100,7 +100,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
                 annotationMismatches.get(k).length != 0).collect(Collectors.toSet());
         if (!missmatchTiers.isEmpty()) {
             problem = true;
-            report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+            report.addCritical(getFunction(), ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                     new String[]{getFunction(), cd.getFilename(), "Annotation mismatch in tiers: " + String.join(",",
                             missmatchTiers)}));
         }
@@ -110,7 +110,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
             if (!segmentationErrors.isEmpty()) {
                 problem = true;
                 for (Object o : segmentationErrors) {
-                    report.addCritical(getFunction(), ReportItem.newParamMap(new String[]{"function", "filename", "description"},
+                    report.addCritical(getFunction(), ReportItem.newParamMap(new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                             new String[]{getFunction(), cd.getFilename(),
                                     "HIAT Segmentation error: " + o.toString() + " - " + o.getClass()}));
                 }
@@ -118,7 +118,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         }
         if (!problem) {
             report.addCorrect(getFunction(),ReportItem.newParamMap(
-                    new String[]{"function","filename","description"},
+                    new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description},
                     new Object[]{getFunction(),cd.getFilename(),"No problems found in file"}
             ));
         }

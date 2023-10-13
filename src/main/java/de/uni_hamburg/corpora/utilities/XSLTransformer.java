@@ -81,7 +81,8 @@ public class XSLTransformer {
                 transformer = tranformerFactory.newTransformer(xslSource);
                 
                 //trying to get xsl:message into error reports            
-                ((net.sf.saxon.jaxp.TransformerImpl) transformer).getUnderlyingController().setRecoveryPolicy(Configuration.DO_NOT_RECOVER);
+                // 20230831: Setting recovery policy does not seem possible in recent version of Saxon
+                // ((net.sf.saxon.jaxp.TransformerImpl) transformer).getUnderlyingController().setRecoveryPolicy(Configuration.DO_NOT_RECOVER);
                 ((net.sf.saxon.jaxp.TransformerImpl) transformer).getUnderlyingController().setMessageEmitter(new MessageEmitter() {
                     @Override
                     public void open() throws XPathException {

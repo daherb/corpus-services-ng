@@ -131,6 +131,11 @@ public class CorpusIO {
                     && url.getPath().toLowerCase().contains("cmdi") && clcds.contains(CmdiData.class)) {
                 return new CmdiData(url);
             } else {
+                // TODO this method does not work properly e.g. for the suffix xml. Curent workaround: treat xml separately
+                if (url.getPath().toLowerCase().endsWith(".xml")) {
+                    out.println("Read " + url);
+                    return new UnspecifiedXMLData(url);
+                }
                 for (Class<? extends CorpusData> c : clcds) {
                     try {
                         CorpusData cd = c.getDeclaredConstructor(URL.class).newInstance(url);

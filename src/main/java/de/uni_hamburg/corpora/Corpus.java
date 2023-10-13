@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;

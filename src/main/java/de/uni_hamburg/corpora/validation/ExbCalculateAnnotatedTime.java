@@ -168,10 +168,10 @@ public class ExbCalculateAnnotatedTime extends Checker implements CorpusFunction
             if (h.get("T" + Integer.toString(Integer.valueOf(itemID.substring(1)) - 1)) != null) {
                 time = h.get("T" + Integer.toString(Integer.valueOf(itemID.substring(1)) - 1));
             } else {
-                time = new Float(0.0);
+                time = (float) 0.0;
             }
             if (!item.getAttribute("time").equals("")) {
-                time = new Float(item.getAttribute("time"));
+                time = Float.parseFloat(item.getAttribute("time"));
             }
             h.put(itemID, time);
         }

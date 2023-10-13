@@ -176,7 +176,7 @@ public class ExbMerger extends Checker implements CorpusFunction {
         for (int i = 0; i < items.getLength(); i++) { // loop for dealing with each timeline item
             Element item = (Element) items.item(i);
             String itemID = item.getAttribute("id");
-            Float time = new Float(item.getAttribute("time"));
+            Float time = Float.parseFloat(item.getAttribute("time"));
             if (!h.containsKey(itemID)) {
                 h.put(itemID, time);
             } else {

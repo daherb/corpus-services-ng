@@ -1,5 +1,5 @@
 compile_withmaven:
-  image: maven:3.8-openjdk-11
+  image: maven:3.8-openjdk-18
   script:
     - cd lib
     - bash download.sh
@@ -12,4 +12,4 @@ compile_withmaven:
   artifacts:
     expire_in: 10 week
     paths:    
-      - target/corpus-services-1.0.jar
+      - target/corpus-services-ng-1.0.jar
