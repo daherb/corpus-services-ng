@@ -93,7 +93,18 @@ public class CorpusMagician {
     static boolean isCorpus = false;
     static boolean isCollection = false;
 
-    public CorpusMagician() {
+    // Here we can control which packages we want to include
+    public static String[] corpusFunctionPackages = {
+        "de.uni_hamburg.corpora.conversion",
+        "de.uni_hamburg.corpora.publication",
+        "de.uni_hamburg.corpora.validation",
+        "de.uni_hamburg.corpora.validation.quest",
+        "de.uni_hamburg.corpora.visualization",
+        "de.idsmannheim.lza.conversion",
+        "de.idsmannheim.lza.publication",
+        "de.idsmannheim.lza.validation",
+    }; 
+   public CorpusMagician() {
     }
 
     //in the future (for repo and external users)
@@ -707,24 +718,14 @@ public class CorpusMagician {
                         // Use reflections to get all corpus data classes
                         //Reflections reflections = new Reflections("de.uni_hamburg.corpora");
                         // Reflections reflections = new Reflections("");
-                        // Here we can control which packages we want to include
-                            String[] validPackages = {
-                                    "de.uni_hamburg.corpora.conversion",
-                                    "de.uni_hamburg.corpora.publication",
-                                    "de.uni_hamburg.corpora.validation",
-                                    "de.uni_hamburg.corpora.validation.quest",
-                                    "de.uni_hamburg.corpora.visualization",
-                                    "de.idsmannheim.lza.conversion",
-                                    "de.idsmannheim.lza.publication",
-                                    "de.idsmannheim.lza.validation",
-                            };
-                        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(validPackages));
+                        
+                        Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(corpusFunctionPackages));
                         boolean checkFunctionName = false;
                         // Get all classes derived from CorpusData
                         for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
                             
                             if (cf.getName().toLowerCase().endsWith(function.toLowerCase()) &&
-                                    Arrays.asList(validPackages).contains(cf.getPackage().getName())) {
+                                    Arrays.asList(corpusFunctionPackages).contains(cf.getPackage().getName())) {
                                 try {
                                     cf2strcorpusfunctions.add((CorpusFunction) cf.getDeclaredConstructor(Properties.class).newInstance(cfProperties));
 				    checkFunctionName = true;
