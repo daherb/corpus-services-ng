@@ -29,12 +29,7 @@ jobs:
         cache: maven
     - name: Download depencencies
       run: cd lib && bash download.sh && cd ..
-#    - name: Install dependency EXMARaLDA
-#      run: mvn install:install-file -Dfile=lib/EXMARaLDA-Preview-20201130.jar -DgroupId=org.exmaralda -DartifactId=EXMARaLDA -Dversion=Preview-20201130 -Dpackaging=jar  -DgeneratePom=true
-#    - name: Install dependency EXMARaLDA
-#      run: mvn install:install-file -Dfile=lib/elan-6.2.jar -DgroupId=nl.mpi -DartifactId=ELAN -Dversion=6.2 -Dpackaging=jar  -DgeneratePom=true
     - name: Build with Maven
-#      run: mvn -B package --file pom.xml
       run: ./mvnw clean test compile assembly:single
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
@@ -46,3 +41,4 @@ jobs:
         name: corpus-services-ng.jar
         path: target/corpus-services-ng-1.0.jar
         if-no-files-found: warn
+
