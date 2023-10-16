@@ -51,14 +51,17 @@ public abstract class Checker implements CorpusFunction {
     }
 
 
+    @Override
     public Report execute(Corpus c) {
         return execute(c, false);
     }
 
+    @Override
     public Report execute(CorpusData cd) {
         return execute(cd, false);
     }
 
+    @Override
     public Report execute(CorpusData cd, boolean fix) {
         Report report = new Report();
         try {
@@ -102,6 +105,7 @@ public abstract class Checker implements CorpusFunction {
         return report;
     }
 
+    @Override
     public Report execute(Corpus c, boolean fix) {
         Report report = new Report();
         try {
@@ -151,10 +155,12 @@ public abstract class Checker implements CorpusFunction {
 
     public abstract Collection<Class<? extends CorpusData>> getIsUsableFor() ;
 
+    @Override
     public String getFunction() {
         return function;
     }
 
+    @Override
     public Boolean getCanFix() {
         return canfix;
     }
@@ -163,6 +169,7 @@ public abstract class Checker implements CorpusFunction {
      * Lists all supported parameter for the checker
      * @return The map of all parameters and their description
      */
+    @Override
     public Map<String, String> getParameters() {
         return new HashMap<>();
     }

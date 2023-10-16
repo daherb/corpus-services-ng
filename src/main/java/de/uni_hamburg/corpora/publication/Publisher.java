@@ -39,6 +39,7 @@ public abstract class Publisher implements CorpusFunction {
         function = this.getClass().getSimpleName();
     }
 
+    @Override
     public Report execute(Corpus c) {
             report = new Report();
         try {
@@ -70,6 +71,7 @@ public abstract class Publisher implements CorpusFunction {
         return report;
     }
 
+    @Override
     public Report execute(CorpusData cd) {
         report = new Report();
         try {
@@ -101,11 +103,13 @@ public abstract class Publisher implements CorpusFunction {
     }
 
     //no fix boolean needed
+    @Override
     public Report execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
     //no fix boolean needed
+    @Override
     public Report execute(Corpus c, boolean fix) {
         return execute(c);
     }

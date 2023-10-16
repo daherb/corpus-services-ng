@@ -122,6 +122,7 @@ public abstract class Visualizer implements CorpusFunction {
 
     }
 
+    @Override
     public Report execute(CorpusData cd) {
         report = new Report();
         try {
@@ -154,10 +155,12 @@ public abstract class Visualizer implements CorpusFunction {
     }
 
     //no fix boolean needed
+    @Override
     public Report execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
+    @Override
     public Report execute(Corpus c) {
         report = new Report();
         try {
@@ -190,6 +193,7 @@ public abstract class Visualizer implements CorpusFunction {
     }
 
     //no fix boolean needed
+    @Override
     public Report execute(Corpus c, boolean fix) {
         return execute(c);
     }
@@ -211,10 +215,12 @@ public abstract class Visualizer implements CorpusFunction {
         }
     }
 
+    @Override
     public String getFunction() {
         return function;
     }
 
+    @Override
     public Boolean getCanFix() {
         return canfix;
     }
