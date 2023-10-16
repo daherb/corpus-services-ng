@@ -7,7 +7,7 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>corpus-services</name>
+    <name>corpus-services-ng</name>
     <url>http://maven.apache.org</url>
     <build>
         <plugins>
