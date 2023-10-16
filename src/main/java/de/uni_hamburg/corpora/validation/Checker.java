@@ -51,15 +51,15 @@ public abstract class Checker implements CorpusFunction {
     }
 
 
-    public Result execute(Corpus c) {
+    public Report execute(Corpus c) {
         return execute(c, false);
     }
 
-    public Result execute(CorpusData cd) {
+    public Report execute(CorpusData cd) {
         return execute(cd, false);
     }
 
-    public Result execute(CorpusData cd, boolean fix) {
+    public Report execute(CorpusData cd, boolean fix) {
         Report report = new Report();
         try {
             if (fix) {
@@ -72,7 +72,7 @@ public abstract class Checker implements CorpusFunction {
                     report = function(cd, false);
                 }
 
-                return new Result(report,cd);
+                return report;
             } else {
                 report = function(cd, fix);
             }
@@ -99,10 +99,10 @@ public abstract class Checker implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return new Result(report,cd);
+        return report;
     }
 
-    public Result execute(Corpus c, boolean fix) {
+    public Report execute(Corpus c, boolean fix) {
         Report report = new Report();
         try {
             if (fix) {
@@ -113,7 +113,7 @@ public abstract class Checker implements CorpusFunction {
                     report.addCritical(function,
                             "Automatic fix is not yet supported.");
                 }
-                return new Result(report,cd);
+                return report;
             } else {
                 report = function(c, fix);
             }
@@ -140,7 +140,7 @@ public abstract class Checker implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, "File reading error");
         }
-        return new Result(report,cd);
+        return report;
     }
 
     //To implement in the class

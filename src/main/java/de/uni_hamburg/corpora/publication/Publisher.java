@@ -39,7 +39,7 @@ public abstract class Publisher implements CorpusFunction {
         function = this.getClass().getSimpleName();
     }
 
-    public Result execute(Corpus c) {
+    public Report execute(Corpus c) {
             report = new Report();
         try {
 
@@ -67,10 +67,10 @@ public abstract class Publisher implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return new Result(report,cd);
+        return report;
     }
 
-    public Result execute(CorpusData cd) {
+    public Report execute(CorpusData cd) {
         report = new Report();
         try {
             report = function(cd);
@@ -97,16 +97,16 @@ public abstract class Publisher implements CorpusFunction {
         } catch (NoSuchAlgorithmException ex) {
             report.addException(function, ex, cd, "File reading error");
         }
-        return new Result(report,cd);
+        return report;
     }
 
     //no fix boolean needed
-    public Result execute(CorpusData cd, boolean fix) {
+    public Report execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
     //no fix boolean needed
-    public Result execute(Corpus c, boolean fix) {
+    public Report execute(Corpus c, boolean fix) {
         return execute(c);
     }
 

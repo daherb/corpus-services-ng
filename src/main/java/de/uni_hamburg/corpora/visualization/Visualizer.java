@@ -122,7 +122,7 @@ public abstract class Visualizer implements CorpusFunction {
 
     }
 
-    public Result execute(CorpusData cd) {
+    public Report execute(CorpusData cd) {
         report = new Report();
         try {
             report = function(cd);
@@ -150,15 +150,15 @@ public abstract class Visualizer implements CorpusFunction {
             report.addException(function, ex, cd, "File reading error");
         }
 
-        return new Result(report,cd);
+        return report;
     }
 
     //no fix boolean needed
-    public Result execute(CorpusData cd, boolean fix) {
+    public Report execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
-    public Result execute(Corpus c) {
+    public Report execute(Corpus c) {
         report = new Report();
         try {
             report = function(c);
@@ -186,11 +186,11 @@ public abstract class Visualizer implements CorpusFunction {
             report.addException(function, ex, cd, "File reading error");
         }
 
-        return new Result(report,cd);
+        return report;
     }
 
     //no fix boolean needed
-    public Result execute(Corpus c, boolean fix) {
+    public Report execute(Corpus c, boolean fix) {
         return execute(c);
     }
 

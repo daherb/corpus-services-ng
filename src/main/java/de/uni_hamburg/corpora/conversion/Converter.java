@@ -54,11 +54,11 @@ public abstract class Converter implements CorpusFunction {
         props = properties;
     }
 
-    public Result execute(CorpusData cd) {
+    public Report execute(CorpusData cd) {
         report = new Report();
         try {
             report = function(cd);
-            return new Result(report,cd);
+            return report;
         } catch (JexmaraldaException je) {
             report.addException(function, je, cd, "Unknown parsing error");
         } catch (JDOMException jdome) {
@@ -84,14 +84,14 @@ public abstract class Converter implements CorpusFunction {
         } catch (Exception ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new Result(report,cd);
+        return report;
     }
 
-    public Result execute(Corpus c) {
+    public Report execute(Corpus c) {
         report = new Report();
         try {
             report = function(c);
-            return new Result(report,cd);
+            return report;
         } catch (JexmaraldaException je) {
             report.addException(function, je, "Unknown parsing error");
         } catch (JDOMException jdome) {
@@ -117,14 +117,14 @@ public abstract class Converter implements CorpusFunction {
         } catch (Exception ex) {
             Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new Result(report,cd);
+        return report;
     }
 
-    public Result execute(CorpusData cd, boolean fix) {
+    public Report execute(CorpusData cd, boolean fix) {
         return execute(cd);
     }
 
-    public Result execute(Corpus c, boolean fix) {
+    public Report execute(Corpus c, boolean fix) {
         return execute(c);
     }
 

@@ -24,14 +24,14 @@ public class Result {
         return corpusData;
     }
 
-    public Result apply(CorpusFunction corpusFunction) {
-        if (corpusFunction.getIsUsableFor().contains(this.corpusData.getClass())) {
-            Result result = corpusFunction.execute(this.corpusData);
-            this.report.merge(result.getReport());
-            return new Result(this.report,result.getCorpusData());
-        }
-        else {
-            return this;
-        }
-    }
+//    public Result apply(CorpusFunction corpusFunction) {
+//        if (corpusFunction.getIsUsableFor().contains(this.corpusData.getClass())) {
+//            Result result = corpusFunction.execute(this.corpusData);
+//            this.report.merge(result.getReport());
+//            return new Result(this.report,result.getCorpusData());
+//        }
+//        else {
+//            return this;
+//        }
+//    }
 }
