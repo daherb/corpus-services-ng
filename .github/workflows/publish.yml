@@ -1,16 +1,15 @@
 ---
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Publish CI build as new release
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for
-  # the "main" branch
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  # Only run if the CI build succeeded
+  workflow_run:
+    workflows: [Java CI with Maven]
+    types:
+      - completed
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -26,17 +25,45 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part
     # of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job
-      # can access it
-      - uses: actions/checkout@v3
-      # your stuff
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      - run: npm install moment
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Install node packages
+        run: npm install moment
       - uses: actions/github-script@v6
         with:
           debug: false
-          script: | 
-            const script = require('./.github/workflows/publish.js');
-            script.publish(github,context);
+          script: |
+            const moment = require('moment')
+            const fs = require('fs');
+            tag_name = moment().format('YYYYMMDD-HHmmss');
+            releaseInfo = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name});
+            console.log(releaseInfo);
+            releaseId = releaseInfo.data.id;
+            releaseUrl = releaseInfo.data.upload_url;
+            artifacts = await github.rest.actions.listArtifactsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            artifacts.data.artifacts.sort(function(a,b){return Date.parse(b["created_at"]) - Date.parse(a["created_at"])})
+            artifactId = artifacts.data.artifacts[0].id;
+            result = await github.rest.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: artifactId,
+              archive_format: "zip",
+              });
+            zipData = result.data;
+            result = await github.request({
+              method: "POST",
+              url: releaseUrl,
+              headers: {
+                "content-type": "application/zip",
+                },
+              data: zipData,
+              name: "corpus-services.zip",
+              label: "Build",
+              });
+            console.log(result);
