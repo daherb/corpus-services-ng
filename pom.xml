@@ -85,10 +85,10 @@
                     <!--mainClass>de.uni_hamburg.corpora.utilities.MediaFileChecker</mainClass-->
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.5.6</version>
+                <version>4.8.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -97,7 +97,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin -->
         </plugins>
         <resources>
             <resource>
