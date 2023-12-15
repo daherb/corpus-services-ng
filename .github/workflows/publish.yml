@@ -8,6 +8,8 @@ on:
   # Only run if the CI build succeeded
   workflow_run:
     workflows: [Java CI with Maven]
+    branches: 
+      - main
     types:
       - completed
 
