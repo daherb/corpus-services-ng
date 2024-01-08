@@ -336,7 +336,10 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                 allValues.get(critName).getOrDefault("#EMPTY#",0));
                         stats.append(" empty values)");
                         stats.append(":\n");
-                        for (String val : vals.keySet()) {
+                        // Sort values with most frequent first
+                        ArrayList<String> valsList = new ArrayList<>(vals.keySet());
+                        Collections.sort(valsList, Comparator.comparingInt(vals::get).reversed());
+                        for (String val : valsList) {
                             stats.append(" - ");
                             stats.append(val);
                             stats.append(" (");
