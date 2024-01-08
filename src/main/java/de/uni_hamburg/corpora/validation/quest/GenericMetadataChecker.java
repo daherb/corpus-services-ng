@@ -78,6 +78,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
         if (properties.containsKey("full-summary") && properties.getProperty("full-summary").equalsIgnoreCase(
                 "true"))
             showFullSummary = true;
+        	// TODO actually implement full summary
     }
 
     /**
