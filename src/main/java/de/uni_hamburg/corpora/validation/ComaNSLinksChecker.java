@@ -37,6 +37,10 @@ import javax.xml.xpath.XPathExpressionException;
 
 /**
  * This class checks for existence of files linked in the coma file.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaNSLinksChecker extends Checker implements CorpusFunction {
 

@@ -14,10 +14,11 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210728
- *
  * Checker for the generic metadata within an IMDI corpus
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class IMDIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 

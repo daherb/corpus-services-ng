@@ -23,6 +23,10 @@ import org.jdom2.JDOMException;
  * The class that checks out if all annotations for Nganasan Corpus are from
  * the annotation specification file and there are no annotations in the
  * coma file not present in the annotation specification file.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class NgTierCheckerWithAnnotation extends Checker implements CorpusFunction {
 

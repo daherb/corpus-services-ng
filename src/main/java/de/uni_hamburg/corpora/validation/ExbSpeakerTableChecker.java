@@ -22,6 +22,10 @@ import org.xml.sax.SAXException;
  * A class that checks IDs in speaker tables of EXB files correspond to 
  * respective abbreviations. If there are mismatches, it corrects them.
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbSpeakerTableChecker extends Checker implements CorpusFunction {
     

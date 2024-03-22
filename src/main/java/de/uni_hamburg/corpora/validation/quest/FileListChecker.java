@@ -25,8 +25,9 @@ import java.util.stream.Collectors;
 /**
  * Checker to compare a list of present files against a list of expected files
  *
- * @author bba1792, Dr. Herbert Lange
- * @version 20220324
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FileListChecker extends Checker implements CorpusFunction {
 

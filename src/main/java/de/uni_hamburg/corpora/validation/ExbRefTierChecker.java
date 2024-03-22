@@ -25,6 +25,10 @@ import org.xml.sax.SAXException;
  * A class that checks reference tiers in exb files and finds out whether or not
  * the order of the numbering and speaker reference are correct. If there are
  * mistakes in the ref tiers, it corrects them thanks to its fix function.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbRefTierChecker extends Checker implements CorpusFunction {
 

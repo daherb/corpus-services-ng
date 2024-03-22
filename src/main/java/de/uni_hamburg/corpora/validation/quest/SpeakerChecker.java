@@ -19,8 +19,10 @@ import java.util.*;
 
 /**
  * Checker for speaker consistency in a corpus
- * @author bba1792, Dr. Herbert Lange
- * @version 20220314
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public abstract class SpeakerChecker extends Checker implements CorpusFunction {
 

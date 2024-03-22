@@ -33,7 +33,10 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
  * @author bay7303
  *
  * This class looks for missing timestamps and issues warnings if finds them.
- * 
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class ExbTimestampsChecker extends Checker implements CorpusFunction {

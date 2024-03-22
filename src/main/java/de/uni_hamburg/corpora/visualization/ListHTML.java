@@ -44,6 +44,9 @@ import org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation;
  *
  * This class creates an html visualization in the List format from an exb.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ListHTML extends Visualizer {
 

@@ -42,6 +42,9 @@ import org.exmaralda.coma.helpers.*;
  * This class checks Exmaralda exb files for segmentation problems and creates
  * segmented exs from the exbs.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbSegmentationChecker extends Checker implements CorpusFunction {
 

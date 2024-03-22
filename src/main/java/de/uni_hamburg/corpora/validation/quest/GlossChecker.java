@@ -19,8 +19,10 @@ import java.util.logging.Logger;
 
 /**
  * Checker for glossing tiers
- * @author bba1792, Dr. Herbert Lange
- * @version 20220202
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public abstract class GlossChecker extends Checker implements CorpusFunction {
 

@@ -26,6 +26,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class ExbSeparateTiersForDifferentSpeakers extends Checker implements CorpusFunction {

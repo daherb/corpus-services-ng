@@ -18,8 +18,10 @@ import java.util.logging.Logger;
 
 /**
  * Example checker for STTS tags in an EXMARaLDA corpus
- * @author bba1792, Dr. Herbert Lange
- * @version 20220328
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXMARaLDASTTSChecker extends Checker implements CorpusFunction  {
 

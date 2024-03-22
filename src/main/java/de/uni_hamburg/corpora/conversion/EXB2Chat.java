@@ -32,6 +32,10 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  *
  * @author Tommi A Pirinen
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXB2Chat extends Converter implements CorpusFunction {
 

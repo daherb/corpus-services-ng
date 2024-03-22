@@ -31,6 +31,10 @@ import org.xml.sax.SAXException;
 /**
  * Simple function to publish all unpublished drafts
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class InvenioPublishDrafts extends Publisher implements CorpusFunction {
 

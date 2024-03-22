@@ -31,6 +31,9 @@ import org.jdom2.JDOMException;
 /**
  * This class checks basic transcription files for structural anomalies.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbStructureChecker extends Checker implements CorpusFunction {
 

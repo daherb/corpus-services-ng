@@ -28,8 +28,10 @@ import org.xml.sax.SAXException;
  * things a lot easier
  *
  * @author Daniel Jettka
+ *
+ * Last updated
  * @author Herbert Lange
- * @version 20230105
+ * @version 20240322
  */
 public abstract class Visualizer implements CorpusFunction {
 

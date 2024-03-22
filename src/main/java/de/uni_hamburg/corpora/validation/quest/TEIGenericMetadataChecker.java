@@ -12,10 +12,11 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20211007
- *
  * Checker for the generic metadata using TEI headers
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class TEIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 

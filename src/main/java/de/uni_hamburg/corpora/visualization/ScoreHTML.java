@@ -49,6 +49,9 @@ import org.xml.sax.SAXException;
  *
  * This class creates an html visualization in the Score format from an exb.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ScoreHTML extends Visualizer {
 

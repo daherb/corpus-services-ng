@@ -29,6 +29,10 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
 

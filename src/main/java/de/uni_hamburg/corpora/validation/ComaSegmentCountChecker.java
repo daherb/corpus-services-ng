@@ -26,6 +26,10 @@ import org.xml.sax.SAXException;
 /**
  * A class that checks whether there are more than one segmentation algorithms
  * used in the coma file. If that is the case, it issues warnings.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
 

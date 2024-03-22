@@ -31,8 +31,10 @@ import org.xml.sax.SAXException;
  * How to also put another file as input for an check?
  *
  * @author ???
+ *
+ * Last updated
  * @author Herbert Lange
- * @version 20230105
+ * @version 20240322
  */
 public abstract class Converter implements CorpusFunction {
 

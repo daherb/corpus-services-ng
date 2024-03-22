@@ -36,6 +36,10 @@ import org.jdom2.JDOMException;
  *      1 % missing, and 4 % with errors (see details here: ___)
  *      12400 of annotations: 100 % done correctly, 7 % with warnings.
  * </pre>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class Report {
 

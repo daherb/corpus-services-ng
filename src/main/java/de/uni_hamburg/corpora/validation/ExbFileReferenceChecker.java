@@ -33,6 +33,10 @@ import org.w3c.dom.NodeList;
 
 /**
  * A validator for EXB-file's references.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbFileReferenceChecker extends Checker implements CorpusFunction {
 

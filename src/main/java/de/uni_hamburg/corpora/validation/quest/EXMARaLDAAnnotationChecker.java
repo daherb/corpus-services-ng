@@ -25,8 +25,10 @@ import java.util.stream.Collectors;
 
 /**
  * EXMARaLDA version of the annotation checker
- * @author bba1792, Dr. Herbert Lange
- * @version 20220823
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXMARaLDAAnnotationChecker extends AnnotationChecker {
 

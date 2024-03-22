@@ -26,10 +26,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20211018
- *
  * Abstract Checker for the generic metadata
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 abstract class GenericMetadataChecker extends Checker implements CorpusFunction {
 

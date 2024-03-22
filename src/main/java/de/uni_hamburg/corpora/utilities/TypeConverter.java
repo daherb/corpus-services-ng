@@ -39,6 +39,10 @@ import org.xml.sax.SAXException;
  * @author Daniel Jettka
  *
  * Class containing methods for converting between data types.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class TypeConverter {
 

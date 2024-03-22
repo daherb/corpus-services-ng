@@ -23,8 +23,10 @@ import java.util.stream.Collectors;
 
 /**
  * Checker for transcription data in an EXMARaLDA file
- * @author bba1792, Dr. Herbert Lange
- * @version 20220516
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
 

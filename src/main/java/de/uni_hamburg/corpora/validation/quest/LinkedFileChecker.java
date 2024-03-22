@@ -29,8 +29,9 @@ import java.util.stream.Collectors;
 /**
  * Extracts a list of referenced files from a corpus
  *
- * @author bba1792, Dr. Herbert Lange
- * @version 20220318
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class LinkedFileChecker extends Checker implements CorpusFunction {
 

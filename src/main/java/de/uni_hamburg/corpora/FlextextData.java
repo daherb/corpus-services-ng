@@ -35,6 +35,10 @@ import org.apache.commons.io.FilenameUtils;
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
  * 
  * NB: The class was copied over from ELANData, might need some cleaning up
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FlextextData implements CorpusData, ContentData, XMLData {
 

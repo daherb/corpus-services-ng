@@ -39,6 +39,10 @@ import org.jdom2.xpath.XPath;
 /**
  *
  * @author anne
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class VikusViewer extends Visualizer {
 

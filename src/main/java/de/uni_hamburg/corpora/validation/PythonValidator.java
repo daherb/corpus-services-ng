@@ -21,6 +21,13 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/***
+ * Runs some python script as a  validator
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
+ */
 public class PythonValidator extends Checker implements CorpusFunction {
 
     Logger logger = Logger.getLogger(this.getFunction());

@@ -37,6 +37,10 @@ import org.xml.sax.SAXException;
 /**
  * Class using the REST API to retrieve a corpus from Invenio
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class InvenioDissemination extends Publisher implements CorpusFunction {
 

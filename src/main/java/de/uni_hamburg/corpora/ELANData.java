@@ -41,6 +41,10 @@ import org.apache.commons.io.FilenameUtils;
  * Provides access to basic transcriptions as a data type that can be read and
  * written HZSK corpus services. Naming might change, depending on what it ends
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ELANData implements CorpusData, ContentData, XMLData {
 

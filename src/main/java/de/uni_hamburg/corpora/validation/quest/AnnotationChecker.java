@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 
 /**
  * Abstract annotation checker class
- * @author bba1792, Dr. Herbert Lange
- * @version 20220905
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 

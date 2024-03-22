@@ -47,9 +47,11 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20221114
  * The checker for Refco set of criteria.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 

@@ -36,6 +36,10 @@ import org.languagetool.language.GermanyGerman;
 
 /**
  * A grammar and spelling error checker for EXB tiers mainly.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class LanguageToolChecker extends Checker implements CorpusFunction {
 

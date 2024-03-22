@@ -22,8 +22,10 @@ import java.util.logging.Logger;
 
 /**
  * Finds a list of tiers based on a pattern
- * @author bba1792, Dr. Herbert Lange
- * @version 20220328
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 abstract class TierFinder extends Checker implements CorpusFunction {
 

@@ -33,7 +33,10 @@ import org.xml.sax.SAXException;
 
 /**
  * This class validates the coma file with the respective XML schema.
- * 
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaXsdChecker extends Checker implements CorpusFunction {
 

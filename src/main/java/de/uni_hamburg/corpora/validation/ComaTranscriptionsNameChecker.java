@@ -25,6 +25,10 @@ import org.xml.sax.SAXException;
  * A class that checks whether or not there is a mismatch between basic and
  * segmented names, basic and segmented file names, plus their NSLinks for each
  * communication in the coma file.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunction {
 

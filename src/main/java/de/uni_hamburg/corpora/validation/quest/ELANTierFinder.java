@@ -15,8 +15,10 @@ import java.util.stream.Collectors;
 
 /**
  * Finds tiers in an ELAN corpus based on a pattern
- * @author bba1792, Dr. Herbert Lange
- * @version 20220328
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ELANTierFinder extends TierFinder {
 

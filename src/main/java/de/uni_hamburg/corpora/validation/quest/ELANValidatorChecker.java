@@ -29,8 +29,9 @@ import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 /**
  * Using the built-in ELAN file checker in corpus services
  *
- * @author bba1792 Dr. Herbert Lange
- * @version 20211019
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ELANValidatorChecker extends Checker implements CorpusFunction {
 

@@ -35,6 +35,10 @@ import org.xml.sax.SAXException;
 /**
  * This class loads coma data and for all communications adds all tiers found in
  * the linked exb as a key value pairs to the description.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaAddTiersFromExbsCorrector extends Checker implements CorpusFunction {
 

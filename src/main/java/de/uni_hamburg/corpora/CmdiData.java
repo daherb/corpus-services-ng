@@ -28,6 +28,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Ozzy
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class CmdiData implements CorpusData, XMLData, Metadata {
 

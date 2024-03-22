@@ -27,6 +27,13 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Checks if an XML file conforms to a XSD schema
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
+ */
 public class XsdChecker  extends Checker implements CorpusFunction {
 
     private final Logger logger = Logger.getLogger(getFunction());

@@ -27,6 +27,10 @@ import org.w3c.dom.NodeList;
 
 /**
  * A class that checks for mixed scripts (e.g. Cyrillic/Latin) in the transcription.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbScriptMixChecker extends Checker implements CorpusFunction {
     ArrayList<String> lsTiersToCheck = new ArrayList<>(

@@ -34,7 +34,10 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
  *
  * This class issues warnings if the tokenization tier contains events 
  * with internal whitespace characters.
- * 
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class ExbEventTokenizationChecker extends Checker implements CorpusFunction {

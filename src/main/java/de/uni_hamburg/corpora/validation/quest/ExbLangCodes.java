@@ -27,11 +27,11 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
- *
- * @author bba1792
- *
  * This class checks all language codes to match the ISO 639-3 list
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class ExbLangCodes extends Checker implements CorpusFunction {

@@ -82,6 +82,10 @@ import org.xml.sax.SAXException;
  *   \-zzz42.xyz
  * ```
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FolderToBasicSIP extends Converter implements CorpusFunction {
 

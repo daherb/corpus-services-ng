@@ -56,6 +56,9 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  * This class takes an exb as input and converts it into ISO standard TEI
  * format.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 

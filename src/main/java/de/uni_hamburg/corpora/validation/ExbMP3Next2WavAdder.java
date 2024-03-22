@@ -28,6 +28,9 @@ import javax.xml.xpath.XPathExpressionException;
  * This class adds the path to an MP3 file next to the WAV file linked as a
  * recording in an exb file.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbMP3Next2WavAdder extends Checker implements CorpusFunction {
 

@@ -10,10 +10,11 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210728
- *
  * Checker for the generic metadata within a CHILDES/TalkBank corpus
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ChildesGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 

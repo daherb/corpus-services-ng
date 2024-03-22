@@ -31,6 +31,10 @@ import org.jdom2.Element;
 /**
  *
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FlextextPunctuationChecker extends Checker implements CorpusFunction {
 

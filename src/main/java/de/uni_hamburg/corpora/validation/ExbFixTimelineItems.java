@@ -28,6 +28,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 //TODO: files with multiple speakers

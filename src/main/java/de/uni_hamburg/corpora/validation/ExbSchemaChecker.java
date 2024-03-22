@@ -34,6 +34,10 @@ import org.xml.sax.SAXException;
 
 /**
  * This class validates a exb file with its DTD file.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class ExbSchemaChecker extends Checker implements CorpusFunction {

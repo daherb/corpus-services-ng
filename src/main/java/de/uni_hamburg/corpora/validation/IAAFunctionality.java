@@ -27,6 +27,10 @@ import org.xml.sax.SAXException;
  * of the same file have different annotations for the same event/token. Moreover, this
  * functionality includes the inter-annotator agreement: percentage of overlapping 
  * choices between the annotators.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class IAAFunctionality extends Checker implements CorpusFunction {

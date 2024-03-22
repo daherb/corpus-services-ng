@@ -32,6 +32,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author anne
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbFileCoverageChecker extends Checker implements CorpusFunction {
 

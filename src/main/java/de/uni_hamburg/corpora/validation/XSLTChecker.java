@@ -32,6 +32,9 @@ import org.jdom2.xpath.XPath;
  * This class runs many little checks specified in a XSLT stylesheet and adds
  * them to the report.";
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class XSLTChecker extends Checker implements CorpusFunction {
 

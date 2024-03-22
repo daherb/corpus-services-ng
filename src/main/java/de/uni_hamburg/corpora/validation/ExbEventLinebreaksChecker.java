@@ -36,6 +36,9 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
  * linebreaks in the events and adds those warnings to the report which it
  * returns.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbEventLinebreaksChecker extends Checker implements CorpusFunction {
 

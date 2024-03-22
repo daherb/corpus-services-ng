@@ -38,6 +38,10 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  * Provides access to basic transcriptions as a data type that can be read and
  * written HZSK corpus services. Naming might change, depending on what it ends
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXMARaLDATranscriptionData implements CorpusData, ContentData, XMLData {
 

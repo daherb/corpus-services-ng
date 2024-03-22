@@ -23,6 +23,10 @@ import org.xml.sax.SAXException;
  * A class that checks speaker attributes in tiers of EXB files correspond to 
  * values in the speaker table. For files with only one speaker, it corrects them.
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbSpeakerTierChecker extends Checker implements CorpusFunction {
     

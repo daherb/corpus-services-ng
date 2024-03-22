@@ -57,7 +57,7 @@ import org.xml.sax.SAXException;
  * - all files having the metadata filename as a prefix are grouped together
  * - there is exactly one metadata file which is not the prefix of any file
  * - this file will be used as the top-level metadata
- * 
+ *
  * An example is here, where root.cmdi is the top-level metadata and the files
  * will be grouped into three records aaa, aab and zzz. The record aaa contains the
  * metadata file aaa.cmdi and the file aaa.abc, the record aab contains the metadata
@@ -78,6 +78,10 @@ import org.xml.sax.SAXException;
  *   \-zzz42.xyz
  * ```
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
 

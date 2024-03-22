@@ -36,6 +36,10 @@ import org.xml.sax.SAXException;
  * Still to do
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class CorpusIO {
     Collection<CorpusData> cdc = new HashSet<>();

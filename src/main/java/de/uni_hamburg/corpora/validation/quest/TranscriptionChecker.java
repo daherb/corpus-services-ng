@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 
 /**
  * Super class for checking transcription alphabets
- * @author bba1792, Dr. Herbert Lange
- * @version 20220905
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 abstract class TranscriptionChecker extends Checker implements CorpusFunction {
 

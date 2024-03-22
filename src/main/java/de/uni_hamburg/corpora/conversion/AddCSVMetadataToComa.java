@@ -44,6 +44,10 @@ import org.jdom2.xpath.jaxen.JaxenXPathFactory;
  * into an existing coma file there needs to be a header with information of the
  * information in the columns the first line has to consist of the sigle of the
  * speaker or name of the communication the metadata should be assigned to
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
 

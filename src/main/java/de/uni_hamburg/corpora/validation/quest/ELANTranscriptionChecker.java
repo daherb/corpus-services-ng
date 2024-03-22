@@ -26,8 +26,10 @@ import java.util.stream.Collectors;
 
 /**
  * Checker for transcription alphabets
- * @author bba1792, Dr. Herbert Lange
- * @version 20220324
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ELANTranscriptionChecker extends TranscriptionChecker {
 

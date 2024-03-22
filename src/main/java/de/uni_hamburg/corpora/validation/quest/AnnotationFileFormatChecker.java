@@ -33,8 +33,9 @@ import java.util.stream.Collectors;
  * Checker that checks for common annotation file formats and which can give feedback about support for the file
  * format for several archives based on the data provided by CLARIN SIS (https://standards.clarin.eu/sis/)
  *
- * @author bba1792, Dr. Herbert Lange
- * @version 20220905
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class AnnotationFileFormatChecker extends Checker implements CorpusFunction {
 

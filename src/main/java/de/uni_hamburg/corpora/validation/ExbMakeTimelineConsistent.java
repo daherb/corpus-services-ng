@@ -30,6 +30,9 @@ import org.xml.sax.SAXException;
  * timepoints and interpolates timeline items without time info if the parameter
  * is set.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction {
 

@@ -25,6 +25,10 @@ import org.xml.sax.SAXException;
  * A class that identifies and lists fields which contain location information;
  * creates a list of different location names; gets geo-coordinates for the
  * location names via Google API.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaKmlForLocations extends Checker implements CorpusFunction {
 

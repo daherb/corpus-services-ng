@@ -22,6 +22,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Daniel Jettka
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class GATListHTML extends ListHTML {
     

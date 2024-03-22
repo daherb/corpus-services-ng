@@ -37,6 +37,10 @@ import java.math.BigInteger;
 /**
  *
  * @author Timofey Arkhangelskiy <timofey.arkhangelskiy@uni-hamburg.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class DuplicateTierContentChecker extends Checker implements CorpusFunction {
 

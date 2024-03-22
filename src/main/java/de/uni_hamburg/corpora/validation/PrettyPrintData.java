@@ -43,6 +43,10 @@ import org.xml.sax.SAXException;
  *
  * This class takes XML corpusdata and formats it in the same way to avoid merge
  * conflicts.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class PrettyPrintData extends Checker implements CorpusFunction {
 

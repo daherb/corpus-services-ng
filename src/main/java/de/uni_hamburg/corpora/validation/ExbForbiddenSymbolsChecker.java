@@ -29,6 +29,10 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
  * This class checks if there are forbidden symbols in the transcription.
  * 
  * @author Aleksandr Riaposov <aleksandr.riaposov@uni-hamburg.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbForbiddenSymbolsChecker extends Checker implements CorpusFunction {
     ArrayList<String> lsTiersToCheck = new ArrayList<>(

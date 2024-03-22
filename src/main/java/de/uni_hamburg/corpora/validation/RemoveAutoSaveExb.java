@@ -31,6 +31,10 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class RemoveAutoSaveExb extends Checker implements CorpusFunction {
 

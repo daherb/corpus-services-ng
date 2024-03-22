@@ -29,6 +29,9 @@ import org.xml.sax.SAXException;
  * This class normalises the basic transcription data using the EXMARaLDA
  * function and fixes white spaces if set by a parameter.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbNormalize extends Checker implements CorpusFunction {
 

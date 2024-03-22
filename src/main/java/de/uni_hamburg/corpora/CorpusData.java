@@ -19,6 +19,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public interface CorpusData {
 

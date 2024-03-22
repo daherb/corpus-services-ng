@@ -39,6 +39,10 @@ import org.exmaralda.partitureditor.fsm.FSMException;
  * This is the check procedure for the Nganasan Corpus
  *
  * @author hanna
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction {
 

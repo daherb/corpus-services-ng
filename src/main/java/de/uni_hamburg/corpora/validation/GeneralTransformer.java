@@ -26,6 +26,10 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class GeneralTransformer extends Checker {
 

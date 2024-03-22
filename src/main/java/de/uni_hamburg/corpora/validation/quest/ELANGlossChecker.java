@@ -14,6 +14,10 @@ import java.util.*;
 
 /**
  * Gloss checker specific for ELAN files
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ELANGlossChecker extends GlossChecker {
     public ELANGlossChecker(List<String> tiers, Set<String> validGlosses, Set<String> glossSeparator, Properties properties) {

@@ -47,6 +47,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class CheckBag extends Checker implements CorpusFunction{
 

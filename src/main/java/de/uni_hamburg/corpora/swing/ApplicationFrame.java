@@ -56,6 +56,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author thomas
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ApplicationFrame extends javax.swing.JFrame {
 

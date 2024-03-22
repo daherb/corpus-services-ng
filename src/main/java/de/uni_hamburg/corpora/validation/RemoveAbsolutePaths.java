@@ -32,6 +32,10 @@ import org.exmaralda.partitureditor.fsm.FSMException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
 
