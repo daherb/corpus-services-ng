@@ -15,7 +15,6 @@ import de.uni_hamburg.corpora.publication.Publisher;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;

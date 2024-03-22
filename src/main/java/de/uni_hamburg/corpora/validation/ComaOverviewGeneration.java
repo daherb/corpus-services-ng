@@ -13,14 +13,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 /**

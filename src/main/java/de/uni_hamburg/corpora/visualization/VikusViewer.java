@@ -29,7 +29,6 @@ import com.opencsv.CSVReader;
 import de.uni_hamburg.corpora.ComaData;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 

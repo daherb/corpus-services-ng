@@ -18,7 +18,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.io.IOUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**

@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;

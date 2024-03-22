@@ -42,12 +42,7 @@ import org.exmaralda.partitureditor.fsm.FSMException;
  */
 public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction {
 
-    private Element communication;
-    private Element basTrans;
-    private Element segTrans;
-    private Element rec;
     private String comafilename;
-    private File comafile;
     private String comadirname;
     final String NSLC = "nslc";
 
@@ -61,12 +56,8 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
         try {
             stats = exceptionalCheck();
             stats.merge(requireObligatoryAnnotationTiersAndTypes());
-        } catch (JexmaraldaException je) {
-            stats.addException(je, "Unknown parsing error");
-        } catch (JDOMException jdome) {
-            stats.addException(jdome, "Unknown parsing error");
-        } catch (SAXException saxe) {
-            stats.addException(saxe, "Unknown parsing error");
+        } catch (JexmaraldaException | JDOMException | SAXException ex) {
+            stats.addException(ex, "Unknown parsing error");
         } catch (IOException ioe) {
             stats.addException(ioe, "Reading error");
         }
@@ -506,20 +497,12 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
      * the primal functionality of the feature can be implemented, and
      * additionally checks for parser configuration, SAXE and IO exceptions.
      */
-    public Report check(CorpusData cd) throws SAXException, JexmaraldaException {
+    public Report check(CorpusData cd) throws JexmaraldaException {
         Report stats = new Report();
         try {
             stats = exceptionalCheck(cd);
             stats.merge(requireObligatoryAnnotationTiersAndTypes());
-        } catch (JexmaraldaException je) {
-            stats.addException(je, "Unknown parsing error");
-        } catch (JDOMException jdome) {
-            stats.addException(jdome, "Unknown parsing error");
-        } catch (SAXException saxe) {
-            stats.addException(saxe, "Unknown parsing error");
-        } catch (IOException ioe) {
-            stats.addException(ioe, "Reading/writing error");
-        } catch (ParserConfigurationException ex) {
+        } catch (JexmaraldaException | JDOMException | IOException | SAXException ex) {
             Logger.getLogger(NgexmaraldaCorpusChecker.class.getName()).log(Level.SEVERE, null, ex);
         }
         return stats;
@@ -530,7 +513,7 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
      * with the coma file.
      */
     private Report exceptionalCheck(CorpusData cd)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, JDOMException {
+            throws IOException, JexmaraldaException, JDOMException {
         Report stats = new Report();
         comafilename = cd.getURL().getFile();
         comadirname = comafilename.substring(0, comafilename.lastIndexOf("/") + 1);

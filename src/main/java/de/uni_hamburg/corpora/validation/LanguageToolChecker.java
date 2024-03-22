@@ -33,8 +33,6 @@ import org.jdom2.xpath.XPath;
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.GermanyGerman;
-//import org.languagetool.language.BritishEnglish;
-//import org.languagetool.language.Russian;
 
 /**
  * A grammar and spelling error checker for EXB tiers mainly.

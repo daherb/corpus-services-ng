@@ -1,6 +1,5 @@
 package de.uni_hamburg.corpora.validation.quest;
 
-import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.ELANData;
 import de.uni_hamburg.corpora.Report;

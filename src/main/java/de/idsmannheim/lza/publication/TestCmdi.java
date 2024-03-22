@@ -4,10 +4,7 @@
  */
 package de.idsmannheim.lza.publication;
 
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import de.idsmannheim.lza.datacitejavaapi.DataciteAPI;
-import de.idsmannheim.lza.datacitejavaapi.DataciteAPITools;
+
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
@@ -15,12 +12,10 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.publication.Publisher;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;

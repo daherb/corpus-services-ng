@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 

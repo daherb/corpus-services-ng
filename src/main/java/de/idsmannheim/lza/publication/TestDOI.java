@@ -19,7 +19,6 @@ import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;

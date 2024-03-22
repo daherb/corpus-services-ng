@@ -26,7 +26,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.exmaralda.common.corpusbuild.FileIO;
 import org.exmaralda.partitureditor.interlinearText.HTMLParameters;
 import org.exmaralda.partitureditor.interlinearText.InterlinearText;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;

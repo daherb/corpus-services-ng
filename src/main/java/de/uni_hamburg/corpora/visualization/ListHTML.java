@@ -14,8 +14,6 @@ import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.exmaralda.common.corpusbuild.FileIO;
-import org.exmaralda.common.jdomutilities.IOUtilities;
 import org.exmaralda.partitureditor.jexmaralda.ListTranscription;
 import org.exmaralda.partitureditor.jexmaralda.SegmentedTranscription;
 import org.exmaralda.partitureditor.jexmaralda.segment.CHATSegmentation;

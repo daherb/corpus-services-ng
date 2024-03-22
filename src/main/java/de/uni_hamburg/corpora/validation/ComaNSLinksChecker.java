@@ -31,7 +31,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
