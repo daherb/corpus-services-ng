@@ -10,10 +10,13 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.*;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
@@ -81,14 +84,12 @@ public class RemoveEmptyEvents extends Checker implements CorpusFunction {
         return IsUsableFor;
     }
 
-    public List findAllEmptyEvents(XMLData xml) throws JDOMException {
+    public List<Element> findAllEmptyEvents(XMLData xml) throws JDOMException {
         doc = xml.getJdom();
         //maybe pretty print too
-        XPath xp1;
         //needs to be working for exs too
-        xp1 = XPath.newInstance("//event[not(text())]");
-        List allEmptyEvents = xp1.selectNodes(doc);
-        return allEmptyEvents;
+        XPathExpression<Element> xp1 = new XPathBuilder<>("//event[not(text())]", Filters.element()).compileWith(new JaxenXPathFactory());
+        return xp1.evaluate(doc);
     }
 
     /**Default function which returns a two/three line description of what 

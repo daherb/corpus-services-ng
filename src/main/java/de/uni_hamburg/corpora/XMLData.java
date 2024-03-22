@@ -5,7 +5,7 @@
  */
 package de.uni_hamburg.corpora;
 
-import org.jdom.Document;
+import org.jdom2.Document;
 
 /**
  *

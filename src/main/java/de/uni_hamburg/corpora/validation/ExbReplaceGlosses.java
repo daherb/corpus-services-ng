@@ -12,12 +12,16 @@ import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 
@@ -37,7 +41,8 @@ public class ExbReplaceGlosses extends Checker implements CorpusFunction {
     String contextTier = null;
     String contextPrefix = null;
     String contextSuffix = null;
-    
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
+
     public void setReplacementTier(String tier) {
         replacementTier = tier;
     }
@@ -96,43 +101,28 @@ public class ExbReplaceGlosses extends Checker implements CorpusFunction {
         //System.out.println(glossFinder.toString());
         CorpusIO cio = new CorpusIO();
         String XPathGloss = "//tier[@category='" + replacementTier + "']/event";
-        XPath XGloss = XPath.newInstance(XPathGloss);
-        List allGlosses = XGloss.selectNodes(doc);
-        for (int g = 0; g < allGlosses.size(); g++) {
-            Object og = allGlosses.get(g);
-            if (og instanceof Element) {
-                Element matchedElement = (Element) og;
-                String glossText = matchedElement.getText();
-                //System.out.println(glossText + "is the gloss text I've found");
-                //System.out.println(glossFinder.toString() + "is the regular expression");
-                Matcher m = glossFinder.matcher(glossText);
-                if (m.find()) {
-                    if (contextValue != null) {
-                        //System.out.println("We have a match! Let's look for context... which should be " + contextValue);
-                        String timeStamp = matchedElement.getAttributeValue("start");
-                        String XPathContext = "//tier[@category='" + contextTier + "']/event[@start='" + timeStamp + "']";
-                        XPath XContext = XPath.newInstance(XPathContext);
-                        Object co = XContext.selectSingleNode(doc);
-                        Element ce = (Element) co;
-                        String contextText = ce.getText();
-                        String contextRegex = contextPrefix + contextValue + contextSuffix;
-                        Pattern contextFinder = Pattern.compile(contextRegex);
-                        //System.out.println(contextText + " is the context value");
-                        //System.out.println(contextFinder.toString());
-                        Matcher ctxm = contextFinder.matcher(contextText);
-                        if (ctxm.find()) {
-                            System.out.println(m.group() + " matched an expression you wanted to replace in " + glossText + " The context is " + contextText);
-                            glossText = m.replaceAll(newGloss);
-                            matchedElement.setText(glossText);
-                            //System.out.println(matchedElement.getText());
-                            if (fix) {
-                                cd.updateUnformattedString(TypeConverter.JdomDocument2String(doc));
-                                cio.write(cd, cd.getURL());
-                                stats.addFix(function, cd, "Replaced " + originalGloss + " with " + newGloss + " in " + glossText);
-                            }
-                        } else {System.out.println("The context didn't match :(");}
-                    } else {
-                        System.out.println(m.group() + " matched an expression you wanted to replace in " + glossText);
+        XPathExpression<Element> XGloss = new XPathBuilder<>(XPathGloss, Filters.element()).compileWith(xpathFactory);
+        List<Element> allGlosses = XGloss.evaluate(doc);
+        for (Element matchedElement : allGlosses) {
+            String glossText = matchedElement.getText();
+            //System.out.println(glossText + "is the gloss text I've found");
+            //System.out.println(glossFinder.toString() + "is the regular expression");
+            Matcher m = glossFinder.matcher(glossText);
+            if (m.find()) {
+                if (contextValue != null) {
+                    //System.out.println("We have a match! Let's look for context... which should be " + contextValue);
+                    String timeStamp = matchedElement.getAttributeValue("start");
+                    String XPathContext = "//tier[@category='" + contextTier + "']/event[@start='" + timeStamp + "']";
+                    XPathExpression<Element> XContext = new XPathBuilder<>(XPathContext, Filters.element()).compileWith(xpathFactory);
+                    Element ce = XContext.evaluateFirst(doc);
+                    String contextText = ce.getText();
+                    String contextRegex = contextPrefix + contextValue + contextSuffix;
+                    Pattern contextFinder = Pattern.compile(contextRegex);
+                    //System.out.println(contextText + " is the context value");
+                    //System.out.println(contextFinder.toString());
+                    Matcher ctxm = contextFinder.matcher(contextText);
+                    if (ctxm.find()) {
+                        System.out.println(m.group() + " matched an expression you wanted to replace in " + glossText + " The context is " + contextText);
                         glossText = m.replaceAll(newGloss);
                         matchedElement.setText(glossText);
                         //System.out.println(matchedElement.getText());
@@ -141,6 +131,16 @@ public class ExbReplaceGlosses extends Checker implements CorpusFunction {
                             cio.write(cd, cd.getURL());
                             stats.addFix(function, cd, "Replaced " + originalGloss + " with " + newGloss + " in " + glossText);
                         }
+                    } else {System.out.println("The context didn't match :(");}
+                } else {
+                    System.out.println(m.group() + " matched an expression you wanted to replace in " + glossText);
+                    glossText = m.replaceAll(newGloss);
+                    matchedElement.setText(glossText);
+                    //System.out.println(matchedElement.getText());
+                    if (fix) {
+                        cd.updateUnformattedString(TypeConverter.JdomDocument2String(doc));
+                        cio.write(cd, cd.getURL());
+                        stats.addFix(function, cd, "Replaced " + originalGloss + " with " + newGloss + " in " + glossText);
                     }
                 }
             }

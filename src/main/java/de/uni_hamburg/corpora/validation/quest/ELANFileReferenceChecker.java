@@ -4,16 +4,19 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -48,9 +51,8 @@ public class ELANFileReferenceChecker extends Checker implements CorpusFunction 
         ELANData elanCorpus = (ELANData) cd ;
         Document doc = elanCorpus.getJdom() ;
         // Get all relative paths to media files
-        XPath languageQuery = XPath.newInstance("//MEDIA_DESCRIPTOR/@RELATIVE_MEDIA_URL");
-        for (Object node : languageQuery.selectNodes(doc)) {
-            Attribute relFileName = (Attribute) node;
+        XPathExpression<Attribute> languageQuery = new XPathBuilder<>("//MEDIA_DESCRIPTOR/@RELATIVE_MEDIA_URL", Filters.attribute()).compileWith(new JaxenXPathFactory());
+        for (Attribute relFileName : languageQuery.evaluate(doc)) {
             // Resolve the relative file name given in the corpus by using the parentUrl of the corpus
             URI fileUri = Paths.get(elanCorpus.getParentURL().toURI().resolve(relFileName.getValue())).toUri() ;
             // Check if the file given by the uri exists

@@ -25,10 +25,10 @@ import org.xml.sax.SAXException;
 
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.xpath.XPath;
+import org.jdom2.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.xpath.XPath;
 
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.JLanguageTool;

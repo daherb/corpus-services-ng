@@ -14,8 +14,9 @@ module corpus_services_ng {
     requires jakarta.activation;
     requires EXMARaLDA;
     requires ELAN;
-    requires jdom;
+
     requires bagit;
+    requires jdom;
     requires org.jdom2;
     requires com.fasterxml.jackson.module.jsonSchema;
     requires com.fasterxml.jackson.dataformat.xml;

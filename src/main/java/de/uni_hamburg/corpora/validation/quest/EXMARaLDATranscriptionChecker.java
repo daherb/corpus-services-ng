@@ -3,10 +3,12 @@ package de.uni_hamburg.corpora.validation.quest;
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
 
     private final Logger logger = Logger.getLogger(getFunction());
+	private final JaxenXPathFactory xpathFactory = new JaxenXPathFactory();
 
     public EXMARaLDATranscriptionChecker(Properties properties) {
         super(properties);
@@ -77,7 +80,7 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
         if (!tierIds.isEmpty())
             for (String id : tierIds) {
                 Element tier =
-                        (Element) XPath.newInstance(String.format("//tier[@id=\"%s\"]",id)).selectSingleNode(dom);
+                		new XPathBuilder<Element>(String.format("//tier[@id=\"%s\"]",id), Filters.element()).compileWith(xpathFactory ).evaluateFirst(dom);
                 if (tier != null)
                     tiers.add(tier);
             }
@@ -85,8 +88,9 @@ public class EXMARaLDATranscriptionChecker extends TranscriptionChecker {
         else if (props.containsKey("transcription-method") &&
                 props.getProperty("transcription-method").equalsIgnoreCase("hiat")) {
             logger.info("HIAT");
-            tiers.addAll(Collections.checkedList(XPath.newInstance("//tier[@category=\"v\"]").selectNodes(dom),
-                    Element.class));
+            tiers.addAll(
+            		new XPathBuilder<Element>("//tier[@category=\"v\"]", Filters.element()).compileWith(xpathFactory).evaluate(dom)
+            		);
         }
         return tiers;
 

@@ -25,9 +25,10 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.io.IOUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.input.SAXBuilder;
 import org.reflections.Reflections;
 import org.xml.sax.SAXException;
 

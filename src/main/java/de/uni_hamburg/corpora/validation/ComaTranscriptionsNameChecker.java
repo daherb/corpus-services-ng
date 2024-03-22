@@ -91,9 +91,8 @@ public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunc
                             CorpusIO cio = new CorpusIO();
                             cd.updateUnformattedString(TypeConverter.W3cDocument2String(doc));
                             XMLData xml = (XMLData) cd;
-                            org.jdom.Document jdomDoc = TypeConverter.W3cDocument2JdomDocument(doc);
+                            org.jdom2.Document jdomDoc = TypeConverter.W3cDocument2JdomDocument(doc);
                             xml.setJdom(jdomDoc);
-                            cd = (CorpusData) xml;
 
                             cd.updateUnformattedString(TypeConverter.JdomDocument2String(jdomDoc));
                             cio.write(cd, cd.getURL());

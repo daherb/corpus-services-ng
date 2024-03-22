@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 
 /**
  * Statistics report is a container class to facilitate building reports for

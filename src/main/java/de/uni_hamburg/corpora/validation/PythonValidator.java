@@ -3,7 +3,7 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.reflections.Reflections;
 import org.xml.sax.SAXException;
 

@@ -5,10 +5,14 @@ import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,12 +62,11 @@ public class ExbLangCodes extends Checker implements CorpusFunction {
         // Get the xml data
         EXMARaLDATranscriptionData btd = (EXMARaLDATranscriptionData) cd;
         BasicTranscription bt = btd.getEXMARaLDAbt();
-        Document doc = bt.toJDOMDocument();
+        Document doc = new SAXBuilder().build(new StringReader(bt.toXML()));
         // find all language tags
-        XPath languageQuery = XPath.newInstance("//language/@lang");
-        for (Object node : languageQuery.selectNodes(doc)) {
+        XPathExpression<Attribute> languageQuery = new XPathBuilder<Attribute>("//language/@lang",Filters.attribute()).compileWith(new JaxenXPathFactory());
+        for (Attribute langAttrib : languageQuery.evaluate(doc)) {
             // get the language from the attribute and check if it is in the list
-            Attribute langAttrib = (Attribute) node;
             if (!langlist.contains(langAttrib.getValue())) {
                 stats.addWarning(getFunction(), "Unknown lang code " + langAttrib.getValue());
             }

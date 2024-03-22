@@ -21,8 +21,15 @@ import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.exmaralda.partitureditor.jexmaralda.BasicBody;
 import org.exmaralda.partitureditor.jexmaralda.Tier;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -36,6 +43,7 @@ public class ComaAddTiersFromExbsCorrector extends Checker implements CorpusFunc
     String tierNameFormat = "Tier %2$s (%1$s):";
     String tierTextFormat = "%s";
     String comaLoc = "";
+	private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ComaAddTiersFromExbsCorrector(Properties properties) {
         //can fix
@@ -110,21 +118,18 @@ public class ComaAddTiersFromExbsCorrector extends Checker implements CorpusFunc
 
         comafile = new File(cd.getURL().toString());
         String str = comafile.getPath().substring(6);
-        org.jdom.Document corpus
-                = org.exmaralda.common.jdomutilities.IOUtilities.readDocumentFromLocalFile(
-                        str);
-        XPath xpCommunications = XPath.newInstance("//Communication");
-        List allCommunications = xpCommunications.selectNodes(corpus);
-        for (Object o : allCommunications) {
-            org.jdom.Element communication = (org.jdom.Element) o;
+        Document corpus
+                = new SAXBuilder().build(new File(str));
+        XPathExpression<Element> xpCommunications = new XPathBuilder<Element>("//Communication", Filters.element()).compileWith(xpathFactory);
+        List<Element> allCommunications = xpCommunications.evaluate(corpus);
+        for (Element communication : allCommunications) {
             //retrieve the communication name
             String communicationName = communication.getAttributeValue("Name");
             //pick up basic transcriptions
-            XPath xpBasTrans = XPath.newInstance("Transcription[Description"
-                    + "/Key[@Name='segmented']/text()='false']");
-            List allBasTrans = xpBasTrans.selectNodes(communication);
-            for (Object oB : allBasTrans) {
-                org.jdom.Element basTrans = (org.jdom.Element) oB;
+            XPathExpression<Element> xpBasTrans = new XPathBuilder<Element>("Transcription[Description"
+                    + "/Key[@Name='segmented']/text()='false']", Filters.element()).compileWith(xpathFactory);
+            List<Element> allBasTrans = xpBasTrans.evaluate(communication);
+            for (Element basTrans : allBasTrans) {
                 String relPath = basTrans.getChildText("NSLink");
                 String filePath = comafile.getParent() + File.separator
                         + relPath;
@@ -134,13 +139,12 @@ public class ComaAddTiersFromExbsCorrector extends Checker implements CorpusFunc
                     // we already checked validity of files in other checks
                     continue;
                 }
-                org.jdom.Element desc = basTrans.getChild("Description");
-                List keys = desc.getChildren("Key");
+                Element desc = basTrans.getChild("Description");
+                List<Element> keys = desc.getChildren("Key");
                 Set<String> addedTiers = new HashSet<String>();
                 // add tiers that are already in the coma file to the set so that they are not added to the coma file
                 // again from the exbs files
-                for (Object key : keys) {
-                    org.jdom.Element keyElement = (org.jdom.Element) key;
+                for (Element keyElement : keys) {
                     if (keyElement.getAttributeValue("Name").startsWith("Tier")) {
                         int fIndex = keyElement.getAttributeValue("Name").indexOf(" ");
                         int lIndex = keyElement.getAttributeValue("Name").lastIndexOf(" ");
@@ -172,7 +176,7 @@ public class ComaAddTiersFromExbsCorrector extends Checker implements CorpusFunc
                     String tierType = tier.getType();
 //                    System.out.println("DEBUG: id,disp,cat" +
 //                            tierID + " , " + displayName + " , " + category);
-                    org.jdom.Element keyElement = new org.jdom.Element("Key");
+                    Element keyElement = new Element("Key");
                     boolean alreadyAdded = false;
                     for (String added : addedTiers) {
                         if (added.equals(category)) {

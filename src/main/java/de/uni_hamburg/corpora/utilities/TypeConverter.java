@@ -25,11 +25,12 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
-import org.jdom.input.DOMBuilder;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.DOMOutputter;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.JDOMException;
+import org.jdom2.input.DOMBuilder;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.DOMOutputter;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -108,13 +109,13 @@ public class TypeConverter {
     }
 
     /**
-     * Converts a org.jdom.Document object into a String object.
+     * Converts a Document object into a String object.
      *
-     * @param s org.jdom.Document object that shall be converted to String
+     * @param s Document object that shall be converted to String
      * object
-     * @return String object that was created from org.jdom.Document object
+     * @return String object that was created from Document object
      */
-    public static String JdomDocument2String(org.jdom.Document jdomDocument) {
+    public static String JdomDocument2String(Document jdomDocument) {
         return new XMLOutputter().outputString(jdomDocument);
 
     }
@@ -124,10 +125,10 @@ public class TypeConverter {
      *
      * @param s org.jdom.Document object that shall be converted to String
      * object
-     * @return String object that was created from org.jdom.Document object
+     * @return String object that was created from Document object
      */
-    public static org.jdom.Document String2JdomDocument(String stringRespresentingDocument) {
-        org.jdom.Document newDocument = null;
+    public static Document String2JdomDocument(String stringRespresentingDocument) {
+        Document newDocument = null;
         try {
 
             InputStream stream = null;
@@ -145,15 +146,15 @@ public class TypeConverter {
     }
 
     /**
-     * Converts a org.w3c.dom.Document object into a org.jdom.Document object.
+     * Converts a org.w3c.dom.Document object into a org.jdom2.Document object.
      *
      * @param s org.w3c.dom.Document object that shall be converted to
      * org.jdom.Document object
      * @return org.jdom.Document object that was created from
      * org.w3c.dom.Document object
      */
-    public static org.jdom.Document W3cDocument2JdomDocument(org.w3c.dom.Document input) {
-        org.jdom.Document jdomDoc = null;
+    public static Document W3cDocument2JdomDocument(org.w3c.dom.Document input) {
+        Document jdomDoc = null;
         try {
             DOMBuilder builder = new DOMBuilder();
             jdomDoc = builder.build(input);
@@ -164,14 +165,14 @@ public class TypeConverter {
     }
 
     /**
-     * Converts a org.jdom.Document object into a org.w3c.dom.Document object.
+     * Converts a org.jdom2.Document object into a org.w3c.dom.Document object.
      *
-     * @param s org.jdom.Document object that shall be converted to
+     * @param s org.jdom2.Document object that shall be converted to
      * org.w3c.dom.Document object
      * @return org.w3c.dom.Document object that was created from
      * org.jdom.Document object
      */
-    public static org.w3c.dom.Document JdomDocument2W3cDocument(org.jdom.Document jdomDoc) {
+    public static org.w3c.dom.Document JdomDocument2W3cDocument(Document jdomDoc) {
         org.w3c.dom.Document w3cDoc = null;
         try {
             DOMOutputter outputter = new DOMOutputter();

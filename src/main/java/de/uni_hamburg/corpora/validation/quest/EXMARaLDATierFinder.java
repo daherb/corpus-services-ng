@@ -3,10 +3,13 @@ package de.uni_hamburg.corpora.validation.quest;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.EXMARaLDATranscriptionData;
 import de.uni_hamburg.corpora.EXMARaLDASegmentedTranscriptionData;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,7 +21,9 @@ import java.util.stream.Collectors;
  */
 public class EXMARaLDATierFinder extends TierFinder {
 
-    public EXMARaLDATierFinder(Properties properties) {
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
+
+	public EXMARaLDATierFinder(Properties properties) {
         super(properties);
         // Use default attribute
         if (attribute_name == null || attribute_name.isEmpty()) {
@@ -48,13 +53,14 @@ public class EXMARaLDATierFinder extends TierFinder {
                 Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
                 String xpath = String.format("//tier[contains(@%s,\"%s\")]/@id",
                         attribute_name, pattern);
-                tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(xpath).selectNodes(dom), Attribute.class))
+                tierIds.addAll(
+                		new XPathBuilder<Attribute>(xpath,Filters.attribute()).compileWith(xpathFactory).evaluate(dom)
                         .stream().map(Attribute::getValue).collect(Collectors.toList()));
             } else if (cd instanceof EXMARaLDASegmentedTranscriptionData) {
                 Document dom = ((EXMARaLDASegmentedTranscriptionData) cd).getJdom();
-                tierIds.addAll(((List<Attribute>) Collections.checkedList(XPath.newInstance(
-                        String.format("//segmented-tier[contains(@%s,\"%s\")]/@id",
-                                attribute_name, pattern)).selectNodes(dom), Attribute.class))
+        		String xpath = String.format("//segmented-tier[contains(@%s,\"%s\")]/@id",attribute_name, pattern);
+                tierIds.addAll(
+                		new XPathBuilder<Attribute>(xpath,Filters.attribute()).compileWith(xpathFactory).evaluate(dom)
                         .stream().map(Attribute::getValue).collect(Collectors.toList()));
             }
         }

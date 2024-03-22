@@ -9,9 +9,13 @@ import de.uni_hamburg.corpora.*;
 
 import java.io.IOException;
 import java.util.Collection;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
@@ -21,7 +25,7 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Element;
+import org.jdom2.Element;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
 /**
@@ -36,6 +40,7 @@ public class ExbTimestampsChecker extends Checker implements CorpusFunction {
 
     boolean missingTimestamp = false;
     Document doc;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ExbTimestampsChecker(Properties properties) {
         //fixing option not available
@@ -52,45 +57,35 @@ public class ExbTimestampsChecker extends Checker implements CorpusFunction {
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); 
         String xpathSegment = "//segmentation/ts";
-        XPath segment = XPath.newInstance(xpathSegment);
-        List allSegments = segment.selectNodes(doc);
-        CorpusIO cio = new CorpusIO();     
-        for (int i = 0; i < allSegments.size(); i++) {
-            Object o = allSegments.get(i);
-            if (o instanceof Element) {
-                Element e = (Element) o;
-                String start = e.getAttributeValue("s");
-                String end = e.getAttributeValue("e");
-                String xpathStart = "//tli[@id='" + start + "']";
-                XPath timelineStart = XPath.newInstance(xpathStart);
-                List tliStart = timelineStart.selectNodes(doc);
-                Object sTli = tliStart.get(0);
-                if (sTli instanceof Element) {
-                    Element el = (Element) sTli;
-                    String id = el.getAttributeValue("id");
-                    String time = el.getAttributeValue("time");
-                    if (time == null) {
-                        missingTimestamp = true;
-                        String message = "Missing timestamp at the start of the segment chain at " + id;
-                        exmaError.addError(function, cd.getURL().getFile(), "", id, false, message);
-                        stats.addWarning(function, cd, message);
-                    }
-                }
-                String xpathEnd = "//tli[@id='" + end + "']";
-                XPath timelineEnd = XPath.newInstance(xpathEnd);
-                List tliEnd = timelineEnd.selectNodes(doc);
-                Object eTli = tliEnd.get(0);
-                if (eTli instanceof Element) {
-                    Element el = (Element) eTli;
-                    String id = el.getAttributeValue("id");
-                    String time = el.getAttributeValue("time");
-                    if (time == null) {
-                        missingTimestamp = true;
-                        String message = "Missing timestamp at the end of the segment chain at " + id;
-                        exmaError.addError(function, cd.getURL().getFile(), "", id, false, message);
-                        stats.addWarning(function, cd, message);
-                    }
-                }
+        XPathExpression<Element> segment = new XPathBuilder<>(xpathSegment, Filters.element()).compileWith(xpathFactory);
+        List<Element> allSegments = segment.evaluate(doc);
+        CorpusIO cio = new CorpusIO();
+        for (Element e : allSegments) {
+            String start = e.getAttributeValue("s");
+            String end = e.getAttributeValue("e");
+            String xpathStart = "//tli[@id='" + start + "']";
+            XPathExpression<Element> timelineStart = new XPathBuilder<>(xpathStart, Filters.element()).compileWith(xpathFactory);
+            List<Element> tliStart = timelineStart.evaluate(doc);
+            Element el = tliStart.get(0);
+            String id = el.getAttributeValue("id");
+            String time = el.getAttributeValue("time");
+            if (time == null) {
+                missingTimestamp = true;
+                String message = "Missing timestamp at the start of the segment chain at " + id;
+                exmaError.addError(function, cd.getURL().getFile(), "", id, false, message);
+                stats.addWarning(function, cd, message);
+            }
+            String xpathEnd = "//tli[@id='" + end + "']";
+            XPathExpression<Element> timelineEnd = new XPathBuilder<>(xpathEnd, Filters.element()).compileWith(xpathFactory);
+            List<Element> tliEnd = timelineEnd.evaluate(doc);
+            el = tliEnd.get(0);
+            id = el.getAttributeValue("id");
+            time = el.getAttributeValue("time");
+            if (time == null) {
+                missingTimestamp = true;
+                String message = "Missing timestamp at the end of the segment chain at " + id;
+                exmaError.addError(function, cd.getURL().getFile(), "", id, false, message);
+                stats.addWarning(function, cd, message);
             }
         }
         if (!missingTimestamp) {

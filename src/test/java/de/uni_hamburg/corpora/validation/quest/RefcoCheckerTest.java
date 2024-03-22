@@ -7,9 +7,9 @@ package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.*;
-import org.jdom.input.SAXBuilder;
-import org.jdom.xpath.XPath;
+import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPath;
 import org.junit.*;
 import org.xml.sax.SAXException;
 

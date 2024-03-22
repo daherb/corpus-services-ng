@@ -64,7 +64,8 @@ public class GATListHTML extends ListHTML {
             String xsl = TypeConverter.InputStream2String(getClass().getResourceAsStream(STYLESHEET_PATH));
 
             // read segmented transcription into String
-            String xml = TypeConverter.JdomDocument2String(GATSegmentation.toXML(lt));
+            org.jdom.Document document = GATSegmentation.toXML(lt);
+            String xml = new org.jdom.output.XMLOutputter().outputString(document);
 
             XSLTransformer xt = new XSLTransformer();
             result = xt.transform(xml, xsl);

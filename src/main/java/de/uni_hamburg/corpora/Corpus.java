@@ -15,8 +15,8 @@ import java.util.HashSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.JDOMException;
+import org.jdom2.xpath.XPath;
 import org.xml.sax.SAXException;
 
 /**

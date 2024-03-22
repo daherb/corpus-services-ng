@@ -18,7 +18,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,9 +33,9 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.xpath.XPath;
 
 /**
  *

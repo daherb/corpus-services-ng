@@ -7,10 +7,12 @@ import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -74,8 +76,7 @@ public class ELANAnnotationChecker extends AnnotationChecker {
         Document dom = ((ELANData) cd).getJdom();
         // Get all matching tier elements
         List<Element> tiers =
-                Collections.checkedList(XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]", tierId)).selectNodes(dom),
-                        Element.class);
+        		new XPathBuilder<Element>(String.format("//TIER[@TIER_ID=\"%s\"]", tierId),Filters.element()).compileWith(new JaxenXPathFactory()).evaluate(dom);
         // Convert tiers to strings and return
         return tiers.stream().map(XMLTools::showAllText).collect(Collectors.joining(" "));
     }

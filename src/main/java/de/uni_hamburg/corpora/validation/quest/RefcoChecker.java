@@ -13,10 +13,10 @@ import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.*;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.*;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPath;
 import org.xml.sax.SAXException;
 
 import jakarta.xml.bind.JAXBContext;

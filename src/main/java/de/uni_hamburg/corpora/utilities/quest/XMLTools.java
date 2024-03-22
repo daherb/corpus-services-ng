@@ -1,6 +1,6 @@
 package de.uni_hamburg.corpora.utilities.quest;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import java.util.stream.Collectors;
 

@@ -6,10 +6,13 @@ import de.uni_hamburg.corpora.ELANData;
 import de.uni_hamburg.corpora.Report;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -77,8 +80,9 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
         // Explicit list of tiers
         if (!tierIds.isEmpty()) {
             for (String id : tierIds) {
+            	XPathExpression<Element> xpath = new XPathBuilder<Element>(String.format("//TIER[@TIER_ID=\"%s\"]", id), new ElementFilter()).compileWith(new JaxenXPathFactory());
                 Element tier =
-                        (Element) XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]", id)).selectSingleNode(dom);
+                		xpath.evaluateFirst(dom);
                 if (tier != null)
                     tiers.add(tier);
             }
@@ -86,8 +90,8 @@ public class ELANTranscriptionChecker extends TranscriptionChecker {
         // HIAT tiers of category v (verbal)
         if (props.containsKey("transcription-method") &&
                 props.getProperty("transcription-method").equalsIgnoreCase("hiat")) {
-            tiers.addAll(Collections.checkedList(XPath.newInstance("//TIER[@LINGUISTIC_TYPE_REF=\"v\"]").selectNodes(dom),
-                    Element.class));
+        	XPathExpression<Element> xpath = new XPathBuilder<Element>("//TIER[@LINGUISTIC_TYPE_REF=\"v\"]", new ElementFilter()).compileWith(new JaxenXPathFactory());
+            tiers.addAll(xpath.evaluate(dom));
         }
         return tiers;
     }

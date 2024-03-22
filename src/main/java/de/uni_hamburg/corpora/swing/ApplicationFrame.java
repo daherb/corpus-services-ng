@@ -63,10 +63,9 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 //import org.exmaralda.partitureditor.jexmaralda.convert.TEIConverter;
 //import org.exmaralda.partitureditor.jexmaralda.convert.TranscriberConverter;
 //import org.exmaralda.partitureditor.partiture.BrowserLauncher;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.xml.sax.SAXException;
 
 /**

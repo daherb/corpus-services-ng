@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.io.File;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -24,11 +25,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 /**
  *
@@ -46,6 +52,7 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
     private Document coma;
     private String SpeakerOrCommunication;
     private Boolean IsSpeaker;
+	private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     /**
      * creates a new instance of AddCSVMetadataToComa
@@ -112,7 +119,7 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
         System.out.println(allElements.get(0)[0]);
         stats.addNote(function, cd, allElements.get(0)[0]);
 
-        coma = org.exmaralda.common.jdomutilities.IOUtilities.readDocumentFromLocalFile(comaFile);
+        coma = new SAXBuilder().build(new File(comaFile));
         //add the key and value to speaker/description or communication/description
         for (int i = 1; i < allElements.size(); i++) {
             for (int a = 1; a < allElements.get(i).length; a++) {
@@ -121,11 +128,9 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
                     String place = "//Speaker[Sigle/text()=\"" + allElements.get(i)[0] + "\"]/Description";
                     System.out.println(place);
                     stats.addNote(function, cd, place);
-                    XPath p = XPath.newInstance(place);
-                    //System.out.println(p.selectSingleNode(coma));
-                    Object o = p.selectSingleNode(coma);
-                    if (o != null) {
-                        Element desc = (Element) o;
+                    XPathExpression<Element> p = new XPathBuilder<Element>(place,Filters.element()).compileWith(xpathFactory);
+                    Element desc = p.evaluateFirst(coma);
+                    if (desc != null) {
                         //the new Key element that is inserted
                         Element key = new Element("Key");
                         desc.addContent(key);
@@ -140,12 +145,9 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
                     String place = "//Communication[@Name=\"" + allElements.get(i)[0] + "\"]/Description";
                     System.out.println(place);
                     stats.addNote(function, cd, place);
-                    XPath p = XPath.newInstance(place);
-                    System.out.println(p.selectSingleNode(coma));
-                    stats.addNote(function, cd, p.selectSingleNode(coma).toString());
-                    Object o = p.selectSingleNode(coma);
-                    if (o != null) {
-                        Element desc = (Element) o;
+                    XPathExpression<Element> p = new XPathBuilder<Element>(place, Filters.element()).compileWith(xpathFactory);
+                    Element desc = p.evaluateFirst(coma);
+                    if (desc != null) {
                         //the new Key element that is inserted
                         Element key = new Element("Key");
                         desc.addContent(key);
@@ -197,7 +199,7 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
         System.out.println(Arrays.toString(allElements.get(0)));
 
         System.out.println(allElements.get(0)[0]);
-        coma = org.exmaralda.common.jdomutilities.IOUtilities.readDocumentFromLocalFile(comaFile);
+        coma = new SAXBuilder().build(new File(comaFile));
         //add the key and value to speaker/description or communication/description
         for (int i = 1; i < allElements.size(); i++) {
             for (int a = 1; a < allElements.get(i).length; a++) {
@@ -205,11 +207,10 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
                     //the place is the xpath where it should be inserted
                     String place = "//Speaker[Sigle/text()=\"" + allElements.get(i)[0] + "\"]/Description";
                     System.out.println(place);
-                    XPath p = XPath.newInstance(place);
+                    XPathExpression<Element> p = new XPathBuilder<Element>(place, Filters.element()).compileWith(xpathFactory);
                     //System.out.println(p.selectSingleNode(coma));
-                    Object o = p.selectSingleNode(coma);
-                    if (o != null) {
-                        Element desc = (Element) o;
+                    Element desc = p.evaluateFirst(coma);
+                    if (desc != null) {
                         //the new Key element that is inserted
                         Element key = new Element("Key");
                         desc.addContent(key);
@@ -222,11 +223,9 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
                     //the place is the xpath where it should be inserted
                     String place = "//Communication[@Name=\"" + allElements.get(i)[0] + "\"]/Description";
                     System.out.println(place);
-                    XPath p = XPath.newInstance(place);
-                    System.out.println(p.selectSingleNode(coma));
-                    Object o = p.selectSingleNode(coma);
-                    if (o != null) {
-                        Element desc = (Element) o;
+                    XPathExpression<Element> p = new XPathBuilder<Element>(place, Filters.element()).compileWith(xpathFactory);
+                    Element desc = p.evaluateFirst(coma);
+                    if (desc != null) {
                         //the new Key element that is inserted
                         Element key = new Element("Key");
                         desc.addContent(key);

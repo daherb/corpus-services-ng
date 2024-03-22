@@ -11,6 +11,7 @@ import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,12 +32,16 @@ import org.exmaralda.partitureditor.interlinearText.InterlinearText;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.TierFormatTable;
 import org.exmaralda.partitureditor.jexmaralda.convert.ItConverter;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.filter.ElementFilter;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -55,6 +60,7 @@ public class ScoreHTML extends Visualizer {
     URL targeturl;
     CorpusData cd;
     String corpusname = "";
+	private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ScoreHTML(Properties properties) {
         super(properties);
@@ -106,8 +112,8 @@ public class ScoreHTML extends Visualizer {
             styles = bt.getTierFormatTable().toTDCSS();
         }
 
-        final Document itDocument = FileIO.readDocumentFromString(itAsString);
-        Document btDocument = bt.toJDOMDocument();
+        final Document itDocument = new SAXBuilder().build(new StringReader(itAsString));
+        Document btDocument = new SAXBuilder().build(new StringReader(bt.toXML()));
 
         // remove "line" elements (die stoeren nur)
         Iterator i = itDocument.getRootElement().getDescendants(new ElementFilter("line"));
@@ -120,19 +126,16 @@ public class ScoreHTML extends Visualizer {
             e.detach();
         }
 
-        XPath xpath1 = XPath.newInstance("//common-timeline");
-        Element timeline = (Element) (xpath1.selectSingleNode(btDocument));
+        Element timeline = new XPathBuilder<Element>("//common-timeline",Filters.element()).compileWith(xpathFactory).evaluateFirst(btDocument);
         timeline.detach();
 
-        XPath xpath2 = XPath.newInstance("//head");
-        Element head = (Element) (xpath2.selectSingleNode(btDocument));
+        Element head = new XPathBuilder<Element>("//head",Filters.element()).compileWith(xpathFactory).evaluateFirst(btDocument);
         head.detach();
 
-        XPath xpath3 = XPath.newInstance("//tier");
-        List tiers = xpath3.selectNodes(btDocument);
+        List<Element> tiers = new XPathBuilder<Element>("//tier",Filters.element()).compileWith(xpathFactory).evaluate(btDocument);
         Element tiersElement = new Element("tiers");
         for (int pos = 0; pos < tiers.size(); pos++) {
-            Element t = (Element) (tiers.get(pos));
+            Element t = tiers.get(pos);
             t.detach();
             t.removeContent();
             tiersElement.addContent(t);

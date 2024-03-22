@@ -5,10 +5,13 @@ import de.uni_hamburg.corpora.utilities.quest.Pair;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,6 +36,8 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
 
     // List of supported transcription conventions
     private final List<String> conventions = Arrays.asList("hiat","chat","lides","cgat","gat");
+
+	private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public HIATLanguageChecker(Properties properties) {
         super(false, properties);
@@ -90,7 +95,8 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
 
     private Report checkTranscriptionConvention(EXMARaLDATranscriptionData cd) throws JDOMException {
         Report report = new Report();
-        String convention = ((Element) XPath.newInstance("//transcription-convention").selectSingleNode(cd.getJdom()))
+        String convention = 
+        		new XPathBuilder<Element>("//transcription-convention", Filters.element()).compileWith(xpathFactory).evaluateFirst(cd.getJdom())
                 .getText();
         if (!conventions.contains(convention.toLowerCase())) {
             report.addWarning(getFunction(),ReportItem.newParamMap(
@@ -105,8 +111,7 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
     private Report checkLanguagesUsed(EXMARaLDATranscriptionData cd) throws JDOMException {
         Report report = new Report();
         List<Element> langsUsed =
-                Collections.checkedList(XPath.newInstance("//languages-used").selectNodes(cd.getJdom()),
-                Element.class);
+        		new XPathBuilder<Element>("//languages-used", Filters.element()).compileWith(xpathFactory).evaluate(cd.getJdom());
         for (Element langUsed : langsUsed) {
             List<Element> langs = Collections.checkedList(langUsed.getChildren("language"),Element.class);
             if (langs.isEmpty()) {
@@ -135,16 +140,13 @@ public class HIATLanguageChecker extends Checker implements CorpusFunction {
         Report report = new Report();
         // Get all time slots
         List<String> slots =
-                ((List<Attribute>) Collections.checkedList(XPath.newInstance("//common-timeline/tli/@id")
-                        .selectNodes(cd.getJdom()), Attribute.class))
+        		new XPathBuilder<Attribute>("//common-timeline/tli/@id", Filters.attribute()).compileWith(xpathFactory).evaluate(cd.getJdom())
                         .stream().map(Attribute::getValue).collect(Collectors.toList());
         // Initialize the list of covered slots
         List<Boolean> coveredSlots = slots.stream().map((s) -> false).collect(Collectors.toList());
         // get all lang segments
         List<Element> segments =
-                (List<Element>) Collections.checkedList(
-                        XPath.newInstance(String.format("//tier[@category=\"%s\"]/event",category))
-                                .selectNodes(cd.getJdom()), Element.class);
+        		new XPathBuilder<Element>(String.format("//tier[@category=\"%s\"]/event",category), Filters.element()).compileWith(xpathFactory).evaluate(cd.getJdom());
         // check if all lang segments cover all time slots
         if (!segments.isEmpty()) {
             for (Element segment : segments) {

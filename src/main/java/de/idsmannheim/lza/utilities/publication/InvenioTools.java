@@ -376,7 +376,7 @@ public class InvenioTools {
      * @param report the report to keep track of detailed information about the process
      * @return if it is a valid BagIt
      */
-    private boolean validateBag(Corpus c, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, org.jdom.JDOMException {
+    private boolean validateBag(Corpus c, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, JDOMException {
         Report r = new Report();
         // Create new properties to pass the parameter
         Properties props = new Properties();

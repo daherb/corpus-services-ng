@@ -14,11 +14,15 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
@@ -35,7 +39,7 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
     boolean coma = false;
     String xpathContext = "//*";
     Document doc = null;
-    XPath context;
+
 
     public CorpusDataRegexReplacer(Properties properties) {
         super(true, properties);
@@ -53,8 +57,8 @@ public class CorpusDataRegexReplacer extends Checker implements CorpusFunction {
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
         Pattern replacePattern = Pattern.compile(replace);
-        context = XPath.newInstance(xpathContext);
-        List allContextInstances = context.selectNodes(doc);
+        XPathExpression<?> context = new XPathBuilder<>(xpathContext, Filters.element()).compileWith(new JaxenXPathFactory());
+        List<?> allContextInstances = context.evaluate(doc);
         String s;
 
         if (!allContextInstances.isEmpty()) {
