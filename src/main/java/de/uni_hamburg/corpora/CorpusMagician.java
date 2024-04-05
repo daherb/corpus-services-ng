@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
@@ -724,8 +725,8 @@ public class CorpusMagician {
                         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(corpusFunctionPackages));
                         boolean checkFunctionName = false;
                         // Get all classes derived from CorpusData
-                        for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
-                            
+                        for (Class<? extends CorpusFunction> cf : reflections.getSubTypesOf(CorpusFunction.class)) {
+                            Logger.getGlobal().info("Scanning " + cf.getName());
                             if (cf.getName().toLowerCase().endsWith(function.toLowerCase()) &&
                                     Arrays.asList(corpusFunctionPackages).contains(cf.getPackage().getName())) {
                                 try {
