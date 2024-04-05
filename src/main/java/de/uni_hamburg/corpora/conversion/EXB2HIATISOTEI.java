@@ -42,6 +42,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
+
 import java.util.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,7 +59,7 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 

@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 abstract class GenericMetadataChecker extends Checker implements CorpusFunction {
 

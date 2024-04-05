@@ -14,7 +14,7 @@ import java.util.Properties;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 public class ChildesGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 

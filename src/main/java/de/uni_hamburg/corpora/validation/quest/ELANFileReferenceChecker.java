@@ -29,7 +29,9 @@ import java.util.Properties;
 /**
  * Deprecated in favor of LinkedFileChecker
  *
- * @author bba1792, Dr. Herbert Lange
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class ELANFileReferenceChecker extends Checker implements CorpusFunction {
 

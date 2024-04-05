@@ -43,7 +43,7 @@ import org.languagetool.language.GermanyGerman;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 public class LanguageToolChecker extends Checker implements CorpusFunction {
     static EXMARaLDATranscriptionData btd;

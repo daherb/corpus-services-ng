@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction {
 

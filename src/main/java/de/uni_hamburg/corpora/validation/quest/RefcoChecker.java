@@ -54,7 +54,7 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 

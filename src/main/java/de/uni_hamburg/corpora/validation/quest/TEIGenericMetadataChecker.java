@@ -16,7 +16,7 @@ import java.util.*;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240405
  */
 public class TEIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
