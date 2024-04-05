@@ -21,9 +21,9 @@ public class ChildesGenericMetadataChecker extends GenericMetadataChecker implem
     public ChildesGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("childes-criteria-file"))
-            setCriteriaFile(properties.getProperty("childes-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("childes-criteria-file"));
         else {
-            loadCriteriaResource("childes-generic.csv");
+        	setUp = setCriteria("childes-generic.csv");
         }
     }
 

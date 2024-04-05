@@ -26,9 +26,9 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker {
     public ComaGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("coma-criteria-file"))
-            setCriteriaFile(properties.getProperty("coma-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("coma-criteria-file"));
         else {
-            loadCriteriaResource("coma-generic.csv");
+        	setUp = setCriteria("coma-generic.csv");
         }
     }
     /**

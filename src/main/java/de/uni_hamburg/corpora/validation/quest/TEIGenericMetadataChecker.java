@@ -26,9 +26,9 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
     public TEIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("tei-criteria-file"))
-            setCriteriaFile(properties.getProperty("tei-criteria-file"));
+            setUp = setCriteria(properties.getProperty("tei-criteria-file"));
         else {
-            loadCriteriaResource("tei-generic.csv");
+        	setUp = setCriteria("tei-generic.csv");
         }
     }
 

@@ -28,9 +28,9 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
     public IMDIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("imdi-criteria-file"))
-            setCriteriaFile(properties.getProperty("imdi-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("imdi-criteria-file"));
         else {
-            loadCriteriaResource("imdi-generic.csv");
+        	setUp = setCriteria("imdi-generic.csv");
         }
     }
 

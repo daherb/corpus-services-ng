@@ -27,9 +27,9 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
     public CMDIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("cmdi-criteria-file"))
-            setCriteriaFile(properties.getProperty("cmdi-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("cmdi-criteria-file"));
         else {
-            loadCriteriaResource("cmdi-blam.csv");
+        	setUp = setCriteria("cmdi-blam.csv");
             // loadCriteriaResource("cmdi-sign.csv");
         }
     }
