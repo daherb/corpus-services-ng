@@ -259,34 +259,34 @@ public class Corpus {
         XPathExpression<Double> xpath = new XPathBuilder<>("sum(//Transcription/Description/Key[@Name = '# HIAT:u'])", Filters.fdouble()).compileWith(xpathFactory);
         double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
-        return "" + IntValue;
+        return String.valueOf(IntValue);
     }
 
     String getCorpusTranscriptionNumber() {
         XPathExpression<Double> xpath = new XPathBuilder<>("count(//Transcription/Description/Key[@Name = 'segmented' and text() = 'false'])", Filters.fdouble()).compileWith(xpathFactory);
         double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
-        return "" + IntValue;
+        return String.valueOf(IntValue);
     }
 
     String getCorpusSpeakerNumber() {
         XPathExpression<Double> xpath = new XPathBuilder<>("count(//Speaker)", Filters.fdouble()).compileWith(xpathFactory);
         double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
-        return "" + IntValue;
+        return String.valueOf(IntValue);
     }
 
     String getCorpusCommunicationNumber() {
         XPathExpression<Double> xpath = new XPathBuilder<>("count(//Communication)", Filters.fdouble()).compileWith(xpathFactory);
         double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
-        return "" + IntValue;
+        return String.valueOf(IntValue);
     }
 
     String getCorpusWords()  {
         XPathExpression<Double> xpath = new XPathBuilder<>("sum(//Transcription/Description/Key[@Name = '# HIAT:w'])", Filters.fdouble()).compileWith(xpathFactory);
         double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
-        return "" + IntValue;
+        return String.valueOf(IntValue);
     }
 }
