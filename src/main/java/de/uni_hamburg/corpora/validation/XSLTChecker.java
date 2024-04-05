@@ -17,13 +17,16 @@ import java.util.*;
 import javax.xml.transform.TransformerException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.xpath.XPath;
 
 /**
  *
@@ -146,8 +149,9 @@ public class XSLTChecker extends Checker implements CorpusFunction {
         URL url = Paths.get(fsmPath).toUri().toURL();
         String fsmstring = cio.readExternalResourceAsString(url.toString());
         Document fsmdoc = de.uni_hamburg.corpora.utilities.TypeConverter.String2JdomDocument(fsmstring);
-        XPath xpath = XPath.newInstance("//fsm/char-set[@id='UtteranceEndSymbols']/char");
-        List allContextInstances = xpath.selectNodes(fsmdoc);
+        XPathExpression<Element> xpath = new XPathBuilder<>("//fsm/char-set[@id='UtteranceEndSymbols']/char", Filters.element())
+                .compileWith(new JaxenXPathFactory());
+        List<Element> allContextInstances = xpath.evaluate(fsmdoc);
         if (!allContextInstances.isEmpty()) {
             for (int i = 0; i < allContextInstances.size(); i++) {
                 Object o = allContextInstances.get(i);

@@ -16,7 +16,11 @@ import java.util.HashSet;
 import org.apache.commons.lang3.StringUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.JDOMException;
-import org.jdom2.xpath.XPath;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 /**
@@ -47,6 +51,7 @@ public class Corpus {
     Collection<CorpusData> cdc = new HashSet<>();
     URL basedirectory;
     String corpusname;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public Corpus() {
     }
@@ -250,37 +255,37 @@ public class Corpus {
     }
 
     //TODO make this more sustainable, it is very INEL specific
-    String getCorpusSentenceNumber() throws JDOMException {
-        XPath xpath = XPath.newInstance("sum(//Transcription/Description/Key[@Name = '# HIAT:u'])");
-        double DoubleValue = (double) xpath.selectSingleNode(comadata.getJdom());
+    String getCorpusSentenceNumber() {
+        XPathExpression<Double> xpath = new XPathBuilder<>("sum(//Transcription/Description/Key[@Name = '# HIAT:u'])", Filters.fdouble()).compileWith(xpathFactory);
+        double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
         return "" + IntValue;
     }
 
-    String getCorpusTranscriptionNumber() throws JDOMException {
-        XPath xpath = XPath.newInstance("count(//Transcription/Description/Key[@Name = 'segmented' and text() = 'false'])");
-        double DoubleValue = (double) xpath.selectSingleNode(comadata.getJdom());
+    String getCorpusTranscriptionNumber() {
+        XPathExpression<Double> xpath = new XPathBuilder<>("count(//Transcription/Description/Key[@Name = 'segmented' and text() = 'false'])", Filters.fdouble()).compileWith(xpathFactory);
+        double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
         return "" + IntValue;
     }
 
-    String getCorpusSpeakerNumber() throws JDOMException {
-        XPath xpath = XPath.newInstance("count(//Speaker)");
-        double DoubleValue = (double) xpath.selectSingleNode(comadata.getJdom());
+    String getCorpusSpeakerNumber() {
+        XPathExpression<Double> xpath = new XPathBuilder<>("count(//Speaker)", Filters.fdouble()).compileWith(xpathFactory);
+        double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
         return "" + IntValue;
     }
 
-    String getCorpusCommunicationNumber() throws JDOMException {
-        XPath xpath = XPath.newInstance("count(//Communication)");
-        double DoubleValue = (double) xpath.selectSingleNode(comadata.getJdom());
+    String getCorpusCommunicationNumber() {
+        XPathExpression<Double> xpath = new XPathBuilder<>("count(//Communication)", Filters.fdouble()).compileWith(xpathFactory);
+        double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
         return "" + IntValue;
     }
 
-    String getCorpusWords() throws JDOMException {
-        XPath xpath = XPath.newInstance("sum(//Transcription/Description/Key[@Name = '# HIAT:w'])");
-        double DoubleValue = (double) xpath.selectSingleNode(comadata.getJdom());
+    String getCorpusWords()  {
+        XPathExpression<Double> xpath = new XPathBuilder<>("sum(//Transcription/Description/Key[@Name = '# HIAT:w'])", Filters.fdouble()).compileWith(xpathFactory);
+        double DoubleValue = xpath.evaluateFirst(comadata.getJdom());
         int IntValue = (int) DoubleValue;
         return "" + IntValue;
     }

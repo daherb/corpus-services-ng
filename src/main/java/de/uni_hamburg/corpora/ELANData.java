@@ -19,8 +19,11 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPath;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import org.jdom2.JDOMException;
 import java.io.IOException;
@@ -54,6 +57,7 @@ public class ELANData implements CorpusData, ContentData, XMLData {
     URL parenturl;
     String filename;
     String filenamewithoutending;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ELANData() {
     }
@@ -162,9 +166,8 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             return new Location("unknown", "");
         String normalizedToken = token.replaceAll("\"", "'");
         Element tier =
-                (Element) XPath.newInstance(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
-                                normalizedToken))
-                        .selectSingleNode(getJdom());
+                new XPathBuilder<>( String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
+                        normalizedToken), Filters.element()).compileWith(xpathFactory).evaluateFirst(getJdom());
         if (tier != null) {
             Attribute tier_id = tier.getAttribute("TIER_ID");
             assert tier_id != null : "Tier id is null";
@@ -184,28 +187,26 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             }
             else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
                 // Resolve reference first
-                annotation_segment = (Element) XPath.newInstance(
-                        String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
-                        annotation_segment.getAttributeValue("ANNOTATION_REF"))).selectSingleNode(tier);
                 assert annotation_segment != null : "Annotation segment is null after resolving reference";
             }
             else {
                 return new Location("Tier:" + tier_id.getValue() + "",
                         "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=") + "");
+                    annotation_segment =
+                            new XPathBuilder<>(String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
+                                    annotation_segment.getAttributeValue("ANNOTATION_REF")), Filters.element()).compileWith(xpathFactory).evaluateFirst(tier);
             }
             Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
             Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
             assert start_ref != null : "Start ref is null";
             assert end_ref != null : "End ref is null";
             Attribute start_time =
-                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                    start_ref.getValue()))
-                            .selectSingleNode(getJdom());
+                    new XPathBuilder<>( String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                            start_ref.getValue()), Filters.attribute()).compileWith(xpathFactory).evaluateFirst(getJdom());
             assert start_time != null : "Start time is null";
             Attribute end_time =
-                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                    end_ref.getValue()))
-                            .selectSingleNode(getJdom());
+                    new XPathBuilder<>( String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                            end_ref.getValue()), Filters.attribute()).compileWith(xpathFactory).evaluateFirst(getJdom());
             assert end_time != null : "End time is null";
             return new Location("Tier:" + tier_id.getValue() + "",
                     "Segment:" + annotation_id + ", Time:" +

@@ -21,6 +21,11 @@ import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
@@ -28,7 +33,6 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.JDOMException;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.xpath.XPath;
 
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.JLanguageTool;
@@ -52,6 +56,7 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
     String tierToCheck = "fg";
     String language = "de";
     JLanguageTool langTool;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public LanguageToolChecker(Properties properties) {
         //fixing is not possible
@@ -90,8 +95,8 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
         Document jDoc = TypeConverter.String2JdomDocument(cd.toSaveableString());
         List<RuleMatch> matches = new ArrayList<RuleMatch>();
         String xpathTier = "//tier[@category='" + tierToCheck + "']";
-        XPath xTier = XPath.newInstance(xpathTier);
-        List tierList = xTier.selectNodes(jDoc);
+        XPathExpression<Element> xTier = new XPathBuilder<>(xpathTier, Filters.element()).compileWith(xpathFactory);
+        List<Element> tierList = xTier.evaluate(jDoc);
         //extra for loop to get the tier id value for exmaError
         for (int i = 0; i< tierList.size(); i++) {
             Object oTier = tierList.get(i);
@@ -99,8 +104,6 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
                 Element tier = (Element) oTier;
                 String tierId = tier.getAttributeValue("id");
                 String xpathEvent = "//tier[@id='" + tierId + "']/event";
-                XPath xEvent = XPath.newInstance(xpathEvent);
-                List eventList = xEvent.selectNodes(tier);
                 for (int j = 0; j < eventList.size(); j++) {
                         Object o = eventList.get(j);
                         if (o instanceof Element) {
@@ -109,8 +112,6 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
                             String start = e.getAttributeValue("start");
                             matches = langTool.check(eventText);
                             String xpathStart = "//tier[@category='ref']/event[@start='" + start + "']";
-                            XPath xpathRef = XPath.newInstance(xpathStart);
-                            List refList = xpathRef.selectNodes(jDoc);
                             if (refList.isEmpty()) {
                                 String emptyMessage = "Ref tier information seems to be missing for event '" + eventText + "'";
                                 stats.addCritical(function, cd, emptyMessage);
@@ -141,6 +142,10 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
                         stats.addCorrect(function, cd, "No spelling errors found.");
                     }
                 }       
+            XPathExpression<Element> xEvent = new XPathBuilder<>(xpathEvent, Filters.element()).compileWith(xpathFactory);
+            List<Element> eventList = xEvent.evaluate(tier);
+                XPathExpression<Element> xpathRef = new XPathBuilder<>(xpathStart, Filters.element()).compileWith(xpathFactory);
+                List<Element> refList = xpathRef.evaluate(jDoc);
             }
         return stats;
         }

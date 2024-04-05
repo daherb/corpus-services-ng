@@ -19,6 +19,10 @@ import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,7 +38,6 @@ import java.net.URL;
 
 import org.jdom2.Attribute;
 import org.jdom2.Element;
-import org.jdom2.xpath.XPath;
 
 /**
  *
@@ -59,6 +62,7 @@ public class VikusViewer extends Visualizer {
     String title;
     String description;
     ArrayList<String> allDistinctYears = new ArrayList<>();
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public VikusViewer(Properties properties) {
         super(properties);
@@ -77,15 +81,20 @@ public class VikusViewer extends Visualizer {
         }
 
         Element comadescription = coma.getCorpusDescription();
-        Element descriptioncoma = (Element) XPath.selectSingleNode(comadescription, "descendant::Key[@Name='DC:description']");
+        Element descriptioncoma =
+            new XPathBuilder<>("descendant::Key[@Name='DC:description']", Filters.element()).compileWith(xpathFactory).evaluateFirst(comadescription);
         description = descriptioncoma.getText();
-        Element elcorpusPrefix = (Element) XPath.selectSingleNode(comadescription, "descendant::Key[@Name='hzsk:corpusPrefix']");
+        Element elcorpusPrefix =
+                new XPathBuilder<>("descendant::Key[@Name='hzsk:corpusPrefix']", Filters.element()).compileWith(xpathFactory).evaluateFirst(comadescription);
         corpusPrefix = elcorpusPrefix.getText();
-        Element eltitle = (Element) XPath.selectSingleNode(comadescription, "descendant::Key[@Name='DC:title']");
+        Element eltitle =
+                new XPathBuilder<>("descendant::Key[@Name='DC:title']", Filters.element()).compileWith(xpathFactory).evaluateFirst(comadescription);
         title = eltitle.getText();
-        Element elversion = (Element) XPath.selectSingleNode(comadescription, "descendant::Key[@Name='hzsk:corpusVersion']");
+        Element elversion =
+                new XPathBuilder<>("descendant::Key[@Name='hzsk:corpusVersion']", Filters.element()).compileWith(xpathFactory).evaluateFirst(comadescription);
         version = elversion.getText();
-        Element ellicence = (Element) XPath.selectSingleNode(comadescription, "descendant::Key[@Name='DC:rights']");
+        Element ellicence =
+                new XPathBuilder<>("descendant::Key[@Name='DC:rights']", Filters.element()).compileWith(xpathFactory).evaluateFirst(comadescription);
         licence = ellicence.getText();
         stats.merge(createDataCSV(cd));
         stats.merge(createConfigJSON(cd));
@@ -128,24 +137,30 @@ public class VikusViewer extends Visualizer {
         for (Element communication : coma.getCommunications()) {
             String[] comrow = new String[16];
             //id
-            Attribute id = (Attribute) XPath.selectSingleNode(communication, "@Name");
+            Attribute id =
+                    new XPathBuilder<>("@Name", Filters.attribute()).compileWith(xpathFactory).evaluateFirst(communication);
             comrow[0] = id.getValue();
             //keyword - year, genre, Title splitted by spaces
-            Element year = (Element) XPath.selectSingleNode(communication, "descendant::Description/Key[contains(@Name,'Date of recording')]");
+            Element year =
+                    new XPathBuilder<>("descendant::Description/Key[contains(@Name,'Date of recording')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             System.out.println(year.getText());
             if (!allDistinctYears.contains(year.getText())) {
                 allDistinctYears.add(year.getText());
             }
-            Element descriptiondesc = (Element) XPath.selectSingleNode(communication, "descendant::Description/Key[contains(@Name,'Title')]");
+            Element descriptiondesc =
+                    new XPathBuilder<>("descendant::Description/Key[contains(@Name,'Title')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
 
-            Element genre = (Element) XPath.selectSingleNode(communication, "descendant::Description/Key[contains(@Name,'Genre')]");
+            Element genre =
+                    new XPathBuilder<>("descendant::Description/Key[contains(@Name,'Genre')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             System.out.println(genre.getText());
-            Element settlement = (Element) XPath.selectSingleNode(communication, "descendant::Location/Description/Key[contains(@Name,'Settlement')]");
+            Element settlement =
+                    new XPathBuilder<>("descendant::Location/Description/Key[contains(@Name,'Settlement')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             if(settlement==null){
                 settlement = new Element("Settlement");
             }
             System.out.println(settlement.getText());
-            Element speaker = (Element) XPath.selectSingleNode(communication, "descendant::Description/Key[contains(@Name,'Speakers')]");
+            Element speaker =
+                    new XPathBuilder<>("descendant::Description/Key[contains(@Name,'Speakers')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             System.out.println(speaker.getText());
             String keywords = "\"";
             if (descriptiondesc != null) {
@@ -162,18 +177,21 @@ public class VikusViewer extends Visualizer {
             //year - Description Date of Recording
             comrow[2] = cleanForCSV(year.getText());
             //dialect
-            Element dialect = (Element) XPath.selectSingleNode(communication, "descendant::Description/Key[contains(@Name,'Dialect')]");
+            Element dialect =
+                    new XPathBuilder<>("descendant::Description/Key[contains(@Name,'Dialect')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             System.out.println(dialect.getText());
             comrow[3] = cleanForCSV(dialect.getText());
             //country
-            Element country = (Element) XPath.selectSingleNode(communication, "descendant::Location/Description/Key[contains(@Name,'Country')]");
+            Element country =
+                    new XPathBuilder<>("descendant::Location/Description/Key[contains(@Name,'Country')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             if(country==null){
                 country = new Element("Country");
             }
             System.out.println(country.getText());
             comrow[4] = cleanForCSV(country.getText());
             //region
-            Element region = (Element) XPath.selectSingleNode(communication, "descendant::Location/Description/Key[contains(@Name,'Region')]");
+            Element region =
+                    new XPathBuilder<>("descendant::Location/Description/Key[contains(@Name,'Region')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             if(region==null){
                 region = new Element("Region");
             }
@@ -182,7 +200,8 @@ public class VikusViewer extends Visualizer {
             //settlement
             comrow[6] = cleanForCSV(settlement.getText());
             //language
-            Element language = (Element) XPath.selectSingleNode(communication, "descendant::Language/LanguageCode");
+            Element language =
+                    new XPathBuilder<>("descendant::Language/LanguageCode", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             System.out.println(language.getText());
             comrow[7] = cleanForCSV(language.getText());
             //speaker
@@ -205,13 +224,16 @@ public class VikusViewer extends Visualizer {
             String listurl = transrepourl + id.getValue() + "/LIST/" + id.getValue() + "-list.html";
             comrow[11] = listurl;
             //pdf url
-            Element pdf = (Element) XPath.selectSingleNode(communication, "descendant::File[mimetype='application/pdf']/relPath");
+            Element pdf =
+                    new XPathBuilder<>("descendant::File[mimetype='application/pdf']/relPath", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             //audio url
-            Element audio = (Element) XPath.selectSingleNode(communication, "descendant::Recording/Media/NSLink");
+            Element audio =
+                    new XPathBuilder<>("descendant::Recording/Media/NSLink", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             //check for cases with no audio and no pdf or both!
             String pdfrurl = filerepourl + id.getValue() + "/PDF/" + id.getValue() + ".pdf";
             String audiourl = recrepourl + id.getValue() + "/MP3/" + id.getValue() + ".mp3";
-            Element transcription = (Element) XPath.selectSingleNode(communication, "descendant::Transcription/NSLink");
+            Element transcription =
+                    new XPathBuilder<>("descendant::Transcription/NSLink", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             URL imageLocation = null;
             if (transcription != null) {
                 imageLocation = new URL(cd.getParentURL() + transcription.getText().replaceFirst("[.][^.]+$", "") + ".jpg");

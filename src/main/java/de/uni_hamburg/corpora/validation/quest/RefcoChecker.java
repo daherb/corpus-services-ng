@@ -14,9 +14,12 @@ import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.*;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.XMLOutputter;
-import org.jdom2.xpath.XPath;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import jakarta.xml.bind.JAXBContext;
@@ -115,6 +118,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * The XML DOM of the RefCo spreadsheet
      */
     private Document refcoDoc ;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public RefcoCriteria getCriteria() {
         return criteria;
@@ -543,8 +547,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      */
     private void expandTableCells(Document document) throws JDOMException {
         // Find all cells that have the attribute number-columns-repeated
-        for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-cell[@table:number-columns-repeated]")
-                .selectNodes(document))) {
+        for (Element node :
+                new XPathBuilder<>("//table:table-cell[@table:number-columns-repeated]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
             // Generate as many blank cells as neede
             ArrayList<Element> replacement = new ArrayList<>();
             int colCount = 0;
@@ -567,8 +571,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             node.getParentElement().setContent(node.getParentElement().indexOf(node),replacement);
         }
         // Expand rows as well
-        for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-row[@table:number-rows-repeated]")
-                .selectNodes(document))) {
+        for (Element node :
+                new XPathBuilder<>("//table:table-row[@table:number-rows-repeated]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
             // Generate as many blank cells as neede
             ArrayList<Element> replacement = new ArrayList<>();
             int rowCount = 0;
@@ -601,15 +605,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         boolean deleted = true;
         while (deleted) {
             deleted = false;
-            for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-cell[not(text:p) and " +
-                            "position() = last()]")
-                    .selectNodes(document))) {
+            for (Element node :
+                    new XPathBuilder<>("//table:table-cell[not(text:p) and " +
+                            "position() = last()]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
                 node.detach();
                 deleted = true;
             }
-            for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-row[not" +
-                            "(table:table-cell) and position() = last()]")
-                    .selectNodes(document))) {
+            for (Element node :
+                    new XPathBuilder<>("//table:table-row[not" +
+                            "(table:table-cell) and position() = last()]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
                 node.detach();
                 deleted = true;
             }
@@ -658,8 +662,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (path == null || e == null)
             return "" ;
         else {
-            Element cell = (Element) XPath.newInstance(String.format(path, title, pos))
-                    .selectSingleNode(e);
+            Element cell =
+                    new XPathBuilder<>(String.format(path, title, pos), Filters.element()).compileWith(xpathFactory).evaluateFirst(e);
             return safeGetText(cell);
         }
     }
@@ -688,7 +692,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         try {
 
             // Read Overview tab
-            Element overviewTable = (Element) XPath.newInstance("//table:table[@table:name='Overview']").selectSingleNode(refcoDoc);
+            Element overviewTable =
+                    new XPathBuilder<>("//table:table[@table:name='Overview']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             String cellXPath =
                     "//table:table-row[table:table-cell[text:p=\"%s\"]]/table:table-cell[position()=%d]/text:p";
             criteria.setCorpusTitle(getCellText(cellXPath, overviewTable,  "Corpus Title"));
@@ -705,7 +710,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             criteria.setNumberTranscribedWords(getInformationNotes(cellXPath, overviewTable, "Total number of transcribed words"));
             criteria.setNumberAnnotatedWords(getInformationNotes(cellXPath, overviewTable, "Total number of morphologically analyzed words"));
             // Read CorpusComposition tab
-            Element sessionTable = (Element) XPath.newInstance("//table:table[@table:name='CorpusComposition']").selectSingleNode(refcoDoc);
+            Element sessionTable =
+                    new XPathBuilder<>("//table:table[@table:name='CorpusComposition']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (sessionTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -745,7 +751,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
             // Read AnnotationTiers tab
-            Element tierTable = (Element) XPath.newInstance("//table:table[@table:name='AnnotationTiers']").selectSingleNode(refcoDoc);
+            Element tierTable =
+                    new XPathBuilder<>("//table:table[@table:name='AnnotationTiers']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (tierTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -780,7 +787,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     " data in all cells"}));
             }
             // Read Transcription tab
-            Element transcriptionTable = (Element) XPath.newInstance("//table:table[@table:name='Transcription']").selectSingleNode(refcoDoc);
+            Element transcriptionTable =
+                    new XPathBuilder<>("//table:table[@table:name='Transcription']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (transcriptionTable == null)
                 report.addCritical(getFunction(),
                         ReportItem.newParamMap(
@@ -814,7 +822,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             // Read Glosses tab
             Element glossesTable =
-                    (Element) XPath.newInstance("//table:table[starts-with(@table:name,'Gloss')]").selectSingleNode(refcoDoc);
+                    new XPathBuilder<>("//table:table[starts-with(@table:name,'Gloss')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (glossesTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -849,7 +857,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     "Check number of columns and presence of data in all cells"}));
             }
             // Read Punctuation tab
-            Element punctuationsTable = (Element) XPath.newInstance("//table:table[@table:name='Punctuations']").selectSingleNode(refcoDoc);
+            Element punctuationsTable =
+                    new XPathBuilder<>("//table:table[@table:name='Punctuations']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (punctuationsTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -2207,8 +2216,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return new ArrayList<>();
         else {
             String path = String.format("//TIER[@LINGUISTIC_TYPE_REF=\"%s\"]//ANNOTATION_VALUE/text()", tier);
-            List texts = XPath.newInstance(path).selectNodes(d);
-            return listToParamList(Text.class, texts);
+            return new XPathBuilder<>(path, Filters.text()).compileWith(xpathFactory).evaluate(d);
         }
     }
 
@@ -2223,10 +2231,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (d == null)
             return new ArrayList<>();
         else {
-            List texts = XPath.newInstance(
-                    String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier))
-                    .selectNodes(d);
-            return listToParamList(Text.class, texts);
+            return new XPathBuilder<>(String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier),
+                    Filters.text()).compileWith(xpathFactory).evaluate(d);
         }
     }
 
@@ -2359,8 +2365,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         Map<String,Set<String>> allTiers = new HashMap<>();
         for (ELANData cd : refcoCorpus.getELANData()) {
             for (String tier_id :
-                    (List<String>) XPath.newInstance("//TIER/@TIER_ID").selectNodes(cd.getJdom())
-                            .stream().map((a) -> ((Attribute) a).getValue()).collect(Collectors.toList())) {
+                    new XPathBuilder<>("//TIER/@TIER_ID", Filters.attribute()).compileWith(xpathFactory)
+                            .evaluate(cd.getJdom())
+                            .stream().map(Attribute::getValue).toList()) {
                 if (allTiers.containsKey(tier_id) && allTiers.get(tier_id) != null) {
                     allTiers.get(tier_id).add(cd.getFilename());
                 }
@@ -2384,9 +2391,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return locations;
         String normalizedToken = token.replaceAll("\"", "'");
         List<Element> tiers =
-                (List<Element>) XPath.newInstance(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
-                                normalizedToken))
-                        .selectNodes(cd.getJdom());
+                new XPathBuilder<>(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
+                                normalizedToken), Filters.element()).compileWith(xpathFactory)
+                        .evaluate(cd.getJdom());
         for (Element tier : tiers.stream().filter((t) ->
                 validTiers.contains(t.getAttributeValue("TIER_ID"))).collect(Collectors.toList())) {
             Attribute tier_id = tier.getAttribute("TIER_ID");
@@ -2407,9 +2414,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             // do nothing
                         } else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
                             // Resolve reference first
-                            annotation_segment = (Element) XPath.newInstance(
-                                    String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
-                                            annotation_segment.getAttributeValue("ANNOTATION_REF"))).selectSingleNode(tier);
                             assert annotation_segment != null : "Annotation segment is null after resolving reference";
                         } else {
                             locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
@@ -2423,22 +2427,26 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
                             assert start_ref != null : "Start ref is null";
                             assert end_ref != null : "End ref is null";
-                            Attribute start_time =
-                                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                                    start_ref.getValue()))
-                                            .selectSingleNode(cd.getJdom());
                             assert start_time != null : "Start time is null";
-                            Attribute end_time =
-                                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                                    end_ref.getValue()))
-                                            .selectSingleNode(cd.getJdom());
                             assert end_time != null : "End time is null";
                             locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
                                     "Segment:" + annotation_id + ", Time:" +
                                             DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
                                             DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"))
                             );
+                                annotation_segment =
+                                        new XPathBuilder<>(String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
+                                                annotation_segment.getAttributeValue("ANNOTATION_REF")), Filters.element()).compileWith(xpathFactory)
+                                                .evaluateFirst(tier);
                         }
+                        Attribute start_time =
+                                new XPathBuilder<>(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                        start_ref.getValue()), Filters.attribute()).compileWith(xpathFactory)
+                                        .evaluateFirst(cd.getJdom());
+                        Attribute end_time =
+                                new XPathBuilder<>(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                                end_ref.getValue()), Filters.attribute()).compileWith(xpathFactory)
+                                        .evaluateFirst(cd.getJdom());
                     }
                 }
             }
@@ -2461,8 +2469,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public boolean containsTier(ELANData cd, String tierId) {
         // Check if node list for tier is empty
         try {
-            return !XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]", tierId))
-                    .selectNodes(cd.getJdom()).isEmpty();
+            return !new XPathBuilder<>(String.format("//TIER[@TIER_ID=\"%s\"]", tierId), Filters.text()).compileWith(xpathFactory)
+                            .evaluate(cd.getJdom()).isEmpty();
         }
         // Exception also means that tier does not exist
         catch (Exception e) {
