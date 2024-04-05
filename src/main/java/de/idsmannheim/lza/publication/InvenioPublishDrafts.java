@@ -25,12 +25,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
  * Simple function to publish all unpublished drafts
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class InvenioPublishDrafts extends Publisher implements CorpusFunction {
 

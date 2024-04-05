@@ -16,9 +16,10 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Document;
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 /**
@@ -29,6 +30,9 @@ import org.xml.sax.SAXException;
  * timepoints and interpolates timeline items without time info if the parameter
  * is set.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction {
 
@@ -53,7 +57,7 @@ public class ExbMakeTimelineConsistent extends Checker implements CorpusFunction
                 bt.getBody().getCommonTimeline().completeTimes();
             }
 
-            btd.setReadbtasjdom(bt.toJDOMDocument());
+            btd.setReadbtasjdom(new SAXBuilder().build(bt.toXML()));
             btd.setOriginalString(bt.toXML(bt.getTierFormatTable()));
             //btd.updateReadbtasjdom();
             cd = (CorpusData) btd;

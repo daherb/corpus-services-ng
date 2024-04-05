@@ -13,37 +13,41 @@ import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.CorpusIO;
 import de.uni_hamburg.corpora.Report;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-//TODO get rid of emxa imports in the future
-import org.exmaralda.common.jdomutilities.IOUtilities;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.SegmentedTranscription;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
-import java.io.UnsupportedEncodingException;
+
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.Text;
-import org.jdom.transform.XSLTransformException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.transform.XSLTransformException;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
+
 import java.util.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.exmaralda.common.corpusbuild.FileIO;
-import org.exmaralda.common.corpusbuild.TextFilter;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 
 /**
@@ -53,6 +57,9 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  * This class takes an exb as input and converts it into ISO standard TEI
  * format.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
@@ -77,11 +84,6 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
     String nameOfDeepSegmentation = "SpeakerContribution_Utterance_Word";
     String nameOfFlategmentation = "SpeakerContribution_Event";
 
-    //transformers for three transformations
-    XSLTransformer transformer;
-    XSLTransformer transformer2;
-    XSLTransformer transformer3;
-
     CorpusIO cio = new CorpusIO();
 
     //debugging
@@ -92,10 +94,12 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
     //String intermediate5 = "file:///home/anne/Schreibtisch/TEI/intermediate5.xml";
     static Boolean INEL = false;
     static Boolean TOKEN = false;
+
+	private static final XPathFactory xpathFactory = new JaxenXPathFactory();
     Boolean COMA = false;
 
-    URL cdURL;
-
+    Namespace teiNamespace = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
+    
     public EXB2HIATISOTEI(Properties properties) {
         super(properties);
     }
@@ -108,8 +112,8 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
      */
     /**
      *
-     * @param cd
-     * @return
+     * @param cd the corpus data
+     * @return the report
      * @throws SAXException
      * @throws FSMException
      * @throws XSLTransformException
@@ -129,10 +133,8 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
     public Report function(Corpus c) throws SAXException,
             FSMException,
-            XSLTransformException,
             JDOMException,
-            IOException,
-            Exception {
+            IOException, ClassNotFoundException {
         COMA = true;
         ComaData comad = c.getComaData();
         return convertCOMA2MORPHEMEHIATISOTEI(comad);
@@ -146,14 +148,16 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
             https://gitlab.rrz.uni-hamburg.de/Bae2551/ids-sample/blob/master/src/java/scripts/ConvertHAMATAC.java
              */
             // read COMA doc
-            Namespace teiNamespace = Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0");
-            Document comaDoc = FileIO.readDocumentFromLocalFile(cd.getURL().getPath());
+            Document comaDoc = new SAXBuilder().build(cd.getURL().getPath());
             // select communication elements in COMA xml
-            List<Element> communicationsList = XPath.selectNodes(comaDoc, "//Communication");
+            XPathExpression<Element> xpath = new XPathBuilder<>("//Communication", Filters.element()).compileWith(xpathFactory);
+            List<Element> communicationsList = xpath.evaluate(comaDoc);
             // iterate through communications
             for (Element communicationElement : communicationsList) {
                 // select basic transcriptions
-                List<Element> transcriptionsList = XPath.selectNodes(communicationElement, "descendant::Transcription[ends-with(Filename,'.exb')]");
+                List<Element> transcriptionsList =
+                        new XPathBuilder<>("descendant::Transcription[ends-with(Filename,'.exb')]", Filters.element())
+                		.compileWith(xpathFactory).evaluate(communicationElement);
                 // iterate through basic transcriptions
                 for (Element transcriptionElement : transcriptionsList) {
                     String transcriptID = transcriptionElement.getAttributeValue("Id");
@@ -175,14 +179,15 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                     transcriptIdnoElement.setText(transcriptID);
                     finalDoc.getRootElement().addContent(0, transcriptIdnoElement);
 
-                    XPath xp1 = XPath.newInstance("//tei:person");
-                    xp1.addNamespace(teiNamespace);
-                    List<Element> personL = xp1.selectNodes(finalDoc);
+                    XPathBuilder<Element> xp1 = new XPathBuilder<>("//tei:person", Filters.element());
+                    xp1.setNamespace(teiNamespace);
+                    List<Element> personL = xp1.compileWith(xpathFactory).evaluate(finalDoc);
                     for (Element personE : personL) {
                         // <person xml:id="SPK0" n="Sh" sex="2">
                         String personSigle = personE.getAttributeValue("n");
                         String xp2 = "//Speaker[Sigle='" + personSigle + "']";
-                        Element speakerE = (Element) XPath.selectSingleNode(comaDoc, xp2);
+                        Element speakerE = new XPathBuilder<>("descendant::Transcription[ends-with(Filename,'.exb')]", Filters.element())
+                        		.compileWith(xpathFactory).evaluateFirst(comaDoc);
                         String speakerID = speakerE.getAttributeValue("Id");
                         Element speakerIdnoElement = new Element("idno", teiNamespace);
                         speakerIdnoElement.setAttribute("type", "HZSK-ID");
@@ -198,7 +203,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                         //TODO save next to the old cd
                         String filename = cdc.getURL().getFile();
                         URL url = new URL("file://" + filename.substring(0, filename.lastIndexOf(".")) + "_tei.xml");
-                        System.out.println(url.toString());
+                        System.out.println(url);
                         cio.write(finalDoc, url);
                         System.out.println("document written.");
                         stats.addCorrect(function, cdc, "ISO TEI conversion of file was successful");
@@ -216,7 +221,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
         } catch (MalformedURLException ex) {
             stats.addException(function, ex, cd, "Unknown file URL reading error");
         } catch (JDOMException ex) {
-            stats.addException(function, ex, cd, "Unknown file reading error");
+            stats.addException(function, ex, cd, "Unknown jdom error");
         } catch (IOException ex) {
             stats.addException(function, ex, cd, "Unknown file reading error");
         } catch (TransformerException ex) {
@@ -233,7 +238,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
         return stats;
     }
 
-    public Report convertEXB2MORPHEMEHIATISOTEI(CorpusData cd) throws SAXException, FSMException, JDOMException, IOException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, XPathExpressionException, URISyntaxException {
+    public Report convertEXB2MORPHEMEHIATISOTEI(CorpusData cd) throws SAXException, FSMException, JDOMException, IOException, TransformerException, ParserConfigurationException, XPathExpressionException, URISyntaxException {
         if (INEL) {
             TOKEN = true;
             return convertEXB2MORPHEMEHIATISOTEI(cd, true, XPath2Morphemes);
@@ -249,7 +254,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
     * and gives back a report if it worked
      */
     public Report convertEXB2MORPHEMEHIATISOTEI(CorpusData cd,
-            boolean includeFullText, String XPath2Morphemes) throws SAXException, FSMException, JDOMException, IOException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, XPathExpressionException, URISyntaxException {
+            boolean includeFullText, String XPath2Morphemes) throws SAXException, FSMException, JDOMException, IOException, TransformerException, ParserConfigurationException, XPathExpressionException, URISyntaxException {
         Report stats = new Report();
         Document stdoc = cd2SegmentedTranscription(cd);
         //TODO paramter in the future for deep & flat segmentation name
@@ -266,7 +271,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
             //TODO save next to the old cd
             String filename = cd.getURL().getFile();
             URL url = new URL("file://" + filename.substring(0, filename.lastIndexOf(".")) + "_tei.xml");
-            System.out.println(url.toString());
+            System.out.println(url);
             cio.write(teiDoc, url);
             System.out.println("document written.");
             stats.addCorrect(function, cd, "ISO TEI conversion of file was successful");
@@ -296,21 +301,20 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                 segmentation = new HIATSegmentation(url.getFile());
          */
         //default HIAT segmentation
-        if (!FSM.equals("")) {
+        if (!FSM.isEmpty()) {
             segmentation.pathToExternalFSM = FSM;
         }
         //create a segmented exs
         SegmentedTranscription st = segmentation.BasicToSegmented(bt);
         System.out.println("Segmented transcription created");
         //Document from segmented transcription string
-        Document stdoc = TypeConverter.String2JdomDocument(st.toXML());
-        return stdoc;
+        return TypeConverter.String2JdomDocument(st.toXML());
     }
 
     public Document SegmentedTranscriptionToTEITranscription(Document segmentedTranscription,
             String nameOfDeepSegmentation,
             String nameOfFlatSegmentation,
-            boolean includeFullText, CorpusData cd) throws JDOMException, IOException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, XPathExpressionException, URISyntaxException {
+            boolean includeFullText, CorpusData cd) throws JDOMException, IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException, URISyntaxException {
 
         Document finalDocument = null;
         String skeleton_stylesheet = cio.readInternalResourceAsString(TEI_SKELETON_STYLESHEET_ISO);
@@ -323,7 +327,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
         String remove_time_stylesheet = cio.readInternalResourceAsString(REMOVE_TIME);
         String spans_2_attributes_stylesheet = cio.readInternalResourceAsString(SPANS2_ATTRIBUTES);
 
-        Document teiDocument = null;
+        Document teiDocument;
 
         XSLTransformer xslt = new XSLTransformer();
         //transform wants an xml as string object and xsl as String Object
@@ -347,35 +351,33 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
         * 'SpeakerContribution_Utterance_Word' nameOfFlatSegmentation =
         * 'SpeakerContribution_Event'
              */
-            Vector uElements = TEIMerge(segmentedTranscription, nameOfDeepSegmentation, nameOfFlatSegmentation, includeFullText);
+            Vector<Element> uElements = TEIMerge(segmentedTranscription, nameOfDeepSegmentation, nameOfFlatSegmentation, includeFullText);
 
-            XPath xp = XPath.newInstance(BODY_NODE);
             BODY_NODE = "//tei:body";
-            xp = XPath.newInstance(BODY_NODE);
-            xp.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-
-            Element textNode = (Element) (xp.selectSingleNode(teiDocument));
+            XPathBuilder<Element> xpb = new XPathBuilder<>(BODY_NODE, Filters.element());
+            xpb.setNamespace(teiNamespace);
+            XPathExpression<Element> xp = xpb.compileWith(xpathFactory);
+            Element textNode = xp.evaluateFirst(teiDocument);
             textNode.addContent(uElements);
             if (teiDocument != null) {
                 System.out.println("STEP 2 completed.");
                 //cio.write(teiDocument, new URL(intermediate2));
-                Document transformedDocument = null;
+                Document transformedDocument;
                 if (INEL) {
                     xslt.setParameter("mode", "inel");
                 }
                 String result2
                         = xslt.transform(TypeConverter.JdomDocument2String(teiDocument), transform_stylesheet);
-                transformedDocument = IOUtilities.readDocumentFromString(result2);
+                transformedDocument = new SAXBuilder().build(new StringReader(result2));
                 if (transformedDocument != null) {
                     //fix for issue #89
-                    textNode = (Element) (xp.selectSingleNode(transformedDocument));
+                    textNode = xp.evaluateFirst(transformedDocument);
                     System.out.println("STEP 3 completed.");
                     //cio.write(transformedDocument, new URL(intermediate3));
                     // now take care of the events from tiers of type 'd'
-                    XPath xp2 = XPath.newInstance("//segmentation[@name='Event']/ats");
-                    List events = xp2.selectNodes(segmentedTranscription);
-                    for (int pos = 0; pos < events.size(); pos++) {
-                        Element exmaraldaEvent = (Element) (events.get(pos));
+                    XPathExpression<Element> xp2 = new XPathBuilder<>("//segmentation[@name='Event']/ats", Filters.element()).compileWith(xpathFactory);
+                    List<Element> events = xp2.evaluate(segmentedTranscription);
+                    for (Element exmaraldaEvent : events) {
                         String category = exmaraldaEvent.getParentElement().getParentElement().getAttributeValue("category");
 
                         String elementName = "event";
@@ -425,7 +427,7 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                                 = xslt.transform(result4, remove_time_stylesheet);
                         String result6
                                 = xslt.transform(result5, spans_2_attributes_stylesheet);
-                        transformedDocument = IOUtilities.readDocumentFromString(result6);
+                        transformedDocument = new SAXBuilder().build(new StringReader(result6));
 
                     }
                     //generate element ids
@@ -438,20 +440,16 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                         String result3
                                 = xslt.transform(TypeConverter.JdomDocument2String(transformedDocument), sort_and_clean_stylesheet);
                         if (result3 != null) {
-                            finalDocument = IOUtilities.readDocumentFromString(result3);
-                            if (finalDocument != null) {
+                            finalDocument = new SAXBuilder().build(new StringReader(result3));
+                            //if (finalDocument != null) {
                                 //cio.write(finalDocument, new URL(intermediate5));
-                            }
+                            //}
                         }
                     }
                 }
             }
         }
         return finalDocument;
-    }
-
-    public static Vector TEIMerge(Document segmentedTranscription, String nameOfDeepSegmentation, String nameOfFlatSegmentation) {
-        return TEIMerge(segmentedTranscription, nameOfDeepSegmentation, nameOfFlatSegmentation, false);
     }
 
     /**
@@ -472,36 +470,34 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
      * speaker-contribution elements with 'who' attributes
      * @return
      */
-    public static Vector TEIMerge(Document segmentedTranscription,
+    public static Vector<Element> TEIMerge(Document segmentedTranscription,
             String nameOfDeepSegmentation,
             String nameOfFlatSegmentation,
             boolean includeFullText) {
         try {
 
             // Make a map of the timeline
-            Hashtable timelineItems = new Hashtable();
-            String xpath = "//tli";
-            XPath xpx = XPath.newInstance(xpath);
-            List tlis = xpx.selectNodes(segmentedTranscription);
+            Hashtable<String,Integer> timelineItems = new Hashtable<>();
+            XPathExpression<Element> xpx = new XPathBuilder<>("//tli", Filters.element()).compileWith(xpathFactory);
+            List<Element> tlis = xpx.evaluate(segmentedTranscription);
             for (int pos = 0; pos < tlis.size(); pos++) {
 
-                timelineItems.put(((Element) (tlis.get(pos))).getAttributeValue("id"), pos);
+                timelineItems.put(tlis.get(pos).getAttributeValue("id"), pos);
             }
 
-            Vector returnValue = new Vector();
-            XPath xp1 = XPath.newInstance("//segmentation[@name='" + nameOfDeepSegmentation + "']/ts");
-            List segmentChains = xp1.selectNodes(segmentedTranscription);
+            Vector<Element> returnValue = new Vector<>();
+            XPathExpression<Element> xp1 = new XPathBuilder<>("//segmentation[@name='" + nameOfDeepSegmentation + "']/ts", Filters.element()).compileWith(xpathFactory);
+            List<Element> segmentChains = xp1.evaluate(segmentedTranscription);
             // go through all top level segment chains
-            for (Object segmentChain : segmentChains) {
-                Element sc = (Element) (segmentChain);
+            for (Element sc : segmentChains) {
                 sc.setAttribute("speaker", sc.getParentElement().getParentElement().getAttributeValue("speaker"));
                 String tierref = sc.getParentElement().getAttributeValue("tierref");
                 String start = sc.getAttributeValue("s");
                 String end = sc.getAttributeValue("e");
                 String xpath2 = "//segmentation[@name='" + nameOfFlatSegmentation + "' and @tierref='" + tierref + "']"
                         + "/ts[@s='" + start + "' and @e='" + end + "']";
-                XPath xp2 = XPath.newInstance(xpath2);
-                Element sc2 = (Element) (xp2.selectSingleNode(segmentedTranscription));
+                XPathExpression<Element> xp2 = new XPathBuilder<>(xpath2, Filters.element()).compileWith(xpathFactory);
+                Element sc2 = xp2.evaluateFirst(segmentedTranscription);
                 if (sc2 == null) {
                     //this means that no corresponding top level
                     //element was found in the second segmentation
@@ -512,20 +508,19 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                 Element mergedElement = merge(sc, sc2);
 
                 // now take care of the corresponding annotations
-                int s = ((Integer) (timelineItems.get(start)));
-                int e = ((Integer) (timelineItems.get(end)));
+                int s = timelineItems.get(start);
+                int e = timelineItems.get(end);
                 //We would also like to keep the FlatSegmentation as an annotation to display it correctly
                 if (INEL) {
                     String xpath3 = "//segmentation[@name='" + nameOfFlatSegmentation + "' and @tierref='" + tierref + "']"
                             + "/ts[@s='" + start + "' and @e='" + end + "']/ts";
-                    XPath xp3 = XPath.newInstance(xpath3);
-                    List transannos = xp3.selectNodes(segmentedTranscription);
-                    for (Object transanno1 : transannos) {
-                        Element transanno = (Element) transanno1;
+                    XPathExpression<Element> xp3 = new XPathBuilder<>(xpath3, Filters.element()).compileWith(xpathFactory);
+                    List<Element> transannos = xp3.evaluate(segmentedTranscription);
+                    for (Element transanno : transannos) {
                         String transaStart = transanno.getAttributeValue("s");
                         String transaEnd = transanno.getAttributeValue("e");
-                        int transas = ((Integer) (timelineItems.get(transaStart)));
-                        int transae = ((Integer) (timelineItems.get(transaEnd)));
+                        int transas = timelineItems.get(transaStart);
+                        int transae = timelineItems.get(transaEnd);
                         boolean transannotationBelongsToThisElement = (transas >= s && transas <= e) || (transae >= s && transae <= e);
                         if (transannotationBelongsToThisElement) {
                             Element annotationsElement = mergedElement.getChild("annotations");
@@ -544,14 +539,13 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                 }
                 // now take care of the corresponding annotations
                 String xpath5 = "//segmented-tier[@id='" + tierref + "']/annotation/ta";
-                XPath xp5 = XPath.newInstance(xpath5);
-                List annotations = xp5.selectNodes(segmentedTranscription);
-                for (Object annotation1 : annotations) {
-                    Element anno = (Element) (annotation1);
+                XPathExpression<Element> xp5 = new XPathBuilder<>(xpath5, Filters.element()).compileWith(xpathFactory);
+                List<Element> annotations = xp5.evaluate(segmentedTranscription);
+                for (Element anno : annotations) {
                     String aStart = anno.getAttributeValue("s");
                     String aEnd = anno.getAttributeValue("e");
-                    int as = ((Integer) (timelineItems.get(aStart)));
-                    int ae = ((Integer) (timelineItems.get(aEnd)));
+                    int as = timelineItems.get(aStart);
+                    int ae = timelineItems.get(aEnd);
                     boolean annotationBelongsToThisElement = (as >= s && as <= e) || (ae >= s && ae <= e);
                     if (annotationBelongsToThisElement) {
                         Element annotationsElement = mergedElement.getChild("annotations");
@@ -579,13 +573,13 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
                     annotation.setAttribute("end", end);
                     annotation.setAttribute("level", "full-text");
 
-                    String fullText = "";
-                    List l = XPath.selectNodes(sc2, "descendant::text()");
-                    for (Object o : l) {
-                        Text text = (Text) o;
-                        fullText += text.getText();
+                    StringBuilder fullText = new StringBuilder();
+                    List<Text> l =
+                            new XPathBuilder<>("descendant::text()", Filters.text()).compileWith(xpathFactory).evaluate(sc2);
+                    for (Text text : l) {
+                        fullText.append(text.getText());
                     }
-                    annotation.setAttribute("value", fullText);
+                    annotation.setAttribute("value", fullText.toString());
 
                     Element annotationsElement = mergedElement.getChild("annotations");
                     if (annotationsElement == null) {
@@ -604,8 +598,6 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
             // in particular, it seems that tiers of type 'd' (which end up as
             // segmentation @name='Event' are lost
             return returnValue;
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -614,21 +606,21 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
     static Element merge(Element e1, Element e2) {
 
-        Iterator i1 = e1.getDescendants();
-        Vector pcData1 = new Vector();
+        Iterator<Content> i1 = e1.getDescendants();
+        Vector<Content> pcData1 = new Vector<>();
         while (i1.hasNext()) {
             pcData1.addElement(i1.next());
         }
 
-        Iterator i2 = e2.getDescendants(new TextFilter());
-        Vector pcData2 = new Vector();
+        Iterator<Text> i2 = e2.getDescendants(Filters.text());
+        Vector<Text> pcData2 = new Vector<>();
         while (i2.hasNext()) {
             pcData2.addElement(i2.next());
         }
 
         int charBoundary = 0;
         for (int pos = 0; pos < pcData2.size() - 1; pos++) {
-            Text eventText = (Text) (pcData2.elementAt(pos));
+            Text eventText = pcData2.elementAt(pos);
             Element anchor = new Element("anchor");
             Element event = eventText.getParentElement();
             String start = event.getAttributeValue("e");
@@ -685,89 +677,84 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
     // new 30-03-2016
     //this needed to be adapted to morpheme ids - and changed for the word IDs too
     //and we need to generate the spans for the morphemes somewhere too
-    private void generateWordIDs(Document document) throws JDOMException {
+    private void generateWordIDs(Document document) {
         // added 30-03-2016
-        HashSet<String> allExistingIDs = new HashSet<String>();
-        XPath idXPath = XPath.newInstance("//tei:*[@xml:id]");
-        idXPath.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-        idXPath.addNamespace(Namespace.XML_NAMESPACE);
-        List idElements = idXPath.selectNodes(document);
-        for (Object o : idElements) {
-            Element e = (Element) o;
+        HashSet<String> allExistingIDs = new HashSet<>();
+        XPathBuilder<Element>  xpb = new XPathBuilder<>("//tei:*[@xml:id]", Filters.element());
+        xpb.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+        XPathExpression<Element> idXPath = xpb.compileWith(xpathFactory);
+        List<Element> idElements = idXPath.evaluate(document);
+        for (Element e : idElements) {
             allExistingIDs.add(e.getAttributeValue("id", Namespace.XML_NAMESPACE));
         }
 
         // changed 30-03-2016
-        XPath wordXPath = XPath.newInstance("//tei:w[not(@xml:id)]");
-        wordXPath.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-        wordXPath.addNamespace(Namespace.XML_NAMESPACE);
+        xpb = new XPathBuilder<>("//tei:w[not(@xml:id)]", Filters.element());
+        xpb.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+        XPathExpression<Element> wordXPath = xpb.compileWith(xpathFactory);
 
-        List words = wordXPath.selectNodes(document);
+        List<Element> words = wordXPath.evaluate(document);
         int count = 1;
-        for (Object o : words) {
-            Element word = (Element) o;
-            while (allExistingIDs.contains("w" + Integer.toString(count))) {
+        for (Element word : words) {
+            while (allExistingIDs.contains("w" + count)) {
                 count++;
             }
 
-            String wordID = "w" + Integer.toString(count);
+            String wordID = "w" + count;
             allExistingIDs.add(wordID);
             //System.out.println("*** " + wordID);
             word.setAttribute("id", wordID, Namespace.XML_NAMESPACE);
         }
 
         // new 02-12-2014
-        XPath pcXPath = XPath.newInstance("//tei:pc[not(@xml:id)]");
-        pcXPath.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-        pcXPath.addNamespace(Namespace.XML_NAMESPACE);
-
-        List pcs = pcXPath.selectNodes(document);
+        xpb = new XPathBuilder<>("//tei:pc[not(@xml:id)]", Filters.element());
+        xpb.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+        XPathExpression<Element> pcXPath = xpb.compileWith(xpathFactory);
+        
+        List<Element> pcs = pcXPath.evaluate(document);
         count = 1;
-        for (Object o : pcs) {
-            Element pc = (Element) o;
-            while (allExistingIDs.contains("pc" + Integer.toString(count))) {
+        for (Element pc : pcs) {
+            while (allExistingIDs.contains("pc" + count)) {
                 count++;
             }
 
-            String pcID = "pc" + Integer.toString(count);
+            String pcID = "pc" + count;
             allExistingIDs.add(pcID);
             //System.out.println("*** " + wordID);
             pc.setAttribute("id", pcID, Namespace.XML_NAMESPACE);
         }
         if (INEL) {
             // we also need this for events/incidents
-            XPath incXPath = XPath.newInstance("//tei:event[not(@xml:id)]");
-            pcXPath.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-            pcXPath.addNamespace(Namespace.XML_NAMESPACE);
-
-            List incs = incXPath.selectNodes(document);
+            xpb = new XPathBuilder<>("//tei:event[not(@xml:id)]", Filters.element());
+            xpb.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+            XPathExpression<Element> incXPath = xpb.compileWith(xpathFactory);
+            
+            List<Element> incs = incXPath.evaluate(document);
             count = 1;
-            for (Object o : incs) {
-                Element pc = (Element) o;
-                while (allExistingIDs.contains("inc" + Integer.toString(count))) {
+            for (Element inc : incs) {
+                while (allExistingIDs.contains("inc" + count)) {
                     count++;
                 }
 
-                String incID = "inc" + Integer.toString(count);
+                String incID = "inc" + count;
                 allExistingIDs.add(incID);
                 //System.out.println("*** " + wordID);
-                pc.setAttribute("id", incID, Namespace.XML_NAMESPACE);
+                inc.setAttribute("id", incID, Namespace.XML_NAMESPACE);
             }
 
             // we also need this for seg elements
-            XPath segXPath = XPath.newInstance("//tei:seg[not(@xml:id)]");
-            pcXPath.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-            pcXPath.addNamespace(Namespace.XML_NAMESPACE);
-
-            List segs = segXPath.selectNodes(document);
+            xpb = new XPathBuilder<>("//tei:seg[not(@xml:id)]", Filters.element());
+            xpb.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+            XPathExpression<Element> segXPath = xpb.compileWith(xpathFactory);
+            
+            List<Element> segs = segXPath.evaluate(document);
             count = 1;
-            for (Object o : segs) {
-                Element seg = (Element) o;
-                while (allExistingIDs.contains("seg" + Integer.toString(count))) {
+            for (Element seg : segs) {
+                while (allExistingIDs.contains("seg" + count)) {
                     count++;
                 }
 
-                String segID = "seg" + Integer.toString(count);
+                String segID = "seg" + count;
                 allExistingIDs.add(segID);
                 //System.out.println("*** " + wordID);
                 seg.setAttribute("id", segID, Namespace.XML_NAMESPACE);
@@ -777,17 +764,17 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
     private void setDocLanguage(Document teiDoc, String language) throws JDOMException {
         // /TEI/text[1]/@*[namespace-uri()='http://www.w3.org/XML/1998/namespace' and local-name()='lang']
-        XPath xpathToLangAttribute = XPath.newInstance("//tei:text/@xml:lang");
-        xpathToLangAttribute.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-        xpathToLangAttribute.addNamespace(Namespace.XML_NAMESPACE);
-        Attribute langAtt = (Attribute) xpathToLangAttribute.selectSingleNode(teiDoc);
+        XPathBuilder<Attribute> xpb = new XPathBuilder<>("//tei:text/@xml:lang", Filters.attribute());
+        xpb.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+        XPathExpression<Attribute> xpathToLangAttribute = xpb.compileWith(xpathFactory);
+        Attribute langAtt = xpathToLangAttribute.evaluateFirst(teiDoc);
         if (langAtt != null) {
             langAtt.setValue(language);
-        } else {
-            XPath xpathToTextElement = XPath.newInstance("//tei:text");
-            xpathToTextElement.addNamespace("tei", "http://www.tei-c.org/ns/1.0");
-            xpathToTextElement.addNamespace(Namespace.XML_NAMESPACE);
-            Element textEl = (Element) xpathToTextElement.selectSingleNode(teiDoc);
+        } else {            
+            XPathBuilder<Element> xpb2 = new XPathBuilder<>("//tei:text", Filters.element());
+            xpb2.setNamespaces(Arrays.asList(teiNamespace,Namespace.XML_NAMESPACE));
+            XPathExpression<Element> xpathToTextElement = xpb2.compileWith(xpathFactory);
+            Element textEl = xpathToTextElement.evaluateFirst(teiDoc);
             textEl.setAttribute("lang", language, Namespace.XML_NAMESPACE);
         }
         System.out.println("Language of document set to " + language);
@@ -812,22 +799,16 @@ public class EXB2HIATISOTEI extends Converter implements CorpusFunction {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.EXMARaLDATranscriptionData");
-            IsUsableFor.add(cl);
-            //Coma will only be used if a corpus is supplied
-            //Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");
-            //IsUsableFor.add(cl3);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "unknown class not found error");
-        }
+        IsUsableFor.add(EXMARaLDATranscriptionData.class);
+        //Coma will only be used if a corpus is supplied
+        //Class cl3 = Class.forName("de.uni_hamburg.corpora.ComaData");
+        //IsUsableFor.add(cl3);
         return IsUsableFor;
     }
 
     @Override
     public String getDescription() {
-        String description = "This class takes an exb as input and converts it into ISO standard TEI format. ";
-        return description;
+        return "This class takes an exb as input and converts it into ISO standard TEI format. ";
     }
 
 }

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -22,15 +21,23 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.io.FilenameUtils;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class EXMARaLDASegmentedTranscriptionData implements CorpusData, ContentData, XMLData {
 
@@ -40,7 +47,7 @@ public class EXMARaLDASegmentedTranscriptionData implements CorpusData, ContentD
     URL parenturl;
     String filename;
     String filenamewithoutending;
-    List segmentCounts;
+    List<Element> segmentCounts;
 
     public EXMARaLDASegmentedTranscriptionData() {
 
@@ -51,7 +58,7 @@ public class EXMARaLDASegmentedTranscriptionData implements CorpusData, ContentD
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
             jdom = builder.build(url);
-            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
+            originalstring = Files.readString(Paths.get(url.toURI()));
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
@@ -118,9 +125,10 @@ public class EXMARaLDASegmentedTranscriptionData implements CorpusData, ContentD
         return filenamewithoutending;
     }
 
-    public List getSegmentCounts() throws JDOMException {
-        XPath context = XPath.newInstance("/segmented-transcription/head/meta-information/ud-meta-information/ud-information[starts-with(@attribute-name,'#')]");
-        segmentCounts = context.selectNodes(jdom);
+    public List<Element> getSegmentCounts() {
+        XPathExpression<Element> context = new XPathBuilder<>( "/segmented-transcription/head/meta-information/ud-meta-information/ud-information[starts-with(@attribute-name,'#')]",
+                Filters.element()).compileWith(new JaxenXPathFactory());
+        segmentCounts = context.evaluate(jdom);
         return segmentCounts;
     }
 

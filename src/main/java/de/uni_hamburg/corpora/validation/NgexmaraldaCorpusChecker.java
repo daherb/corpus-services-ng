@@ -19,10 +19,14 @@ import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.exmaralda.partitureditor.jexmaralda.BasicBody;
 import org.exmaralda.partitureditor.jexmaralda.Tier;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import java.net.URISyntaxException;
@@ -35,15 +39,14 @@ import org.exmaralda.partitureditor.fsm.FSMException;
  * This is the check procedure for the Nganasan Corpus
  *
  * @author hanna
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction {
 
-    private Element communication;
-    private Element basTrans;
-    private Element segTrans;
-    private Element rec;
     private String comafilename;
-    private File comafile;
     private String comadirname;
     final String NSLC = "nslc";
 
@@ -57,12 +60,8 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
         try {
             stats = exceptionalCheck();
             stats.merge(requireObligatoryAnnotationTiersAndTypes());
-        } catch (JexmaraldaException je) {
-            stats.addException(je, "Unknown parsing error");
-        } catch (JDOMException jdome) {
-            stats.addException(jdome, "Unknown parsing error");
-        } catch (SAXException saxe) {
-            stats.addException(saxe, "Unknown parsing error");
+        } catch (JexmaraldaException | JDOMException | SAXException ex) {
+            stats.addException(ex, "Unknown parsing error");
         } catch (IOException ioe) {
             stats.addException(ioe, "Reading error");
         }
@@ -73,19 +72,17 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
             IOException {
         Report stats = new Report();
         Document nganasanCorpus
-                = org.exmaralda.common.jdomutilities.IOUtilities.readDocumentFromLocalFile(comafilename);
-        XPath xpCommunications = XPath.newInstance("//Communication");
-        List allCommunications = xpCommunications.selectNodes(nganasanCorpus);
-        for (Object o : allCommunications) {
-            communication = (Element) o;
+                = new SAXBuilder().build(comafilename);
+        XPathExpression<Element> xpath = new XPathBuilder<Element>("//Communication", Filters.element()).compileWith(new JaxenXPathFactory());
+        List<Element> allCommunications = xpath.evaluate(nganasanCorpus);
+        for (Element communication : allCommunications) {
             //retrieve the communication name
             String communicationName = communication.getAttributeValue("Name");
             //pick up basic transcriptions
-            XPath xpBasTrans = XPath.newInstance("Transcription[Description"
-                    + "/Key[@Name='segmented']/text()='false']");
-            List allBasTrans = xpBasTrans.selectNodes(communication);
-            for (Object oB : allBasTrans) {
-                basTrans = (Element) oB;
+            XPathExpression<Element> xpBasTrans = new XPathBuilder<Element>("Transcription[Description"
+                    + "/Key[@Name='segmented']/text()='false']", Filters.element()).compileWith(new JaxenXPathFactory());
+            List<Element> allBasTrans = xpBasTrans.evaluate(communication);
+            for (Element basTrans : allBasTrans) {
                 String relPath = basTrans.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);
@@ -128,12 +125,10 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
                             + communicationName);
                 }
             }
-            XPath xpSegTrans = XPath.newInstance(
-                    "Transcription[Description"
-                    + "/Key[@Name='segmented']/text()='true']");
-            List allSegTrans = xpSegTrans.selectNodes(communication);
-            for (Object oS : allSegTrans) {
-                segTrans = (Element) oS;
+            XPathExpression<Element> xpSegTrans = new XPathBuilder<Element>("Transcription[Description"
+                    + "/Key[@Name='segmented']/text()='true']", Filters.element()).compileWith(new JaxenXPathFactory());
+            List<Element> allSegTrans = xpSegTrans.evaluate(communication);
+            for (Element segTrans : allSegTrans) {
                 String relPath = segTrans.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);
@@ -174,11 +169,10 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
                             + communicationName);
                 }
             }
-            XPath xpRec = XPath.newInstance("Recording/Media");
-            List allRec = xpRec.selectNodes(communication);
-            for (Object oR : allRec) {
-                Element media = (Element) oR;
-                rec = media.getParentElement();
+            XPathExpression<Element> xpRec = new XPathBuilder<Element>("Recording/Media", Filters.element()).compileWith(new JaxenXPathFactory());
+            List<Element> allRec = xpRec.evaluate(communication);
+            for (Element media : allRec) {
+                Element rec = media.getParentElement();
                 String relPath = media.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);
@@ -373,9 +367,9 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
 
         Report stats = new Report();
         Document nganasanCorpus
-                = org.exmaralda.common.jdomutilities.IOUtilities.readDocumentFromLocalFile(comafilename);
-        XPath xpCommunications = XPath.newInstance("//Communication");
-        List allCommunications = xpCommunications.selectNodes(nganasanCorpus);
+                = new SAXBuilder().build(comafilename);
+        XPathExpression<Element> xpCommunications = new XPathBuilder<Element>("//Communication", Filters.element()).compileWith(new JaxenXPathFactory());
+        List<Element> allCommunications = xpCommunications.evaluate(nganasanCorpus);
         Set<String> skipTiers = new HashSet<String>();
         skipTiers.add("COLUMN-LABEL");
         skipTiers.add("ROW-LABEL");
@@ -383,16 +377,14 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
         skipTiers.add("EMPTY");
         skipTiers.add("EMPTY-EDITOR");
 
-        for (Object o : allCommunications) {
-            communication = (Element) o;
+        for (Element communication : allCommunications) {
             //retrieve the communication name
             String communicationName = communication.getAttributeValue("Name");
             //pick up basic transcriptions
-            XPath xpBasTrans = XPath.newInstance("Transcription[Description"
-                    + "/Key[@Name='segmented']/text()='false']");
-            List allBasTrans = xpBasTrans.selectNodes(communication);
-            for (Object oB : allBasTrans) {
-                basTrans = (Element) oB;
+            XPathExpression<Element> xpBasTrans = new XPathBuilder<Element>("Transcription[Description"
+                    + "/Key[@Name='segmented']/text()='false']", Filters.element()).compileWith(new JaxenXPathFactory()); 
+            List<Element> allBasTrans = xpBasTrans.evaluate(communication);
+            for (Element basTrans : allBasTrans) {
                 String relPath = basTrans.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);
@@ -509,20 +501,12 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
      * the primal functionality of the feature can be implemented, and
      * additionally checks for parser configuration, SAXE and IO exceptions.
      */
-    public Report check(CorpusData cd) throws SAXException, JexmaraldaException {
+    public Report check(CorpusData cd) throws JexmaraldaException {
         Report stats = new Report();
         try {
             stats = exceptionalCheck(cd);
             stats.merge(requireObligatoryAnnotationTiersAndTypes());
-        } catch (JexmaraldaException je) {
-            stats.addException(je, "Unknown parsing error");
-        } catch (JDOMException jdome) {
-            stats.addException(jdome, "Unknown parsing error");
-        } catch (SAXException saxe) {
-            stats.addException(saxe, "Unknown parsing error");
-        } catch (IOException ioe) {
-            stats.addException(ioe, "Reading/writing error");
-        } catch (ParserConfigurationException ex) {
+        } catch (JexmaraldaException | JDOMException | IOException | SAXException ex) {
             Logger.getLogger(NgexmaraldaCorpusChecker.class.getName()).log(Level.SEVERE, null, ex);
         }
         return stats;
@@ -533,24 +517,22 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
      * with the coma file.
      */
     private Report exceptionalCheck(CorpusData cd)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, JDOMException {
+            throws IOException, JexmaraldaException, JDOMException {
         Report stats = new Report();
         comafilename = cd.getURL().getFile();
         comadirname = comafilename.substring(0, comafilename.lastIndexOf("/") + 1);
         Document nganasanCorpus
-                = org.exmaralda.common.jdomutilities.IOUtilities.readDocumentFromLocalFile(comafilename);
-        XPath xpCommunications = XPath.newInstance("//Communication");
-        List allCommunications = xpCommunications.selectNodes(nganasanCorpus);
-        for (Object o : allCommunications) {
-            communication = (Element) o;
+                = new SAXBuilder().build(comafilename);
+        XPathExpression<Element> xpCommunications = new XPathBuilder<Element>("//Communication", Filters.element()).compileWith(new JaxenXPathFactory());
+        List<Element> allCommunications = xpCommunications.evaluate(nganasanCorpus);
+        for (Element communication : allCommunications) {
             //retrieve the communication name
             String communicationName = communication.getAttributeValue("Name");
             //pick up basic transcriptions
-            XPath xpBasTrans = XPath.newInstance("Transcription[Description"
-                    + "/Key[@Name='segmented']/text()='false']");
-            List allBasTrans = xpBasTrans.selectNodes(communication);
-            for (Object oB : allBasTrans) {
-                basTrans = (Element) oB;
+            XPathExpression<Element> xpBasTrans = new XPathBuilder<Element>("Transcription[Description"
+                    + "/Key[@Name='segmented']/text()='false']", Filters.element()).compileWith(new JaxenXPathFactory());
+            List<Element> allBasTrans = xpBasTrans.evaluate(communication);
+            for (Element basTrans : allBasTrans) {
                 String relPath = basTrans.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);
@@ -593,12 +575,10 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
                             + communicationName);
                 }
             }
-            XPath xpSegTrans = XPath.newInstance(
-                    "Transcription[Description"
-                    + "/Key[@Name='segmented']/text()='true']");
-            List allSegTrans = xpSegTrans.selectNodes(communication);
-            for (Object oS : allSegTrans) {
-                segTrans = (Element) oS;
+            XPathExpression<Element> xpSegTrans = new XPathBuilder<Element>("Transcription[Description"
+                    + "/Key[@Name='segmented']/text()='true']", Filters.element()).compileWith(new JaxenXPathFactory());
+            List<Element> allSegTrans = xpSegTrans.evaluate(communication);
+            for (Element segTrans : allSegTrans) {
                 String relPath = segTrans.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);
@@ -639,11 +619,10 @@ public class NgexmaraldaCorpusChecker extends Checker implements CorpusFunction 
                             + communicationName);
                 }
             }
-            XPath xpRec = XPath.newInstance("Recording/Media");
-            List allRec = xpRec.selectNodes(communication);
-            for (Object oR : allRec) {
-                Element media = (Element) oR;
-                rec = media.getParentElement();
+            XPathExpression<Element> xpRec = new XPathBuilder<Element>("Recording/Media", Filters.element()).compileWith(new JaxenXPathFactory());
+            List<Element> allRec = xpRec.evaluate(communication);
+            for (Element media : allRec) {
+                Element rec = media.getParentElement();
                 String relPath = media.getChildText("NSLink");
                 String filePath = comadirname + File.separator + relPath;
                 File file = new File(filePath);

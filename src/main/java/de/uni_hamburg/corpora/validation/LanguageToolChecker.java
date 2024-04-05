@@ -21,35 +21,36 @@ import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
-import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.xpath.XPath;
+import org.jdom2.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.GermanyGerman;
-//import org.languagetool.language.BritishEnglish;
-//import org.languagetool.language.Russian;
 
 /**
  * A grammar and spelling error checker for EXB tiers mainly.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class LanguageToolChecker extends Checker implements CorpusFunction {
-
-    static String filename;
-    BasicTranscription bt;
     static EXMARaLDATranscriptionData btd;
-    ValidatorSettings settings;
-    List<String> conventions = new ArrayList<String>();
-    List<String> problems = new ArrayList<String>();
     String tierToCheck = "fg";
     String language = "de";
     JLanguageTool langTool;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public LanguageToolChecker(Properties properties) {
         //fixing is not possible
@@ -86,60 +87,50 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
         }
         boolean spellingError = false;
         Document jDoc = TypeConverter.String2JdomDocument(cd.toSaveableString());
-        List<RuleMatch> matches = new ArrayList<RuleMatch>();
+        List<RuleMatch> matches = new ArrayList<>();
         String xpathTier = "//tier[@category='" + tierToCheck + "']";
-        XPath xTier = XPath.newInstance(xpathTier);
-        List tierList = xTier.selectNodes(jDoc);
+        XPathExpression<Element> xTier = new XPathBuilder<>(xpathTier, Filters.element()).compileWith(xpathFactory);
+        List<Element> tierList = xTier.evaluate(jDoc);
         //extra for loop to get the tier id value for exmaError
-        for (int i = 0; i< tierList.size(); i++) {
-            Object oTier = tierList.get(i);
-            if (oTier instanceof Element) {
-                Element tier = (Element) oTier;
-                String tierId = tier.getAttributeValue("id");
-                String xpathEvent = "//tier[@id='" + tierId + "']/event";
-                XPath xEvent = XPath.newInstance(xpathEvent);
-                List eventList = xEvent.selectNodes(tier);
-                for (int j = 0; j < eventList.size(); j++) {
-                        Object o = eventList.get(j);
-                        if (o instanceof Element) {
-                            Element e = (Element) o;
-                            String eventText = e.getText();
-                            String start = e.getAttributeValue("start");
-                            matches = langTool.check(eventText);
-                            String xpathStart = "//tier[@category='ref']/event[@start='" + start + "']";
-                            XPath xpathRef = XPath.newInstance(xpathStart);
-                            List refList = xpathRef.selectNodes(jDoc);
-                            if (refList.isEmpty()) {
-                                String emptyMessage = "Ref tier information seems to be missing for event '" + eventText + "'";
-                                stats.addCritical(function, cd, emptyMessage);
-                                exmaError.addError(function, cd.getURL().getFile(), tierId, start, false, emptyMessage);
-                                continue;
-                            }
-                            Object refObj = refList.get(0);
-                            if (refObj instanceof Element) {
-                                Element refEl = (Element) refObj;
-                                String refText = refEl.getText();
-                                for (RuleMatch match : matches) {
-                                    String message = "Potential error at characters "
-                                            + match.getFromPos() + "-" + match.getToPos() + ": "
-                                            + match.getMessage() + ": \""
-                                            + eventText.substring(match.getFromPos(),
-                                                    match.getToPos()) + "\" "
-                                            + "Suggested correction(s): "
-                                            + match.getSuggestedReplacements()
-                                            + ". Reference tier id: " + refText;
-                                    spellingError = true;
-                                    stats.addWarning(function, cd, message);
-                                    exmaError.addError(function, cd.getURL().getFile(), tierId, start, false, message);
-                                }
-                            }
-                        }
-                    }
-                     if (!spellingError) {
-                        stats.addCorrect(function, cd, "No spelling errors found.");
-                    }
-                }       
+        for (Element tier : tierList) {
+            String tierId = tier.getAttributeValue("id");
+            String xpathEvent = "//tier[@id='" + tierId + "']/event";
+            XPathExpression<Element> xEvent = new XPathBuilder<>(xpathEvent, Filters.element()).compileWith(xpathFactory);
+            List<Element> eventList = xEvent.evaluate(tier);
+            for (Element e : eventList) {
+                String eventText = e.getText();
+                String start = e.getAttributeValue("start");
+                matches.addAll(langTool.check(eventText));
+                String xpathStart = "//tier[@category='ref']/event[@start='" + start + "']";
+                XPathExpression<Element> xpathRef = new XPathBuilder<>(xpathStart, Filters.element()).compileWith(xpathFactory);
+                List<Element> refList = xpathRef.evaluate(jDoc);
+                if (refList.isEmpty()) {
+                    String emptyMessage = "Ref tier information seems to be missing for event '" + eventText + "'";
+                    stats.addCritical(function, cd, emptyMessage);
+                    exmaError.addError(function, cd.getURL().getFile(), tierId, start, false, emptyMessage);
+                    continue;
+                }
+                Element refEl =  refList.get(0);
+                String refText = refEl.getText();
+                for (RuleMatch match : matches) {
+                    String message = "Potential error at characters "
+                            + match.getFromPos() + "-" + match.getToPos() + ": "
+                            + match.getMessage() + ": \""
+                            + eventText.substring(match.getFromPos(),
+                            match.getToPos()) + "\" "
+                            + "Suggested correction(s): "
+                            + match.getSuggestedReplacements()
+                            + ". Reference tier id: " + refText;
+                    spellingError = true;
+                    stats.addWarning(function, cd, message);
+                    exmaError.addError(function, cd.getURL().getFile(), tierId, start, false, message);
+                }
+
             }
+            if (!spellingError) {
+                stats.addCorrect(function, cd, "No spelling errors found.");
+            }
+        }
         return stats;
         }
         
@@ -156,10 +147,9 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
 
     @Override
     public String getDescription() {
-        String description = "This class takes a CorpusDataObject that is an Exb, "
+        return "This class takes a CorpusDataObject that is an Exb, "
                 + "checks if there are spell or grammar errors in German, English or Russian using LanguageTool and"
                 + " returns the errors in the Report and in the ExmaErrors.";
-        return description;
     }
 
     public void setLanguage(String lang) {

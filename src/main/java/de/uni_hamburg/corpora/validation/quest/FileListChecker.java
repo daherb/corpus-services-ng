@@ -5,7 +5,7 @@ import de.uni_hamburg.corpora.utilities.quest.FileTools;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,8 +25,9 @@ import java.util.stream.Collectors;
 /**
  * Checker to compare a list of present files against a list of expected files
  *
- * @author bba1792, Dr. Herbert Lange
- * @version 20220324
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FileListChecker extends Checker implements CorpusFunction {
 

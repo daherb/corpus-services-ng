@@ -2,21 +2,23 @@ package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210728
- *
  * Checker for the generic metadata within an IMDI corpus
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class IMDIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
@@ -26,9 +28,9 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
     public IMDIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("imdi-criteria-file"))
-            setCriteriaFile(properties.getProperty("imdi-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("imdi-criteria-file"));
         else {
-            loadCriteriaResource("imdi-generic.csv");
+        	setUp = setCriteria("imdi-generic.csv");
         }
     }
 
@@ -72,33 +74,29 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
         Report report = new Report();
         // Workaround for default namespace "" kind of following
         // http://www.edankert.com/defaultnamespaces.html
-        try {
-            XPath xpath = XPath.newInstance(locator);
-            xpath.addNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
-            List<Object> nodes = xpath.selectNodes(((IMDIData) cd).getJdom());
-            // Convert nodes to string values
-            for (Object o : nodes) {
-                // Get the value of the node, either from an element or an attribute
-                if (o instanceof Element) {
-                    values.add(XMLTools.showAllText((Element) o));
-                }
-                else if (o instanceof Attribute)
-                    values.add(((Attribute) o).getValue());
+        XPathBuilder<?> xpb = new XPathBuilder<>(locator, Filters.attribute().or(Filters.fboolean()));
+        xpb.setNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
+        List<?> nodes =
+                xpb.compileWith(new JaxenXPathFactory()).evaluate(((IMDIData) cd).getJdom());
+        // Convert nodes to string values
+        for (Object o : nodes) {
+            // Get the value of the node, either from an element or an attribute
+            if (o instanceof Element) {
+                values.add(XMLTools.showAllText((Element) o));
+            }
+            else if (o instanceof Attribute)
+                values.add(((Attribute) o).getValue());
                 // Result of a XPath predicate -> only keep if the result is true
                 // This allows e.g. predicates where the counts of elements can be compared
-                else if (o instanceof Boolean) {
-                    if ((Boolean) o)
-                        values.add(((Boolean) o).toString());
-                }
-                else {
-                    // Error if it is neither element nor attribute
-                    report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
-                    break;
-                }
+            else if (o instanceof Boolean) {
+                if ((Boolean) o)
+                    values.add(((Boolean) o).toString());
             }
-        }
-        catch (JDOMException e) {
-            e.printStackTrace();
+            else {
+                // Error if it is neither element nor attribute
+                report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
+                break;
+            }
         }
         return report ;
 

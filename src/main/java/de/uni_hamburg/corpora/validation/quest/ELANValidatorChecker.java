@@ -5,7 +5,7 @@ import de.uni_hamburg.corpora.validation.Checker;
 import mpi.eudico.server.corpora.util.ProcessReport;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 
@@ -31,8 +29,9 @@ import mpi.eudico.server.corpora.clomimpl.util.EAFValidator ;
 /**
  * Using the built-in ELAN file checker in corpus services
  *
- * @author bba1792 Dr. Herbert Lange
- * @version 20211019
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ELANValidatorChecker extends Checker implements CorpusFunction {
 

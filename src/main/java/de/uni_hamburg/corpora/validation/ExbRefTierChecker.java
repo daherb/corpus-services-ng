@@ -15,7 +15,7 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -25,6 +25,10 @@ import org.xml.sax.SAXException;
  * A class that checks reference tiers in exb files and finds out whether or not
  * the order of the numbering and speaker reference are correct. If there are
  * mistakes in the ref tiers, it corrects them thanks to its fix function.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbRefTierChecker extends Checker implements CorpusFunction {
 

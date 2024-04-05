@@ -32,9 +32,9 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.exmaralda.partitureditor.jexmaralda.segment.AbstractSegmentation;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.SegmentedTranscription;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
 import org.exmaralda.coma.helpers.*;
 
@@ -42,6 +42,9 @@ import org.exmaralda.coma.helpers.*;
  * This class checks Exmaralda exb files for segmentation problems and creates
  * segmented exs from the exbs.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbSegmentationChecker extends Checker implements CorpusFunction {
 

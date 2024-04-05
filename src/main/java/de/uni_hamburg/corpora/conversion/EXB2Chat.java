@@ -7,8 +7,8 @@ import de.uni_hamburg.corpora.ComaData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
-import org.jdom.JDOMException;
-import org.jdom.transform.XSLTransformException;
+import org.jdom2.JDOMException;
+import org.jdom2.transform.XSLTransformException;
 import org.xml.sax.SAXException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,6 +32,10 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  *
  * @author Tommi A Pirinen
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXB2Chat extends Converter implements CorpusFunction {
 

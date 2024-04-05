@@ -13,17 +13,25 @@ import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 
 /**
  *
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 //TODO: files with multiple speakers
@@ -32,6 +40,7 @@ public class ExbFixTimelineItems extends Checker implements CorpusFunction {
 
     Document doc;
     XMLOutputter xmOut = new XMLOutputter(); //for testing
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ExbFixTimelineItems(Properties properties) {
         //fixing option available
@@ -51,9 +60,9 @@ public class ExbFixTimelineItems extends Checker implements CorpusFunction {
         CorpusIO cio = new CorpusIO();    
         
         //temporary stopgap to prevent working on files with multiple speakers
-        Boolean stopgap = false;
-        XPath xpathStopgap = XPath.newInstance("//tier[@category='ts']");
-        List stopList = xpathStopgap.selectNodes(doc);
+        boolean stopgap = false;
+        XPathExpression<Element> xpathStopgap = new XPathBuilder<>("//tier[@category='ts']", Filters.element()).compileWith(xpathFactory);
+        List<Element> stopList = xpathStopgap.evaluate(doc);
         if (stopList.size() > 1) {
             stopgap = true;
         }
@@ -65,56 +74,46 @@ public class ExbFixTimelineItems extends Checker implements CorpusFunction {
             Map<String,ArrayList<String>> timeMap = new HashMap<>();
 
             //first we collect all the timeline elements in a list
-            XPath XTimeline = XPath.newInstance("//tli");
-            List allTimestamps = XTimeline.selectNodes(doc);
+            XPathExpression<Element> XTimeline = new XPathBuilder<>("//tli", Filters.element()).compileWith(xpathFactory);
+            List<Element> allTimestamps = XTimeline.evaluate(doc);
             for (int tl = 0; tl < allTimestamps.size(); tl ++) {
-                Object to = allTimestamps.get(tl);
-                if (to instanceof Element) {
-                    Element te = (Element) to;
-                    String tID = te.getAttributeValue("id");
-                    //aborting the check if the file is not normalized
-                    if (!tID.equals("T" + tl)) {
-                        System.out.println("EXB is not normalized; aborting");
-                        System.exit(0);
-                    }
-                    timeline.add(tID);              
+                Element te = allTimestamps.get(tl);
+                String tID = te.getAttributeValue("id");
+                //aborting the check if the file is not normalized
+                if (!tID.equals("T" + tl)) {
+                    System.out.println("EXB is not normalized; aborting");
+                    System.exit(0);
                 }
+                timeline.add(tID);
             }
             
             //put the sentence from the ref tier and the associated timeline IDs into a HashMap
-            XPath xSentences = XPath.newInstance("//tier[@category='ref']/event");
-            List allSentences = xSentences.selectNodes(doc);
-            for (int sent = 0; sent < allSentences.size(); sent++) {
-                Object o = allSentences.get(sent);
-                if (o instanceof Element) {
-                    Element e = (Element) o;
-                    ArrayList<String> sentenceList = new ArrayList<>();
-                    String start = e.getAttributeValue("start");
-                    String end = e.getAttributeValue("end");
-                    originalEnd.add(end);
-                    Integer eStart = timeline.indexOf(start);
-                    Integer eEnd = timeline.indexOf(end);
-                    for (int it = eStart; it < eEnd; it++) {
-                        sentenceList.add(timeline.get(it));
-                    }
-                    sentenceMap.put(e.getText(), sentenceList);
+            XPathExpression<Element> xSentences = new XPathBuilder<>("//tier[@category='ref']/event", Filters.element()).compileWith(xpathFactory);
+            List<Element> allSentences = xSentences.evaluate(doc);
+            for (Element e : allSentences) {
+                ArrayList<String> sentenceList = new ArrayList<>();
+                String start = e.getAttributeValue("start");
+                String end = e.getAttributeValue("end");
+                originalEnd.add(end);
+                int eStart = timeline.indexOf(start);
+                int eEnd = timeline.indexOf(end);
+                for (int it = eStart; it < eEnd; it++) {
+                    sentenceList.add(timeline.get(it));
                 }
+                sentenceMap.put(e.getText(), sentenceList);
             }
             
             //put the sentence from the ref tier and the associated time codes IDs into a HashMap
             for (String sentenceId : sentenceMap.keySet()) {
-                List ids = sentenceMap.get(sentenceId);
+                List<String> ids = sentenceMap.get(sentenceId);
                 ArrayList<String> timeList = new ArrayList<>();
-                for (int i = 0; i < ids.size(); i++) {
-                    String xpathGetTli = "//tli[@id='" + ids.get(i) + "']";
-                    XPath getTli = XPath.newInstance(xpathGetTli);
-                    Object gotTliObj = getTli.selectSingleNode(doc);
-                    if (gotTliObj instanceof Element) {
-                        Element gotTliEle = (Element) gotTliObj;
-                        String timeStamp = gotTliEle.getAttributeValue("time");
-                        if (timeStamp != null) {
-                            timeList.add(timeStamp);
-                        }
+                for (String id : ids) {
+                    String xpathGetTli = "//tli[@id='" + id + "']";
+                    XPathExpression<Element> getTli = new XPathBuilder<>(xpathGetTli, Filters.element()).compileWith(xpathFactory);
+                    Element gotTliEle = getTli.evaluateFirst(doc);
+                    String timeStamp = gotTliEle.getAttributeValue("time");
+                    if (timeStamp != null) {
+                        timeList.add(timeStamp);
                     }
                 }
                 timeMap.put(sentenceId, timeList);
@@ -157,40 +156,26 @@ public class ExbFixTimelineItems extends Checker implements CorpusFunction {
             }
 
             //replace the old timeline with a new one
-            Object body = XPath.newInstance("//basic-body").selectSingleNode(doc);
-            if (body instanceof Element) {
-                Element eBody = (Element) body;
-                Object oldTime = eBody.getChild("common-timeline");
-                if (oldTime instanceof Element) {
-                    Element eOldTime = (Element) oldTime;
-                    eOldTime.detach();
-                }
-                eBody.addContent(0, newTimeline);
-            }
+            Element eBody = new XPathBuilder<>("//basic-body", Filters.element()).compileWith(xpathFactory).evaluateFirst(doc);
+            Element eOldTime = eBody.getChild("common-timeline");
+            eOldTime.detach();
+            eBody.addContent(0, newTimeline);
 
             //set the original "end" attributes to the pauses created above
             //TODO: what would happen if the file is normalized before this step?
             for (String startTli : endTimes.keySet()) {
                 String xpathEvents = "//event[@start='" + startTli + "']";
-                XPath events = XPath.newInstance(xpathEvents);
-                List relevantEvents = events.selectNodes(doc);
-                for (int event = 0; event < relevantEvents.size(); event++) {
-                    Object evo = relevantEvents.get(event);
-                    if (evo instanceof Element) {
-                        Element eve = (Element) evo;
-                        String ending = eve.getAttributeValue("end");
-                        if (originalEnd.contains(ending)) {
-                            eve.setAttribute("end", endTimes.get(startTli));
-                            String xpathWords = "//event[@end='" + ending + "']";
-                            XPath words = XPath.newInstance(xpathWords);
-                            List relevantWords = words.selectNodes(doc);
-                            for (int word = 0; word < relevantWords.size(); word ++) {
-                                Object wo = relevantWords.get(word);
-                                if (wo instanceof Element) {
-                                    Element we = (Element) wo;
-                                    we.setAttribute("end", endTimes.get(startTli)); 
-                                }
-                            }
+                XPathExpression<Element> events = new XPathBuilder<>(xpathEvents, Filters.element()).compileWith(xpathFactory);
+                List<Element> relevantEvents = events.evaluate(doc);
+                for (Element eve : relevantEvents) {
+                    String ending = eve.getAttributeValue("end");
+                    if (originalEnd.contains(ending)) {
+                        eve.setAttribute("end", endTimes.get(startTli));
+                        String xpathWords = "//event[@end='" + ending + "']";
+                        XPathExpression<Element> words = new XPathBuilder<>(xpathWords,Filters.element()).compileWith(xpathFactory);//XPath.newInstance(xpathWords);
+                        List<Element> relevantWords = words.evaluate(doc);
+                        for (Element we : relevantWords) {
+                            we.setAttribute("end", endTimes.get(startTli));
                         }
                     }
                 }

@@ -13,15 +13,18 @@ import de.uni_hamburg.corpora.validation.Checker;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.*;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.*;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.SchemaOutputResolver;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.SchemaOutputResolver;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.TransformerException;
@@ -47,9 +50,11 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20221114
  * The checker for Refco set of criteria.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class RefcoChecker extends Checker implements CorpusFunction {
 
@@ -73,7 +78,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     private String tierSpeakerSeparator = "@";
 
     // Placeholder used in the corpus documentation to denote a space character
-    private String spacePlaceholder = "[ ]";
+    private final String spacePlaceholder = "[ ]";
 
     // The XML namespace for table elements in ODS files
     private final Namespace tableNamespace =
@@ -96,7 +101,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     // Flag if locations should be skipped
     private boolean skipLocations = false;
     // Flag if we want segment and time in the location
-    private boolean detailedLocations = false;
+    private final boolean detailedLocations = false;
     // Flag if we have a dictionary to check lexical glosses
     private boolean hasDict = false;
     // Automaton for lexeme checking in gloss tiers
@@ -113,6 +118,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * The XML DOM of the RefCo spreadsheet
      */
     private Document refcoDoc ;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public RefcoCriteria getCriteria() {
         return criteria;
@@ -121,12 +127,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * The criteria extracted from the Refco spreadsheet
      */
-    private RefcoCriteria criteria = new RefcoCriteria() ;
+    private final RefcoCriteria criteria = new RefcoCriteria() ;
 
     /**
      * The list of ISO-639-3 language codes
      */
-    private ArrayList<String> isoList = new ArrayList<>() ;
+    private final ArrayList<String> isoList = new ArrayList<>() ;
 
     /**
      * The corpus with all usable files
@@ -136,32 +142,32 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      *  The frequency list of all transcription tokens in the corpus
      */
-    private FrequencyList tokenFreq = new FrequencyList();
+    private final FrequencyList tokenFreq = new FrequencyList();
 
     /**
      * The frequency list of all segmented annotation/morphology glosses in the corpus
      */
-    private FrequencyList morphemeFreq = new FrequencyList();
+    private final FrequencyList morphemeFreq = new FrequencyList();
 
     /**
      * The frequency list of all segmented lexical glosses in the corpus
      */
-    private FrequencyList lexicalFreq = new FrequencyList();
+    private final FrequencyList lexicalFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-segmented annotation/morphology glosses in the corpus
      */
-    private FrequencyList glossFreq = new FrequencyList();
+    private final FrequencyList glossFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-segmentable gloss tokens
      */
-    private FrequencyList missingGlossFreq = new FrequencyList();
+    private final FrequencyList missingGlossFreq = new FrequencyList();
 
     /**
      * The frequency list of all non-matchable lexeme tokens
      */
-    private FrequencyList missingLexicalFreq = new FrequencyList();
+    private final FrequencyList missingLexicalFreq = new FrequencyList();
 
     /**
      * Collection of approximately matched lexemes to be disambiguated
@@ -171,7 +177,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * The global report, will be filled by the constructor and the function applied to the complete corpus
      */
-    private Report report = new Report();
+    private final Report report = new Report();
 
     /**
      * Default constructor with fixing option as parameter
@@ -206,7 +212,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 System.out.println(deriveJSONSpecification());
                 System.exit(0);
             } catch (Exception e) {
-                e.printStackTrace();
+                report.addCritical(getFunction(),e, "Exception when deriving schemas");
             }
         }
         if (properties.containsKey("skip-locations") && properties.getProperty("skip-locations")
@@ -335,13 +341,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             if (!missingGlossFreq.isEmpty())
                 report.addNote(getFunction(),"Corpus data: Morpheme glosses missing from documentations:\n" +
-                        missingGlossFreq.toString());
+                        missingGlossFreq);
             if (!morphemeFreq.isEmpty() && !lexicalFreq.isEmpty() && props.containsKey("gloss-stats") &&
                     props.getProperty("gloss-stats").equalsIgnoreCase("true")) {
                 report.addNote(getFunction(), "Corpus data: Morphological glosses encountered in the corpus:\n" +
-                        morphemeFreq.toString());
+                        morphemeFreq);
                 report.addNote(getFunction(), "Corpus data: Lexical glosses encountered in the corpus:\n" +
-                        lexicalFreq.toString());
+                        lexicalFreq);
             }
         }
         // In any case, just return the report
@@ -382,11 +388,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Create the checker. This also triggers the parser for the spreadsheet
             // and initializes the criteria field
             RefcoChecker rc = new RefcoChecker(props);
-            try {
-                new XMLOutputter().output(rc.refcoDoc, new FileWriter("/tmp/newdoc.xml"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             // Safe the Refco criteria to file
             // Generate pretty-printed json using an object mapper
@@ -395,14 +396,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Allows serialization even when getters are missing
             mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
-            try {
-                FileWriter fw = new FileWriter("/tmp/refco.json") ;
-                fw.write(mapper.writeValueAsString(rc.criteria));
-                fw.close();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
             try {
                 Report report = new Report();
                 // Read the corpus
@@ -426,17 +419,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 // Allows serialization even when getters are missing
                 mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
                 mapper.configure(SerializationFeature.INDENT_OUTPUT,true);
-                try {
-                    fw = new FileWriter("/tmp/glosses.json") ;
-                    fw.write(mapper.writeValueAsString(rc.glossFreq));
-                    fw.close();
-                    fw = new FileWriter("/tmp/gloss-morphemes.json") ;
-                    fw.write(mapper.writeValueAsString(rc.morphemeFreq));
-                    fw.close();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
             } catch (URISyntaxException | IOException | SAXException | JexmaraldaException | ClassNotFoundException | XPathExpressionException | NoSuchAlgorithmException | ParserConfigurationException | JDOMException | FSMException | TransformerException e) {
                 e.printStackTrace() ;
             }
@@ -465,20 +447,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // ODS file is basically a ZIP file containing XMLs but we use a proper API to access it
             else if (refcoFileName.toLowerCase().endsWith("ods")) {
                 // ODS files basically are ZIP file containing XMLs
-                ZipFile f = new ZipFile(new File(refcoFileName));
-                ZipEntry e = f.getEntry("content.xml");
-                if (e == null) {
-                    report.addCritical(getFunction(),ReportItem.newParamMap(
-                            new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
-                            new Object[]{getFunction(),refcoShortName, "General: ODS file invalid",
-                                    //"does not contain content.xml",
-                            "Check spreadsheet file and only use proper ODS files"})) ;
-                }
-                else {
-                    SAXBuilder builder = new SAXBuilder();
-                    refcoDoc = builder.build(f.getInputStream(e));
-                    // Or we could use the proper API instead but that requires additional dependencies
-                    // refcoDoc = builder.build(new StringReader(OdfSpreadsheetDocument.loadDocument(refcoFileName).getContentDom().toString()));
+                try (ZipFile f = new ZipFile(new File(refcoFileName))) {
+                    ZipEntry e = f.getEntry("content.xml");
+                    if (e == null) {
+                        report.addCritical(getFunction(), ReportItem.newParamMap(
+                                new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
+                                new Object[]{getFunction(), refcoShortName, "General: ODS file invalid",
+                                        //"does not contain content.xml",
+                                        "Check spreadsheet file and only use proper ODS files"}));
+                    } else {
+                        SAXBuilder builder = new SAXBuilder();
+                        refcoDoc = builder.build(f.getInputStream(e));
+                        // Or we could use the proper API instead but that requires additional dependencies
+                        // refcoDoc = builder.build(new StringReader(OdfSpreadsheetDocument.loadDocument(refcoFileName).getContentDom().toString()));
+                    }
                 }
             }
             else {
@@ -537,12 +519,11 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * run-length compression for multiple blank cells in a row which is problematic for the parser.
      *
      * @param document the document in which the cells should be expanded
-     * @throws JDOMException if the XPath expression is invalid
      */
-    private void expandTableCells(Document document) throws JDOMException {
+    private void expandTableCells(Document document) {
         // Find all cells that have the attribute number-columns-repeated
-        for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-cell[@table:number-columns-repeated]")
-                .selectNodes(document))) {
+        for (Element node :
+                new XPathBuilder<>("//table:table-cell[@table:number-columns-repeated]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
             // Generate as many blank cells as neede
             ArrayList<Element> replacement = new ArrayList<>();
             int colCount = 0;
@@ -556,7 +537,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 logger.log(Level.SEVERE,"Error parsing number",e);
             }
             for (int i = 0; i < colCount; i++){
-                Element e = (Element) node.clone();
+                Element e = node.clone();
                 e.removeAttribute("number-columns-repeated", tableNamespace);
                 e.setAttribute("ignore","true");
                 replacement.add(e);
@@ -565,8 +546,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             node.getParentElement().setContent(node.getParentElement().indexOf(node),replacement);
         }
         // Expand rows as well
-        for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-row[@table:number-rows-repeated]")
-                .selectNodes(document))) {
+        for (Element node :
+                new XPathBuilder<>("//table:table-row[@table:number-rows-repeated]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
             // Generate as many blank cells as neede
             ArrayList<Element> replacement = new ArrayList<>();
             int rowCount = 0;
@@ -580,7 +561,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 logger.log(Level.SEVERE,"Error parsing number",e);
             }
             for (int i = 0; i < rowCount; i++){
-                Element e = (Element) node.clone();
+                Element e = node.clone();
                 e.removeAttribute("number-rows-repeated", tableNamespace);
                 e.setAttribute("ignore","true");
                 replacement.add(e);
@@ -593,21 +574,20 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * Removes both table cells without text content (i.e. without p-tag as children) and rows without table cells
      * @param document the document to be modified
-     * @throws JDOMException in case the XPath expressions fail
      */
-    private void removeEmptyCells(Document document) throws JDOMException {
+    private void removeEmptyCells(Document document) {
         boolean deleted = true;
         while (deleted) {
             deleted = false;
-            for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-cell[not(text:p) and " +
-                            "position() = last()]")
-                    .selectNodes(document))) {
+            for (Element node :
+                    new XPathBuilder<>("//table:table-cell[not(text:p) and " +
+                            "position() = last()]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
                 node.detach();
                 deleted = true;
             }
-            for (Element node : listToParamList(Element.class, XPath.newInstance("//table:table-row[not" +
-                            "(table:table-cell) and position() = last()]")
-                    .selectNodes(document))) {
+            for (Element node :
+                    new XPathBuilder<>("//table:table-row[not" +
+                            "(table:table-cell) and position() = last()]", Filters.element()).compileWith(xpathFactory).evaluate(document)) {
                 node.detach();
                 deleted = true;
             }
@@ -650,14 +630,13 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param title the text contained in the first cell
      * @param pos the cell in the row
      * @return either the text contained or an empty string
-     * @throws JDOMException if the xpath expression is invalid
      */
-    private String getTextInRow(String path, Element e, String title, int pos) throws JDOMException {
+    private String getTextInRow(String path, Element e, String title, int pos) {
         if (path == null || e == null)
             return "" ;
         else {
-            Element cell = (Element) XPath.newInstance(String.format(path, title, pos))
-                    .selectSingleNode(e);
+            Element cell =
+                    new XPathBuilder<>(String.format(path, title, pos), Filters.element()).compileWith(xpathFactory).evaluateFirst(e);
             return safeGetText(cell);
         }
     }
@@ -686,7 +665,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         try {
 
             // Read Overview tab
-            Element overviewTable = (Element) XPath.newInstance("//table:table[@table:name='Overview']").selectSingleNode(refcoDoc);
+            Element overviewTable =
+                    new XPathBuilder<>("//table:table[@table:name='Overview']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             String cellXPath =
                     "//table:table-row[table:table-cell[text:p=\"%s\"]]/table:table-cell[position()=%d]/text:p";
             criteria.setCorpusTitle(getCellText(cellXPath, overviewTable,  "Corpus Title"));
@@ -703,7 +683,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             criteria.setNumberTranscribedWords(getInformationNotes(cellXPath, overviewTable, "Total number of transcribed words"));
             criteria.setNumberAnnotatedWords(getInformationNotes(cellXPath, overviewTable, "Total number of morphologically analyzed words"));
             // Read CorpusComposition tab
-            Element sessionTable = (Element) XPath.newInstance("//table:table[@table:name='CorpusComposition']").selectSingleNode(refcoDoc);
+            Element sessionTable =
+                    new XPathBuilder<>("//table:table[@table:name='CorpusComposition']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (sessionTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -711,10 +692,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table CorpusComposition to corpus documentation"}));
             else {
                 boolean missingData = false;
-                List<Element> rowList = listToParamList(Element.class, sessionTable.getChildren("table-row",
-                        tableNamespace));
+                List<Element> rowList = sessionTable.getChildren("table-row", tableNamespace);
                 for (Element row : rowList) {
-                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    List<Element> columns = row.getChildren("table-cell", tableNamespace);
                     if (columns.size() > 7 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith("Session")) {
                         RefcoCriteria.Session session = new RefcoCriteria.Session();
@@ -729,7 +709,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         // Age group was a custom column
                         // session.ageGroup = safeGetText(columns.get(8).getChild("p", textNamespace));
                         criteria.sessions.add(session);
-                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
+                    } else if (!columns.isEmpty() && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Session")) {
                         missingData = true;
                     }
@@ -743,7 +723,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
             }
             // Read AnnotationTiers tab
-            Element tierTable = (Element) XPath.newInstance("//table:table[@table:name='AnnotationTiers']").selectSingleNode(refcoDoc);
+            Element tierTable =
+                    new XPathBuilder<>("//table:table[@table:name='AnnotationTiers']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (tierTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -752,10 +733,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table AnnotationTiers to corpus documentation"}));
             else {
                 boolean missingData = false;
-                List<Element> rowList = listToParamList(Element.class, tierTable.getChildren("table-row",
-                        tableNamespace));
+                List<Element> rowList = tierTable.getChildren("table-row", tableNamespace);
                 for (Element row : rowList) {
-                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    List<Element> columns = row.getChildren("table-cell", tableNamespace);
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Names")) {
                         RefcoCriteria.Tier tier = new RefcoCriteria.Tier();
@@ -765,7 +745,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         tier.setSegmentationStrategy(safeGetText(columns.get(2).getChild("p", textNamespace)));
                         tier.setLanguages(safeGetText(columns.get(3).getChild("p", textNamespace)));
                         criteria.getTiers().add(tier);
-                    }  else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
+                    }  else if (!columns.isEmpty() && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Name")) {
                         missingData = true;
                     }
@@ -778,7 +758,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     " data in all cells"}));
             }
             // Read Transcription tab
-            Element transcriptionTable = (Element) XPath.newInstance("//table:table[@table:name='Transcription']").selectSingleNode(refcoDoc);
+            Element transcriptionTable =
+                    new XPathBuilder<>("//table:table[@table:name='Transcription']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (transcriptionTable == null)
                 report.addCritical(getFunction(),
                         ReportItem.newParamMap(
@@ -787,10 +768,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                         "Add table Transcription to corpus documentation"}));
             else {
                 boolean missingData = false;
-                List<Element> rowList = listToParamList(Element.class, transcriptionTable.getChildren("table-row",
-                        tableNamespace));
+                List<Element> rowList = transcriptionTable.getChildren("table-row", tableNamespace);
                 for (Element row : rowList) {
-                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    List<Element> columns = row.getChildren("table-cell", tableNamespace);
                     if (columns.size() > 2 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Graphemes")) {
                         RefcoCriteria.Transcription transcription = new RefcoCriteria.Transcription();
@@ -798,7 +778,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         transcription.setLinguisticValue(safeGetText(columns.get(1).getChild("p", textNamespace)));
                         transcription.setLinguisticConvention(safeGetText(columns.get(2).getChild("p", textNamespace)));
                         criteria.getTranscriptions().add(transcription);
-                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
+                    } else if (!columns.isEmpty() && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Grapheme")) {
                         missingData = true;
                     }
@@ -812,7 +792,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
             // Read Glosses tab
             Element glossesTable =
-                    (Element) XPath.newInstance("//table:table[starts-with(@table:name,'Gloss')]").selectSingleNode(refcoDoc);
+                    new XPathBuilder<>("//table:table[starts-with(@table:name,'Gloss')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (glossesTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -820,10 +800,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table Glosses to corpus documentation"}));
             else {
                 boolean missingData = false;
-                List<Element> rowList = listToParamList(Element.class, glossesTable.getChildren("table-row",
-                        tableNamespace));
+                List<Element> rowList = glossesTable.getChildren("table-row", tableNamespace);
                 for (Element row : rowList) {
-                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    List<Element> columns = row.getChildren("table-cell", tableNamespace);
                     if (columns.size() > 3 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).equals("Abbreviations")) {
                         RefcoCriteria.Gloss gloss = new RefcoCriteria.Gloss();
@@ -834,7 +813,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                         gloss.setComments(safeGetText(columns.get(2).getChild("p", textNamespace)));
                         gloss.setTiers(safeGetText(columns.get(3).getChild("p", textNamespace)));
                         criteria.getGlosses().add(gloss);
-                    } else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
+                    } else if (!columns.isEmpty() && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Abbreviation")) {
                         missingData = true;
                     }
@@ -847,7 +826,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                     "Check number of columns and presence of data in all cells"}));
             }
             // Read Punctuation tab
-            Element punctuationsTable = (Element) XPath.newInstance("//table:table[@table:name='Punctuations']").selectSingleNode(refcoDoc);
+            Element punctuationsTable =
+                    new XPathBuilder<>("//table:table[@table:name='Punctuations']", Filters.element()).compileWith(xpathFactory).evaluateFirst(refcoDoc);
             if (punctuationsTable == null)
                 report.addCritical(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
@@ -855,10 +835,9 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                                 "Add table Punctuation to corpus documentation"}));
             else {
                 boolean missingData = false;
-                List<Element> rowList = listToParamList(Element.class, punctuationsTable.getChildren("table-row",
-                        tableNamespace));
+                List<Element> rowList = punctuationsTable.getChildren("table-row", tableNamespace);
                 for (Element row : rowList) {
-                    List<Element> columns = listToParamList(Element.class, row.getChildren("table-cell", tableNamespace));
+                    List<Element> columns = row.getChildren("table-cell", tableNamespace);
                     if (columns.size() > 4 && !safeGetText(columns.get(0).getChild("p", textNamespace)).isEmpty()
                             && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith("Character")) {
                         RefcoCriteria.Punctuation punctuation = new RefcoCriteria.Punctuation();
@@ -874,7 +853,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                             glossSeparator.add(punctuation.getCharacter());
                         criteria.getPunctuations().add(punctuation);
                     }
-                    else if (columns.size() > 0 && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
+                    else if (!columns.isEmpty() && !safeGetText(columns.get(0).getChild("p", textNamespace)).startsWith(
                             "Character")) {
                         missingData = true;
                     }
@@ -1123,46 +1102,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 for (String f : filenames) {
                     try {
                         // Collect all candidate URIs, even for files in other directories
-                        List<URI> uris = new ArrayList<>();
-                        // Corpus files are in the annotation folders
-                        if (f.toLowerCase().endsWith("eaf")) {
-                            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI().normalize());
-                            else
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
-                        }
-                        // Audio recordings are in the Recordings folder
-                        else if (f.toLowerCase().endsWith("wav") || f.toLowerCase().endsWith("mp3")) {
-                            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI().normalize());
-                            else
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
-                        }
-                        // All other files are metadata
-                        else {
-                            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Metadata/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Metadata/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/metadata/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/metadata/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/" + f).toURI().normalize());
-                            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/").toURI()).exists())
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/" + f).toURI().normalize());
-                            else
-                                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
-                        }
+                        List<URI> uris = getUris(f);
                         // Copy all file URIs of files in respective folders
                         documentedFiles.addAll(uris);
                     }
@@ -1241,6 +1181,50 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         return report;
     }
 
+    private List<URI> getUris(String f) throws URISyntaxException, MalformedURLException {
+        List<URI> uris = new ArrayList<>();
+        // Corpus files are in the annotation folders
+        if (f.toLowerCase().endsWith("eaf")) {
+            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Annotations/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/annotations/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/annotations/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Annotations/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../annotations/" + f).toURI().normalize());
+            else
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
+        }
+        // Audio recordings are in the Recordings folder
+        else if (f.toLowerCase().endsWith("wav") || f.toLowerCase().endsWith("mp3")) {
+            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Recordings/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/recordings/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/recordings/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Recordings/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../recordings/" + f).toURI().normalize());
+            else
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
+        }
+        // All other files are metadata
+        else {
+            if (new File(new URL(refcoCorpus.getBaseDirectory() + "/Metadata/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/Metadata/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/metadata/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/metadata/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../Metadata/" + f).toURI().normalize());
+            else if (new File(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/").toURI()).exists())
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/../metadata/" + f).toURI().normalize());
+            else
+                uris.add(new URL(refcoCorpus.getBaseDirectory() + "/" + f).toURI().normalize());
+        }
+        return uris;
+    }
+
     /**
      * Function that performs tier checks on the RefCo documentation stored in the Checker object (using setRefcoFile)
      *
@@ -1268,7 +1252,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         }
         // Make a deep copy of the tier map
         Map<String,Set<String>> remainingTiers = allTiers.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, (e) -> e.getValue().stream().collect(Collectors.toSet())));
+                .collect(Collectors.toMap(Map.Entry::getKey, (e) -> new HashSet<>(e.getValue())));
         for (Map.Entry<String,Set<String>> tier : allTiers.entrySet()) {
             String tierName = tier.getKey();
             // logger.info("Looking at " + tierName);
@@ -1353,7 +1337,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             }
         }
         // If we have some tiers left and at least one of them has files left we have to report it
-        if (remainingTiers.size() > 0 && remainingTiers.entrySet().stream().anyMatch((e) -> !e.getValue().isEmpty())) {
+        if (!remainingTiers.isEmpty() && remainingTiers.entrySet().stream().anyMatch((e) -> !e.getValue().isEmpty())) {
             report.addWarning(getFunction(), ReportItem.newParamMap(
                     new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Filename, ReportItem.Field.Description, ReportItem.Field.HowToFix},
                     new Object[]{getFunction(), refcoShortName, "Tiers are not documented:\n" +
@@ -1413,7 +1397,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             // Check if we can split the gloss but only if it is a grammatical morpheme (i.e. does not contain
             // lower-case letters)
 //            else if (g.gloss.split("[" + String.join("", glossSeparator) + "]").length > 1
-            else if (Arrays.stream(g.getGloss().split("")).map((c) ->glossSeparator.contains(c)).reduce(Boolean::logicalOr).orElse(false)
+            else if (Arrays.stream(g.getGloss().split("")).map(glossSeparator::contains).reduce(Boolean::logicalOr).orElse(false)
                     && !g.getGloss().matches(".*[a-z].*"))
                 report.addWarning(getFunction(),
                         ReportItem.newParamMap(
@@ -1541,7 +1525,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param file the file to contain the tiers
      * @return list of transcription tiers
      */
-    private ArrayList<String> findTranscriptionTiers(String file) throws JDOMException {
+    private ArrayList<String> findTranscriptionTiers(String file) {
         // Add tiers containing transcription in the tier function
         // as well as the ones with morpheme segmentation
         return findTiersByFunction(file,Arrays.asList("transcription", "morpheme segmentation"));
@@ -1552,7 +1536,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param file the file to contain the tiers
      * @return list of gloss tiers
      */
-    private ArrayList<String> findGlossTiers(String file) throws JDOMException {
+    private ArrayList<String> findGlossTiers(String file) {
         return findTiersByFunction(file,Arrays.asList("morpheme gloss","morpheme glossing"));
     }
 
@@ -1562,7 +1546,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
      * @param functions list of tier functions
      * @return list of tiers matching the functions
      */
-    private ArrayList<String> findTiersByFunction(String file, List<String> functions) throws JDOMException {
+    private ArrayList<String> findTiersByFunction(String file, List<String> functions) {
         ArrayList<String> foundTiers = new ArrayList<>();
         // Get all documented speakers for the file
         List<String> speakers = findSpeakers(file);
@@ -1636,11 +1620,15 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 mismatch = false ;
                 // Update frequency list
                 tokenFreq.put(token);
+                if (glosses.contains(token)){
+                    // Add the length of the gloss to matched
+                    matched += token.length() ;
+                }
                 // Token is not one of the glosses
-                if (!glosses.contains(token)) {
+                else {
                     // Check if we can segment the token using the chunks and glosses
                     if (sm.segmentWord(token,
-                            Sets.union(chunks.stream().collect(Collectors.toSet()),glosses).stream().collect(Collectors.toList()))) {
+                            new ArrayList<>(Sets.union(new HashSet<>(chunks), glosses)))) {
                         matched += token.length();
                     }
                     else {
@@ -1650,15 +1638,12 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 }
                 // Only accept non-morphological glosses, i.e. glosses that are not only uppercase letters
                 //else if (token.matches(".*[a-z].*")){
-                else if (glosses.contains(token)){
-                    // Add the length of the gloss to matched
-                    matched += token.length() ;
-                }
-                // It is neither recognized by the automaton nor a non-morphological gloss
-                else {
-                    missing += token.length();
-                    mismatch = true;
-                }
+
+//                // It is neither recognized by the automaton nor a non-morphological gloss
+//                else {
+//                    missing += token.length();
+//                    mismatch = true;
+//                }
                 if (mismatch && !token.isEmpty()) {
 //                    try {
 //                        if (skipLocations) {
@@ -1945,7 +1930,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         // Check if we can disambiguate the approximate matches
         if (!approximateMatches.isEmpty()) {
             for (String lexeme : approximateMatches.keySet()) {
-                int lexemeCount = missingLexicalFreq.get(lexeme);
+                // int lexemeCount = missingLexicalFreq.get(lexeme);
                 int maxCount = -1;
                 String maxCandidate = null;
                 for (String candidate : approximateMatches.get(lexeme)) {
@@ -1957,7 +1942,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     }
                 }
                 // TODO what is the threshold
-                int threshold = 1;
+                // int threshold = 1;
                 // if (maxCount >= threshold * lexemeCount && maxCandidate != null) {
                 if (maxCandidate != null) {
                     addWarningWithLocation(cd,tier,lexeme,
@@ -2205,8 +2190,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return new ArrayList<>();
         else {
             String path = String.format("//TIER[@LINGUISTIC_TYPE_REF=\"%s\"]//ANNOTATION_VALUE/text()", tier);
-            List texts = XPath.newInstance(path).selectNodes(d);
-            return listToParamList(Text.class, texts);
+            return new XPathBuilder<>(path, Filters.text()).compileWith(xpathFactory).evaluate(d);
         }
     }
 
@@ -2221,10 +2205,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
         if (d == null)
             return new ArrayList<>();
         else {
-            List texts = XPath.newInstance(
-                    String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier))
-                    .selectNodes(d);
-            return listToParamList(Text.class, texts);
+            return new XPathBuilder<>(String.format("//TIER[@TIER_ID=\"%s\"]//ANNOTATION_VALUE/text()", tier),
+                    Filters.text()).compileWith(xpathFactory).evaluate(d);
         }
     }
 
@@ -2242,7 +2224,7 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                 criteria.getTiers().stream().filter((t) -> t.getTierFunctions()
                                 .stream().anyMatch(f -> f.contains(tierFunction.toLowerCase())))
                         .map(RefcoCriteria.Tier::getTierName)
-                        .collect(Collectors.toList());
+                        .toList();
         for (String tierName :
                 tierList) {
             for (CorpusData cd : refcoCorpus.getCorpusData()) {
@@ -2291,29 +2273,6 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     }
 
     /**
-     * Function to safely convert an un-parametrized list into a parametrized one
-     *
-     * @param p the parameter class extending the parameter type
-     * @param l the un-parametrized list
-     * @param <T> the parameter class
-     * @return the parametrized list
-     */
-    @SuppressWarnings("unchecked")
-    public   <T> List<T> listToParamList(Class<? extends T> p, List l) {
-        ArrayList<T> nl = new ArrayList<>(l.size()) ;
-        for (Object o : l) {
-            if (o.getClass() == p)
-                try {
-                    nl.add((T) o);
-                }
-                catch (ClassCastException e) {
-                    logger.log(Level.SEVERE,"Encountered exception", e);
-                }
-        }
-        return nl;
-    }
-
-    /**
      * Function to convert a string to an list of characters
      * @param s the string
      * @return the list of characters
@@ -2351,14 +2310,14 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     /**
      * Extracts all tier ids  from the globalcorpus
      * @return A map from tier id to files in which it is defined
-     * @throws JDOMException on problems with the xpath expressions
      */
-    private Map<String, Set<String>> getTierIDs() throws JDOMException{
+    private Map<String, Set<String>> getTierIDs() {
         Map<String,Set<String>> allTiers = new HashMap<>();
         for (ELANData cd : refcoCorpus.getELANData()) {
             for (String tier_id :
-                    (List<String>) XPath.newInstance("//TIER/@TIER_ID").selectNodes(cd.getJdom())
-                            .stream().map((a) -> ((Attribute) a).getValue()).collect(Collectors.toList())) {
+                    new XPathBuilder<>("//TIER/@TIER_ID", Filters.attribute()).compileWith(xpathFactory)
+                            .evaluate(cd.getJdom())
+                            .stream().map(Attribute::getValue).toList()) {
                 if (allTiers.containsKey(tier_id) && allTiers.get(tier_id) != null) {
                     allTiers.get(tier_id).add(cd.getFilename());
                 }
@@ -2382,18 +2341,18 @@ public class RefcoChecker extends Checker implements CorpusFunction {
             return locations;
         String normalizedToken = token.replaceAll("\"", "'");
         List<Element> tiers =
-                (List<Element>) XPath.newInstance(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
-                                normalizedToken))
-                        .selectNodes(cd.getJdom());
+                new XPathBuilder<>(String.format("/ANNOTATION_DOCUMENT/TIER[contains(string(.),\"%s\")]",
+                                normalizedToken), Filters.element()).compileWith(xpathFactory)
+                        .evaluate(cd.getJdom());
         for (Element tier : tiers.stream().filter((t) ->
-                validTiers.contains(t.getAttributeValue("TIER_ID"))).collect(Collectors.toList())) {
+                validTiers.contains(t.getAttributeValue("TIER_ID"))).toList()) {
             Attribute tier_id = tier.getAttribute("TIER_ID");
             assert tier_id != null : "Tier id is null";
             // TODO finding the segment and time takes too long
             if (detailedLocations) {
                 Element annotation_segment = null;
                 // All elements are ANNOTATION tags here
-                for (Element e : (List<Element>) tier.getChildren()) {
+                for (Element e : tier.getChildren()) {
                     if (e.getChild("ALIGNABLE_ANNOTATION") != null)
                         annotation_segment = e.getChild("ALIGNABLE_ANNOTATION");
                     else if (e.getChild("REF_ANNOTATION") != null)
@@ -2401,47 +2360,43 @@ public class RefcoChecker extends Checker implements CorpusFunction {
                     assert annotation_segment != null : "Annotation segment is null";
                     if (XMLTools.showAllText(annotation_segment).contains(normalizedToken)) {
                         String annotation_id = annotation_segment.getAttributeValue("ANNOTATION_ID");
-                        if (annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
-                            // do nothing
-                        } else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
-                            // Resolve reference first
-                            annotation_segment = (Element) XPath.newInstance(
-                                    String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
-                                            annotation_segment.getAttributeValue("ANNOTATION_REF"))).selectSingleNode(tier);
-                            assert annotation_segment != null : "Annotation segment is null after resolving reference";
-                        } else {
-                            locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
-                                    "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=") + ""));
+                        if (!annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
+                            if (annotation_segment.getName().equals("REF_ANNOTATION")) {
+                                // Resolve reference first
+                                annotation_segment =
+                                        new XPathBuilder<>(String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
+                                                annotation_segment.getAttributeValue("ANNOTATION_REF")), Filters.element()).compileWith(xpathFactory)
+                                                .evaluateFirst(tier);
+                                assert annotation_segment != null : "Annotation segment is null after resolving reference";
+                            } else {
+                                locations.add(new CorpusData.Location("Tier:" + tier_id.getValue(),
+                                        "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=")));
+                            }
                         }
-                        if (annotation_segment == null)
-                            locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
-                                    "Segment:" + annotation_id));
-                        else {
-                            Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
-                            Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
-                            assert start_ref != null : "Start ref is null";
-                            assert end_ref != null : "End ref is null";
-                            Attribute start_time =
-                                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                                    start_ref.getValue()))
-                                            .selectSingleNode(cd.getJdom());
-                            assert start_time != null : "Start time is null";
-                            Attribute end_time =
-                                    (Attribute) XPath.newInstance(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
-                                                    end_ref.getValue()))
-                                            .selectSingleNode(cd.getJdom());
-                            assert end_time != null : "End time is null";
-                            locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "",
-                                    "Segment:" + annotation_id + ", Time:" +
-                                            DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
-                                            DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"))
-                            );
-                        }
+                        Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
+                        Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
+                        assert start_ref != null : "Start ref is null";
+                        assert end_ref != null : "End ref is null";
+                        Attribute start_time =
+                                new XPathBuilder<>(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                        start_ref.getValue()), Filters.attribute()).compileWith(xpathFactory)
+                                        .evaluateFirst(cd.getJdom());
+                        assert start_time != null : "Start time is null";
+                        Attribute end_time =
+                                new XPathBuilder<>(String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
+                                                end_ref.getValue()), Filters.attribute()).compileWith(xpathFactory)
+                                        .evaluateFirst(cd.getJdom());
+                        assert end_time != null : "End time is null";
+                        locations.add(new CorpusData.Location("Tier:" + tier_id.getValue(),
+                                "Segment:" + annotation_id + ", Time:" +
+                                        DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
+                                        DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"))
+                        );
                     }
                 }
             }
             else {
-                locations.add(new CorpusData.Location("Tier:" + tier_id.getValue() + "", ""));
+                locations.add(new CorpusData.Location("Tier:" + tier_id.getValue(), ""));
             }
         }
         if (locations.isEmpty())
@@ -2459,8 +2414,8 @@ public class RefcoChecker extends Checker implements CorpusFunction {
     public boolean containsTier(ELANData cd, String tierId) {
         // Check if node list for tier is empty
         try {
-            return !XPath.newInstance(String.format("//TIER[@TIER_ID=\"%s\"]", tierId))
-                    .selectNodes(cd.getJdom()).isEmpty();
+            return !new XPathBuilder<>(String.format("//TIER[@TIER_ID=\"%s\"]", tierId), Filters.text()).compileWith(xpathFactory)
+                            .evaluate(cd.getJdom()).isEmpty();
         }
         // Exception also means that tier does not exist
         catch (Exception e) {

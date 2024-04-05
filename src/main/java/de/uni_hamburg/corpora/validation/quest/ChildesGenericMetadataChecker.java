@@ -10,19 +10,20 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210728
- *
  * Checker for the generic metadata within a CHILDES/TalkBank corpus
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class ChildesGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
     public ChildesGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("childes-criteria-file"))
-            setCriteriaFile(properties.getProperty("childes-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("childes-criteria-file"));
         else {
-            loadCriteriaResource("childes-generic.csv");
+        	setUp = setCriteria("childes-generic.csv");
         }
     }
 

@@ -1,12 +1,13 @@
 package de.uni_hamburg.corpora.utilities.quest;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import java.util.stream.Collectors;
 
 /**
- * @author bba1792, Dr. Herbert Lange
- * @version 20220120
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class XMLTools {
     /**

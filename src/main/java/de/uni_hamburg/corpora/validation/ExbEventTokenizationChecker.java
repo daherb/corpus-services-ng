@@ -10,18 +10,22 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Element;
+import org.jdom2.Element;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
-import org.jdom.Attribute;
+import org.jdom2.Attribute;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
 /**
@@ -30,7 +34,10 @@ import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
  *
  * This class issues warnings if the tokenization tier contains events 
  * with internal whitespace characters.
- * 
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 
 public class ExbEventTokenizationChecker extends Checker implements CorpusFunction {
@@ -39,6 +46,7 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
     boolean incompleteAnnotation = false;
     boolean missingTimestamp = false;
     Document doc;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ExbEventTokenizationChecker(Properties properties) {
         //fixing option not available
@@ -73,8 +81,8 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
         Pattern excludePattern = Pattern.compile("^\\(\\(.*\\)\\)\\s*$"); // ignore events which contain information in double parentheses
         Pattern whitespacePattern = Pattern.compile("\\S\\s\\S"); 
         String xpathSpeakers = "//tier[@type='" + tokensTierName + "']//@speaker";
-        XPath speakers = XPath.newInstance(xpathSpeakers);
-        List allSpeakers = speakers.selectNodes(doc);
+        XPathExpression<Attribute> speakers = new XPathBuilder<>(xpathSpeakers, Filters.attribute()).compileWith(xpathFactory);
+        List<Attribute> allSpeakers = speakers.evaluate(doc);
         CorpusIO cio = new CorpusIO();
         for (int sp = 0; sp < allSpeakers.size(); sp++) {
             Object ob = allSpeakers.get(sp);
@@ -82,8 +90,8 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
                 Attribute attr = (Attribute) ob;
                 String speakerName = attr.getValue();
                 String xpathContext = "//tier[@type='" + tokensTierName + "'][@speaker='" + speakerName + "']/event";
-                XPath context = XPath.newInstance(xpathContext);
-                List allContextInstances = context.selectNodes(doc);
+                XPathExpression<Element> context = new XPathBuilder<>(xpathContext, Filters.element()).compileWith(xpathFactory);
+                List<Element> allContextInstances = context.evaluate(doc);
                 if (!allContextInstances.isEmpty()) {
                     for (int i = 0; i < allContextInstances.size(); i++) {
                         Object o = allContextInstances.get(i);
@@ -111,8 +119,8 @@ public class ExbEventTokenizationChecker extends Checker implements CorpusFuncti
                             for (int j = 0; j < lsTiersToCheck.size(); j++) {
                                 String curTierName = lsTiersToCheck.get(j);
                                 String xpathComp = "//tier[@category='" + curTierName + "'][@speaker='" + speakerName + "']/event[@start='" + st + "']";
-                                XPath compl = XPath.newInstance(xpathComp);
-                                List complInstances = compl.selectNodes(doc);
+                                XPathExpression<Element> compl = new XPathBuilder<>(xpathComp, Filters.element()).compileWith(xpathFactory);
+                                List<Element> complInstances = compl.evaluate(doc);
                                 if (!complInstances.isEmpty()) {
                                     Object oo = complInstances.get(0);
                                     if (oo instanceof Element) {

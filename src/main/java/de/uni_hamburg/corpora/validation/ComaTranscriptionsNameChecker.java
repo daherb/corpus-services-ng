@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -26,6 +25,10 @@ import org.xml.sax.SAXException;
  * A class that checks whether or not there is a mismatch between basic and
  * segmented names, basic and segmented file names, plus their NSLinks for each
  * communication in the coma file.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunction {
 
@@ -91,9 +94,8 @@ public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunc
                             CorpusIO cio = new CorpusIO();
                             cd.updateUnformattedString(TypeConverter.W3cDocument2String(doc));
                             XMLData xml = (XMLData) cd;
-                            org.jdom.Document jdomDoc = TypeConverter.W3cDocument2JdomDocument(doc);
+                            org.jdom2.Document jdomDoc = TypeConverter.W3cDocument2JdomDocument(doc);
                             xml.setJdom(jdomDoc);
-                            cd = (CorpusData) xml;
 
                             cd.updateUnformattedString(TypeConverter.JdomDocument2String(jdomDoc));
                             cio.write(cd, cd.getURL());

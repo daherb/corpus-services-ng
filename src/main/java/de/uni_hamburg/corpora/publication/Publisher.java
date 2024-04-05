@@ -16,14 +16,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
  * @author Herbert Lange
- * @version 20230105
+ * @version 20240322
  */
 public abstract class Publisher implements CorpusFunction {
 

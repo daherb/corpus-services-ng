@@ -8,9 +8,9 @@ package de.uni_hamburg.corpora.visualization;
 
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
@@ -22,14 +22,18 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Daniel Jettka
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class GATListHTML extends ListHTML {
     
-    private static final String segmentationAlgorithm = "GAT";
+    //private static final String segmentationAlgorithm = "GAT";
     
     // resources loaded from directory supplied in pom.xml
     static final String STYLESHEET_PATH = "/xsl/GAT2ListHTML.xsl";  
-    private static final String SERVICE_NAME = "GATListHTML";
+    //private static final String SERVICE_NAME = "GATListHTML";
 
         
     public GATListHTML(String btAsString) {
@@ -42,7 +46,6 @@ public class GATListHTML extends ListHTML {
 	 * This method deals performs the transformation of EXB to GATList HTML
 	 *
 	 * @param  btAsString  the EXB file represented in a String object
-	 * @return  
 	 */
     private void createFromBasicTranscription(String btAsString){
     
@@ -64,23 +67,16 @@ public class GATListHTML extends ListHTML {
             String xsl = TypeConverter.InputStream2String(getClass().getResourceAsStream(STYLESHEET_PATH));
 
             // read segmented transcription into String
-            String xml = TypeConverter.JdomDocument2String(GATSegmentation.toXML(lt));
+            org.jdom.Document document = GATSegmentation.toXML(lt);
+            String xml = new org.jdom.output.XMLOutputter().outputString(document);
 
             XSLTransformer xt = new XSLTransformer();
             result = xt.transform(xml, xsl);
             
-        } catch (FSMException ex) {
-            Logger.getLogger(GATListHTML.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(GATListHTML.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JexmaraldaException ex) {
-            Logger.getLogger(GATListHTML.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(GATListHTML.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
+        } catch (FSMException | SAXException | JexmaraldaException | TransformerException ex) {
             Logger.getLogger(GATListHTML.class.getName()).log(Level.SEVERE, null, ex);
         }
-   
+
         setHTML(result); 
         
     }

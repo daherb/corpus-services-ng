@@ -1,5 +1,6 @@
 package de.uni_hamburg.corpora;
 
+import de.idsmannheim.lza.xmlmagic.XmlMagic;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 
@@ -25,9 +26,10 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.io.IOUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.input.SAXBuilder;
 import org.reflections.Reflections;
 import org.xml.sax.SAXException;
 
@@ -35,6 +37,10 @@ import org.xml.sax.SAXException;
  * Still to do
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class CorpusIO {
     Collection<CorpusData> cdc = new HashSet<>();
@@ -133,8 +139,16 @@ public class CorpusIO {
             } else {
                 // TODO this method does not work properly e.g. for the suffix xml. Curent workaround: treat xml separately
                 if (url.getPath().toLowerCase().endsWith(".xml")) {
-                    out.println("Read " + url);
-                    return new UnspecifiedXMLData(url);
+                	SAXBuilder sb = new SAXBuilder();
+                	// TODO implement this properly
+                	try {
+                		XmlMagic magic = new XmlMagic(sb.build(url)); 
+                		out.println("Read " + url);
+                		
+                	}
+                	finally {
+                		return new UnspecifiedXMLData(url);
+                	}
                 }
                 for (Class<? extends CorpusData> c : clcds) {
                     try {
@@ -290,12 +304,12 @@ public class CorpusIO {
                     if (Files.isDirectory(entry)) {
                         recursed.addAll(listFiles(entry, report));
                     }
-                    // Othwereise we check the file extension if we know it
+                    // Otherwise we check the file extension if we know it
                     // First getting the file name
                     String sentry = entry.getFileName().toString().toLowerCase();
                     // Getting all known extensions
                     Collection<String> allExts = getAllExtensions();
-                    // Check if eny of these extensions happens to be the final part of sentry
+                    // Check if any of these extensions happens to be the final part of sentry
                     // if yes we add the file to the list
                     if (allExts.stream().map(sentry::endsWith).reduce(Boolean::logicalOr).orElse(false)) {
                         recursed.add(entry.toUri().toURL());

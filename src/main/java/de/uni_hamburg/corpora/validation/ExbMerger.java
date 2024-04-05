@@ -18,7 +18,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -31,6 +31,10 @@ import org.xml.sax.SAXException;
  * if different versions of the same file have different annotations for the
  * same event/token. Moreover, this functionality includes the inter-annotator
  * agreement: percentage of overlapping choices between the annotators.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbMerger extends Checker implements CorpusFunction {
 

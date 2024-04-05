@@ -13,8 +13,6 @@ import de.uni_hamburg.corpora.conversion.Converter;
 
 import de.uni_hamburg.corpora.CorpusFunction;
 import de.uni_hamburg.corpora.Report;
-import de.idsmannheim.lza.utilities.publication.mapper.MapFile;
-import de.idsmannheim.lza.utilities.publication.mapper.MapRecord;
 import de.idsmannheim.lza.utilities.publication.mapper.MapRootRecord;
 import gov.loc.repository.bagit.creator.CreatePayloadManifestsVistor;
 import gov.loc.repository.bagit.creator.CreateTagManifestsVistor;
@@ -37,26 +35,20 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFileFilter;
-import org.apache.commons.io.filefilter.NotFileFilter;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -65,7 +57,7 @@ import org.xml.sax.SAXException;
  * - all files having the metadata filename as a prefix are grouped together
  * - there is exactly one metadata file which is not the prefix of any file
  * - this file will be used as the top-level metadata
- * 
+ *
  * An example is here, where root.cmdi is the top-level metadata and the files
  * will be grouped into three records aaa, aab and zzz. The record aaa contains the
  * metadata file aaa.cmdi and the file aaa.abc, the record aab contains the metadata
@@ -86,6 +78,10 @@ import org.xml.sax.SAXException;
  *   \-zzz42.xyz
  * ```
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FolderFetchToBasicSIP extends Converter implements CorpusFunction {
 

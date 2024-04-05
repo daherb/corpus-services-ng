@@ -12,9 +12,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.regex.Pattern;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
@@ -22,7 +25,7 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Element;
+import org.jdom2.Element;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
 /**
@@ -33,12 +36,14 @@ import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
  * linebreaks in the events and adds those warnings to the report which it
  * returns.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbEventLinebreaksChecker extends Checker implements CorpusFunction {
 
     boolean linebreak = false;
     String xpathContext = "//event";
-    XPath context;
     Document doc;
 
     public ExbEventLinebreaksChecker(Properties properties) {
@@ -57,29 +62,25 @@ public class ExbEventLinebreaksChecker extends Checker implements CorpusFunction
         Report stats = new Report();         // create a new report
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString()); // read the file as a doc
         Pattern replacePattern = Pattern.compile("[\r\n]");
-        context = XPath.newInstance(xpathContext);
-        List allContextInstances = context.selectNodes(doc);
+        XPathExpression<Element> context = new XPathBuilder<>(xpathContext, Filters.element()).compileWith(new JaxenXPathFactory());
+        List<Element> allContextInstances = context.evaluate(doc);
         CorpusIO cio = new CorpusIO();
         String s = "";
         if (!allContextInstances.isEmpty()) {
-            for (int i = 0; i < allContextInstances.size(); i++) {
-                Object o = allContextInstances.get(i);
-                if (o instanceof Element) {
-                    Element e = (Element) o;
-                    s = e.getText();
-                    if (replacePattern.matcher(s).find()) {          // if file contains the RegEx then issue warning
-                        linebreak = true;
-                        if (fix) {
-                            String snew = s.replaceAll("[\r\n]", "");    //replace all replace with replacement
-                            //TODO Attributes?
-                            e.setText(snew);
-                            cd.updateUnformattedString(doc.toString());
-                            cio.write(cd, cd.getURL());
-                            stats.addFix(function, cd, "Removed line ending in an event: " + escapeHtml4(s) + " with " + escapeHtml4(snew));
-                        } else {
-                            System.out.println("Exb is containing line ending in an event: " + escapeHtml4(s));
-                            stats.addCritical(function, cd, "Exb is containing line ending in an event: " + escapeHtml4(s));
-                        }
+            for (Element e : allContextInstances) {
+                s = e.getText();
+                if (replacePattern.matcher(s).find()) {          // if file contains the RegEx then issue warning
+                    linebreak = true;
+                    if (fix) {
+                        String snew = s.replaceAll("[\r\n]", "");    //replace all replace with replacement
+                        //TODO Attributes?
+                        e.setText(snew);
+                        cd.updateUnformattedString(doc.toString());
+                        cio.write(cd, cd.getURL());
+                        stats.addFix(function, cd, "Removed line ending in an event: " + escapeHtml4(s) + " with " + escapeHtml4(snew));
+                    } else {
+                        System.out.println("Exb is containing line ending in an event: " + escapeHtml4(s));
+                        stats.addCritical(function, cd, "Exb is containing line ending in an event: " + escapeHtml4(s));
                     }
                 }
             }

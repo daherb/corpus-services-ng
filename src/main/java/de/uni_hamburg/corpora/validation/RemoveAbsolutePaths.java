@@ -11,11 +11,15 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 
@@ -28,6 +32,10 @@ import org.exmaralda.partitureditor.fsm.FSMException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
 
@@ -35,6 +43,7 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
     Path pathRelative = null;
     String nameOfCorpusFolder;
     String nameOfExbFolder;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public RemoveAbsolutePaths(Properties properties) {
         //fixing is possible
@@ -180,34 +189,28 @@ public class RemoveAbsolutePaths extends Checker implements CorpusFunction {
         return IsUsableFor;
     }
 
-    public List findAllAbsolutePathsExbAttribute(CorpusData cd) throws JDOMException, URISyntaxException, MalformedURLException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public List<Attribute> findAllAbsolutePathsExbAttribute(CorpusData cd) throws JDOMException, URISyntaxException, MalformedURLException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString());
-        XPath xp1;
         // in exbs: <referenced-file url="ChND_99_Barusi_flkd.wav"/>  
         //working for exs too
-        xp1 = XPath.newInstance("//head/meta-information/referenced-file/@url");
-        List allAbsolutePaths = xp1.selectNodes(doc);
-        return allAbsolutePaths;
+        XPathExpression<Attribute> xp1 = new XPathBuilder<>("//head/meta-information/referenced-file/@url", Filters.attribute()).compileWith(xpathFactory);
+        return xp1.evaluate(doc);
     }
 
-    public List findAllAbsolutePathsExbElement(CorpusData cd) throws JDOMException, URISyntaxException, MalformedURLException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public List<Element> findAllAbsolutePathsExbElement(CorpusData cd) throws JDOMException, URISyntaxException, MalformedURLException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString());
-        XPath xp1;
         // in exbs: <referenced-file url="ChND_99_Barusi_flkd.wav"/>  
         //working for exs too
-        xp1 = XPath.newInstance("//ud-meta-information/ud-information[@attribute-name='# EXB-SOURCE']");
-        List allAbsolutePaths = xp1.selectNodes(doc);
-        return allAbsolutePaths;
+        XPathExpression<Element> xp1 = new XPathBuilder<>("//ud-meta-information/ud-information[@attribute-name='# EXB-SOURCE']", Filters.element()).compileWith(xpathFactory);
+        return xp1.evaluate(doc);
     }
 
-    public List findAllAbsolutePathsComa(CorpusData cd) throws JDOMException, URISyntaxException, MalformedURLException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public List<Element> findAllAbsolutePathsComa(CorpusData cd) throws JDOMException, URISyntaxException, MalformedURLException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         doc = TypeConverter.String2JdomDocument(cd.toSaveableString());
-        XPath xp1;
         // in Coma: NSLinks and relPaths <NSLink>narrative/KBD_71_Fish_nar/KBD_71_Fish_nar_s.exs</NSLink>
         //  <relPath>narrative/KBD_71_Fish_nar/NG_6_1971_506-507_KBD_71_Fish_nar.pdf</relPath>
-        xp1 = XPath.newInstance("/Corpus/CorpusData/Communication/File/relPath | /Corpus/CorpusData/Communication/File/absPath | /Corpus/CorpusData/Communication/Transcription/NSLink | /Corpus/CorpusData/Communication/Transcription/Description/Key[@Name='# EXB-SOURCE'] | /Corpus/CorpusData/Communication/Recording/Media/NSLink");
-        List allAbsolutePaths = xp1.selectNodes(doc);
-        return allAbsolutePaths;
+        XPathExpression<Element> xp1 = new XPathBuilder<>("/Corpus/CorpusData/Communication/File/relPath | /Corpus/CorpusData/Communication/File/absPath | /Corpus/CorpusData/Communication/Transcription/NSLink | /Corpus/CorpusData/Communication/Transcription/Description/Key[@Name='# EXB-SOURCE'] | /Corpus/CorpusData/Communication/Recording/Media/NSLink", Filters.element()).compileWith(xpathFactory);
+        return xp1.evaluate(doc);
     }
 
     public static Path trimFilePathBeforeDirectory(Path filepath, String directory) {

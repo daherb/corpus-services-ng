@@ -18,7 +18,7 @@ import java.util.Set;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -26,6 +26,10 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class GeneralTransformer extends Checker {
 

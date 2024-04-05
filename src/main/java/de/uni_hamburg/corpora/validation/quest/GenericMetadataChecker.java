@@ -5,7 +5,7 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,10 +26,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20211018
- *
  * Abstract Checker for the generic metadata
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 abstract class GenericMetadataChecker extends Checker implements CorpusFunction {
 
@@ -68,7 +69,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
         // If parameters contain list of criteria, split the values on commas and add as lower-case
         if (properties.containsKey("ignore-criteria")) {
             ignoredCriteria.addAll(Stream.of(properties.getProperty("ignore-criteria").split(","))
-                    .map(String::toLowerCase).collect(Collectors.toList()));
+                    .map(String::toLowerCase).toList());
         }
         if (properties.containsKey("metadata-summary") && !properties.getProperty("metadata-summary").equalsIgnoreCase(
                 "true"))
@@ -78,6 +79,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
         if (properties.containsKey("full-summary") && properties.getProperty("full-summary").equalsIgnoreCase(
                 "true"))
             showFullSummary = true;
+        	// TODO actually implement full summary
     }
 
     /**
@@ -100,6 +102,8 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     @Override
     public Report function(CorpusData cd, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
+        // Used to match empty optionals
+        final Optional<String> emptyStr = Optional.empty();
         // Only work if properly set up
         if (setUp && shouldBeChecked(cd.getURL())) {
             for (GenericMetadataCriterion c : criteria) {
@@ -129,7 +133,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     }
                     // Store all values that have a reasonable type for potential statistics
                     // (Ab)use sets to remove duplicates
-                    if (!c.type.contains(Optional.empty())) {
+                    if (!c.type.contains(emptyStr)) {
                         if (!allValues.containsKey(c.name))
                             allValues.put(c.name,new HashMap<>());
                         for (String val : values)
@@ -152,7 +156,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         boolean parsable = false;
                         for (Optional<String> t : c.type) {
                             // No type, we don't have to parse it
-                            if (!t.isPresent())
+                            if (t.isEmpty())
                                 parsable = true;
                             else {
                                 // String is always valid
@@ -175,20 +179,18 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         parsable = false;
                                     }
                                     // Also try it as a URL
-                                    URL url = null;
                                     try {
                                         // Handle URIs can start with hdl: and can be resolved using a proxy
                                         if (value.startsWith("hdl:")) {
-                                            url = new URL(value.replace("hdl:", "https://hdl.handle.net/"));
-
+                                            new URL(value.replace("hdl:", "https://hdl.handle.net/"));
                                         }
                                         // DOI URIs can start with hdl: and can be resolved using a proxy
                                         else if (value.startsWith("doi:")) {
-                                            url = new URL(value.replace("doi:", "https://doi.org/"));
+                                            new URL(value.replace("doi:", "https://doi.org/"));
                                         }
                                         // HTTP URIs are URLs
                                         else if (value.startsWith("http")) {
-                                            url = new URL(value);
+                                            new URL(value);
                                         }
                                     } catch (MalformedURLException e) {
 //                                    // We only want to create a log item if there is no fallback to string
@@ -219,7 +221,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                 else if (t.get().equalsIgnoreCase("date")) {
                                     // Try various date formats
                                     try {
-                                        Date sd = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+                                        new SimpleDateFormat("yyyy-MM-dd").parse(value);
                                         parsable = true;
                                     } catch (ParseException e) {
                                         parsable = false;
@@ -228,15 +230,13 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                         try {
                                             new SimpleDateFormat("yyyy-MM").parse(value);
                                             parsable = true;
-                                        } catch (ParseException e) {
-                                            parsable = false;
+                                        } catch (ParseException ignored) {
                                         }
                                     if (!parsable)
                                         try {
                                             new SimpleDateFormat("yyyy").parse(value);
                                             parsable = true;
-                                        } catch (ParseException e) {
-                                            parsable = false;
+                                        } catch (ParseException ignored) {
                                         }
                                 }
                             }
@@ -309,7 +309,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                 report.addWarning(getFunction(),ReportItem.newParamMap(
                         new ReportItem.Field[]{ReportItem.Field.Function, ReportItem.Field.Description},
                         new Object[]{getFunction(), "No metadata files found matching supported formats: " +
-                        usable.stream().map(u -> u.getSimpleName())
+                        usable.stream().map(Class::getSimpleName)
                                 .collect(Collectors.joining(","))
                         }
                 ));
@@ -336,7 +336,10 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                                 allValues.get(critName).getOrDefault("#EMPTY#",0));
                         stats.append(" empty values)");
                         stats.append(":\n");
-                        for (String val : vals.keySet()) {
+                        // Sort values with most frequent first
+                        ArrayList<String> valsList = new ArrayList<>(vals.keySet());
+                        valsList.sort(Comparator.comparingInt(vals::get).reversed());
+                        for (String val : valsList) {
                             stats.append(" - ");
                             stats.append(val);
                             stats.append(" (");
@@ -347,7 +350,7 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     }
                 }
                 report.addNote(getFunction(), getFunction() + " summary\n" +
-                        c.getCorpusData().stream().map((cd) -> cd.getURL()).filter(this::shouldBeChecked).count() +
+                        c.getCorpusData().stream().map(CorpusData::getURL).filter(this::shouldBeChecked).count() +
                         " files checked\n" + stats);
             }
         } else
@@ -366,8 +369,9 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
     /**
      * Function to load a criteria file and set up the checker
      * @param filename the criteria as a csv file to be loaded
+     * @return if loading succeeded
      */
-    public void setCriteriaFile(String filename) {
+    public boolean loadCriteriaFile(String filename) {
         try {
             // Read CSV file
             criteria = new CsvToBeanBuilder<GenericMetadataCriterion>(new FileReader(filename))
@@ -375,17 +379,19 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                     .withSkipLines(1) // skip header
                     .build()
                     .parse();
-            setUp = true;
+            return true;
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Encountered exception when loading criteria ", e);
+            return false;
         }
     }
 
     /**
      * Loads the criteria as a resource
      * @param name the name of the resource
+     * @return if loading succeeded
      */
-    public void loadCriteriaResource(String name) throws FileNotFoundException {
+    public boolean loadCriteriaResource(String name) throws FileNotFoundException {
             InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream("metadata/"+name);
             if (resourceStream != null) {
                 // Read CSV file
@@ -394,13 +400,28 @@ abstract class GenericMetadataChecker extends Checker implements CorpusFunction 
                         .withSkipLines(1) // skip header
                         .build()
                         .parse();
-                setUp = true;
+                return true;
             }
             else {
-                throw new FileNotFoundException("Missing file in resources: " + name);
+                logger.log(Level.SEVERE,"Missing file in resources: ",name);
+                return false;
             }
     }
 
+    /**
+     * Loads the criteria either as a resource or as a file. Tries resource first and if that fails tries file instead
+     * @param fileOrResource the name of the file or resource
+     * @return if loading succeeded
+     */
+    public boolean setCriteria(String fileOrResource) {
+    	try {
+    		return loadCriteriaResource(fileOrResource) || loadCriteriaFile(fileOrResource);
+    	}
+    	catch (IOException e) {
+    		return false;
+    	}
+    }
+    
     @Override
     public Map<String, String> getParameters() {
         Map<String, String> params = super.getParameters();

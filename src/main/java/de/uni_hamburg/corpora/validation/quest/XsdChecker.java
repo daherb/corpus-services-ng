@@ -5,7 +5,7 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.reflections.Reflections;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -27,6 +27,13 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Checks if an XML file conforms to a XSD schema
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
+ */
 public class XsdChecker  extends Checker implements CorpusFunction {
 
     private final Logger logger = Logger.getLogger(getFunction());

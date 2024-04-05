@@ -25,12 +25,16 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
  *
  * @author Daniel Jettka
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class HScoreHTML extends Visualizer {
 

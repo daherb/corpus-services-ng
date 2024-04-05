@@ -13,8 +13,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,6 +26,10 @@ import org.xml.sax.SAXException;
 /**
  * A class that checks whether there are more than one segmentation algorithms
  * used in the coma file. If that is the case, it issues warnings.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
 
@@ -42,33 +49,33 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
     public Report function(CorpusData cd, Boolean fix) throws ClassNotFoundException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report stats = new Report(); //create a new report
         ComaData comad = (ComaData) cd;
-        org.jdom.Document comaDoc = comad.getJdom();
+        org.jdom2.Document comaDoc = comad.getJdom();
         Document doc = JdomDocument2W3cDocument(comaDoc);
         NodeList communications = doc.getElementsByTagName("Communication"); // divide by Communication tags
         ArrayList<String> algorithmNames = new ArrayList<>(); // array for holding algorithm names
         CorpusIO cio = new CorpusIO();
         EXMARaLDASegmentedTranscriptionData exs;
         if (fix) {
-            List<org.jdom.Element> toRemove = new ArrayList<org.jdom.Element>();
-            XPath context;
-            context = XPath.newInstance("//Transcription[Description/Key[@Name='segmented']/text()='true']");
+            List<org.jdom2.Element> toRemove = new ArrayList<org.jdom2.Element>();
+            XPathExpression<org.jdom2.Element> context = new XPathBuilder<>("//Transcription[Description/Key[@Name='segmented']/text()='true']",
+                    Filters.element()).compileWith(new JaxenXPathFactory());
             URL url;
-            List allContextInstances = context.selectNodes(comaDoc);
+            List<org.jdom2.Element> allContextInstances = context.evaluate(comaDoc);
             if (!allContextInstances.isEmpty()) {
                 for (int i = 0; i < allContextInstances.size(); i++) {
                     Object o = allContextInstances.get(i);
-                    if (o instanceof org.jdom.Element) {
-                        org.jdom.Element e = (org.jdom.Element) o;
-                        List<org.jdom.Element> descKeys;
+                    if (o instanceof org.jdom2.Element) {
+                        org.jdom2.Element e = (org.jdom2.Element) o;
+                        List<org.jdom2.Element> descKeys;
                         //in the coma file remove old stats first
                         descKeys = e.getChild("Description")
                                 .getChildren();
-                        for (org.jdom.Element ke : (List<org.jdom.Element>) descKeys) {
+                        for (org.jdom2.Element ke : (List<org.jdom2.Element>) descKeys) {
                             if (Pattern.matches("#(..).*", ke.getAttributeValue("Name"))) {
                                 toRemove.add(ke);
                             }
                         }
-                        for (org.jdom.Element re : toRemove) {
+                        for (org.jdom2.Element re : toRemove) {
                             descKeys.remove(re);
                         }
                         //now get the new segment counts and add them insted
@@ -78,13 +85,13 @@ public class ComaSegmentCountChecker extends Checker implements CorpusFunction {
                         exs = (EXMARaLDASegmentedTranscriptionData) cio.readFileURL(url);
                         List segmentCounts = exs.getSegmentCounts();
                         for (Object segmentCount : segmentCounts) {
-                            if (segmentCount instanceof org.jdom.Element) {
-                                org.jdom.Element segmentCountEl = (org.jdom.Element) segmentCount;
+                            if (segmentCount instanceof org.jdom2.Element) {
+                                org.jdom2.Element segmentCountEl = (org.jdom2.Element) segmentCount;
                                 //Object key = segmentCountEl.getAttributeValue("attribute-name").substring(2);
                                 Object key = segmentCountEl.getAttributeValue("attribute-name");
                                 Object value = segmentCountEl.getValue();
                                 //System.out.println("Value:" + value);
-                                org.jdom.Element newKey = new org.jdom.Element("Key");
+                                org.jdom2.Element newKey = new org.jdom2.Element("Key");
                                 newKey.setAttribute("Name", (String) key);
                                 newKey.setText(value.toString());
                                 e.getChild("Description").addContent(

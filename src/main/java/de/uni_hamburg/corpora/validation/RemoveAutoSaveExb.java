@@ -10,10 +10,13 @@ import de.uni_hamburg.corpora.*;
 import java.io.IOException;
 import java.util.*;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import static de.uni_hamburg.corpora.CorpusMagician.exmaError;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
@@ -28,6 +31,10 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class RemoveAutoSaveExb extends Checker implements CorpusFunction {
 
@@ -80,13 +87,11 @@ public class RemoveAutoSaveExb extends Checker implements CorpusFunction {
         return IsUsableFor;
     }
 
-    public List findAllAutoSaveInstances(XMLData xml) throws JDOMException {
+    public List<Element> findAllAutoSaveInstances(XMLData xml) throws JDOMException {
         doc = xml.getJdom();
-        XPath xp1;
         //working for exs too
-        xp1 = XPath.newInstance("//head/meta-information/ud-meta-information/ud-information[@attribute-name='AutoSave']");
-        List allAutoSaveInfo = xp1.selectNodes(doc);
-        return allAutoSaveInfo;
+        XPathExpression<Element> xp1 = new XPathBuilder<>("//head/meta-information/ud-meta-information/ud-information[@attribute-name='AutoSave']", Filters.element()).compileWith(new JaxenXPathFactory());
+        return xp1.evaluate(doc);
     }
 
     /**

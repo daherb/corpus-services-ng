@@ -1,20 +1,22 @@
 package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.filter.*;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20211007
- *
  * Checker for the generic metadata using TEI headers
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class TEIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
@@ -24,9 +26,9 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
     public TEIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("tei-criteria-file"))
-            setCriteriaFile(properties.getProperty("tei-criteria-file"));
+            setUp = setCriteria(properties.getProperty("tei-criteria-file"));
         else {
-            loadCriteriaResource("tei-generic.csv");
+        	setUp = setCriteria("tei-generic.csv");
         }
     }
 
@@ -47,7 +49,10 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Valid for TEI format (and XML)
-        return Arrays.asList(new Class[]{TEIData.class,UnspecifiedXMLData.class});
+        ArrayList<Class<? extends CorpusData>> list =new ArrayList<>();
+        list.add(TEIData.class);
+        list.add(UnspecifiedXMLData.class);
+        return list;
     }
 
 //    @Override
@@ -68,33 +73,30 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
         Report report = new Report();
         // Workaround for default namespace "" kind of following
         // http://www.edankert.com/defaultnamespaces.html
-        try {
-            XPath xpath = XPath.newInstance(locator);
-            xpath.addNamespace(Namespace.getNamespace("tei", "http://www.tei-c.org/ns/1.0"));
-            List<Object> nodes = xpath.selectNodes(((TEIData) cd).getJdom());
-            xpath = null;
-            // Convert nodes to string values
-            for (Object o : nodes) {
-                // Get the value of the node, either from an element or an attribute
-                if (o instanceof Element)
-                    values.add(((Element) o).getValue());
-                else if (o instanceof Attribute)
-                    values.add(((Attribute) o).getValue());
+        XPathBuilder<Object> builder = new XPathBuilder<>(locator, Filters.fpassthrough());
+        builder.setNamespace("tei", "http://www.tei-c.org/ns/1.0");
+        XPathExpression<Object> xpath = builder.compileWith(new JaxenXPathFactory());
+        List<Object> nodes = xpath.evaluate(((TEIData) cd).getJdom());
+        // Might help freeing the data
+        // xpath = null;
+        // Convert nodes to string values
+        for (Object o : nodes) {
+            // Get the value of the node, either from an element or an attribute
+            if (o instanceof Element)
+                values.add(((Element) o).getValue());
+            else if (o instanceof Attribute)
+                values.add(((Attribute) o).getValue());
                 // Result of a XPath predicate -> only keep if the result is true
                 // This allows e.g. predicates where the counts of elements can be compared
-                else if (o instanceof Boolean) {
-                    if ((Boolean) o)
-                        values.add(((Boolean) o).toString());
-                }
-                else {
-                    // Error if it is neither element nor attribute
-                    report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
-                    break;
-                }
+            else if (o instanceof Boolean) {
+                if ((Boolean) o)
+                    values.add(((Boolean) o).toString());
             }
-        }
-        catch (JDOMException e) {
-            e.printStackTrace();
+            else {
+                // Error if it is neither element nor attribute
+                report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
+                break;
+            }
         }
         return report ;
 

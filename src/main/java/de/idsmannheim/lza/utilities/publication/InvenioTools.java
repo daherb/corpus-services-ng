@@ -54,7 +54,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -78,6 +78,10 @@ import org.xml.sax.SAXException;
 /**
  * Class providing higher-level abstraction helpers based on Invenio API calls
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class InvenioTools {
     
@@ -376,7 +380,7 @@ public class InvenioTools {
      * @param report the report to keep track of detailed information about the process
      * @return if it is a valid BagIt
      */
-    private boolean validateBag(Corpus c, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, org.jdom.JDOMException {
+    private boolean validateBag(Corpus c, Report report) throws MalformedURLException, JexmaraldaException, URISyntaxException, IOException, ClassNotFoundException, SAXException, NoSuchAlgorithmException, FSMException, ParserConfigurationException, TransformerException, XPathExpressionException, JDOMException {
         Report r = new Report();
         // Create new properties to pass the parameter
         Properties props = new Properties();

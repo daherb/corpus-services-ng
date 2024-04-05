@@ -1,16 +1,21 @@
 package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
-import org.jdom.*;
-import org.jdom.xpath.XPath;
+import org.jdom2.*;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Checker for speaker consistency in an EXMARaLDA corpus
- * @author bba1792, Dr. Herbert Lange
- * @version 20220324
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXMARaLDASpeakerChecker extends SpeakerChecker {
 
@@ -47,8 +52,8 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
             if (cd.getClass().equals(ComaData.class)) {
                 Document dom = ((ComaData) cd).getJdom();
                 uniqueSpeakerDistinction = dom.getRootElement().getAttributeValue("uniqueSpeakerDistinction");
-                List<Text> sigles = Collections.checkedList(XPath.newInstance("//Speaker/Sigle/text()").selectNodes(dom),
-                        Text.class);
+                XPathExpression<Text> xpath = new XPathBuilder<Text>("//Speaker/Sigle/text()", Filters.text()).compileWith(new JaxenXPathFactory());
+                List<Text> sigles = xpath.evaluate(dom);
                 speakers.addAll(sigles.stream().map(Text::getText).collect(Collectors.toList()));
             }
 
@@ -67,18 +72,18 @@ public class EXMARaLDASpeakerChecker extends SpeakerChecker {
         Report report = new Report();
         Document dom = ((EXMARaLDATranscriptionData) cd).getJdom();
         // All speaker codes, i.e. the speaker code for each tier
+        JaxenXPathFactory xfactor = new JaxenXPathFactory(); 
+        XPathExpression<Attribute> xpath1 = new XPathBuilder<Attribute>("//tier/@speaker", Filters.attribute()).compileWith(xfactor);
         Set<String> tierSpeakerCodes =
-                ((List<Attribute>) Collections.checkedList(XPath.newInstance("//tier/@speaker").selectNodes(dom),
-                        Attribute.class)).stream().map(Attribute::getValue).collect(Collectors.toSet());
+                xpath1.evaluate(dom).stream().map(Attribute::getValue).collect(Collectors.toSet());
         // All speaker abbreviations defined in the header to be checked
+        XPathExpression<Text> xpath2 = new XPathBuilder<Text>(uniqueSpeakerDistinction + "/text()", Filters.text()).compileWith(xfactor);
         List<String> uncheckedSpeakerAbbrevs =
-                ((List<Text>) Collections.checkedList(XPath.newInstance(uniqueSpeakerDistinction + "/text()").selectNodes(dom),
-                        Text.class)).stream().map(Text::getText).collect(Collectors.toList());
+                xpath2.evaluate(dom).stream().map(Text::getText).collect(Collectors.toList());
         for (String code : tierSpeakerCodes) {
             // Get abbreviation for speaker code
-            Element speaker =
-                    (Element) XPath.newInstance(String.format("//speaker[@id=\"%s\"]",code))
-                            .selectSingleNode(dom);
+        	XPathExpression<Element> xpath3 = new XPathBuilder<Element>(String.format("//speaker[@id=\"%s\"]",code), Filters.element()).compileWith(xfactor);
+            Element speaker = xpath3.evaluateFirst(dom);
             // Speaker for code is not defined
             if (speaker == null) {
                 report.addWarning(getFunction(),ReportItem.newParamMap(

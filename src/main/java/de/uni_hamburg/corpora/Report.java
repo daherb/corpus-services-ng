@@ -20,9 +20,8 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Logger;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 
 /**
  * Statistics report is a container class to facilitate building reports for
@@ -37,6 +36,10 @@ import org.jdom.JDOMException;
  *      1 % missing, and 4 % with errors (see details here: ___)
  *      12400 of annotations: 100 % done correctly, 7 % with warnings.
  * </pre>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class Report {
 

@@ -18,9 +18,11 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathFactory;
 import org.xml.sax.SAXException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -28,14 +30,20 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Element;
-import org.jdom.xpath.XPath;
+import org.jdom2.Element;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 
 /**
  *
  * @author fsnv625
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ComaData implements Metadata, CorpusData, XMLData {
 
@@ -58,6 +66,7 @@ public class ComaData implements Metadata, CorpusData, XMLData {
     String corpusname;
 
     public ArrayList<URL> referencedCorpusDataURLs = new ArrayList<>();
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ComaData() {
     }
@@ -123,55 +132,42 @@ public class ComaData implements Metadata, CorpusData, XMLData {
     public Collection<URL> getAllBasicTranscriptionURLs() throws MalformedURLException {
         URL resulturl;
         ArrayList<URL> resulturls = new ArrayList<>();
-        try {
-            XPath xpath = XPath.newInstance(BASIC_FILE_XPATH);
-            List<Element> transcriptionList = xpath.selectNodes(readcomaasjdom);
-            for (Element nslink : transcriptionList) {
-                //String fullTranscriptionName = CORPUS_BASEDIRECTORY.toURI().getPath() + nslink.getText();
-                resulturl = new URL(CORPUS_BASEDIRECTORY + nslink.getText());
-                //Paths.get(fullTranscriptionName).toUri().toURL();
-                resulturls.add(resulturl);
-            }
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
+        XPathExpression<Element> xpath = new XPathBuilder<Element>(BASIC_FILE_XPATH, Filters.element()).compileWith(xpathFactory);
+        List<Element> transcriptionList = xpath.evaluate(readcomaasjdom);
+        for (Element nslink : transcriptionList) {
+        	//String fullTranscriptionName = CORPUS_BASEDIRECTORY.toURI().getPath() + nslink.getText();
+        	resulturl = new URL(CORPUS_BASEDIRECTORY + nslink.getText());
+        	//Paths.get(fullTranscriptionName).toUri().toURL();
+        	resulturls.add(resulturl);
         }
         return resulturls;
     }
 
     public ArrayList<String> getAllBasicTranscriptionFilenames() {
-        try {
-            ArrayList<String> result = new ArrayList<>();
-            XPath xpath = XPath.newInstance(BASIC_FILE_XPATH);
-            List<Element> transcriptionList = xpath.selectNodes(readcomaasjdom);
-            for (Element nslink : transcriptionList) {
-                // currentElement = nslink;
-                // String fullTranscriptionName = CORPUS_BASEDIRECTORY + "\\" +
-                // nslink.getText();
-                result.add(nslink.getText());
-                //resulturl = Paths.get(nslink.getText()).toUri().toURL();
-                //resulturls.add(resulturl);
-            }
-            return result;
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
-        }
-        return null;
+    	ArrayList<String> result = new ArrayList<>();
+    	XPathExpression<Element> xpath = new XPathBuilder<Element>(BASIC_FILE_XPATH, Filters.element()).compileWith(xpathFactory);
+    	List<Element> transcriptionList = xpath.evaluate(readcomaasjdom);
+    	for (Element nslink : transcriptionList) {
+    		// currentElement = nslink;
+    		// String fullTranscriptionName = CORPUS_BASEDIRECTORY + "\\" +
+    		// nslink.getText();
+    		result.add(nslink.getText());
+    		//resulturl = Paths.get(nslink.getText()).toUri().toURL();
+    		//resulturls.add(resulturl);
+    	}
+    	return result;
     }
 
     public Collection<URL> getAllSegmentedTranscriptionURLs() throws MalformedURLException {
         URL resulturl;
         ArrayList<URL> resulturls = new ArrayList<>();
-        try {
-            XPath xpath = XPath.newInstance(SEGMENTED_FILE_XPATH);
-            List<Element> transcriptionList = xpath.selectNodes(readcomaasjdom);
-            for (Element nslink : transcriptionList) {
-                //String fullTranscriptionName = CORPUS_BASEDIRECTORY.toURI().getPath() + nslink.getText();
-                resulturl = new URL(CORPUS_BASEDIRECTORY + nslink.getText());
-                //Paths.get(fullTranscriptionName).toUri().toURL();
-                resulturls.add(resulturl);
-            }
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
+        XPathExpression<Element> xpath = new XPathBuilder<Element>(SEGMENTED_FILE_XPATH, Filters.element()).compileWith(xpathFactory);
+        List<Element> transcriptionList = xpath.evaluate(readcomaasjdom);
+        for (Element nslink : transcriptionList) {
+        	//String fullTranscriptionName = CORPUS_BASEDIRECTORY.toURI().getPath() + nslink.getText();
+        	resulturl = new URL(CORPUS_BASEDIRECTORY + nslink.getText());
+        	//Paths.get(fullTranscriptionName).toUri().toURL();
+        	resulturls.add(resulturl);
         }
         return resulturls;
     }
@@ -179,19 +175,15 @@ public class ComaData implements Metadata, CorpusData, XMLData {
     public Collection<URL> getAllURLs() throws MalformedURLException {
         URL resulturl;
         ArrayList<URL> resulturls = new ArrayList<>();
-        try {
-            XPath xpath = XPath.newInstance(ALL_FILE_XPATH);
-            List<Element> transcriptionList = xpath.selectNodes(readcomaasjdom);
-            for (Element nslink : transcriptionList) {
-                //String fullTranscriptionName = CORPUS_BASEDIRECTORY.toURI().getPath() + nslink.getText();
-                resulturl = new URL(CORPUS_BASEDIRECTORY + nslink.getText());
-                //Paths.get(fullTranscriptionName).toUri().toURL();
-                if (!resulturls.contains(resulturl)) {
-                    resulturls.add(resulturl);
-                }
-            }
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
+        XPathExpression<Element> xpath = new XPathBuilder<Element>(ALL_FILE_XPATH, Filters.element()).compileWith(xpathFactory);
+        List<Element> transcriptionList = xpath.evaluate(readcomaasjdom);
+        for (Element nslink : transcriptionList) {
+        	//String fullTranscriptionName = CORPUS_BASEDIRECTORY.toURI().getPath() + nslink.getText();
+        	resulturl = new URL(CORPUS_BASEDIRECTORY + nslink.getText());
+        	//Paths.get(fullTranscriptionName).toUri().toURL();
+        	if (!resulturls.contains(resulturl)) {
+        		resulturls.add(resulturl);
+        	}
         }
         return resulturls;
     }
@@ -250,8 +242,8 @@ public class ComaData implements Metadata, CorpusData, XMLData {
     }
 
     public String getCorpusName() throws JDOMException {
-        XPath xpath = XPath.newInstance(CORPUSNAME_XPATH);
-        Element name = (Element) xpath.selectSingleNode(readcomaasjdom);
+        XPathExpression<Element> xpath = new XPathBuilder<>(CORPUSNAME_XPATH, Filters.element()).compileWith(xpathFactory);
+        Element name = xpath.evaluateFirst(readcomaasjdom);
         corpusname = name.getText();
         return corpusname;
     }
@@ -260,17 +252,20 @@ public class ComaData implements Metadata, CorpusData, XMLData {
         corpusname = s;
     }
     
-    public List<Element> getCommunications() throws JDOMException{
-      return XPath.selectNodes(readcomaasjdom, "//Communication");
+    public List<Element> getCommunications() {
+    	XPathExpression<Element> xpath = new XPathBuilder<>("//Communication", Filters.element()).compileWith(xpathFactory);
+    	return xpath.evaluate(readcomaasjdom);
     }
     
-    public Element getCorpusDescription() throws JDOMException{
-      return (Element) XPath.selectSingleNode(readcomaasjdom, "/Corpus/Description");
+    public Element getCorpusDescription() {
+    	XPathExpression<Element> xpath = new XPathBuilder<>("/Corpus/Description",  Filters.element()).compileWith(xpathFactory);
+    	return xpath.evaluateFirst(readcomaasjdom);
     }
     
         
     public Element getCorpusData() throws JDOMException{
-      return (Element) XPath.selectSingleNode(readcomaasjdom, "/Corpus/CorpusData");
+    	XPathExpression<Element> xpath = new XPathBuilder<Element>("/Corpus/CorpusData",  Filters.element()).compileWith(xpathFactory);
+    	return xpath.evaluateFirst(readcomaasjdom);
     }
 
     @Override

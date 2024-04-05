@@ -12,9 +12,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.regex.Pattern;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
@@ -22,19 +26,23 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 
 /**
  *
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ElanPunctuationChecker extends Checker implements CorpusFunction {
 
     boolean badPunctuation = false;
     String xpathContext = "/ANNOTATION_DOCUMENT/TIER[@LINGUISTIC_TYPE_REF!='no']/ANNOTATION/*";
-    XPath context;
     Document doc;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public ElanPunctuationChecker(Properties properties) {
         //fixing option not available
@@ -56,8 +64,8 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
         Pattern qmarkPattern = Pattern.compile("(?<=[^\\?])\\?{1,3}(?=[^\\?]).+?");
         Pattern paragraphPattern = Pattern.compile("§.+$");
         Pattern exclamPattern = Pattern.compile("!.+$");
-        context = XPath.newInstance(xpathContext);
-        List allContextInstances = context.selectNodes(doc);
+        XPathExpression<Element> context = new XPathBuilder<>(xpathContext, Filters.element()).compileWith(xpathFactory);
+        List allContextInstances = context.evaluate(doc);
         String start = "";
         String finish = "";
         if (!allContextInstances.isEmpty()) {
@@ -72,8 +80,8 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                         if (e.getAttributeValue("ANNOTATION_REF") != null) {
                             String att = e.getAttributeValue("ANNOTATION_REF");
                             String xpathAnnID = "//ALIGNABLE_ANNOTATION[@ANNOTATION_ID='" + att + "']";
-                            XPath annID = XPath.newInstance(xpathAnnID);
-                            a = annID.selectSingleNode(doc);
+                            XPathExpression<Element> annID = new XPathBuilder<>(xpathAnnID, Filters.element()).compileWith(xpathFactory);
+                            a = annID.evaluateFirst(doc);
                         } else {
                             a = o;
                         }
@@ -83,8 +91,8 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                             String end = ee.getAttributeValue("TIME_SLOT_REF2");
                             String xpathBegTime = "//TIME_SLOT[@TIME_SLOT_ID='" + begin + "']";
                             String xpathEndTime = "//TIME_SLOT[@TIME_SLOT_ID='" + end + "']";
-                            XPath beginTime = XPath.newInstance(xpathBegTime);
-                            Object bt = beginTime.selectSingleNode(doc);
+                            XPathExpression<Element> beginTime = new XPathBuilder<>(xpathBegTime, Filters.element()).compileWith(xpathFactory);
+                            Object bt = beginTime.evaluateFirst(doc);
                             if (bt instanceof Element) {
                                 Element eb = (Element) bt;
                                 start = eb.getAttributeValue("TIME_VALUE");
@@ -94,8 +102,8 @@ public class ElanPunctuationChecker extends Checker implements CorpusFunction {
                                 int startHours  = (startTime / (1000*60*60)) % 24;
                                 String startFormatted = String.format("%d:%d:%d", startHours, startMinutes, startSeconds);
                                 System.out.println(startFormatted);
-                                XPath endTime = XPath.newInstance(xpathEndTime);
-                                Object et = endTime.selectSingleNode(doc);
+                                XPathExpression<Element> endTime = new XPathBuilder<>(xpathEndTime, Filters.element()).compileWith(xpathFactory);
+                                Object et = endTime.evaluateFirst(doc);
                                 if (et instanceof Element) {
                                     Element ec = (Element) et;
                                     finish = ec.getAttributeValue("TIME_VALUE");

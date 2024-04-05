@@ -33,12 +33,16 @@ import javax.xml.xpath.XPathExpressionException;
 import org.datacite.ApiException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
  * Simple function to delete all unpublished drafts (and all draft DOIs if Datacite credentials are give)
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class InvenioDeleteDrafts extends Publisher implements CorpusFunction {
 

@@ -12,9 +12,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.regex.Pattern;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.net.URISyntaxException;
@@ -22,18 +25,21 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.Element;
+import org.jdom2.Element;
 
 
 /**
  *
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FlextextPunctuationChecker extends Checker implements CorpusFunction {
 
     boolean badPunctuation = false;
     String xpathContext = "//item[@type='punct']";
-    XPath context;
     Document doc;
     String flexFile = "";
 
@@ -55,24 +61,20 @@ public class FlextextPunctuationChecker extends Checker implements CorpusFunctio
         doc = TypeConverter.String2JdomDocument(flexFile); // read the file as a doc
         Pattern bracketsPattern = Pattern.compile("[«»]");
         Pattern slashPattern = Pattern.compile("^…\\/$");
-        context = XPath.newInstance(xpathContext);
-        List allContextInstances = context.selectNodes(doc);
+        XPathExpression<Element> context = new XPathBuilder<>(xpathContext, Filters.element()).compileWith(new JaxenXPathFactory());
+        List<Element> allContextInstances = context.evaluate(doc);
         CorpusIO cio = new CorpusIO();
         String s = "";
         if (!allContextInstances.isEmpty()) {
-            for (int i = 0; i < allContextInstances.size(); i++) {
-                Object o = allContextInstances.get(i);
-                if (o instanceof Element) {
-                    Element e = (Element) o;
-                    s = e.getText();
-                    if (bracketsPattern.matcher(s).find()) {          // if file contains the RegEx then issue warning
-                        badPunctuation = true;
-                        stats.addCritical(function, cd, "Remove «» brackets in :" + s);
-                    }
-                    if (slashPattern.matcher(s).find()) {
-                        badPunctuation = true;
-                        stats.addCritical(function, cd, "Add a slash before " + s);
-                    }
+            for (Element e : allContextInstances) {
+                s = e.getText();
+                if (bracketsPattern.matcher(s).find()) {          // if file contains the RegEx then issue warning
+                    badPunctuation = true;
+                    stats.addCritical(function, cd, "Remove «» brackets in :" + s);
+                }
+                if (slashPattern.matcher(s).find()) {
+                    badPunctuation = true;
+                    stats.addCritical(function, cd, "Add a slash before " + s);
                 }
             }
             if (badPunctuation && fix) {

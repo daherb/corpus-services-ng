@@ -4,8 +4,8 @@ import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
-import org.jdom.Text;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,8 +19,10 @@ import java.util.logging.Logger;
 
 /**
  * Checker for glossing tiers
- * @author bba1792, Dr. Herbert Lange
- * @version 20220202
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public abstract class GlossChecker extends Checker implements CorpusFunction {
 

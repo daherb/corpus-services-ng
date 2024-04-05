@@ -13,7 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +22,10 @@ import org.xml.sax.SAXException;
 /**
  * A class that can check exb tiers and find out if there is a mismatch between
  * category, speaker abbreviation and display name for each tier.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction {
 

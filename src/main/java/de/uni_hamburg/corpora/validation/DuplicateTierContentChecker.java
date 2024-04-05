@@ -11,19 +11,23 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+import org.jdom2.Document;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.JDOMException;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.Element;
 
 import java.util.regex.Pattern;
 import java.security.MessageDigest;
@@ -33,6 +37,10 @@ import java.math.BigInteger;
 /**
  *
  * @author Timofey Arkhangelskiy <timofey.arkhangelskiy@uni-hamburg.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class DuplicateTierContentChecker extends Checker implements CorpusFunction {
 
@@ -44,6 +52,7 @@ public class DuplicateTierContentChecker extends Checker implements CorpusFuncti
             Pattern.UNICODE_CHARACTER_CLASS);
     Pattern rxApostrophe = Pattern.compile("[`‘’′́̀ʼ]", Pattern.UNICODE_CHARACTER_CLASS);
     MessageDigest md = null;
+    private final XPathFactory xpathFactory = new JaxenXPathFactory();
 
     public DuplicateTierContentChecker(Properties properties) {
         //no fixing option available
@@ -58,28 +67,24 @@ public class DuplicateTierContentChecker extends Checker implements CorpusFuncti
      * Concatenate and normalize the text of one tier.
      */
     public String normalize_tier(Element tier) {
-        String tierText = "";
-        NodeList events = tier.getElementsByTagName("event");
-        for (int j = 0; j < events.getLength(); j++) {
-            Element event = (Element) events.item(j);
-            String eventText = event.getTextContent();
-            tierText += eventText.toLowerCase();
+        StringBuilder tierTextBuilder = new StringBuilder();
+
+        List<Element> events = new XPathBuilder<Element>("//event", Filters.element()).compileWith(xpathFactory).evaluate(tier);
+        for (Element event : events) {
+            String eventText = event.getText();
+            tierTextBuilder.append(eventText.toLowerCase());
         }
-        tierText = rxClean.matcher(tierText).replaceAll("");
+        String tierText = rxClean.matcher(tierTextBuilder.toString()).replaceAll("");
         tierText = rxApostrophe.matcher(tierText).replaceAll("'");
         if (tierText.length() <= MIN_TIER_LENGTH) {
             return "";  // we don't want to compare empty or too short tiers
         }
         String hashText;
         // Use short MD5 hashes instead of long strings
-        try {
-            byte[] tierBytes = tierText.getBytes("UTF-8");
-            byte[] md5Bytes = md.digest(tierBytes);
-            BigInteger bigInt = new BigInteger(1, md5Bytes);
-            hashText = bigInt.toString(16);
-        } catch (UnsupportedEncodingException ex) {
-            return tierText;
-        }
+        byte[] tierBytes = tierText.getBytes(StandardCharsets.UTF_8);
+        byte[] md5Bytes = md.digest(tierBytes);
+        BigInteger bigInt = new BigInteger(1, md5Bytes);
+        hashText = bigInt.toString(16);
         //System.out.println("hash: " + hashText);
         return hashText;
     }
@@ -91,13 +96,12 @@ public class DuplicateTierContentChecker extends Checker implements CorpusFuncti
     public Map<String, String> process_exb(CorpusData cd) {
         Map<String, String> tierValues = new HashMap<>();
         XMLData xml = (XMLData) cd;
-        Document doc = TypeConverter.JdomDocument2W3cDocument(xml.getJdom());
+        org.w3c.dom.Document doc = TypeConverter.JdomDocument2W3cDocument(xml.getJdom());
 
-        NodeList tiers = doc.getElementsByTagName("tier"); // get all tiers of the transcript      
-        ArrayList<Element> relevantTiers = new ArrayList();
+        NodeList tiers = doc.getElementsByTagName("tier"); // get all tiers of the transcript
         for (int i = 0; i < tiers.getLength(); i++) {
             Element tier = (Element) tiers.item(i);
-            String category = tier.getAttribute("category"); // get category so that we know is this is a relevant tier 
+            String category = tier.getAttribute("category").getValue(); // get category so that we know is this is a relevant tier
             if (lsTiersToCheck.contains(category)) {
                 if (tierValues.containsKey(category)) {
                     tierValues.put(category, tierValues.get(category) + normalize_tier(tier));
@@ -127,33 +131,29 @@ public class DuplicateTierContentChecker extends Checker implements CorpusFuncti
             tierValues.put(tierName, new HashMap<String, String>());
         }
 
-        org.jdom.Document comaDoc = TypeConverter.String2JdomDocument(cd.toSaveableString());
-        XPath context;
-        context = XPath.newInstance("//Transcription[Description/Key[@Name='segmented']/text()='false']");
+        Document comaDoc = TypeConverter.String2JdomDocument(cd.toSaveableString());
+        XPathExpression<Element> xpath = new XPathBuilder<Element>("//Transcription[Description/Key[@Name='segmented']/text()='false']", Filters.element())
+        		.compileWith(xpathFactory);
         URL url;
-        List allContextInstances = context.selectNodes(comaDoc);
-        for (int i = 0; i < allContextInstances.size(); i++) {
-            Object o = allContextInstances.get(i);
-            if (o instanceof org.jdom.Element) {
-                org.jdom.Element e = (org.jdom.Element) o;
-                String sFilename = e.getChildText("NSLink");
-                System.out.println("NSLink: " + sFilename);
-                url = new URL(cd.getParentURL() + sFilename);
-                CorpusData exb = cio.readFileURL(url);
-                Map<String, String> curTierValues = process_exb(exb);
-                for (Map.Entry<String, String> entry : curTierValues.entrySet()) {
-                    if (!tierValues.containsKey(entry.getKey())
-                            || entry.getValue().length() <= 0) {
-                        continue;
-                    }
-                    if (tierValues.get(entry.getKey()).containsKey(entry.getValue())) {
-                        stats.addCritical(function, exb, "The file is a duplicate of "
-                                + tierValues.get(entry.getKey()).get(entry.getValue())
-                                + " (tier " + entry.getKey() + ").");
-                    } else {
-                        tierValues.get(entry.getKey()).put(entry.getValue(), exb.getFilename());
-                        // Remember that this text for this tier was seen in this file
-                    }
+        List<Element> allContextInstances = xpath.evaluate(comaDoc);
+        for (Element e : allContextInstances) {
+            String sFilename = e.getChildText("NSLink");
+            System.out.println("NSLink: " + sFilename);
+            url = new URL(cd.getParentURL() + sFilename);
+            CorpusData exb = cio.readFileURL(url);
+            Map<String, String> curTierValues = process_exb(exb);
+            for (Map.Entry<String, String> entry : curTierValues.entrySet()) {
+                if (!tierValues.containsKey(entry.getKey())
+                        || entry.getValue().length() <= 0) {
+                    continue;
+                }
+                if (tierValues.get(entry.getKey()).containsKey(entry.getValue())) {
+                    stats.addCritical(function, exb, "The file is a duplicate of "
+                            + tierValues.get(entry.getKey()).get(entry.getValue())
+                            + " (tier " + entry.getKey() + ").");
+                } else {
+                    tierValues.get(entry.getKey()).put(entry.getValue(), exb.getFilename());
+                    // Remember that this text for this tier was seen in this file
                 }
             }
         }

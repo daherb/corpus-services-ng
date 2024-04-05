@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

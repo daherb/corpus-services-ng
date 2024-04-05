@@ -12,10 +12,10 @@ import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,6 +35,10 @@ import org.apache.commons.io.FilenameUtils;
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
  * 
  * NB: The class was copied over from ELANData, might need some cleaning up
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class FlextextData implements CorpusData, ContentData, XMLData {
 

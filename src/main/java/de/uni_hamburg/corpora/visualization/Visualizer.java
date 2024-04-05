@@ -18,7 +18,7 @@ import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -28,8 +28,10 @@ import org.xml.sax.SAXException;
  * things a lot easier
  *
  * @author Daniel Jettka
+ *
+ * Last updated
  * @author Herbert Lange
- * @version 20230105
+ * @version 20240405
  */
 public abstract class Visualizer implements CorpusFunction {
 
@@ -50,7 +52,7 @@ public abstract class Visualizer implements CorpusFunction {
 
     CorpusData cd;
     Report report;
-    Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<Class<? extends CorpusData>>();
+    Collection<Class<? extends CorpusData>> IsUsableFor = new ArrayList<>();
     final String function;
     Boolean canfix = false;
 
@@ -63,7 +65,6 @@ public abstract class Visualizer implements CorpusFunction {
      * Manually set the HTML content of the visualization
      *
      * @param c content to be set as HTML of the visualization
-     * @return
      */
     public void setHTML(String c) {
         html = c;
@@ -72,7 +73,6 @@ public abstract class Visualizer implements CorpusFunction {
     /**
      * Get the HTML content of the visualization
      *
-     * @param
      * @return the HTML content of the visualization
      */
     public String getHTML() {
@@ -85,7 +85,6 @@ public abstract class Visualizer implements CorpusFunction {
      *
      * @param recordingId path/URL to the recording file
      * @param recordingType type of the recording (e.g. wav, mp3, mpg, webm)
-     * @return
      */
     public void setMedia(String recordingId, String recordingType) {
 
@@ -113,8 +112,6 @@ public abstract class Visualizer implements CorpusFunction {
     /**
      * remove content from media element in the HTML content of the
      * visualization
-     *
-     * @return
      */
     public void removeMedia() {
 
@@ -127,28 +124,13 @@ public abstract class Visualizer implements CorpusFunction {
         report = new Report();
         try {
             report = function(cd);
-        } catch (JDOMException jdome) {
+        } catch (JDOMException | SAXException jdome) {
             report.addException(function, jdome, cd, "Unknown parsing error");
-        } catch (SAXException saxe) {
-            report.addException(function, saxe, cd, "Unknown parsing error");
-        } catch (IOException ioe) {
+        } catch (IOException | JexmaraldaException | NoSuchAlgorithmException | ClassNotFoundException |
+                 XPathExpressionException | TransformerException | ParserConfigurationException | FSMException ioe) {
             report.addException(function, ioe, cd, "File reading error");
-        } catch (FSMException ex) {
-            report.addException(function, ex, cd, "File reading error");
         } catch (URISyntaxException ex) {
             report.addException(function, ex, cd, "File reading erro");
-        } catch (ParserConfigurationException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (TransformerException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (XPathExpressionException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (ClassNotFoundException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (NoSuchAlgorithmException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (JexmaraldaException ex) {
-            report.addException(function, ex, cd, "File reading error");
         }
 
         return report;
@@ -165,28 +147,13 @@ public abstract class Visualizer implements CorpusFunction {
         report = new Report();
         try {
             report = function(c);
-        } catch (JexmaraldaException je) {
+        } catch (JexmaraldaException | SAXException | JDOMException je) {
             report.addException(function, je, cd, "Unknown parsing error");
-        } catch (JDOMException jdome) {
-            report.addException(function, jdome, cd, "Unknown parsing error");
-        } catch (SAXException saxe) {
-            report.addException(function, saxe, cd, "Unknown parsing error");
-        } catch (IOException ioe) {
+        } catch (IOException | NoSuchAlgorithmException | ClassNotFoundException | XPathExpressionException |
+                 TransformerException | ParserConfigurationException | FSMException ioe) {
             report.addException(function, ioe, cd, "File reading error");
-        } catch (FSMException ex) {
-            report.addException(function, ex, cd, "File reading error");
         } catch (URISyntaxException ex) {
             report.addException(function, ex, cd, "File reading erro");
-        } catch (ParserConfigurationException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (TransformerException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (XPathExpressionException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (ClassNotFoundException ex) {
-            report.addException(function, ex, cd, "File reading error");
-        } catch (NoSuchAlgorithmException ex) {
-            report.addException(function, ex, cd, "File reading error");
         }
 
         return report;
@@ -201,18 +168,12 @@ public abstract class Visualizer implements CorpusFunction {
     //TODO
     public abstract Report function(CorpusData cd) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException;
 
-    ;
-
     public abstract Report function(Corpus c) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException;
-
-    ;
 
     public abstract Collection<Class<? extends CorpusData>> getIsUsableFor();
 
     public void setIsUsableFor(Collection<Class<? extends CorpusData>> cdc) {
-        for (Class<? extends CorpusData> cl : cdc) {
-            IsUsableFor.add(cl);
-        }
+        IsUsableFor.addAll(cdc);
     }
 
     @Override
@@ -227,6 +188,6 @@ public abstract class Visualizer implements CorpusFunction {
 
     @Override
     public Map<String, String> getParameters() {
-        return Collections.EMPTY_MAP;
+        return (Map<String,String>) Collections.EMPTY_MAP;
     }
 }

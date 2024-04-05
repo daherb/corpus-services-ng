@@ -20,6 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Logger;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
@@ -35,8 +36,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Document;
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
 import org.reflections.Reflections;
 import org.reflections.util.ConfigurationBuilder;
 import org.xml.sax.SAXException;
@@ -46,8 +47,10 @@ import org.xml.sax.SAXException;
  * Corpus Function on a corpus in a main method.
  *
  * @author fsnv625
+ *
+ * Last updated
  * @author Herbert Lange
- * @version 20230105
+ * @version 20240405
  */
 public class CorpusMagician {
 
@@ -722,8 +725,8 @@ public class CorpusMagician {
                         Reflections reflections = new Reflections(new ConfigurationBuilder().forPackages(corpusFunctionPackages));
                         boolean checkFunctionName = false;
                         // Get all classes derived from CorpusData
-                        for (Class cf : reflections.getSubTypesOf(CorpusFunction.class)) {
-                            
+                        for (Class<? extends CorpusFunction> cf : reflections.getSubTypesOf(CorpusFunction.class)) {
+                            Logger.getGlobal().info("Scanning " + cf.getName());
                             if (cf.getName().toLowerCase().endsWith(function.toLowerCase()) &&
                                     Arrays.asList(corpusFunctionPackages).contains(cf.getPackage().getName())) {
                                 try {

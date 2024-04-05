@@ -1,91 +1,95 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.uni_hamburg.corpora</groupId>
-    <artifactId>corpus-services-ng</artifactId>
-    <version>1.0</version>
-    <packaging>jar</packaging>
+	<groupId>de.uni_hamburg.corpora</groupId>
+	<artifactId>corpus-services-ng</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
 
-    <name>corpus-services-ng</name>
-    <url>http://maven.apache.org</url>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
-                <configuration>
-                    <source>18</source>
-                    <target>18</target>
-                </configuration>
-            </plugin>
-            <!--
-            https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven
+	<name>corpus-services-ng</name>
+	<url>http://maven.apache.org</url>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.12.0</version>
+				<configuration>
+					<source>18</source>
+					<target>18</target>
+				</configuration>
+			</plugin>
+			<!--
+			https://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven
             -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>de.uni_hamburg.corpora.CorpusMagician</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-            </plugin>
-            <!-- Doxygen plugin -->
-            <plugin>
-                <groupId>com.soebes.maven.plugins</groupId>
-                <artifactId>doxygen-maven-plugin</artifactId>
-                <version>1.1.0</version>
-                <configuration>
-                    <quiet>false</quiet>
-                    <projectName>${project.artifactId}</projectName>
-                    <projectNumber>${project.version}</projectNumber>
-                    <optimizeOutputJava>true</optimizeOutputJava>
-                    <extractAll>true</extractAll>
-                    <extractStatic>true</extractStatic>
-                    <recursive>true</recursive>
-                    <exclude>.git</exclude>
-                    <recursive>true</recursive>
-                    <umlLook>true</umlLook>
-                    <!--haveGraph>true</haveGraph-->
-                    <generateLatex>false</generateLatex>
-                    <generateHtml>true</generateHtml>
-                    <outputDirectory>${basedir}/doc</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>${mainClass}</mainClass>
-                    <!-- mainClass>de.uni_hamburg.corpora.validation.quest.RefcoChecker</mainClass -->
-                    <!-- mainClass>de.uni_hamburg.corpora.validation.EXMARaLDAValidatorChecker</mainClass-->
-                    <!--mainClass>de.uni_hamburg.corpora.utilities.MediaFileChecker</mainClass-->
-                </configuration>
-            </plugin>
-            <!-- plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>de.uni_hamburg.corpora.CorpusMagician</mainClass>
+						</manifest>
+					</archive>
+					<descriptors>
+						<descriptor>src/assembly/jar.xml</descriptor>
+					</descriptors>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
+			</plugin>
+			<!-- Doxygen plugin -->
+			<plugin>
+				<groupId>com.soebes.maven.plugins</groupId>
+				<artifactId>doxygen-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<quiet>false</quiet>
+					<projectName>${project.artifactId}</projectName>
+					<projectNumber>${project.version}</projectNumber>
+					<optimizeOutputJava>true</optimizeOutputJava>
+					<extractAll>true</extractAll>
+					<extractStatic>true</extractStatic>
+					<recursive>true</recursive>
+					<exclude>.git</exclude>
+					<recursive>true</recursive>
+					<umlLook>true</umlLook>
+					<!--haveGraph>true</haveGraph-->
+					<generateLatex>false</generateLatex>
+					<generateHtml>true</generateHtml>
+					<outputDirectory>${basedir}/doc</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>${mainClass}</mainClass>
+					<!--
+					mainClass>de.uni_hamburg.corpora.validation.quest.RefcoChecker</mainClass -->
+					<!--
+					mainClass>de.uni_hamburg.corpora.validation.EXMARaLDAValidatorChecker</mainClass-->
+					<!--mainClass>de.uni_hamburg.corpora.utilities.MediaFileChecker</mainClass-->
+				</configuration>
+			</plugin>
+			<!-- plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>4.8.1</version>
@@ -98,230 +102,287 @@
                     </execution>
                 </executions>
             </plugin -->
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/java/de/uni_hamburg/corpora/validation/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java/de/uni_hamburg/corpora/visualization/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java/de/uni_hamburg/corpora/conversion/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java/de/uni_hamburg/corpora/swing/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java/de/uni_hamburg/corpora/utilities/resources</directory>
-            </resource>
-            <resource>
-                <directory>src/main/java/de/uni_hamburg/corpora/validation/quest/resources</directory>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/java/de/uni_hamburg/corpora/utilities/resources</directory>
-            </testResource>
-            <testResource>
-                <directory>src/test/java/de/uni_hamburg/corpora/resources</directory>
-            </testResource>
-            <testResource>
-                <directory>src/test/java/de/uni_hamburg/corpora/validation/quest/resources</directory>
-            </testResource>
-        </testResources> 
-    </build>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>de.uni_hamburg.corpora.CorpusMagician</mainClass>
-    </properties>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>
+					src/main/java/de/uni_hamburg/corpora/validation/resources</directory>
+			</resource>
+			<resource>
+				<directory>
+					src/main/java/de/uni_hamburg/corpora/visualization/resources</directory>
+			</resource>
+			<resource>
+				<directory>
+					src/main/java/de/uni_hamburg/corpora/conversion/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/java/de/uni_hamburg/corpora/swing/resources</directory>
+			</resource>
+			<resource>
+				<directory>
+					src/main/java/de/uni_hamburg/corpora/utilities/resources</directory>
+			</resource>
+			<resource>
+				<directory>
+					src/main/java/de/uni_hamburg/corpora/validation/quest/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>
+					src/test/java/de/uni_hamburg/corpora/utilities/resources</directory>
+			</testResource>
+			<testResource>
+				<directory>src/test/java/de/uni_hamburg/corpora/resources</directory>
+			</testResource>
+			<testResource>
+				<directory>
+					src/test/java/de/uni_hamburg/corpora/validation/quest/resources</directory>
+			</testResource>
+		</testResources>
+	</build>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mainClass>de.uni_hamburg.corpora.CorpusMagician</mainClass>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.exmaralda</groupId>
-            <artifactId>EXMARaLDA</artifactId>
-            <!-- version>Preview-20201130</version-->
-            <version>1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>nl.mpi</groupId>
-            <artifactId>ELAN</artifactId>
-            <version>6.2</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom</artifactId>
-            <version>1.1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>12.3</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
-            <version>1.1.6</version>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.32</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.exmaralda</groupId>
+			<artifactId>EXMARaLDA</artifactId>
+			<!-- version>Preview-20201130</version-->
+			<version>1.0</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>nl.mpi</groupId>
+			<artifactId>ELAN</artifactId>
+			<version>6.2</version>
+			<type>jar</type>
+		</dependency>
+		<!-- Only necessary for GATListHTML -->
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sf.saxon</groupId>
+			<artifactId>Saxon-HE</artifactId>
+			<version>12.3</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1.6</version>
+		</dependency>
 
 
-        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli for validator CLI -->
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>1.3.1</version>
-        </dependency>
+		<!-- https://mvnrepository.com/artifact/commons-cli/commons-cli for
+		validator CLI -->
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.6.0</version>
+		</dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
-<!--        <dependency>
+		<!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+		<!--        <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>-->
 
 
-        <!-- https://mvnrepository.com/artifact/org.ini4j/ini4j testing using ini as configuration file format-->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.ini4j</groupId>
-            <artifactId>ini4j</artifactId>
-            <version>0.5.4</version>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.7</version>
+		</dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
-        for validator servlet e.g. -->
+		<!-- https://mvnrepository.com/artifact/org.ini4j/ini4j testing using
+		ini as configuration file format-->
+		<dependency>
+			<groupId>org.ini4j</groupId>
+			<artifactId>ini4j</artifactId>
+			<version>0.5.4</version>
+		</dependency>
+
+		<!--         https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+        for validator servlet e.g. 
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
+		<!--
+		https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.1</version>
+			<!-- <scope>provided</scope> -->
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api -->
+		<dependency>
+			<groupId>jakarta.activation</groupId>
+			<artifactId>jakarta.activation-api</artifactId>
+			<version>2.1.2</version>
+		</dependency>
 
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>4.0.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.10.2</version>
+		</dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.11</version>
-        </dependency>
+		<!-- https://github.com/phax/ph-schematron -->
+		<dependency>
+			<groupId>com.helger</groupId>
+			<artifactId>ph-schematron</artifactId>
+			<version>5.6.5</version>
+		</dependency>
 
-        <!-- https://github.com/phax/ph-schematron -->
-        <dependency>
-            <groupId>com.helger</groupId>
-            <artifactId>ph-schematron</artifactId>
-            <version>5.6.5</version>
-        </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.6</version>
-        </dependency>
-        <!--
-        https://stackoverflow.com/questions/62006284/noclassdeffounderror-org-w3c-dom-ls-documentls-issue-occurring-only-on-deploy
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.6</version>
+		</dependency>
+		<!--
+		https://stackoverflow.com/questions/62006284/noclassdeffounderror-org-w3c-dom-ls-documentls-issue-occurring-only-on-deploy
         -->
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.11.0</version>
-        </dependency>
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xerces</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>4.2</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.languagetool</groupId>
-            <artifactId>language-de</artifactId>
-            <version>4.2</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.22</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/preflight -->
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>preflight</artifactId>
-            <version>2.0.22</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>javax.activation-api</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jmimemagic</groupId>
-            <artifactId>jmimemagic</artifactId>
-            <version>0.1.3</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-jsonSchema -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jsonSchema</artifactId>
-            <version>2.13.2</version>
-        </dependency>
-        <dependency>
-        <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.13.3</version>
-            <type>jar</type>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-compiler -->
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>2.13.8</version>
-        </dependency>
-        <dependency>
-            <groupId>de.ids-mannheim.lza</groupId>
-            <artifactId>invenio-java-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.loc</groupId>
-            <artifactId>bagit</artifactId>
-            <version>5.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>de.ids-mannheim.lza</groupId>
-            <artifactId>datacite-java-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xercesImpl</artifactId>
+			<version>2.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xerces</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>4.2</version>
+			<type>jar</type>
+		</dependency>
+		<!--        <dependency>-->
+		<!--            <groupId>org.languagetool</groupId>-->
+		<!--            <artifactId>language-de</artifactId>-->
+		<!--            <version>4.2</version>-->
+		<!--        </dependency>-->
+		<dependency>
+			<groupId>org.languagetool</groupId>
+			<artifactId>languagetool</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>2.0.22</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/preflight -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>preflight</artifactId>
+			<version>2.0.22</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>javax.activation-api</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jmimemagic</groupId>
+			<artifactId>jmimemagic</artifactId>
+			<version>0.1.3</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-jsonSchema -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jsonSchema</artifactId>
+			<version>2.16.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.16.0</version>
+			<type>jar</type>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-compiler -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>2.13.8</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ids-mannheim.lza</groupId>
+			<artifactId>invenio-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>gov.loc</groupId>
+			<artifactId>bagit</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ids-mannheim.lza</groupId>
+			<artifactId>datacite-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ids-mannheim.lza</groupId>
+			<artifactId>xml-magic</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>33.0.0-jre</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.jdom</groupId>
+    		<artifactId>jdom2</artifactId>
+    		<version>2.0.6.1</version>
+		</dependency>
+	</dependencies>
 </project>

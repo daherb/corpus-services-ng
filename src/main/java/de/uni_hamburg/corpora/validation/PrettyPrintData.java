@@ -29,7 +29,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Node;
@@ -43,6 +43,10 @@ import org.xml.sax.SAXException;
  *
  * This class takes XML corpusdata and formats it in the same way to avoid merge
  * conflicts.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class PrettyPrintData extends Checker implements CorpusFunction {
 

@@ -2,20 +2,22 @@ package de.uni_hamburg.corpora.validation.quest;
 
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.quest.XMLTools;
-import org.jdom.Attribute;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 
 import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210728
- *
  * Checker for the generic metadata within an IMDI corpus
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240405
  */
 public class CMDIGenericMetadataChecker extends GenericMetadataChecker implements CorpusFunction {
 
@@ -25,9 +27,9 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
     public CMDIGenericMetadataChecker(Properties properties) throws FileNotFoundException {
         super(properties);
         if (properties != null && !properties.isEmpty() && properties.containsKey("cmdi-criteria-file"))
-            setCriteriaFile(properties.getProperty("cmdi-criteria-file"));
+        	setUp = setCriteria(properties.getProperty("cmdi-criteria-file"));
         else {
-            loadCriteriaResource("cmdi-blam.csv");
+        	setUp = setCriteria("cmdi-blam.csv");
             // loadCriteriaResource("cmdi-sign.csv");
         }
     }
@@ -64,32 +66,27 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
         Report report = new Report();
         // Workaround for default namespace "" kind of following
         // http://www.edankert.com/defaultnamespaces.html
-        try {
-            XPath xpath = XPath.newInstance(locator);
-            xpath.addNamespace(Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/"));
-            List<Object> nodes = xpath.selectNodes(((CmdiData) cd).getJdom());
-            // Convert nodes to string values
-            for (Object o : nodes) {
-                // Get the value of the node, either from an element or an attribute
-                if (o instanceof Element)
-                    values.add(XMLTools.showAllText((Element) o));
-                else if (o instanceof Attribute)
-                    values.add(((Attribute) o).getValue());
+        XPathBuilder<?> xpb = new XPathBuilder<>(locator, Filters.element().or(Filters.attribute()).or(Filters.fboolean()));
+        xpb.setNamespace(Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/"));
+        List<?> nodes = xpb.compileWith(new JaxenXPathFactory()).evaluate(((CmdiData) cd).getJdom());
+        // Convert nodes to string values
+        for (Object o : nodes) {
+            // Get the value of the node, either from an element or an attribute
+            if (o instanceof Element)
+                values.add(XMLTools.showAllText((Element) o));
+            else if (o instanceof Attribute)
+                values.add(((Attribute) o).getValue());
                 // Result of a XPath predicate -> only keep if the result is true
                 // This allows e.g. predicates where the counts of elements can be compared
-                else if (o instanceof Boolean) {
-                    if ((Boolean) o)
-                        values.add(((Boolean) o).toString());
-                }
-                else {
-                    // Error if it is neither element nor attribute
-                    report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
-                    break;
-                }
+            else if (o instanceof Boolean) {
+                if ((Boolean) o)
+                    values.add(((Boolean) o).toString());
             }
-        }
-        catch (JDOMException e) {
-            e.printStackTrace();
+            else {
+                // Error if it is neither element nor attribute
+                report.addCritical(getFunction(), cd, "Unexpected object type: " + o.getClass().getName());
+                break;
+            }
         }
         return report;
     }

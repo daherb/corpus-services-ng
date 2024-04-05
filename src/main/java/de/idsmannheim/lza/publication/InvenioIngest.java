@@ -15,7 +15,6 @@ import de.uni_hamburg.corpora.publication.Publisher;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,12 +29,16 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.lang3.time.StopWatch;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
  * Class using the REST API to publish a corpus to Invenio
  * @author Herbert Lange <lange@ids-mannheim.de>
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class InvenioIngest extends Publisher implements CorpusFunction {
 

@@ -15,10 +15,10 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -38,6 +38,10 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
  * Provides access to basic transcriptions as a data type that can be read and
  * written HZSK corpus services. Naming might change, depending on what it ends
  * up being implemented as. It seems to me like a bridge now, or just aggregate.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class EXMARaLDATranscriptionData implements CorpusData, ContentData, XMLData {
 

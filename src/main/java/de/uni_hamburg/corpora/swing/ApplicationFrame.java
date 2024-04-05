@@ -21,9 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -34,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -47,31 +44,22 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
-import org.exmaralda.folker.utilities.HTMLDisplayDialog;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-//import org.exmaralda.common.jdomutilities.IOUtilities;
-//import org.exmaralda.folker.utilities.HTMLDisplayDialog;
-//import org.exmaralda.partitureditor.fsm.FSMException;
-//import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
-//import org.exmaralda.partitureditor.jexmaralda.convert.CHATConverter;
-//import org.exmaralda.partitureditor.jexmaralda.convert.ELANConverter;
-//import org.exmaralda.partitureditor.jexmaralda.convert.StylesheetFactory;
-//import org.exmaralda.partitureditor.jexmaralda.convert.TEIConverter;
-//import org.exmaralda.partitureditor.jexmaralda.convert.TranscriberConverter;
-//import org.exmaralda.partitureditor.partiture.BrowserLauncher;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.xml.sax.SAXException;
 
 /**
  *
  * @author thomas
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ApplicationFrame extends javax.swing.JFrame {
 

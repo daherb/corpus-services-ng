@@ -12,7 +12,7 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -22,6 +22,10 @@ import org.xml.sax.SAXException;
  * A class that checks IDs in speaker tables of EXB files correspond to 
  * respective abbreviations. If there are mismatches, it corrects them.
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbSpeakerTableChecker extends Checker implements CorpusFunction {
     

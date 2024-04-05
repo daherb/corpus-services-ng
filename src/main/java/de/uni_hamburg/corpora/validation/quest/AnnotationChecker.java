@@ -5,11 +5,13 @@ import de.uni_hamburg.corpora.utilities.quest.FrequencyList;
 import de.uni_hamburg.corpora.validation.Checker;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,8 +26,10 @@ import java.util.stream.Collectors;
 
 /**
  * Abstract annotation checker class
- * @author bba1792, Dr. Herbert Lange
- * @version 20220905
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 abstract class AnnotationChecker extends Checker implements CorpusFunction {
 
@@ -90,10 +94,11 @@ abstract class AnnotationChecker extends Checker implements CorpusFunction {
         List<String> tags = new ArrayList<>();
         try {
             Document dom = sb.build(this.getClass().getClassLoader().getResourceAsStream(fileName));
-            List<Attribute> names = Collections.checkedList(XPath.newInstance("//tag/@name").selectNodes(dom),
-                    Attribute.class);
+
+            List<Attribute> names = new XPathBuilder<Attribute>("//tag/@name", Filters.attribute())
+                    .compileWith(new JaxenXPathFactory()).evaluate(dom);
             // Extract attribute values and add them to the tags list
-            tags.addAll(names.stream().map(Attribute::getValue).collect(Collectors.toList()));
+            tags.addAll(names.stream().map(Attribute::getValue).toList());
         } catch (IOException | JDOMException e) {
             e.printStackTrace();
         }

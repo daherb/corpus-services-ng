@@ -4,9 +4,12 @@ import de.uni_hamburg.corpora.validation.Checker;
 import de.uni_hamburg.corpora.*;
 import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.xpath.XPath;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.xpath.XPathBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,7 +20,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -27,8 +29,9 @@ import java.util.stream.Collectors;
 /**
  * Extracts a list of referenced files from a corpus
  *
- * @author bba1792, Dr. Herbert Lange
- * @version 20220318
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class LinkedFileChecker extends Checker implements CorpusFunction {
 
@@ -115,18 +118,19 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
         Set<String> part1 = new HashSet<>(Arrays.asList("Transcription", "transcription", "Media",
                 "media"));
         Set<String> part2 = new HashSet<>(Arrays.asList("NSLink", "nslink"));
-        List<Element> fileRefs =
-                    XPath.newInstance(Sets.cartesianProduct(part1,part2)
+        XPathExpression<Element> xpath = new XPathBuilder<Element>(Sets.cartesianProduct(part1,part2)
                 .stream().map((l) -> "//" + String.join("/",l))
-                .collect(Collectors.joining("|"))).selectNodes(cd.getJdom());
+                .collect(Collectors.joining("|")), new ElementFilter()).compileWith(new JaxenXPathFactory());
+        List<Element> fileRefs =
+        		xpath.evaluate(cd.getJdom());
         part1 = new HashSet<>(Arrays.asList("File", "file"));
         part2 = new HashSet<>(Arrays.asList("RelPath", "Relpath", "relPath","relpath"));
-        fileRefs.addAll(XPath.newInstance(Sets.cartesianProduct(part1,part2)
+        xpath = new XPathBuilder<Element>(Sets.cartesianProduct(part1,part2)
                 .stream().map((l) -> "//" + String.join("/",l))
-                .collect(Collectors.joining("|"))).selectNodes(cd.getJdom()));
+                .collect(Collectors.joining("|")), new ElementFilter()).compileWith(new JaxenXPathFactory());
+        fileRefs.addAll(xpath.evaluate(cd.getJdom()));
         for (Element file : fileRefs) {
-             File tmpFile = new File(new URL(cd.getParentURL() +
-                    file.getText()).toURI());
+             File tmpFile = new File(new URI(cd.getParentURL() + file.getText()));
             URI fileUri = tmpFile.toURI();
             files.add(fileUri);
         }
@@ -144,11 +148,11 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
      */
     private List<URI> getReferencedFiles(EXMARaLDATranscriptionData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
+        XPathExpression<Element> xpath = new XPathBuilder<Element>("//referenced-file", new ElementFilter()).compileWith(new JaxenXPathFactory());
         List<Element> referencedFiles =
-                new ArrayList<>(XPath.newInstance("//referenced-file").selectNodes(cd.getJdom()));
+                new ArrayList<>(xpath.evaluate(cd.getJdom()));
         for (Element file : referencedFiles) {
-            File tmpFile = new File(new URL(cd.getParentURL() +
-                    file.getAttribute("url").getValue()).toURI());
+            File tmpFile = new File(new URI(cd.getParentURL() + file.getAttribute("url").getValue()));
             URI fileUri = tmpFile.toURI();
             files.add(fileUri);
         }
@@ -166,12 +170,11 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
      */
     private List<URI> getReferencedFiles(EXMARaLDASegmentedTranscriptionData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
+        XPathExpression<Element> xpath = new XPathBuilder<Element>("//referenced-file", new ElementFilter()).compileWith(new JaxenXPathFactory());
         List<Element> referencedFiles =
-                new ArrayList<>(XPath.newInstance("//referenced-file").selectNodes(cd.getJdom()));
+                new ArrayList<>(xpath.evaluate(cd.getJdom()));
         for (Element file : referencedFiles) {
-            File tmpFile = new File(new URL(cd.getParentURL() +
-                    file.getAttribute("url").getValue()).toURI());
-            URI fileUri = tmpFile.toURI();
+            URI fileUri = new URI(cd.getParentURL() + file.getAttribute("url").getValue());
             files.add(fileUri);
         }
         return files;
@@ -188,14 +191,13 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
      */
     private List<URI> getReferencedFiles(ELANData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
+        XPathExpression<Element> xpath = new XPathBuilder<Element>("//MEDIA_DESCRIPTOR", new ElementFilter()).compileWith(new JaxenXPathFactory());
         List<Element> referencedFiles =
-                new ArrayList<>(XPath.newInstance("//MEDIA_DESCRIPTOR").selectNodes(cd.getJdom()));
+                new ArrayList<>(xpath.evaluate(cd.getJdom()));
         for (Element file : referencedFiles) {
             logger.info(file.toString());
             if (file.getAttributeValue("RELATIVE_MEDIA_URL") != null) {
-                File tmpFile = new File(new URL(cd.getParentURL() +
-                        file.getAttributeValue("RELATIVE_MEDIA_URL")).toURI());
-                URI fileUri = tmpFile.toURI();
+            	URI fileUri = new URI(cd.getParentURL() + file.getAttributeValue("RELATIVE_MEDIA_URL"));
                 files.add(fileUri);
             }
         }
@@ -213,11 +215,10 @@ public class LinkedFileChecker extends Checker implements CorpusFunction {
      */
     private List<URI> getReferencedFiles(IMDIData cd) throws JDOMException, MalformedURLException, URISyntaxException {
         ArrayList<URI> files = new ArrayList<>();
-        List<Element> referencedFiles = XPath.newInstance("//MEDIA_DESCRIPTOR").selectNodes(cd.getJdom());
+        XPathExpression<Element> xpath = new XPathBuilder<Element>("//MEDIA_DESCRIPTOR", new ElementFilter()).compileWith(new JaxenXPathFactory());
+        List<Element> referencedFiles = xpath.evaluate(cd.getJdom());
         for (Element file : referencedFiles) {
-            File tmpFile = new File(new URL(cd.getParentURL() +
-                    file.getAttribute("RELATIVE_MEDIA_URL").getValue()).toURI());
-            URI fileUri = tmpFile.toURI();
+            URI fileUri = new URI(cd.getParentURL() + file.getAttribute("RELATIVE_MEDIA_URL").getValue());
             files.add(fileUri);
         }
         return files;

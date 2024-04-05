@@ -17,7 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,6 +27,10 @@ import org.w3c.dom.NodeList;
 
 /**
  * A class that checks for mixed scripts (e.g. Cyrillic/Latin) in the transcription.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbScriptMixChecker extends Checker implements CorpusFunction {
     ArrayList<String> lsTiersToCheck = new ArrayList<>(

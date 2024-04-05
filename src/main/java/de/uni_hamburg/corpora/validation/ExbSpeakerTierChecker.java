@@ -13,7 +13,7 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,6 +23,10 @@ import org.xml.sax.SAXException;
  * A class that checks speaker attributes in tiers of EXB files correspond to 
  * values in the speaker table. For files with only one speaker, it corrects them.
  * @author bay7303
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ExbSpeakerTierChecker extends Checker implements CorpusFunction {
     

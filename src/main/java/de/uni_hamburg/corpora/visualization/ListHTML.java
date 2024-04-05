@@ -14,8 +14,6 @@ import de.uni_hamburg.corpora.utilities.TypeConverter;
 import de.uni_hamburg.corpora.utilities.XSLTransformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.exmaralda.common.corpusbuild.FileIO;
-import org.exmaralda.common.jdomutilities.IOUtilities;
 import org.exmaralda.partitureditor.jexmaralda.ListTranscription;
 import org.exmaralda.partitureditor.jexmaralda.SegmentedTranscription;
 import org.exmaralda.partitureditor.jexmaralda.segment.CHATSegmentation;
@@ -23,10 +21,13 @@ import org.exmaralda.partitureditor.jexmaralda.segment.GATSegmentation;
 import org.exmaralda.partitureditor.jexmaralda.segment.GenericSegmentation;
 import org.exmaralda.partitureditor.jexmaralda.segment.IPASegmentation;
 import org.exmaralda.partitureditor.jexmaralda.segment.SegmentedToListInfo;
-import org.jdom.Document;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
 import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -43,6 +44,9 @@ import org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation;
  *
  * This class creates an html visualization in the List format from an exb.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240322
  */
 public class ListHTML extends Visualizer {
 
@@ -157,8 +161,8 @@ public class ListHTML extends Visualizer {
                     hS.pathToExternalFSM = path2ExternalFSM;
                 }
                 ListTranscription lt = hS.BasicToUtteranceList(basicTranscription);
-                final Document listXML = FileIO.readDocumentFromString(lt.toXML());
-                list = IOUtilities.documentToString(listXML);
+                final Document listXML = new SAXBuilder().build(new StringReader(lt.toXML()));
+                list = new XMLOutputter().outputString(listXML);
                 break;
             }
             case "CHAT": {
@@ -167,8 +171,8 @@ public class ListHTML extends Visualizer {
                     cS.pathToExternalFSM = path2ExternalFSM;
                 }
                 ListTranscription lt = cS.BasicToUtteranceList(basicTranscription);
-                final Document listXML = FileIO.readDocumentFromString(lt.toXML());
-                list = IOUtilities.documentToString(listXML);
+                final Document listXML =  new SAXBuilder().build(new StringReader(lt.toXML()));
+                list = new XMLOutputter().outputString(listXML);
                 break;
             }
             case "GAT": {
@@ -177,8 +181,8 @@ public class ListHTML extends Visualizer {
                     gS.pathToExternalFSM = path2ExternalFSM;
                 }
                 ListTranscription lt = gS.BasicToIntonationUnitList(basicTranscription);
-                final Document listXML = FileIO.readDocumentFromString(lt.toXML());
-                list = IOUtilities.documentToString(listXML);
+                final Document listXML =  new SAXBuilder().build(new StringReader(lt.toXML()));
+                list = new XMLOutputter().outputString(listXML);
                 break;
             }
             case "IPA": {
@@ -188,8 +192,8 @@ public class ListHTML extends Visualizer {
                 }
                 SegmentedTranscription st = ipaS.BasicToSegmented(basicTranscription);
                 ListTranscription lt = st.toListTranscription(new SegmentedToListInfo(st, SegmentedToListInfo.TURN_SEGMENTATION));
-                final Document listXML = FileIO.readDocumentFromString(lt.toXML());
-                list = IOUtilities.documentToString(listXML);
+                final Document listXML =  new SAXBuilder().build(new StringReader(lt.toXML()));
+                list = new XMLOutputter().outputString(listXML);
                 break;
             }
             case "Generic": {
@@ -199,8 +203,8 @@ public class ListHTML extends Visualizer {
                 }
                 SegmentedTranscription st = genS.BasicToSegmented(basicTranscription);
                 ListTranscription lt = st.toListTranscription(new SegmentedToListInfo(st, SegmentedToListInfo.TURN_SEGMENTATION));
-                final Document listXML = FileIO.readDocumentFromString(lt.toXML());
-                list = IOUtilities.documentToString(listXML);
+                final Document listXML =  new SAXBuilder().build(new StringReader(lt.toXML()));
+                list = new XMLOutputter().outputString(listXML);
                 break;
             }
             default:
