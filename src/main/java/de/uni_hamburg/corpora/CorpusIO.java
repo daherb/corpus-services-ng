@@ -1,5 +1,6 @@
 package de.uni_hamburg.corpora;
 
+import de.idsmannheim.lza.xmlmagic.XmlMagic;
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
 
@@ -138,8 +139,16 @@ public class CorpusIO {
             } else {
                 // TODO this method does not work properly e.g. for the suffix xml. Curent workaround: treat xml separately
                 if (url.getPath().toLowerCase().endsWith(".xml")) {
-                    out.println("Read " + url);
-                    return new UnspecifiedXMLData(url);
+                	SAXBuilder sb = new SAXBuilder();
+                	// TODO implement this properly
+                	try {
+                		XmlMagic magic = new XmlMagic(sb.build(url)); 
+                		out.println("Read " + url);
+                		
+                	}
+                	finally {
+                		return new UnspecifiedXMLData(url);
+                	}
                 }
                 for (Class<? extends CorpusData> c : clcds) {
                     try {

@@ -8,7 +8,7 @@ module corpus_services_ng {
 
     requires transitive invenio.java.api;
     requires transitive datacite.java.api;
-
+    requires transitive xml.magic;
 //    requires java.xml.bind;
     requires jakarta.xml.bind;
     requires jakarta.activation;
