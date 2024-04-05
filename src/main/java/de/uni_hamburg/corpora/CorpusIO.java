@@ -304,12 +304,12 @@ public class CorpusIO {
                     if (Files.isDirectory(entry)) {
                         recursed.addAll(listFiles(entry, report));
                     }
-                    // Othwereise we check the file extension if we know it
+                    // Otherwise we check the file extension if we know it
                     // First getting the file name
                     String sentry = entry.getFileName().toString().toLowerCase();
                     // Getting all known extensions
                     Collection<String> allExts = getAllExtensions();
-                    // Check if eny of these extensions happens to be the final part of sentry
+                    // Check if any of these extensions happens to be the final part of sentry
                     // if yes we add the file to the list
                     if (allExts.stream().map(sentry::endsWith).reduce(Boolean::logicalOr).orElse(false)) {
                         recursed.add(entry.toUri().toURL());
