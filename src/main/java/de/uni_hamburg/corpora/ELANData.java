@@ -10,7 +10,6 @@ package de.uni_hamburg.corpora;
 
 import de.uni_hamburg.corpora.utilities.PrettyPrinter;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -32,7 +31,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -67,7 +65,7 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
             jdom = builder.build(url);
-            originalstring = new String(Files.readAllBytes(Paths.get(url.toURI())), StandardCharsets.UTF_8);
+            originalstring = Files.readString(Paths.get(url.toURI()));
             URI uri = url.toURI();
             URI parentURI = uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
             parenturl = parentURI.toURL();
@@ -172,8 +170,8 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             Attribute tier_id = tier.getAttribute("TIER_ID");
             assert tier_id != null : "Tier id is null";
             Element annotation_segment = null ;
-            for (Element e : (List<Element>) tier.getChildren()) {
-                for (Element ee : (List<Element>) e.getChildren()) {
+            for (Element e : tier.getChildren()) {
+                for (Element ee : e.getChildren()) {
                     if (XMLTools.showAllText(e).contains(normalizedToken)) {
                         annotation_segment = ee;
                         break;
@@ -182,19 +180,18 @@ public class ELANData implements CorpusData, ContentData, XMLData {
             }
             assert annotation_segment != null : "Annotation segment is null";
             String annotation_id = annotation_segment.getAttributeValue("ANNOTATION_ID");
-            if (annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
+            if (!annotation_segment.getName().equals("ALIGNABLE_ANNOTATION")) {
                 // do nothing
-            }
-            else if (annotation_segment.getName().equals("REF_ANNOTATION")) {
-                // Resolve reference first
-                assert annotation_segment != null : "Annotation segment is null after resolving reference";
-            }
-            else {
-                return new Location("Tier:" + tier_id.getValue() + "",
-                        "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID=") + "");
+                if (annotation_segment.getName().equals("REF_ANNOTATION")) {
+                    // Resolve reference first
                     annotation_segment =
                             new XPathBuilder<>(String.format("//ALIGNABLE_ANNOTATION[@ANNOTATION_ID=\"%s\"]",
                                     annotation_segment.getAttributeValue("ANNOTATION_REF")), Filters.element()).compileWith(xpathFactory).evaluateFirst(tier);
+                    assert annotation_segment != null : "Annotation segment is null after resolving reference";
+                } else {
+                    return new Location("Tier:" + tier_id.getValue(),
+                            "Segment:" + annotation_segment.getAttributeValue("ANNOTATION_ID="));
+                }
             }
             Attribute start_ref = annotation_segment.getAttribute("TIME_SLOT_REF1");
             Attribute end_ref = annotation_segment.getAttribute("TIME_SLOT_REF2");
@@ -208,7 +205,7 @@ public class ELANData implements CorpusData, ContentData, XMLData {
                     new XPathBuilder<>( String.format("//TIME_SLOT[@TIME_SLOT_ID=\"%s\"]/@TIME_VALUE",
                             end_ref.getValue()), Filters.attribute()).compileWith(xpathFactory).evaluateFirst(getJdom());
             assert end_time != null : "End time is null";
-            return new Location("Tier:" + tier_id.getValue() + "",
+            return new Location("Tier:" + tier_id.getValue(),
                     "Segment:" + annotation_id + ", Time:" +
                             DurationFormatUtils.formatDuration(start_time.getIntValue(), "mm:ss.SSSS") + "-" +
                             DurationFormatUtils.formatDuration(end_time.getIntValue(), "mm:ss.SSSS"));

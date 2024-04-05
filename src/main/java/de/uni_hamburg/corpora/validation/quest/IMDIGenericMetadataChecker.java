@@ -76,7 +76,7 @@ public class IMDIGenericMetadataChecker extends GenericMetadataChecker implement
         // http://www.edankert.com/defaultnamespaces.html
         XPathBuilder<?> xpb = new XPathBuilder<>(locator, Filters.attribute().or(Filters.fboolean()));
         xpb.setNamespace(Namespace.getNamespace("imdi", "http://www.mpi.nl/IMDI/Schema/IMDI"));
-        List<? extends Object> nodes =
+        List<?> nodes =
                 xpb.compileWith(new JaxenXPathFactory()).evaluate(((IMDIData) cd).getJdom());
         // Convert nodes to string values
         for (Object o : nodes) {

@@ -6,7 +6,7 @@ import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.exmaralda.partitureditor.jexmaralda.segment.HIATSegmentation;
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -61,7 +61,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
         URL fileUri = Paths.get(cd.getURL().toURI()).toAbsolutePath().toUri().toURL();
         BasicTranscription bt = new BasicTranscription();
         CorpusIO cio = new CorpusIO();
-        bt.BasicTranscriptionFromJDOMDocument(((EXMARaLDATranscriptionData) cio.readFileURL(fileUri)).getJdom());
+        bt.BasicTranscriptionFromString(cio.readFileURL(fileUri).toSaveableString());
         String[] duplicateTranscriptionTiers = bt.getDuplicateTranscriptionTiers();
         if (duplicateTranscriptionTiers.length > 0) {
             problem = true;
@@ -106,7 +106,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
                             missmatchTiers)}));
         }
         if (checkHIAT) {
-            Vector segmentationErrors = new HIATSegmentation().getSegmentationErrors(bt);
+            Vector<FSMException> segmentationErrors = new HIATSegmentation().getSegmentationErrors(bt);
             // TODO the exact reason and form of segmentation errors is not clear
             if (!segmentationErrors.isEmpty()) {
                 problem = true;
@@ -147,7 +147,7 @@ public class EXMARaLDAValidatorChecker extends Checker implements CorpusFunction
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report report = new Report();
         // Apply function for each supported file
-        Collection usable = this.getIsUsableFor();
+        Collection<Class<? extends CorpusData>> usable = this.getIsUsableFor();
         for (CorpusData cdata : c.getCorpusData()) {
             if (usable.contains(cdata.getClass())) {
                 report.merge(function(cdata, fix));

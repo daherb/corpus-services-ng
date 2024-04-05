@@ -6,7 +6,6 @@ import org.exmaralda.partitureditor.fsm.FSMException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
-import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathBuilder;
@@ -67,7 +66,7 @@ public class ELANFileReferenceChecker extends Checker implements CorpusFunction 
     public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
         Report stats = new Report();
         // Apply function for each supported file
-        Collection usable = this.getIsUsableFor();
+        Collection<Class<? extends CorpusData>> usable = this.getIsUsableFor();
         for (CorpusData cdata : c.getCorpusData()) {
             if (usable.contains(cdata.getClass())) {
                 stats.merge(function(cdata, fix));

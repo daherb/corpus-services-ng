@@ -49,7 +49,10 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Valid for TEI format (and XML)
-        return Arrays.asList(new Class[]{TEIData.class,UnspecifiedXMLData.class});
+        ArrayList<Class<? extends CorpusData>> list =new ArrayList<>();
+        list.add(TEIData.class);
+        list.add(UnspecifiedXMLData.class);
+        return list;
     }
 
 //    @Override
@@ -70,11 +73,12 @@ public class TEIGenericMetadataChecker extends GenericMetadataChecker implements
         Report report = new Report();
         // Workaround for default namespace "" kind of following
         // http://www.edankert.com/defaultnamespaces.html
-        XPathBuilder<Object> builder = new XPathBuilder<Object>(locator,Filters.fpassthrough());
+        XPathBuilder<Object> builder = new XPathBuilder<>(locator, Filters.fpassthrough());
         builder.setNamespace("tei", "http://www.tei-c.org/ns/1.0");
         XPathExpression<Object> xpath = builder.compileWith(new JaxenXPathFactory());
         List<Object> nodes = xpath.evaluate(((TEIData) cd).getJdom());
-        xpath = null;
+        // Might help freeing the data
+        // xpath = null;
         // Convert nodes to string values
         for (Object o : nodes) {
             // Get the value of the node, either from an element or an attribute

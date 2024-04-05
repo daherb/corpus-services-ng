@@ -62,7 +62,7 @@ public class ComaGenericMetadataChecker extends GenericMetadataChecker {
         Report report = new Report();
         // Workaround for default namespace "" kind of following
         // http://www.edankert.com/defaultnamespaces.html
-        XPathBuilder<Object> builder = new XPathBuilder<Object>(locator,Filters.fpassthrough());
+        XPathBuilder<Object> builder = new XPathBuilder<>(locator, Filters.fpassthrough());
         builder.setNamespace("schema", "¡http://www.w3.org/2001/XMLSchema-instance");
         XPathExpression<Object> xpath = builder.compileWith(new JaxenXPathFactory());
         

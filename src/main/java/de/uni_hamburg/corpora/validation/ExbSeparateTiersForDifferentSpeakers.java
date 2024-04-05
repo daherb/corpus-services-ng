@@ -7,6 +7,7 @@ package de.uni_hamburg.corpora.validation;
 
 import de.uni_hamburg.corpora.*;
 import de.uni_hamburg.corpora.utilities.TypeConverter;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -131,7 +132,6 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
                     for (Element ele : allTiers) {
                         String tierCategory = ele.getAttributeValue("category");
                         String tierName = tierCategory + "-" + speakerCode;
-                        String tierSp = speakerCode;
                         String tierType = ele.getAttributeValue("type");
                         //for the last speaker we don't have to create new tiers, simply fixing the attributes will do
                         if (iter == keys) {
@@ -158,7 +158,7 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
                                 Element newTier = new Element("tier-temp"); //tier-temp instead of tier to prevent overwriting
                                 newTier.setAttribute("id", tierName);
                                 newTier.setAttribute("display-name", tierName);
-                                newTier.setAttribute("speaker", tierSp);
+                                newTier.setAttribute("speaker", speakerCode);
                                 newTier.setAttribute("category", tierCategory);
                                 newTier.setAttribute("type", tierType);
                                 for (Element eee : elementsToCopy) {
@@ -215,77 +215,8 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
                 Element formatTable = formatTableXpath.evaluateFirst(doc);
                 formatTable.removeChildren("tier-format");
                 for (String name : tierNames) {
-                    Element tierFormat = new Element("tier-format");
-                    tierFormat.setAttribute("tierref", name);
-                    
-                    Element rowHeight = new Element ("property");
-                    rowHeight.setAttribute("name", "row-height-calculation");
-                    rowHeight.setText("Generous");
-                    tierFormat.addContent(rowHeight);
-                    
-                    Element rowHeightFixed = new Element ("property");
-                    rowHeightFixed.setAttribute("name", "fixed-row-height");
-                    rowHeightFixed.setText("10");
-                    tierFormat.addContent(rowHeightFixed);
-                    
-                    Element fontFace = new Element ("property");
-                    fontFace.setAttribute("name", "font-face");
-                    if (name.startsWith("st-") || name.startsWith("ROW-LABEL")) {
-                        fontFace.setText("Bold");
-                    } else {
-                        fontFace.setText("Plain");
-                    }
-                    tierFormat.addContent(fontFace);
-                    
-                    Element fontColor = new Element ("property");
-                    fontColor.setAttribute("name", "font-color");
-                    if (name.startsWith("ts-")) {
-                        fontColor.setText("#R00G99B33");
-                    } else if (name.startsWith("fr-")) {
-                        fontColor.setText("#RccG00B00");
-                    } else if (name.startsWith("tx-")) {
-                        fontColor.setText("#R00G00B99");
-                    } else if (name.startsWith("ROW-LABEL") || name.startsWith("COLUMN-LABEL")) {
-                        fontColor.setText("blue");
-                    }else {
-                        fontColor.setText("Black");
-                    }
-                    tierFormat.addContent(fontColor);
-                    
-                    Element chunkBorderStyle = new Element ("property");
-                    chunkBorderStyle.setAttribute("name", "chunk-border-sryle");
-                    chunkBorderStyle.setText("solid");
-                    tierFormat.addContent(chunkBorderStyle);
-                    
-                    Element bgColor = new Element ("property");
-                    bgColor.setAttribute("name", "bg-color");
-                    bgColor.setText("white");
-                    tierFormat.addContent(bgColor);
-                    
-                    Element textAlignment = new Element ("property");
-                    textAlignment.setAttribute("name", "text-alignment");
-                    textAlignment.setText("Left");
-                    tierFormat.addContent(textAlignment);
-                    
-                    Element chunkBorderColor = new Element ("property");
-                    chunkBorderColor.setAttribute("name", "chunk-border-color");
-                    chunkBorderColor.setText("#R00G00B00");
-                    tierFormat.addContent(chunkBorderColor);
-                    
-                    Element chunkBorder = new Element ("property");
-                    chunkBorder.setAttribute("name", "chunk-border");
-                    tierFormat.addContent(chunkBorder);
-                    
-                    Element fontSize = new Element ("property");
-                    fontSize.setAttribute("name", "font-size");
-                    fontSize.setText("12");
-                    tierFormat.addContent(fontSize);
-                    
-                    Element fontName = new Element ("property");
-                    fontName.setAttribute("name", "font-name");
-                    fontName.setText("Charis SIL");
-                    tierFormat.addContent(fontName);
-                    
+                    Element tierFormat = getTierFormat(name);
+
                     formatTable.addContent(tierFormat);
                 }             
                                 
@@ -328,6 +259,85 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
         return stats; 
     }
 
+    private static Element getTierFormat(String name) {
+        Element tierFormat = new Element("tier-format");
+        tierFormat.setAttribute("tierref", name);
+
+        Element rowHeight = new Element ("property");
+        rowHeight.setAttribute("name", "row-height-calculation");
+        rowHeight.setText("Generous");
+        tierFormat.addContent(rowHeight);
+
+        Element rowHeightFixed = new Element ("property");
+        rowHeightFixed.setAttribute("name", "fixed-row-height");
+        rowHeightFixed.setText("10");
+        tierFormat.addContent(rowHeightFixed);
+
+        Element fontFace = new Element ("property");
+        fontFace.setAttribute("name", "font-face");
+        if (name.startsWith("st-") || name.startsWith("ROW-LABEL")) {
+            fontFace.setText("Bold");
+        } else {
+            fontFace.setText("Plain");
+        }
+        tierFormat.addContent(fontFace);
+
+        Element fontColor = getFontColor(name);
+        tierFormat.addContent(fontColor);
+
+        Element chunkBorderStyle = new Element ("property");
+        chunkBorderStyle.setAttribute("name", "chunk-border-sryle");
+        chunkBorderStyle.setText("solid");
+        tierFormat.addContent(chunkBorderStyle);
+
+        Element bgColor = new Element ("property");
+        bgColor.setAttribute("name", "bg-color");
+        bgColor.setText("white");
+        tierFormat.addContent(bgColor);
+
+        Element textAlignment = new Element ("property");
+        textAlignment.setAttribute("name", "text-alignment");
+        textAlignment.setText("Left");
+        tierFormat.addContent(textAlignment);
+
+        Element chunkBorderColor = new Element ("property");
+        chunkBorderColor.setAttribute("name", "chunk-border-color");
+        chunkBorderColor.setText("#R00G00B00");
+        tierFormat.addContent(chunkBorderColor);
+
+        Element chunkBorder = new Element ("property");
+        chunkBorder.setAttribute("name", "chunk-border");
+        tierFormat.addContent(chunkBorder);
+
+        Element fontSize = new Element ("property");
+        fontSize.setAttribute("name", "font-size");
+        fontSize.setText("12");
+        tierFormat.addContent(fontSize);
+
+        Element fontName = new Element ("property");
+        fontName.setAttribute("name", "font-name");
+        fontName.setText("Charis SIL");
+        tierFormat.addContent(fontName);
+        return tierFormat;
+    }
+
+    private static Element getFontColor(String name) {
+        Element fontColor = new Element ("property");
+        fontColor.setAttribute("name", "font-color");
+        if (name.startsWith("ts-")) {
+            fontColor.setText("#R00G99B33");
+        } else if (name.startsWith("fr-")) {
+            fontColor.setText("#RccG00B00");
+        } else if (name.startsWith("tx-")) {
+            fontColor.setText("#R00G00B99");
+        } else if (name.startsWith("ROW-LABEL") || name.startsWith("COLUMN-LABEL")) {
+            fontColor.setText("blue");
+        }else {
+            fontColor.setText("Black");
+        }
+        return fontColor;
+    }
+
     /**
      * Default function which determines for what type of files (basic
      * transcription, segmented transcription, coma etc.) this feature can be
@@ -344,8 +354,7 @@ public class ExbSeparateTiersForDifferentSpeakers extends Checker implements Cor
      */
     @Override
     public String getDescription() {
-        String description = "This class fixes tier alignment for basic transctiption files with multiple speakers";
-        return description;
+        return "This class fixes tier alignment for basic transctiption files with multiple speakers";
     }
 
     @Override

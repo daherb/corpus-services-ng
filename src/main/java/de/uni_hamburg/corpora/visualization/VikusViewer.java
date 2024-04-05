@@ -32,7 +32,6 @@ import com.google.gson.JsonParser;
 import com.opencsv.CSVReader;
 import de.uni_hamburg.corpora.ComaData;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
@@ -77,7 +76,9 @@ public class VikusViewer extends Visualizer {
         File vikusviewerfolder = new File((vikusviewerurl).getFile());
         if (!vikusviewerfolder.exists()) {
             //the curation folder it not there and needs to be created
-            vikusviewerfolder.mkdirs();
+            if (!vikusviewerfolder.mkdirs()) {
+                report.addCritical("Error creating folder " + vikusviewerfolder);
+            }
         }
 
         Element comadescription = coma.getCorpusDescription();
@@ -121,13 +122,14 @@ public class VikusViewer extends Visualizer {
         keywordblacklist.add("...");
     }
 
-    public Report createDataCSV(CorpusData cd) throws FileNotFoundException, IOException, JDOMException {
+    public Report createDataCSV(CorpusData cd) throws IOException {
         //id,keywords,year,_dialect,_country,_region,_settlement,_language,_speaker,_transcription,_scorehtml,_listhtml,_pdf,_audio,_genre,_description
         //"sketch,drawing",1890,Ket,Russia,Tomsk Oblast,sel,https://corpora.uni-hamburg.de/hzsk/de/islandora/object/transcript:selkup-0.1_AR_1965_RestlessNight_transl/datastream/EXB/AR_1965_RestlessNight_transl.exb,https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:selkup-0.1_KFN_1965_BearHunting1_nar/datastream/PDF/KFN_1965_BearHunting1_nar.pdf,https://corpora.uni-hamburg.de/hzsk/de/islandora/object/recording:selkup-0.1_DN_196X_Bread_nar/datastream/MP3/DN_196X_Bread_nar.mp3,flk,Male Torso,KAI_1965_OldWitch_flk
         Report stats = new Report();
         CSVReader reader;
         CorpusIO cio = new CorpusIO();
-        reader = new CSVReader(new InputStreamReader(getClass().getResourceAsStream(DATA_PATH)), ',');
+        // TODO deprecated
+        reader = new CSVReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(DATA_PATH))), ',');
         List<String[]> data = reader.readAll();
         //create Row ForCommunications
         ComaData coma = (ComaData) cd;
@@ -162,18 +164,18 @@ public class VikusViewer extends Visualizer {
             Element speaker =
                     new XPathBuilder<>("descendant::Description/Key[contains(@Name,'Speakers')]", Filters.element()).compileWith(xpathFactory).evaluateFirst(communication);
             System.out.println(speaker.getText());
-            String keywords = "\"";
+            StringBuilder keywords = new StringBuilder("\"");
             if (descriptiondesc != null) {
                 System.out.println(descriptiondesc.getText());
 
                 for (String s : descriptiondesc.getText().split(" ")) {
                     if (!keywordblacklist.contains(s.toLowerCase())) {
-                        keywords += s + ",";
+                        keywords.append(s).append(",");
                     }
                 }
             }
-            keywords += year.getText() + "," + genre.getText() + "," + settlement.getText() + "," + speaker.getText() + "\"";
-            comrow[1] = keywords;
+            keywords.append(year.getText()).append(",").append(genre.getText()).append(",").append(settlement.getText()).append(",").append(speaker.getText()).append("\"");
+            comrow[1] = keywords.toString();
             //year - Description Date of Recording
             comrow[2] = cleanForCSV(year.getText());
             //dialect
@@ -273,16 +275,16 @@ public class VikusViewer extends Visualizer {
             }
             data.add(comrow);
         }
-        String newdata = "";
+        StringBuilder newdata = new StringBuilder();
         for (String[] row : data) {
-            newdata += String.join(",", row) + "\n";
+            newdata.append(String.join(",", row)).append("\n");
             //first row = keys
             //other rows = values
         }
         //now save the string array as csv
         URL configJSONlocation = new URL(vikusviewerurl + "/data.csv");
-        cio.write(newdata, configJSONlocation);
-        stats.addCorrect(function, cd, "vikus-viewer config successfully created at " + configJSONlocation.toString());
+        cio.write(newdata.toString(), configJSONlocation);
+        stats.addCorrect(function, cd, "vikus-viewer config successfully created at " + configJSONlocation);
         return stats;
     }
 
@@ -290,6 +292,7 @@ public class VikusViewer extends Visualizer {
         Report stats = new Report();
         CorpusIO cio = new CorpusIO();
         String config = cio.readInternalResourceAsString(CONFIG_PATH);
+        // TODO deprecated
         JsonElement jelement = new JsonParser().parse(config);
         JsonObject jobject = jelement.getAsJsonObject();
         jobject = jobject.getAsJsonObject("project");
@@ -300,7 +303,7 @@ public class VikusViewer extends Visualizer {
         //now save it pretty printed
         URL configJSONlocation = new URL(vikusviewerurl + "/config.json");
         cio.write(prettyJsonString, configJSONlocation);
-        stats.addCorrect(function, cd, "vikus-viewer config successfully created at " + configJSONlocation.toString());
+        stats.addCorrect(function, cd, "vikus-viewer config successfully created at " + configJSONlocation);
         return stats;
     }
 
@@ -317,17 +320,18 @@ public class VikusViewer extends Visualizer {
         //now save the string array as csv
         URL infoMDlocation = new URL(vikusviewerurl + "/info.md");
         cio.write(info, infoMDlocation);
-        stats.addCorrect(function, cd, "vikus-viewer info.md successfully created at " + infoMDlocation.toString());
+        stats.addCorrect(function, cd, "vikus-viewer info.md successfully created at " + infoMDlocation);
         return stats;
     }
 
-    public Report createTimelineCSV(CorpusData cd) throws FileNotFoundException, IOException, JDOMException {
+    public Report createTimelineCSV(CorpusData cd) throws IOException {
         //year,titel,text,extra,link,kategorie
         //1864,Early work,"Vincent begins drawing his surroundings early, at the age of 11 here.","The family van Gogh lives in the small town Zundert in the South of the Netherlands. Vincent later visits a middle school in Tilburg, where he lives far from his family. Despite his good grades, he leaves school in 1868, aged 15. From now on, he works for the international art firm Goupil & Cie.",,
         Report stats = new Report();
         CSVReader reader;
         CorpusIO cio = new CorpusIO();
-        reader = new CSVReader(new InputStreamReader(getClass().getResourceAsStream(TIMELINE_PATH)), ',');
+        // TODO deprecated
+        reader = new CSVReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(TIMELINE_PATH))), ',');
         Collections.sort(allDistinctYears);
         List<String[]> time = reader.readAll();
         for (String year : allDistinctYears) {
@@ -340,14 +344,14 @@ public class VikusViewer extends Visualizer {
             timerow[5] = "";
             time.add(timerow);
         }
-        String newtime = "";
+        StringBuilder newtime = new StringBuilder();
         for (String[] row : time) {
-            newtime += String.join(",", row) + "\n";
+            newtime.append(String.join(",", row)).append("\n");
         }
         //now save the string array as csv
         URL timelineCSVlocation = new URL(vikusviewerurl + "/timeline.csv");
-        cio.write(newtime, timelineCSVlocation);
-        stats.addCorrect(function, cd, "vikus-viewer config successfully created at " + timelineCSVlocation.toString());
+        cio.write(newtime.toString(), timelineCSVlocation);
+        stats.addCorrect(function, cd, "vikus-viewer config successfully created at " + timelineCSVlocation);
         return stats;
     }
 
@@ -361,12 +365,7 @@ public class VikusViewer extends Visualizer {
 
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.ComaData");
-            IsUsableFor.add(cl);
-        } catch (ClassNotFoundException ex) {
-            report.addException(ex, "Usable class not found.");
-        }
+        IsUsableFor.add(ComaData.class);
         return IsUsableFor;
     }
     
@@ -379,9 +378,8 @@ public class VikusViewer extends Visualizer {
 
     @Override
     public String getDescription() {
-        String description = "This class creates an config files needed "
+        return "This class creates an config files needed "
                 + "for the vikus-viewer software. ";
-        return description;
     }
 
 }
