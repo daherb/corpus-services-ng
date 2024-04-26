@@ -298,16 +298,6 @@
 			<version>4.2</version>
 			<type>jar</type>
 		</dependency>
-		<!--        <dependency>-->
-		<!--            <groupId>org.languagetool</groupId>-->
-		<!--            <artifactId>language-de</artifactId>-->
-		<!--            <version>4.2</version>-->
-		<!--        </dependency>-->
-		<dependency>
-			<groupId>org.languagetool</groupId>
-			<artifactId>languagetool</artifactId>
-			<version>2.0.1</version>
-		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
