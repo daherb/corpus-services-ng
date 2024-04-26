@@ -631,21 +631,21 @@ public class CorpusMagician {
                         }
                     }
                     break;
-                case "languagetoolchecker":
-                    LanguageToolChecker ltc = new LanguageToolChecker(cfProperties);
-                    if (cfProperties != null) {
-                        // Pass on the configuration parameter
-                        if (cfProperties.containsKey(spelllang)) {
-                            ltc.setLanguage(cfProperties.getProperty(spelllang));
-                            System.out.println("Language set to " + cfProperties.getProperty(spelllang));
-                        }
-                        if (cfProperties.containsKey("tier")) {
-                            ltc.setTierToCheck(cfProperties.getProperty("tier"));
-                            System.out.println("Tier to check set to " + cfProperties.getProperty("tier"));
-                        }
-                    }
-                    cf2strcorpusfunctions.add(ltc);
-                    break;
+//                case "languagetoolchecker":
+//                    LanguageToolChecker ltc = new LanguageToolChecker(cfProperties);
+//                    if (cfProperties != null) {
+//                        // Pass on the configuration parameter
+//                        if (cfProperties.containsKey(spelllang)) {
+//                            ltc.setLanguage(cfProperties.getProperty(spelllang));
+//                            System.out.println("Language set to " + cfProperties.getProperty(spelllang));
+//                        }
+//                        if (cfProperties.containsKey("tier")) {
+//                            ltc.setTierToCheck(cfProperties.getProperty("tier"));
+//                            System.out.println("Tier to check set to " + cfProperties.getProperty("tier"));
+//                        }
+//                    }
+//                    cf2strcorpusfunctions.add(ltc);
+//                    break;
                 case "exbeventtokenizationchecker":
                     ExbEventTokenizationChecker eetc = new ExbEventTokenizationChecker(cfProperties);
                     cf2strcorpusfunctions.add(eetc);
