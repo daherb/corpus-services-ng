@@ -14,3 +14,6 @@ cd ..
 if [[ ! -e datacite-java-api ]]; then git clone --recursive --remote-submodules https://github.com/daherb/datacite-java-api; fi
 cd datacite-java-api && git pull && bash install-pom.sh
 cd ..
+if [[ ! -e xml-magic ]]; then git clone --recursive --remote-submodules https://github.com/daherb/xml-magic; fi
+cd xml-magic && git pull && bash install-pom.sh
+cd ..
