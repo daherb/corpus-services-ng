@@ -26,4 +26,4 @@ target/
 !*.php
 !crontab-example.bak
 !holidays
-
+doc/
