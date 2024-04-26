@@ -28,7 +28,6 @@ module corpus_services_ng {
     requires preflight;
     requires org.apache.pdfbox;
     requires com.google.gson;
-    requires languagetool;
     requires org.apache.commons.cli;
     requires org.apache.commons.text;
     requires commons.io;
