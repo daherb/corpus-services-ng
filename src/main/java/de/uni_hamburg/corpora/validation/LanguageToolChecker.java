@@ -40,13 +40,15 @@ import org.jdom2.Element;
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.GermanyGerman;
+import org.languagetool.language.BritishEnglish;
+import org.languagetool.language.Russian;
 
 /**
  * A grammar and spelling error checker for EXB tiers mainly.
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240405
+ * @version 20240510
  */
 public class LanguageToolChecker extends Checker implements CorpusFunction {
     static EXMARaLDATranscriptionData btd;
@@ -73,24 +75,24 @@ public class LanguageToolChecker extends Checker implements CorpusFunction {
             throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, JDOMException, XPathExpressionException, TransformerException {
         Report stats = new Report();
         btd = new EXMARaLDATranscriptionData(cd.getURL());
-//        if (language.equals("de")) {
-//            langTool = new JLanguageTool(new GermanyGerman());
-//            System.out.println("Language set to German");
-//
-//        } /* else if (language.equals("en")) {
-//            //needs to be English!
-//            //langTool = new JLanguageTool(new BritishEnglish());
-//            //System.out.println("Language set to English");
-//        } else if (language.equals("ru")) {
-//            //needs to be Russian!
-//            //langTool = new JLanguageTool(new Russian());
-//            //System.out.println("Language set to Russian");
-//        } */ else {
-//            Report report = new Report();
-//            report.addCritical(function, cd, "Missing languagetool resource for language "
-//                    + language);
-//            return stats;
-//        }
+        if (language.equals("de")) {
+            langTool = new JLanguageTool(new GermanyGerman());
+            System.out.println("Language set to German");
+
+        } else if (language.equals("en")) {
+            //needs to be English!
+            langTool = new JLanguageTool(new BritishEnglish());
+            System.out.println("Language set to English");
+        } else if (language.equals("ru")) {
+            //needs to be Russian!
+            langTool = new JLanguageTool(new Russian());
+            System.out.println("Language set to Russian");
+        } else {
+            Report report = new Report();
+            report.addCritical(function, cd, "Missing languagetool resource for language "
+                    + language);
+            return stats;
+        }
         boolean spellingError = false;
         Document jDoc = TypeConverter.String2JdomDocument(cd.toSaveableString());
         List<RuleMatch> matches = new ArrayList<>();
