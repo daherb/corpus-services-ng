@@ -6,9 +6,9 @@ module corpus_services_ng {
     requires transitive java.desktop;
     requires transitive java.xml;
 
-    requires transitive invenio.java.api;
-    requires transitive datacite.java.api;
-    requires transitive xml.magic;
+    requires invenio.java.api;
+    requires datacite.java.api;
+    requires xml.magic;
 //    requires java.xml.bind;
     requires jakarta.xml.bind;
     requires jakarta.activation;
