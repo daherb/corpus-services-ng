@@ -7,13 +7,11 @@ package de.uni_hamburg.corpora;
  *
  * @author Tommi A Pirinen <tommi.antero.pirinen@uni-hamburg.de>
  * @author HZSK
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240510
  */
-
-
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 
 import java.io.UnsupportedEncodingException;
 import java.io.FileNotFoundException;
@@ -23,9 +21,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.net.URL;
-import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BasicTranscriptTest {
 
@@ -44,7 +43,7 @@ public class BasicTranscriptTest {
             String unprettyXML = btd.toUnformattedString();
             assertNotNull(unprettyXML);
             // could be assertThat()
-            assertTrue(unprettyXML.equals(exbString));
+            assertEquals(unprettyXML, exbString);
             PrintWriter exbOut = new PrintWriter("src/test/java/de/uni_hamburg/corpora/resources/example/outxample.exb");
             exbOut.print(unprettyXML);
             exbOut.close();

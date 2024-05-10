@@ -10,7 +10,6 @@ import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.xpath.XPath;
-import org.junit.*;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -24,7 +23,6 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
 
 /**
  * Unit test for the RefcoChecker class

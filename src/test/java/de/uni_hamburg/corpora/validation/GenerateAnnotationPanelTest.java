@@ -8,6 +8,7 @@ package de.uni_hamburg.corpora.validation;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.Report;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.net.URL;
@@ -15,35 +16,34 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Properties;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author Ozzy
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240510
  */
 public class GenerateAnnotationPanelTest {
     
     public GenerateAnnotationPanelTest() {
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
     }
     
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
     }
     
-    @Before
+    @BeforeEach
     public void setUp() {
     }
     
-    @After
+    @AfterEach
     public void tearDown() {
     }
 

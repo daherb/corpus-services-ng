@@ -21,35 +21,36 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jdom2.JDOMException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  *
  * @author Ozzy
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240510
  */
 public class AddCSVMetadataToComaTest {
     
     public AddCSVMetadataToComaTest() {
     }
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
     }
     
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
     }
     
-    @Before
+    @BeforeEach
     public void setUp() {
     }
     
-    @After
+    @AfterEach
     public void tearDown() {
     }
 
