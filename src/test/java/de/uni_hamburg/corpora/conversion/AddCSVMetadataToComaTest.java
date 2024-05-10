@@ -5,19 +5,12 @@
  */
 package de.uni_hamburg.corpora.conversion;
 
-import com.opencsv.CSVReader;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
-import de.uni_hamburg.corpora.Report;
-import de.uni_hamburg.corpora.conversion.AddCSVMetadataToComa;
-import de.uni_hamburg.corpora.validation.ExbSegmentationChecker;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.List;
 import java.util.Properties;
 
 import org.jdom2.JDOMException;
