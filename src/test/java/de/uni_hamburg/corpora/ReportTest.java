@@ -1,6 +1,6 @@
 package de.uni_hamburg.corpora;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,11 +10,13 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210629
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240510
+ *
  * Unit tests for the Report class.
  */
 public class ReportTest {
@@ -25,15 +27,15 @@ public class ReportTest {
     public ReportTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         comprehensiveReport = new Report();
         comprehensiveReport.addCorrect("Correct","First correct");
@@ -64,7 +66,7 @@ public class ReportTest {
         comprehensiveReport.addReportItem("Random",new ReportItem());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
     }
 
@@ -79,16 +81,16 @@ public class ReportTest {
             privateField.setAccessible(true);
             Map<String, Collection<ReportItem>> privateStatistics = (Map<String, Collection<ReportItem>>) privateField.get(r);
             // After creation the report is empty
-            assertTrue("The statistics should be empty", privateStatistics.isEmpty());
+            assertTrue(privateStatistics.isEmpty(),"The statistics should be empty");
             // get access to the private method
             Method privateMethod = privateReport.getDeclaredMethod("getOrCreateStatistic",String.class);
             // Create new bucket testId
             privateMethod.setAccessible(true);
             privateMethod.invoke(r,"testId");
             // After creating a bucket the report is not empty any longer
-            assertFalse("The statistics should be non-empty", privateStatistics.isEmpty());
+            assertFalse(privateStatistics.isEmpty(),"The statistics should be non-empty");
             // And the key for the new bucket is contained
-            assertTrue("Key should be contained now", privateStatistics.containsKey("testId"));
+            assertTrue(privateStatistics.containsKey("testId"),"Key should be contained now");
         }
         catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
@@ -103,7 +105,7 @@ public class ReportTest {
         try {
             privateStatistics = r.getClass().getDeclaredField("statistics");
             privateStatistics.setAccessible(true);
-            assertTrue("An empty report contains an empty statistics", ((Map<String,Collection<ReportItem>>) privateStatistics.get(r)).isEmpty());
+            assertTrue(((Map<String,Collection<ReportItem>>) privateStatistics.get(r)).isEmpty(), "An empty report contains an empty statistics");
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -119,7 +121,7 @@ public class ReportTest {
         r2.addCritical("MergeTest", "Note 2");
         r1.merge(r2);
         r1.getFullReports();
-        assertEquals("Report should be combination of the two reports", "All reports\nMergeTest:\n: Note 1. No known fixes. \n: Note 2. No known fixes. \n", r1.getFullReports());
+        assertEquals("All reports\nMergeTest:\n: Note 1. No known fixes. \n: Note 2. No known fixes. \n", r1.getFullReports(), "Report should be combination of the two reports");
     }
 
     @Test
@@ -131,11 +133,11 @@ public class ReportTest {
             Field privateStatistics = r.getClass().getDeclaredField("statistics");
             privateStatistics.setAccessible(true);
             Map<String, Collection<ReportItem>> map = (Map<String, Collection<ReportItem>>) privateStatistics.get(r);
-            assertFalse("StatId key does not exist before adding", map.containsKey("Test")) ;
+            assertFalse(map.containsKey("Test"),"StatId key does not exist before adding") ;
             r.addReportItem("Test",ri);
-            assertTrue("StatId key does exist after adding", map.containsKey("Test")) ;
-            assertTrue("Item exists in the collection", map.get("Test").contains(ri)) ;
-            assertEquals("Item in the collection is the one we created", ": some report item. No known fixes. ", map.get("Test").toArray()[0].toString());
+            assertTrue(map.containsKey("Test"),"StatId key does exist after adding") ;
+            assertTrue(map.get("Test").contains(ri),"Item exists in the collection") ;
+            assertEquals(": some report item. No known fixes. ", map.get("Test").toArray()[0].toString(), "Item in the collection is the one we created");
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -196,7 +198,7 @@ public class ReportTest {
                 "  Correct: 100 %: 3 OK, 0 bad, 0 warnings and 0 unknown. = 3 items.\n" +
                 "  Exception: 0 %: 0 OK, 3 bad, 0 warnings and 0 unknown. = 3 items.\n" +
                 "  Total: 34 %: 9 OK, 13 bad, 4 warnings and 0 unknown. = 26 items.\n";
-        assertEquals("The summary is what we expect", expectedSummary, comprehensiveReport.getSummaryLines());
+        assertEquals(expectedSummary, comprehensiveReport.getSummaryLines(), "The summary is what we expect");
     }
 
     @Test
@@ -252,7 +254,7 @@ public class ReportTest {
         logger.info("Run getRawStatistics test");
         Collection<ReportItem> rawStatistics = comprehensiveReport.getRawStatistics();
         // Just count the elements at the moment
-        assertEquals("Should contain all the elements we defined", 26, rawStatistics.size()) ;
+        assertEquals(26, rawStatistics.size(), "Should contain all the elements we defined") ;
     }
 
     @Test
@@ -260,7 +262,7 @@ public class ReportTest {
         logger.info("Run getErrorStatistics test");
         Collection<ReportItem> rawStatistics = comprehensiveReport.getRawStatistics();
         Collection<ReportItem> errorStatistics = comprehensiveReport.getErrorStatistics();
-        assertTrue("All errors are in the raw statistics", rawStatistics.containsAll(errorStatistics)) ;
+        assertTrue(rawStatistics.containsAll(errorStatistics), "All errors are in the raw statistics") ;
     }
 
     @Test

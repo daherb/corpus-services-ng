@@ -8,6 +8,21 @@
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
+
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.10.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
 	<name>corpus-services-ng</name>
 	<url>http://maven.apache.org</url>
 	<build>
@@ -102,6 +117,14 @@
                     </execution>
                 </executions>
             </plugin -->
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.1.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.1.2</version>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -149,9 +172,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->

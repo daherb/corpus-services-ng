@@ -1,7 +1,5 @@
 package de.uni_hamburg.corpora.utilities;
 
-import org.junit.*;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -9,15 +7,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import de.uni_hamburg.corpora.utilities.quest.DictionaryAutomaton;
+import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * Class for a finite-state representation of a dictionary
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240510
  */
 public class DictionaryAutomatonTest {
     File tmpDict;
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         // Write test file
         try {
@@ -35,17 +39,17 @@ public class DictionaryAutomatonTest {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
 
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeClass() throws Exception {
 
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterClass() throws Exception {
 
     }
@@ -57,11 +61,11 @@ public class DictionaryAutomatonTest {
     public void testReadFileAsList() {
         // Read temp file and check the results
         List<String> lines = DictionaryAutomaton.readFileAsList(tmpDict);
-        assertNotEquals("List not null", lines, null);
-        assertFalse("List not empty", lines.isEmpty());
-        assertEquals("List has expected number of elements", 5, lines.size());
-        assertEquals("Expected first element", lines.get(0), "foo");
-        assertEquals("Expected last element", lines.get(lines.size()-1), "blubb");
+        assertNotNull(lines, "List not null");
+        assertFalse(lines.isEmpty(), "List not empty");
+        assertEquals(5, lines.size(),"List has expected number of elements");
+        assertEquals("foo",lines.get(0),  "Expected first element");
+        assertEquals("blubb", lines.get(lines.size()-1), "Expected last element");
     }
 
     /**
@@ -81,7 +85,7 @@ public class DictionaryAutomatonTest {
     @Test
     public void testGetInitialState() {
         DictionaryAutomaton da = new DictionaryAutomaton(tmpDict);
-        assertEquals("The artificial initial state" , "s0", da.getInitialState());
+        assertEquals("s0", da.getInitialState(), "The artificial initial state");
     }
 
     /**
@@ -99,8 +103,8 @@ public class DictionaryAutomatonTest {
     public void testGetAlphabet() {
         DictionaryAutomaton da = new DictionaryAutomaton(tmpDict);
         Set<Character> alphabet = da.getAlphabet();
-        assertEquals("The expected alphabet", "[a, b, f, l, o, r, u, z]",
-                alphabet.stream().sorted().collect(Collectors.toList()).toString());
+        assertEquals("[a, b, f, l, o, r, u, z]",
+                alphabet.stream().sorted().collect(Collectors.toList()).toString(), "The expected alphabet");
     }
 
     /**
@@ -111,30 +115,30 @@ public class DictionaryAutomatonTest {
         DictionaryAutomaton da = new DictionaryAutomaton(tmpDict);
         Set<Character> alphabet1 = new HashSet(da.getAlphabet());
         // Check that prior to adding it, the alphabet does not contain certain letters and does not accept the worc
-        assertFalse("Letter w not in alphabet", alphabet1.contains('w'));
-        assertFalse("The word is not accepted", da.match("wuseldusel"));
+        assertFalse(alphabet1.contains('w'), "Letter w is in alphabet");
+        assertFalse(da.match("wuseldusel"), "The word is accepted");
         da.addWord("wuseldusel");
         // Check that the alphabet gets extended appropriately
         Set<Character> alphabet2 = da.getAlphabet();
-        assertFalse("Letter w still not in first alphabet", alphabet1.contains('w'));
-        assertNotEquals("New alphabet is not the same", alphabet1, alphabet2);
-        assertTrue("New alphabet is larger", alphabet2.size() > alphabet1.size());
-        assertTrue("Letter w in second alphabet", alphabet2.contains('w'));
+        assertFalse(alphabet1.contains('w'), "Letter w is nowin first alphabet");
+        assertNotEquals(alphabet1, alphabet2,"New alphabet is the same");
+        assertTrue(alphabet2.size() > alphabet1.size(), "New alphabet is not larger");
+        assertTrue(alphabet2.contains('w'), "Letter w in not second alphabet");
         // Check that the word is now accepted
-        assertTrue("The word is now accepted", da.match("wuseldusel"));
-        assertFalse("Some other random word is still not accepted",da.match("blafasel"));
+        assertTrue(da.match("wuseldusel"), "The word is still not accepted");
+        assertFalse(da.match("blafasel"), "Some other random word is accepted");
     }
 
     @Test
     public void testMatch() {
         DictionaryAutomaton da = new DictionaryAutomaton(tmpDict);
         // Some words that are accepted
-        assertTrue("First accepted word", da.match("bla"));
-        assertTrue("Second accepted word", da.match("blubb"));
+        assertTrue(da.match("bla"), "First word not accepted");
+        assertTrue(da.match("blubb"), "Second word not accepted");
         // Some words that are not
-        assertFalse("First non-accepted word", da.match("blu"));
-        assertFalse("Second non-accepted word", da.match("blub"));
-        assertFalse("Third non-accepted word", da.match("foobar"));
+        assertFalse(da.match("blu"), "First word accepted");
+        assertFalse(da.match("blub"), "Second word accepted");
+        assertFalse(da.match("foobar"), "Third word accepted");
     }
 
     @Test
@@ -144,42 +148,42 @@ public class DictionaryAutomatonTest {
         String state = da.getInitialState();
         String oldstate = state;
         state = da.transition(state, 'b');
-        assertNotNull("First new state is not null", state);
-        assertNotEquals("We are not in the initial state anymore", oldstate, state);
+        assertNotNull(state, "First new state is null");
+        assertNotEquals(oldstate, state, "We are still in the initial state");
         oldstate = state;
         state = da.transition(state, 'l');
-        assertNotNull("Second new state is not null", state);
-        assertNotEquals("We are not in the same state anymore", oldstate, state);
+        assertNotNull(state, "Second new state is null");
+        assertNotEquals(oldstate, state, "We are still in the same state");
         oldstate = state;
         state = da.transition(state, 'a');
-        assertNotNull("Third new state is not null", state);
-        assertTrue("After the end of the word we are in an accepting state", da.isAcceptingState(state));
+        assertNotNull(state, "Third new state is null");
+        assertTrue(da.isAcceptingState(state), "After the end of the word we are not in an accepting state");
         state = da.transition(state, 'w');
-        assertNull("Incorrect transition leads to null state", state);
+        assertNull(state, "Incorrect transition does not lead to null state");
     }
 
     @Test
     public void testSegmentWord() {
         DictionaryAutomaton da = new DictionaryAutomaton(tmpDict);
         List<String> segments = da.segmentWord("foobar");
-        assertNotNull("First segments are not null", segments);
-        assertEquals("First segments have two elements", 2, segments.size());
+        assertNotNull(segments, "First segments are null");
+        assertEquals(2, segments.size(), "First segments do not have two elements");
         segments = da.segmentWord("foo");
-        assertNotNull("Second segments are not null", segments);
-        assertEquals("Second segments have one element", 1, segments.size());
+        assertNotNull(segments, "Second segments are null");
+        assertEquals(1, segments.size(), "Second segments do not have one element");
         segments = da.segmentWord("foob");
-        assertNull("Third segments are null", segments);
+        assertNull(segments, "Third segments are not null");
         segments = da.segmentWord("wuseldusel");
-        assertNull("Fourth segments are null", segments);
+        assertNull(segments, "Fourth segments are not null");
     }
 
     @Test
     public void testCheckSegmentWord() {
          DictionaryAutomaton da = new DictionaryAutomaton(tmpDict);
-         assertTrue("First word is segmentable", da.checkSegmentableWord("foobar"));
-         assertTrue("Second word is segmentable", da.checkSegmentableWord("foo"));
-         assertFalse("Third word is non-segmentable", da.checkSegmentableWord("foob"));
-         assertFalse("Fourth word is non-segmentable", da.checkSegmentableWord("wuseldusel"));
+         assertTrue(da.checkSegmentableWord("foobar"), "First word is not segmentable");
+         assertTrue(da.checkSegmentableWord("foo"), "Second word is not segmentable");
+         assertFalse(da.checkSegmentableWord("foob"), "Third word is segmentable");
+         assertFalse(da.checkSegmentableWord("wuseldusel"), "Fourth word is segmentable");
     }
 
     @Test

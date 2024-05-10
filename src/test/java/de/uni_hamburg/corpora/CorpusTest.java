@@ -1,6 +1,6 @@
 package de.uni_hamburg.corpora;
 
-import org.junit.*;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,12 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
-
-import static org.junit.Assert.*;
-
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20210629
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240510
+ *
  * Unit tests for the Corpus class.
  */
 public class CorpusTest {
@@ -24,19 +23,19 @@ public class CorpusTest {
     public CorpusTest() {
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
     }
 
