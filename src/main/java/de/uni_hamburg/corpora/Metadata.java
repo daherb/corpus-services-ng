@@ -14,7 +14,7 @@ import java.util.Collection;
  *
  * @author fsnv625
  */
-interface Metadata extends CorpusData{
+public interface Metadata extends CorpusData{
     
     public Collection<URL> getReferencedCorpusDataURLs() throws MalformedURLException, URISyntaxException; 
 }
