@@ -33,7 +33,7 @@ import org.xml.sax.SAXException;
  * @author Herbert Lange
  * @version 20240322
  */
-public class CmdiData implements CorpusData, XMLData, Metadata {
+public class CMDIMetadata implements CorpusData, XMLData, Metadata {
 
     Document jdom;
     URL url;
@@ -42,11 +42,11 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
     String filename;
     String filenamewithoutending;
 
-    public CmdiData() {
+    public CMDIMetadata() {
 
     }
 
-    public CmdiData(URL url) {
+    public CMDIMetadata(URL url) {
         try {
             this.url = url;
             SAXBuilder builder = new SAXBuilder();
@@ -58,7 +58,7 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
             filename = FilenameUtils.getName(url.getPath());
             filenamewithoutending = FilenameUtils.getBaseName(url.getPath());
         } catch (JDOMException | IOException | URISyntaxException ex) {
-            Logger.getLogger(CmdiData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CMDIMetadata.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -129,7 +129,7 @@ public class CmdiData implements CorpusData, XMLData, Metadata {
 
     @Override
     public Object clone() {
-        return new CmdiData(this.url);
+        return new CMDIMetadata(this.url);
     }
 
     @Override

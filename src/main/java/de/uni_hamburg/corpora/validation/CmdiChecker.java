@@ -8,11 +8,12 @@
  */
 package de.uni_hamburg.corpora.validation;
 
-import de.uni_hamburg.corpora.CmdiData;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.Report;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
+import de.uni_hamburg.corpora.CMDIMetadata;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class CmdiChecker extends Checker implements CorpusFunction {
 
     public Report function(CorpusData cd, Boolean fix)
             throws SAXException, IOException, ParserConfigurationException {
-        CmdiData cmdi = (CmdiData) cd;
+        CMDIMetadata cmdi = (CMDIMetadata) cd;
         Document doc = JdomDocument2W3cDocument(cmdi.getJdom());
         NodeList rps = doc.getElementsByTagName("ResourceProxy");
         Report stats = new Report();
@@ -281,7 +282,7 @@ public class CmdiChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
-        return Collections.singleton(CmdiData.class);
+        return Collections.singleton(CMDIMetadata.class);
     }
 
 
@@ -298,7 +299,7 @@ public class CmdiChecker extends Checker implements CorpusFunction {
     @Override
     public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException {
         Report stats = new Report();
-        for(CmdiData cmdid : c.getCmdidata()){
+        for(CMDIMetadata cmdid : c.getCmdidata()){
             stats.merge(function(cmdid, false));
         }
         return stats;

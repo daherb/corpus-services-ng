@@ -52,7 +52,7 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         // Valid for CMDI format
-        return Collections.singleton(CmdiData.class);
+        return Collections.singleton(CMDIMetadata.class);
     }
 
     /**
@@ -68,7 +68,7 @@ public class CMDIGenericMetadataChecker extends GenericMetadataChecker implement
         // http://www.edankert.com/defaultnamespaces.html
         XPathBuilder<?> xpb = new XPathBuilder<>(locator, Filters.element().or(Filters.attribute()).or(Filters.fboolean()));
         xpb.setNamespace(Namespace.getNamespace("cmd", "http://www.clarin.eu/cmd/"));
-        List<?> nodes = xpb.compileWith(new JaxenXPathFactory()).evaluate(((CmdiData) cd).getJdom());
+        List<?> nodes = xpb.compileWith(new JaxenXPathFactory()).evaluate(((CMDIMetadata) cd).getJdom());
         // Convert nodes to string values
         for (Object o : nodes) {
             // Get the value of the node, either from an element or an attribute
