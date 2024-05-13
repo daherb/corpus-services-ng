@@ -41,7 +41,7 @@ public class Corpus {
     Collection<AdditionalData> additionaldata = new ArrayList<>();
     Collection<AnnotationSpecification> annotationspecification = new ArrayList<>();
     Collection<ConfigParameters> configparameters = new ArrayList<>();
-    private Collection<CmdiData> cmdidata = new ArrayList<>();
+    private Collection<CMDIMetadata> cmdidata = new ArrayList<>();
     Collection<EXMARaLDATranscriptionData> basictranscriptiondata = new ArrayList<>();
     Collection<EXMARaLDASegmentedTranscriptionData> segmentedtranscriptiondata = new ArrayList<>();
     Collection<ELANData> elandata = new ArrayList<>();
@@ -127,8 +127,8 @@ public class Corpus {
             } else if (cd instanceof Metadata) {
                 //can only be CMDI since it's a coma file...
                 metadata.add((Metadata) cd);
-                if (cd instanceof CmdiData) {
-                    cmdidata.add((CmdiData) cd);
+                if (cd instanceof CMDIMetadata) {
+                    cmdidata.add((CMDIMetadata) cd);
                 } else if (cd instanceof AnnotationSpecification) {
                     annotationspecification.add((AnnotationSpecification) cd);
                 } else if (cd instanceof ConfigParameters) {
@@ -166,7 +166,7 @@ public class Corpus {
         return configparameters;
     }
 
-    public Collection<CmdiData> getCmdidata() {
+    public Collection<CMDIMetadata> getCmdidata() {
         return cmdidata;
     }
 
@@ -218,7 +218,7 @@ public class Corpus {
         this.cdc = cdc;
     }
 
-    public void setCmdidata(Collection<CmdiData> cmdidata) {
+    public void setCmdidata(Collection<CMDIMetadata> cmdidata) {
         this.cmdidata = cmdidata;
     }
 

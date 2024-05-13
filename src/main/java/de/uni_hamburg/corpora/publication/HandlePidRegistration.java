@@ -5,7 +5,7 @@
  */
 package de.uni_hamburg.corpora.publication;
 
-import de.uni_hamburg.corpora.CmdiData;
+import de.uni_hamburg.corpora.CMDIMetadata;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
@@ -65,7 +65,7 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
         
         Report stats = new Report();     
         
-        CmdiData cmdi = (CmdiData) cd;
+        CMDIMetadata cmdi = (CMDIMetadata) cd;
         Document doc = JdomDocument2W3cDocument(cmdi.getJdom());
         
         //optional, but recommended
@@ -246,7 +246,7 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
     @Override
     public Collection<Class<? extends CorpusData>> getIsUsableFor() {
         try {
-            Class cl = Class.forName("de.uni_hamburg.corpora.CmdiData");
+            Class cl = Class.forName("de.uni_hamburg.corpora.CMDIMetadata");
             IsUsableFor.add(cl);
         } catch (ClassNotFoundException ex) {
             report.addException(ex, " usable class not found");
@@ -267,7 +267,7 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
     @Override
     public Report function(Corpus c) throws SAXException, IOException, ParserConfigurationException {
         Report stats = new Report();
-        for(CmdiData cmdid : c.getCmdidata()){
+        for(CMDIMetadata cmdid : c.getCmdidata()){
             stats.merge(function(cmdid));
         }
         return stats;

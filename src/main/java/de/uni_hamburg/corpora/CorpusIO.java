@@ -134,8 +134,8 @@ public class CorpusIO {
             // - in a path containing cmdi
             // - we expect CMDI files in one of the checkers
             else if (url.getPath().toLowerCase().endsWith("xml")
-                    && url.getPath().toLowerCase().contains("cmdi") && clcds.contains(CmdiData.class)) {
-                return new CmdiData(url);
+                    && url.getPath().toLowerCase().contains("cmdi") && clcds.contains(CMDIMetadata.class)) {
+                return new CMDIMetadata(url);
             } else {
                 // TODO this method does not work properly e.g. for the suffix xml. Curent workaround: treat xml separately
                 if (url.getPath().toLowerCase().endsWith(".xml")) {
