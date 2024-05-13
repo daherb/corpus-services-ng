@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @author Herbert Lange
  * @version 20240405
  */
-abstract class GenericMetadataChecker extends Checker implements CorpusFunction {
+abstract public class GenericMetadataChecker extends Checker implements CorpusFunction {
 
     // Regex to match for an empty string
     private final String emptyString = "[\\s\\n]+";
