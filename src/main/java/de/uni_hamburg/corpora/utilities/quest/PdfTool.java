@@ -3,8 +3,6 @@ package de.uni_hamburg.corpora.utilities.quest;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -20,8 +18,6 @@ import org.apache.xmpbox.schema.DublinCoreSchema;
 import org.apache.xmpbox.schema.PDFAIdentificationSchema;
 import org.apache.xmpbox.type.BadFieldValueException;
 import org.apache.xmpbox.xml.XmpSerializer;
-import org.reflections.Reflections;
-import org.reflections.scanners.ResourcesScanner;
 
 import javax.xml.transform.TransformerException;
 
