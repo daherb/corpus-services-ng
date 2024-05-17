@@ -1,6 +1,9 @@
 package de.uni_hamburg.corpora.conversion;
 
+import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusFunction;
@@ -47,7 +50,7 @@ import org.jdom2.xpath.jaxen.JaxenXPathFactory;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20240517
  */
 public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
 
@@ -181,11 +184,16 @@ public class AddCSVMetadataToComa extends Converter implements CorpusFunction {
     /**
      * reads the data from the csv file
      */
-    public List<String[]> readData() throws FileNotFoundException, IOException {
-        CSVReader reader = new CSVReader(new FileReader(csvFile), ';');
-        List<String[]> allElements = null;
-        allElements = reader.readAll();
-        return allElements;
+    public List<String[]> readData() throws IOException {
+        try  (CSVReader reader = new CSVReaderBuilder(new FileReader(csvFile))
+                .withCSVParser(new CSVParserBuilder().withSeparator(';').build())
+                .build()) {
+            List<String[]> allElements = null;
+            allElements = reader.readAll();
+            return allElements;
+        } catch (CsvException e) {
+            throw new IOException(e);
+        }
     }
 
     /**
