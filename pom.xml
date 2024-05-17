@@ -366,25 +366,11 @@
 			<version>2.13.8</version>
 		</dependency>
 		<dependency>
-			<groupId>de.ids-mannheim.lza</groupId>
-			<artifactId>invenio-java-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>gov.loc</groupId>
 			<artifactId>bagit</artifactId>
 			<version>5.2.0</version>
 		</dependency>
 		<dependency>
-			<groupId>de.ids-mannheim.lza</groupId>
-			<artifactId>datacite-java-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>de.ids-mannheim.lza</groupId>
-			<artifactId>xml-magic</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -412,6 +398,28 @@
 			<groupId>org.languagetool</groupId>
 			<artifactId>language-ru</artifactId>
 			<version>6.4</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.github.yaml-path/yaml-path -->
+		<dependency>
+			<groupId>io.github.yaml-path</groupId>
+			<artifactId>yaml-path</artifactId>
+			<version>0.0.12</version>
+		</dependency>
+		<!-- Own dependencies installed using lib/download.sh -->
+		<dependency>
+			<groupId>de.ids-mannheim.lza</groupId>
+			<artifactId>invenio-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ids-mannheim.lza</groupId>
+			<artifactId>datacite-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>de.ids-mannheim.lza</groupId>
+			<artifactId>xml-magic</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
