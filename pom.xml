@@ -41,7 +41,7 @@
             -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>3.7.1</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -87,7 +87,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -107,7 +107,7 @@
 			<!-- plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.8.1</version>
+                <version>4.9.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -119,11 +119,11 @@
             </plugin -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.1.2</version>
+				<version>3.2.5</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.1.2</version>
+				<version>3.2.5</version>
 			</plugin>
 		</plugins>
 		<resources>
