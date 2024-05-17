@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
+import org.apache.pdfbox.preflight.Format;
 import org.apache.pdfbox.preflight.PreflightDocument;
 import org.apache.pdfbox.preflight.parser.*;
 import org.apache.xmpbox.XMPMetadata;
@@ -36,13 +37,9 @@ import javax.xml.transform.TransformerException;
 public class PdfTool {
 
     public static boolean isPDFA(URL file) {
-        try {
-            PreflightParser preflightParser = new PreflightParser(new File(file.toURI()));
-            preflightParser.parse();
-            PreflightDocument pd = preflightParser.getPreflightDocument();
-            // System.out.println(pd.getResult().getErrorsList().stream().map((e) -> e.getDetails()).collect
-            // (Collectors.toSet()));
-            return pd.getResult().isValid();
+        try (PDDocument document = new PreflightParser(new File(file.toURI())).parse()) {
+            PreflightDocument pd = new PreflightDocument(document.getDocument(), Format.PDF_A1A);
+            return pd.validate().isValid();
         } catch (IOException | URISyntaxException e) {
             return false;
         }
@@ -79,8 +76,7 @@ public class PdfTool {
             try {
                 DublinCoreSchema dc = xmp.createAndAddDublinCoreSchema();
                 dc.setTitle(src.getDocumentInformation().getTitle());
-
-                PDFAIdentificationSchema id = xmp.createAndAddPFAIdentificationSchema();
+                PDFAIdentificationSchema id = xmp.createAndAddPDFAIdentificationSchema();
                 id.setPart(1);
                 id.setConformance("B");
 
