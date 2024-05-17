@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
@@ -25,14 +26,16 @@ import org.reflections.scanners.ResourcesScanner;
 import javax.xml.transform.TransformerException;
 
 /**
- * @author bba1792 Dr. Herbert Lange
- * @version 20211020
  *
  * Some basic PDF handling functions
  *
  * References
  * @url https://pdfbox.apache.org/1.8/cookbook/pdfavalidation.html
  * @url https://pdfbox.apache.org/1.8/cookbook/pdfacreation.html
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20240517
  */
 public class PdfTool {
 
@@ -127,7 +130,7 @@ public class PdfTool {
                     System.out.println("Already a PDF/A");
                 } else {
                     System.out.println("Converting to PDF/A");
-                    PDDocument dest = PdfTool.toPDFA(PDDocument.load(new File(args[0])),new File(args[1]));
+                    PDDocument dest = PdfTool.toPDFA(Loader.loadPDF(new File(args[0])),new File(args[1]));
                 }
             } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
