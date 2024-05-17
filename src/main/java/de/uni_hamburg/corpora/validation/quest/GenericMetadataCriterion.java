@@ -46,7 +46,7 @@ public class GenericMetadataCriterion {
         }
     }
 
-    public static class ToBounds extends AbstractBeanField {
+    public static class ToBounds extends AbstractBeanField<Object,Integer> {
 
         public ToBounds() {}
 
@@ -83,7 +83,7 @@ public class GenericMetadataCriterion {
         }
     }
 
-    public static class ToType extends AbstractBeanField {
+    public static class ToType extends AbstractBeanField<Object,Integer> {
 
         @Override
         protected Object convert(String value) throws CsvDataTypeMismatchException, CsvConstraintViolationException {
