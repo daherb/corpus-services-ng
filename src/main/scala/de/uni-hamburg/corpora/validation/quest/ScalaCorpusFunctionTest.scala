@@ -10,7 +10,7 @@ class ScalaCorpusFunctionTest(properties: Properties) extends Checker (false,pro
 
   override def getDescription: String = "Test corpus function written in Scala"
 
-  override def getIsUsableFor: util.Collection[Class[_ <: CorpusData]] = {
+  override def getIsUsableFor: util.Collection[Class[? <: CorpusData]] = {
     Collections.singleton(classOf[EXMARaLDATranscriptionData])
   }
 
