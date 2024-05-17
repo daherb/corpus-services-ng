@@ -5,6 +5,10 @@
  */
 package de.uni_hamburg.corpora.visualization;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import de.uni_hamburg.corpora.Corpus;
 import de.uni_hamburg.corpora.CorpusData;
 import de.uni_hamburg.corpora.CorpusIO;
@@ -44,7 +48,7 @@ import org.jdom2.Element;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240405
+ * @version 20240517
  */
 public class VikusViewer extends Visualizer {
 
@@ -126,11 +130,13 @@ public class VikusViewer extends Visualizer {
         //id,keywords,year,_dialect,_country,_region,_settlement,_language,_speaker,_transcription,_scorehtml,_listhtml,_pdf,_audio,_genre,_description
         //"sketch,drawing",1890,Ket,Russia,Tomsk Oblast,sel,https://corpora.uni-hamburg.de/hzsk/de/islandora/object/transcript:selkup-0.1_AR_1965_RestlessNight_transl/datastream/EXB/AR_1965_RestlessNight_transl.exb,https://corpora.uni-hamburg.de/hzsk/de/islandora/object/file:selkup-0.1_KFN_1965_BearHunting1_nar/datastream/PDF/KFN_1965_BearHunting1_nar.pdf,https://corpora.uni-hamburg.de/hzsk/de/islandora/object/recording:selkup-0.1_DN_196X_Bread_nar/datastream/MP3/DN_196X_Bread_nar.mp3,flk,Male Torso,KAI_1965_OldWitch_flk
         Report stats = new Report();
-        CSVReader reader;
         CorpusIO cio = new CorpusIO();
-        // TODO deprecated
-        reader = new CSVReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(DATA_PATH))), ',');
-        List<String[]> data = reader.readAll();
+        List<String[]> data;
+        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(DATA_PATH)))).withCSVParser(new CSVParserBuilder().withSeparator(',').build()).build()) {
+            data = reader.readAll();
+        } catch (CsvException e) {
+            throw new IOException(e);
+        }
         //create Row ForCommunications
         ComaData coma = (ComaData) cd;
         String transrepourl = "https://corpora.uni-hamburg.de/repository/transcript:" + corpusPrefix + "-" + version + "_";
@@ -328,12 +334,14 @@ public class VikusViewer extends Visualizer {
         //year,titel,text,extra,link,kategorie
         //1864,Early work,"Vincent begins drawing his surroundings early, at the age of 11 here.","The family van Gogh lives in the small town Zundert in the South of the Netherlands. Vincent later visits a middle school in Tilburg, where he lives far from his family. Despite his good grades, he leaves school in 1868, aged 15. From now on, he works for the international art firm Goupil & Cie.",,
         Report stats = new Report();
-        CSVReader reader;
         CorpusIO cio = new CorpusIO();
-        // TODO deprecated
-        reader = new CSVReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(TIMELINE_PATH))), ',');
         Collections.sort(allDistinctYears);
-        List<String[]> time = reader.readAll();
+        List<String[]> time;
+        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(TIMELINE_PATH)))).withCSVParser(new CSVParserBuilder().withSeparator(',').build()).build()) {
+            time = reader.readAll();
+        } catch (CsvException e) {
+            throw new IOException(e);
+        }
         for (String year : allDistinctYears) {
             String[] timerow = new String[6];
             timerow[0] = year;
