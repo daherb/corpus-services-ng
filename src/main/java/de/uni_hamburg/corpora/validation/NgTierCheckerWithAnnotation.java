@@ -45,7 +45,7 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
      * specification file.
      */
     public void addAnnotations(CorpusData cd)
-            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(TypeConverter.String2InputStream(cd.toSaveableString())); // get the file as a document
@@ -113,7 +113,7 @@ public class NgTierCheckerWithAnnotation extends Checker implements CorpusFuncti
             stats.addException(ex, comaLoc + ": Unknown file reading error");
         } catch (TransformerException ex) {
             stats.addException(ex, comaLoc + ": Unknown file reading error");
-        } catch (XPathExpressionException ex) {
+        } catch (JDOMException ex) {
             stats.addException(ex, comaLoc + ": Unknown file reading error");
         }
         return stats;

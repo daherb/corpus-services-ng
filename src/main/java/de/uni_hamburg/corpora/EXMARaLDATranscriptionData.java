@@ -125,13 +125,13 @@ public class EXMARaLDATranscriptionData implements CorpusData, ContentData, XMLD
     //utilities\PrettyPrinter.java here to pretty print the files, so they
     //will always get pretty printed in the same way
     //TODO
-    private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException{
+    private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         PrettyPrinter pp = new PrettyPrinter();
         //String prettyCorpusData = pp.indent(bt.toXML(bt.getTierFormatTable()), "event");
         return pp.indent(toUnformattedString(), "event");
     }
 
-    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException  {
+    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException  {
         return toPrettyPrintedXML();
     }
 
@@ -161,7 +161,7 @@ public class EXMARaLDATranscriptionData implements CorpusData, ContentData, XMLD
                 Files.move(Paths.get("tempfile.exb"), Paths.get(args[0]),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
-        } catch (SAXException | IOException | JexmaraldaException | TransformerException | ParserConfigurationException | XPathExpressionException saxe) {
+        } catch (SAXException | IOException | JexmaraldaException | TransformerException | ParserConfigurationException | JDOMException saxe) {
             saxe.printStackTrace();
             System.exit(1);
         }

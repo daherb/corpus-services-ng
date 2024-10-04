@@ -61,7 +61,7 @@ public class ComaKmlForLocations extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerConfigurationException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerConfigurationException, TransformerException, JDOMException {
         Report stats = new Report();
         try {
 
@@ -274,8 +274,6 @@ public class ComaKmlForLocations extends Checker implements CorpusFunction {
             stats.addException(function, ex, cd, "The KML file could not be parsed.");
         } catch (TransformerException ex) {
             stats.addException(function, ex, cd, "Unknown Transformer error.");
-        } catch (XPathExpressionException ex) {
-            stats.addException(function, ex, cd, "Unknown XPath error.");
         } catch (IOException ex) {
             stats.addException(function, ex, cd, "The KML file could not be parsed.");
         } catch (URISyntaxException ex) {
@@ -356,7 +354,7 @@ public class ComaKmlForLocations extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, TransformerConfigurationException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, TransformerConfigurationException, JDOMException {
         Report stats = new Report();
         cd = c.getComaData();
         stats = function(cd, fix);

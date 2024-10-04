@@ -57,7 +57,7 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
         super(true, properties);
     }
 
-    public Report function(CorpusData cd, Boolean fix) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public Report function(CorpusData cd, Boolean fix) throws IOException, TransformerException, ParserConfigurationException, SAXException, JDOMException {
         Report report = new Report();
         // if no diff - all fine, nothing needs to be done
         if (CorpusDataIsAlreadyPretty(cd)) {
@@ -91,7 +91,7 @@ public class PrettyPrintData extends Checker implements CorpusFunction {
         return IsUsableFor;
     }
 
-    public boolean CorpusDataIsAlreadyPretty(CorpusData cd) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException, UnsupportedEncodingException {
+    public boolean CorpusDataIsAlreadyPretty(CorpusData cd) throws TransformerException, ParserConfigurationException, SAXException, IOException, UnsupportedEncodingException, JDOMException {
         //take the data, change datatosaveable string, method indent() in utilities\PrettyPrinter.java
         //this one works for BasicTranscriptions only (keeping events togehter), but doesn't harm others
         //need to have another string not intended depending on which

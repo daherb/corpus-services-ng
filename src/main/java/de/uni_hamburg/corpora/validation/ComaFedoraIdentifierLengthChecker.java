@@ -19,6 +19,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -49,7 +50,7 @@ public class ComaFedoraIdentifierLengthChecker extends Checker implements Corpus
      * violate Fedora's PID limits.
      */
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -140,7 +141,7 @@ public class ComaFedoraIdentifierLengthChecker extends Checker implements Corpus
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, JexmaraldaException, IOException, ParserConfigurationException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, JexmaraldaException, IOException, ParserConfigurationException, TransformerException, JDOMException {
         Report stats = new Report();
         cd = c.getComaData();
         stats = function(cd, fix);

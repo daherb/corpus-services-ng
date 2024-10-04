@@ -20,6 +20,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -105,7 +106,7 @@ public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, TransformerConfigurationException, TransformerException, JDOMException {
          DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(TypeConverter.String2InputStream(cd.toSaveableString())); // get the file as a document
@@ -197,7 +198,7 @@ public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report();
         for (CorpusData cdata : c.getBasicTranscriptionData()) {
             stats.merge(function(cdata, fix));

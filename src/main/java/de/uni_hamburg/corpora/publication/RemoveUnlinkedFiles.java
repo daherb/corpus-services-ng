@@ -18,6 +18,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -105,8 +107,8 @@ public class RemoveUnlinkedFiles extends Publisher implements CorpusFunction {
             stats.addException(function, ex, cd, "Unknown SAXException.");
         } catch (IOException ex) {
             stats.addException(function, ex, cd, "Unknown IOException.");
-        } catch (XPathExpressionException ex) {
-            stats.addException(function, ex, cd, "Unknown XPathExpressionException.");
+        } catch (JDOMException ex) {
+            stats.addException(function, ex, cd, "Unknown JDOMException.");
         }
 
         return stats;

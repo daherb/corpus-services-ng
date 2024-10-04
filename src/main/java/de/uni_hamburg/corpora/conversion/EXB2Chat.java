@@ -106,7 +106,7 @@ public class EXB2Chat extends Converter implements CorpusFunction {
             stats.addException(EXB2CHAT, ioe, cod, "Input Output Exception");
         } catch (XPathException xe) {
             stats.addException(EXB2CHAT, xe, cod, "Input Output Exception");
-        } catch (XPathExpressionException xee) {
+        } catch (JDOMException xee) {
             stats.addException(EXB2CHAT, xee, cod, "Input Output Exception");
         } catch (ParserConfigurationException pe) {
             stats.addException(EXB2CHAT, pe, cod, "Input Output Exception");

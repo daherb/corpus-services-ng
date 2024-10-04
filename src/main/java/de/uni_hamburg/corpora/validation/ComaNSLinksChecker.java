@@ -54,7 +54,7 @@ public class ComaNSLinksChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, JDOMException, IOException, JexmaraldaException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, JDOMException, IOException, JexmaraldaException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Report stats = new Report();
         cd = c.getComaData();
         stats = function(cd, fix);
@@ -63,7 +63,7 @@ public class ComaNSLinksChecker extends Checker implements CorpusFunction {
 
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Document doc = TypeConverter.JdomDocument2W3cDocument(TypeConverter.String2JdomDocument(cd.toSaveableString()));
         NodeList nslinks = doc.getElementsByTagName("NSLink");
         Report stats = new Report();

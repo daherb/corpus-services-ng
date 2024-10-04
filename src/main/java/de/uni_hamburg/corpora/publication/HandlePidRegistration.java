@@ -24,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -141,8 +143,8 @@ public class HandlePidRegistration extends Publisher implements CorpusFunction {
             stats.addFix(function, cd, "Handle PIDs were retrieved and file was updated.");
         } catch (UnsupportedEncodingException ex) {
             stats.addCritical(function, cd, "UnsupportedEncodingException: " + ex);
-        } catch (XPathExpressionException ex) {
-            stats.addCritical(function, cd, "XPathExpressionException: " + ex);
+        } catch (JDOMException ex) {
+            stats.addCritical(function, cd, "JDOMException: " + ex);
         } catch (TransformerException ex) {
             stats.addCritical(function, cd, "TransformerException: " + ex);
         }

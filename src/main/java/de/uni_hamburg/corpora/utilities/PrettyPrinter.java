@@ -14,15 +14,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.TransformerException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+
+import org.jdom2.Content;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.jaxen.JaxenXPathFactory;
+import org.jdom2.Text;
+import org.jdom2.Document;
+import org.jdom2.output.XMLOutputter;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import java.util.List;
 
 /**
  *
@@ -45,7 +48,7 @@ public class PrettyPrinter {
     * @param suppressedElements  blank-separated list of QNames for elements to be disregarded for indentation
     * @return	                 indented XML string
     */
-    public String indent(String xml, String suppressedElements) throws TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, IOException, XPathExpressionException {
+    public String indent(String xml, String suppressedElements) throws TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, IOException, JDOMException {
                     
         String xslString = TypeConverter.InputStream2String(getClass().getResourceAsStream(xslLocation));
         return indent(xml, suppressedElements, xslString);
@@ -60,31 +63,27 @@ public class PrettyPrinter {
     * @param suppressedElements  blank-separated list of QNames for elements to be disregarded for indentation
     * @return	                 indented XML string
     */
-    public String indent(String xml, String suppressedElements, String xslString) throws TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, IOException, XPathExpressionException {
+    public String indent(String xml, String suppressedElements, String xslString) throws TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, IOException, JDOMException {
       
         
             // Turn xml string into a document
-            Document document = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder()
-                    .parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+//            Document document = DocumentBuilderFactory.newInstance()
+//                    .newDocumentBuilder()
+//                    .parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+            Document document = new SAXBuilder().build(new ByteArrayInputStream(xml.getBytes("utf-8")));
 
-            // Remove whitespaces outside tags
-            document.normalize();
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            NodeList nodeList = (NodeList) xPath.evaluate("//text()[normalize-space()='']",
-                                                          document,
-                                                          XPathConstants.NODESET);
+            List<Content> nodeList = new JaxenXPathFactory().compile("//text()[normalize-space()='']", Filters.content()).evaluate(document);
 
-            for (int i = 0; i < nodeList.getLength(); ++i) {
-                Node node = nodeList.item(i);
-                node.getParentNode().removeChild(node);
+            for (int i = 0; i < nodeList.size(); ++i) {
+                Content node = nodeList.get(i);
+                node.getParent().removeContent(node);
             }
 
             // Setup pretty print options
             // get the XSLT stylesheet and the XML base
             //String xslString = TypeConverter.InputStream2String(de.uni_hamburg.corpora.utilities.PrettyPrinter.class.getClassLoader().getResourceAsStream("/xsl/pretty-print-sort-elements.xsl"));
             
-            String xmlString = TypeConverter.W3cDocument2String(document);
+            String xmlString = new XMLOutputter().outputString(document);
             
             // create XSLTransformer and set the parameters 
             XSLTransformer xt = new XSLTransformer("net.sf.saxon.TransformerFactoryImpl");

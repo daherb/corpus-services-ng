@@ -68,7 +68,7 @@ public interface CorpusData {
     
     String getFilenameWithoutFileEnding();
 
-    String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException;
+    String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException;
 
     String toUnformattedString();
     

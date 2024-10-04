@@ -68,7 +68,7 @@ public class CMDIMetadata implements CorpusData, XMLData, Metadata {
     }
 
     @Override
-    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         return toPrettyPrintedXML();
     }
 
@@ -77,7 +77,7 @@ public class CMDIMetadata implements CorpusData, XMLData, Metadata {
         return originalstring;
     }
 
-    private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         PrettyPrinter pp = new PrettyPrinter();
         //String prettyCorpusData = indent(bt.toXML(bt.getTierFormatTable()), "event");
         return pp.indent(toUnformattedString(), "event");

@@ -68,13 +68,13 @@ public class FlextextData implements CorpusData, ContentData, XMLData {
         }
     }
 
-    private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException{
+    private String toPrettyPrintedXML() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         PrettyPrinter pp = new PrettyPrinter();
         //String prettyCorpusData = pp.indent(bt.toXML(bt.getTierFormatTable()), "event");
         return pp.indent(toUnformattedString(), "event");
     }
 
-    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException  {
+    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException  {
         return toPrettyPrintedXML();
     }
 

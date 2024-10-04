@@ -17,6 +17,7 @@ import org.exmaralda.partitureditor.jexmaralda.BasicTranscription;
 import org.exmaralda.partitureditor.jexmaralda.Event;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
 import org.exmaralda.partitureditor.jexmaralda.Tier;
+import org.jdom2.JDOMException;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -42,7 +43,7 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report(); //create a new report
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -116,7 +117,7 @@ public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report();
         for (CorpusData cdata : c.getBasicTranscriptionData()) {
             stats.merge(function(cdata, fix));

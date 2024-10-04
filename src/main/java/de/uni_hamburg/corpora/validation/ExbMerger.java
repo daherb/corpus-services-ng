@@ -77,7 +77,7 @@ public class ExbMerger extends Checker implements CorpusFunction {
             stats.addException(ioe, exbLoc + ": Unknown file reading error");
         } catch (TransformerException ex) {
             Logger.getLogger(ExbMerger.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (XPathExpressionException ex) {
+        } catch (JDOMException ex) {
             Logger.getLogger(ExbMerger.class.getName()).log(Level.SEVERE, null, ex);
         }
         return stats;
@@ -90,7 +90,7 @@ public class ExbMerger extends Checker implements CorpusFunction {
      * inter annotator agreement according to Krippendorff's alpha.
      */
     private Report exceptionalCheck(CorpusData cd)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report(); //create a new report
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -465,7 +465,7 @@ public class ExbMerger extends Checker implements CorpusFunction {
 
 
     @Override
-    public Report function(CorpusData cd, Boolean fix) throws FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+    public Report function(CorpusData cd, Boolean fix) throws FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return new Report();
     }
@@ -476,7 +476,7 @@ public class ExbMerger extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         // Do nothing
         return new Report();
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

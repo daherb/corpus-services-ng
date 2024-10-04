@@ -51,7 +51,7 @@ public class ExbFileReferenceChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, URISyntaxException {
+            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, URISyntaxException, JDOMException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(TypeConverter.String2InputStream(cd.toSaveableString())); // get the file as a document
@@ -115,7 +115,7 @@ public class ExbFileReferenceChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, XPathExpressionException, JexmaraldaException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, JexmaraldaException, JDOMException {
         Report stats = new Report();
         for (CorpusData cdata : c.getBasicTranscriptionData()) {
             stats.merge(function(cdata, fix));

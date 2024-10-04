@@ -141,7 +141,7 @@ public class HScoreHTML extends Visualizer {
             stats.addException(SERVICE_NAME, ex, "Parser Exception");
         } catch (SAXException ex) {
             stats.addException(SERVICE_NAME, ex, "XML Exception");
-        } catch (XPathExpressionException ex) {
+        } catch (JDOMException ex) {
             stats.addException(SERVICE_NAME, ex, "XPath Exception");
         }
         return stats;

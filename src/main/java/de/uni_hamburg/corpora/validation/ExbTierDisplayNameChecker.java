@@ -42,7 +42,7 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
      */
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, TransformerException, JDOMException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(TypeConverter.String2InputStream(cd.toSaveableString())); // get the file as a document
@@ -145,7 +145,7 @@ public class ExbTierDisplayNameChecker extends Checker implements CorpusFunction
     }
 
      @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, JDOMException, TransformerException, JDOMException {
         Report stats = new Report();
         for (CorpusData cdata : c.getBasicTranscriptionData()) {
             stats.merge(function(cdata, fix));

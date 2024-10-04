@@ -2,6 +2,7 @@ package de.uni_hamburg.corpora;
 
 import com.helger.collection.pair.Pair;
 import org.apache.commons.io.FilenameUtils;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -108,7 +109,7 @@ public class ChildesMetadata implements Metadata, CorpusData {
     }
 
     @Override
-    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public String toSaveableString() throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         return unformatedString;
     }
 

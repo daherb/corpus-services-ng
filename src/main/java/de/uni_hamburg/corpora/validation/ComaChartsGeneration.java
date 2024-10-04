@@ -21,6 +21,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -79,7 +81,7 @@ public class ComaChartsGeneration extends Checker implements CorpusFunction {
             r.addException(function, ex, cd, "Unknown Parser error");
         } catch (SAXException ex) {
             r.addException(function, ex, cd, "Unknown XML error");
-        } catch (XPathExpressionException ex) {
+        } catch (JDOMException ex) {
             r.addException(function, ex, cd, "Unknown XPath error");
         }
 

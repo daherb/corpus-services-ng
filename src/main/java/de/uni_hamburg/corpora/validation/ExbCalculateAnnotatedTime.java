@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import org.exmaralda.partitureditor.jexmaralda.JexmaraldaException;
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -32,7 +33,7 @@ public class ExbCalculateAnnotatedTime extends Checker implements CorpusFunction
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report();
             for (CorpusData cdata : c.getBasicTranscriptionData()) {
                 stats.merge(function(cdata, fix));
@@ -46,7 +47,7 @@ public class ExbCalculateAnnotatedTime extends Checker implements CorpusFunction
      * each annotation in the exb.
      */
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report(); //create a new report
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();

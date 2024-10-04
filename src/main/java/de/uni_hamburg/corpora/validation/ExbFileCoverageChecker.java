@@ -56,7 +56,7 @@ public class ExbFileCoverageChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Report stats = new Report();
         // FIXME:
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -166,7 +166,7 @@ public class ExbFileCoverageChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, XPathExpressionException, JDOMException {
+    public Report function(Corpus c, Boolean fix) throws NoSuchAlgorithmException, ClassNotFoundException, FSMException, URISyntaxException, SAXException, IOException, ParserConfigurationException, JexmaraldaException, TransformerException, JDOMException {
         Report stats = new Report();
         for (CorpusData cdata : c.getBasicTranscriptionData()) {
             stats.merge(function(cdata, fix));

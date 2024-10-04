@@ -18,6 +18,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -79,7 +81,7 @@ public class CorpusHTML extends Visualizer {
             stats.addException(SERVICE_NAME, ex, "Parser Exception");
         } catch (SAXException ex) {
             stats.addException(SERVICE_NAME, ex, "XML Exception");
-        } catch (XPathExpressionException ex) {
+        } catch (JDOMException ex) {
             stats.addException(SERVICE_NAME, ex, "XPath Exception");
         }
         return stats;

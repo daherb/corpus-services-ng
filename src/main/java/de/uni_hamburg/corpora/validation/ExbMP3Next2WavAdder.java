@@ -40,7 +40,7 @@ public class ExbMP3Next2WavAdder extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(CorpusData cd, Boolean fix) throws TransformerConfigurationException, TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public Report function(CorpusData cd, Boolean fix) throws TransformerConfigurationException, TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         Report r = new Report();
         // get the XSLT stylesheet
         String xsl = TypeConverter.InputStream2String(getClass().getResourceAsStream("/xsl/AddMP3next2WavExb.xsl"));

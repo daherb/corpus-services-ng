@@ -58,11 +58,11 @@ public class CorpusIO {
                 .collect(Collectors.toSet()));
     }
 
-    public String CorpusData2String(CorpusData cd) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public String CorpusData2String(CorpusData cd) throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         return cd.toSaveableString();
     }
 
-    public void write(CorpusData cd, URL url) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public void write(CorpusData cd, URL url) throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         write(cd.toSaveableString(), url);
     }
 
@@ -77,7 +77,7 @@ public class CorpusIO {
         System.out.println("Document written...");
     }
 
-    public void write(Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void write(Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, SAXException, JDOMException {
         XMLOutputter xmOut = new XMLOutputter();
         String unformattedCorpusData = xmOut.outputString(doc);
         PrettyPrinter pp = new PrettyPrinter();
@@ -85,7 +85,7 @@ public class CorpusIO {
         write(prettyCorpusData, url);
     }
 
-    public void write(org.w3c.dom.Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, SAXException, XPathExpressionException {
+    public void write(org.w3c.dom.Document doc, URL url) throws IOException, TransformerException, ParserConfigurationException, SAXException, JDOMException {
         String unformattedCorpusData = TypeConverter.W3cDocument2String(doc);
         PrettyPrinter pp = new PrettyPrinter();
         String prettyCorpusData = pp.indent(unformattedCorpusData, "event");
@@ -282,7 +282,7 @@ public class CorpusIO {
         return host != null && !"".equals(host);
     }
 
-    public void writePrettyPrinted(CorpusData cd, URL url) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    public void writePrettyPrinted(CorpusData cd, URL url) throws TransformerException, ParserConfigurationException, SAXException, IOException, JDOMException {
         write(cd.toSaveableString(), url);
     }
 

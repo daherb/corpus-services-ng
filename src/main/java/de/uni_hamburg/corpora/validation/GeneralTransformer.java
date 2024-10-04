@@ -47,7 +47,7 @@ public class GeneralTransformer extends Checker {
     }
 
     @Override
-    public Report function(CorpusData cd, Boolean fix) throws JDOMException, IOException, URISyntaxException, TransformerConfigurationException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, XPathExpressionException {
+    public Report function(CorpusData cd, Boolean fix) throws JDOMException, IOException, URISyntaxException, TransformerConfigurationException, TransformerException, ParserConfigurationException, UnsupportedEncodingException, SAXException, JDOMException {
         Report report = new Report();
         if (fix) {
             CorpusIO cio = new CorpusIO();

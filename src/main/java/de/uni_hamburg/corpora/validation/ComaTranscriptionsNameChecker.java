@@ -16,6 +16,8 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+
+import org.jdom2.JDOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -44,7 +46,7 @@ public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunc
      * those warnings to the report which it returns.
      */
     public Report function(CorpusData cd, Boolean fix)
-            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Report stats = new Report(); //create a new report
         ComaData ccd = (ComaData) cd;
         Document doc = TypeConverter.JdomDocument2W3cDocument(ccd.getJdom()); // get the file as a document¡
@@ -196,7 +198,7 @@ public class ComaTranscriptionsNameChecker extends Checker implements CorpusFunc
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Report stats;
         cd = c.getComaData();
         stats = function(cd, fix);

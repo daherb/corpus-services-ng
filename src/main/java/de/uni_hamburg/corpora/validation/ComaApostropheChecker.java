@@ -13,6 +13,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.exmaralda.coma.root.Coma;
+import org.jdom2.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -37,7 +38,7 @@ public class ComaApostropheChecker extends Checker implements CorpusFunction {
      */
     @Override
     public Report function(CorpusData cd, Boolean fix) // check whether there's any illegal apostrophes '
-            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+            throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Report stats = new Report();         // create a new report
         comaFile = cd.toSaveableString();     // read the coma file as a string
         if (comaFile.contains("'")) {          // if coma file contains an apostrophe ' then issue warning
@@ -81,7 +82,7 @@ public class ComaApostropheChecker extends Checker implements CorpusFunction {
     }
 
     @Override
-    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, XPathExpressionException {
+    public Report function(Corpus c, Boolean fix) throws SAXException, IOException, ParserConfigurationException, URISyntaxException, TransformerException, JDOMException {
         Report stats;
         cd = c.getComaData();
         stats = function(cd, fix);

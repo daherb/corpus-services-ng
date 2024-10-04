@@ -50,7 +50,7 @@ public class ExbRefTierChecker extends Checker implements CorpusFunction {
 
     //testRefIds
     @Override
-    public Report function(CorpusData cd, Boolean fix) throws IOException, SAXException, TransformerException, ParserConfigurationException, XPathExpressionException {
+    public Report function(CorpusData cd, Boolean fix) throws IOException, SAXException, TransformerException, ParserConfigurationException, JDOMException {
         Report stats = new Report(); // create a new report for the transcript
         Document doc = null;
         EXMARaLDATranscriptionData bcd = new EXMARaLDATranscriptionData();
