@@ -31,6 +31,10 @@ import javax.xml.xpath.XPathExpressionException;
 /**
  * A class that can load coma data and check for potential problems with HZSK
  * repository depositing.
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ComaFedoraIdentifierLengthChecker extends Checker implements CorpusFunction {
 

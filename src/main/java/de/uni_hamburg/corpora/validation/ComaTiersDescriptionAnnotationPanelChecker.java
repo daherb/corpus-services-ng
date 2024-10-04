@@ -24,6 +24,10 @@ import org.xml.sax.SAXException;
  * The class that checks out that all annotations are from the annotation
  * specification file and that there are no annotations in the coma file not in
  * the annotation specification file.
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ComaTiersDescriptionAnnotationPanelChecker extends Checker implements CorpusFunction {
 

@@ -27,6 +27,10 @@ import org.xml.sax.SAXException;
  *
  * This class checks whether the annotations in exb files comply with annotation
  * specification panel.
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ExbAnnotationPanelCheck extends Checker implements CorpusFunction {
 

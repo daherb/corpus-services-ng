@@ -25,6 +25,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Daniel Jettka
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class CorpusHTML extends Visualizer {
 

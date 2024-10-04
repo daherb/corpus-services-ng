@@ -30,7 +30,7 @@ import javax.xml.xpath.XPathExpressionException;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20241004
  */
 public class ExbMP3Next2WavAdder extends Checker implements CorpusFunction {
 

@@ -31,6 +31,10 @@ import org.xml.sax.SAXException;
  *
  * This class creates a sort- and filterable html overview in table form of the
  * content of the coma file to make error checking and harmonizing easier.
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ComaChartsGeneration extends Checker implements CorpusFunction {
 

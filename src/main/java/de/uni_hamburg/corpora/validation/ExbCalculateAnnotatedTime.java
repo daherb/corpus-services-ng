@@ -21,6 +21,9 @@ import org.xml.sax.SAXException;
  * This class calculates annotated time for an exb file and computes the
  * duration of each annotation in the exb.
  *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ExbCalculateAnnotatedTime extends Checker implements CorpusFunction {
 

@@ -18,8 +18,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /***
- * @author bba1702 Dr. Herbert Lange
- * @version 20210622
+ * @author Herbert Lange
+ * @version 20241004
  *
  * Representation of Metadata of a CHILDES/TalkBank corpus
  */

@@ -38,7 +38,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20241004
  */
 public class FlextextData implements CorpusData, ContentData, XMLData {
 

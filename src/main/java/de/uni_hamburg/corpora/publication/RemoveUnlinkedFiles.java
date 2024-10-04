@@ -30,6 +30,10 @@ import org.xml.sax.SAXException;
  * the coma file
  *
  * @author sesv009
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class RemoveUnlinkedFiles extends Publisher implements CorpusFunction {
 

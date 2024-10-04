@@ -45,7 +45,7 @@ import org.apache.commons.io.FilenameUtils;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240405
+ * @version 20241004
  */
 public class ELANData implements CorpusData, ContentData, XMLData {
 

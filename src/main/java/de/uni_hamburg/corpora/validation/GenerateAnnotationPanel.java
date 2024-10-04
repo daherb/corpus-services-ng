@@ -30,6 +30,10 @@ import org.xml.sax.SAXException;
 /**
  * The class that generates an annotation specification panel from the basic
  * transcription files (exb).
+ *
+ * Last updated
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class GenerateAnnotationPanel extends Checker implements CorpusFunction {
 

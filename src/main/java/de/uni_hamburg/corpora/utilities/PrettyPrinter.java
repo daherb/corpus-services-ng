@@ -30,6 +30,10 @@ import java.util.List;
 /**
  *
  * @author Daniel Jettka
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class PrettyPrinter {
     

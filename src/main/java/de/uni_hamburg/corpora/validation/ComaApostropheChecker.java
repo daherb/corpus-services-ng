@@ -19,6 +19,10 @@ import org.xml.sax.SAXException;
 /**
  * A class that checks whether or not the coma file contains an apostrophe '. If
  * it does then these all apostrophes ' are changed to apostrophes ’.
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ComaApostropheChecker extends Checker implements CorpusFunction {
 

@@ -32,6 +32,10 @@ import org.xml.sax.SAXException;
 /**
  *
  * @author Ozzy
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class ExbMergerGUI extends javax.swing.JFrame {
 

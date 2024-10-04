@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20241004
  */
 public class ExbMerger extends Checker implements CorpusFunction {
 

@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  *
  * Last updated
  * @author Herbert Lange
- * @version 20240322
+ * @version 20241004
  */
 public class ExbFileReferenceChecker extends Checker implements CorpusFunction {
 

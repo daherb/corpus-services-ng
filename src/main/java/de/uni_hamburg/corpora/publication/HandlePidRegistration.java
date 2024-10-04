@@ -41,6 +41,10 @@ import javax.xml.xpath.XPathExpressionException;
  * and replaces the original URLs with the Handle URLs
  *
  * @author daniel.jettka@uni-hamburg.de
+ *
+ * Last update
+ * @author Herbert Lange
+ * @version 20241004
  */
 public class HandlePidRegistration extends Publisher implements CorpusFunction {
     
