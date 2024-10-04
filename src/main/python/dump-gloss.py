@@ -2,6 +2,7 @@ import os.path
 import sys
 # import xml.etree.ElementTree as ET
 import libxml2
+import shutil
 
 import Report
 from CorpusFunction import CorpusFunction
@@ -17,7 +18,11 @@ class DumpGloss(CorpusFunction):
     tierId = "gl"
     xpath = "//TIER[contains(@TIER_ID,\"%s\")]//ANNOTATION_VALUE"
     expectedData = "ELANData"
-
+    try:
+      os.mkdir(tmpDir)
+    except:
+      print("Error creating tmpDir " + tmpDir)
+      exit(-1)
     def function(self):
         if self.corpusdata == self.expectedData:
             gloss_text = []
@@ -41,7 +46,7 @@ class DumpGloss(CorpusFunction):
                 gf.write(" ".join(gloss_text))
         else:
             self.report.append(Report.ReportItem(what="Unsupported data type " + self.corpusdata))
-        self.write_report()
+        shutil.rmtree(self.tmpDir)
 
 
 def main():
